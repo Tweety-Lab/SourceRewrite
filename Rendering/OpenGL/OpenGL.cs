@@ -37,7 +37,7 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
-            test_mesh = new Mesh();
+            test_mesh = new Mesh(new Texture("../../../Assets/bricks.jpg"), new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag"));
 
             // Instantiating our new abstractions
             Ebo = new OpenGLBufferObject<uint>(OpenGL, test_mesh.Indices, BufferTargetARB.ElementArrayBuffer);

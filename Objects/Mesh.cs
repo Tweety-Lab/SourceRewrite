@@ -11,10 +11,10 @@ namespace SourceRewrite.Objects
     {
         public Texture texture;
         public Shader shader;
-        public Mesh()
+        public Mesh(Texture inputTexture, Shader inputShader)
         {
-            shader = new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag");
-            texture = new Texture("../../../Assets/bricks.jpg");
+            shader = inputShader;
+            texture = inputTexture;
         }
         // Placeholder Array of vertex positions
         public float[] Vertices =
