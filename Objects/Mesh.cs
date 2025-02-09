@@ -7,7 +7,7 @@ using SourceRewrite.Rendering;
 
 namespace SourceRewrite.Objects
 {
-    public class Mesh
+    public class Mesh : GameObject
     {
         public Texture texture;
         public Shader shader;

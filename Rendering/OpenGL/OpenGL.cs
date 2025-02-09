@@ -16,10 +16,6 @@ namespace SourceRewrite.Rendering.OpenGL
         private static OpenGLBufferObject<uint> Ebo;
         private static OpenGLVertexArrayObject<float, uint> Vao;
 
-        private static Transform ItemTransform = new Transform();
-
-        private Mesh test_mesh;
-
         public GL OpenGL;
         public OpenGLContext(GameWindow targetWindow)
         {
@@ -37,22 +33,24 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
-            test_mesh = new Mesh(new Texture("../../../Assets/bricks.jpg"), new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag"));
+            // Create a mesh for testing
+            Mesh testMesh = new Mesh(new Texture("../../../Assets/bricks.jpg"), new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag"));
 
-            // Instantiating our new abstractions
-            Ebo = new OpenGLBufferObject<uint>(OpenGL, test_mesh.Indices, BufferTargetARB.ElementArrayBuffer);
-            Vbo = new OpenGLBufferObject<float>(OpenGL, test_mesh.Vertices, BufferTargetARB.ArrayBuffer);
-            Vao = new OpenGLVertexArrayObject<float, uint>(OpenGL, Vbo, Ebo);
+            foreach (GameObject gameObject in GameObject.ActiveObjects)
+            {
+                if (gameObject.GetType() == typeof(Mesh))
+                {
+                    Mesh meshobject = (Mesh)gameObject;
+                    // Instantiating our new abstractions
+                    Ebo = new OpenGLBufferObject<uint>(OpenGL, meshobject.Indices, BufferTargetARB.ElementArrayBuffer);
+                    Vbo = new OpenGLBufferObject<float>(OpenGL, meshobject.Vertices, BufferTargetARB.ArrayBuffer);
+                    Vao = new OpenGLVertexArrayObject<float, uint>(OpenGL, Vbo, Ebo);
 
-            //Telling the VAO object how to lay out the attribute pointers
-            Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-
-            //Mixed transformation.
-            ItemTransform = new Transform();
-            ItemTransform.Position = new Vector3(0.0f, 0.0f, 0f);
-            ItemTransform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 1f);
-            ItemTransform.Scale = 0.5f;
+                    //Telling the VAO object how to lay out the attribute pointers
+                    Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
+                    Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
+                }
+            }
         }
 
         public unsafe void OnRender(RendererContext renderer)
@@ -62,16 +60,23 @@ namespace SourceRewrite.Rendering.OpenGL
             //Binding and using our VAO and shader.
             Vao.Bind();
 
-            OpenGLShader opengl_testshader = (OpenGLShader) test_mesh.shader.GetShaderInterface();
-            OpenGLTexture opengl_testtexture = (OpenGLTexture) test_mesh.texture.GetTextureInterface();
+            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            {
+                if (gameobject.GetType() == typeof(Mesh))
+                {
+                    Mesh meshobject = (Mesh)gameobject;
 
-            opengl_testshader.Use();
-            opengl_testtexture.Bind(TextureUnit.Texture0);
+                    OpenGLShader openglShader = (OpenGLShader)meshobject.shader.GetShaderInterface();
+                    OpenGLTexture openglTexture = (OpenGLTexture)meshobject.texture.GetTextureInterface();
 
-            // Using the transformations.
-            opengl_testshader.SetUniform("uModel", ItemTransform.ViewMatrix);
+                    openglShader.Use();
+                    openglTexture.Bind(TextureUnit.Texture0);
 
-            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)test_mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
+                    openglShader.SetUniform("uModel", meshobject.Transform.ViewMatrix);
+
+                    OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshobject.Indices.Length, DrawElementsType.UnsignedInt, null);
+                }
+            }
         }
 
         public void OnFramebufferResize(Vector2D<int> newSize)
