@@ -16,12 +16,9 @@ namespace SourceRewrite.Rendering.OpenGL
         private static OpenGLBufferObject<uint> Ebo;
         private static OpenGLVertexArrayObject<float, uint> Vao;
 
-        public static Texture TestTexture;
-        private static Shader TestShader;
-
         private static Transform ItemTransform = new Transform();
 
-        private Mesh test_mesh = new Mesh();
+        private Mesh test_mesh;
 
         public GL OpenGL;
         public OpenGLContext(GameWindow targetWindow)
@@ -40,6 +37,8 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
+            test_mesh = new Mesh();
+
             // Instantiating our new abstractions
             Ebo = new OpenGLBufferObject<uint>(OpenGL, test_mesh.Indices, BufferTargetARB.ElementArrayBuffer);
             Vbo = new OpenGLBufferObject<float>(OpenGL, test_mesh.Vertices, BufferTargetARB.ArrayBuffer);
@@ -48,19 +47,6 @@ namespace SourceRewrite.Rendering.OpenGL
             //Telling the VAO object how to lay out the attribute pointers
             Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
             Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-
-            TestShader = new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag");
-            if (TestShader == null)
-            {
-                throw new FileNotFoundException("Shader files not found.");
-            }
-
-            TestTexture = new Texture("../../../Assets/bricks.jpg");
-            if (TestTexture == null)
-            {
-                throw new FileNotFoundException("Texture file not found.");
-            }
-
 
             //Mixed transformation.
             ItemTransform = new Transform();
@@ -76,8 +62,8 @@ namespace SourceRewrite.Rendering.OpenGL
             //Binding and using our VAO and shader.
             Vao.Bind();
 
-            OpenGLShader opengl_testshader = (OpenGLShader) TestShader.GetShaderInterface();
-            OpenGLTexture opengl_testtexture = (OpenGLTexture)TestTexture.GetTextureInterface();
+            OpenGLShader opengl_testshader = (OpenGLShader) test_mesh.shader.GetShaderInterface();
+            OpenGLTexture opengl_testtexture = (OpenGLTexture) test_mesh.texture.GetTextureInterface();
 
             opengl_testshader.Use();
             opengl_testtexture.Bind(TextureUnit.Texture0);

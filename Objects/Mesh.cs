@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SourceRewrite.Rendering;
 
 namespace SourceRewrite.Objects
 {
     public class Mesh
     {
+        public Texture texture;
+        public Shader shader;
+        public Mesh()
+        {
+            shader = new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag");
+            texture = new Texture("../../../Assets/bricks.jpg");
+        }
         // Placeholder Array of vertex positions
         public float[] Vertices =
         {
