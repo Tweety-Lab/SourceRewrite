@@ -9,6 +9,5 @@ class Program
     {
         // Create our main Game Window
         new GameWindow(new Vector2D<int>(800, 500), "Game Window");
-        Console.WriteLine(GameWindow.CurrentWindow);
     }
 }
