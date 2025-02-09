@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 
@@ -61,6 +62,16 @@ namespace SourceRewrite.Rendering
         public void OnRender()
         {
             _apiInterface.OnRender(this);
+
+            // Render every Mesh GameObject
+            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            {
+                if (gameobject.GetType() == typeof(Mesh))
+                {
+                    Mesh meshObject = (Mesh)gameobject;
+                    _apiInterface.RenderMesh(meshObject);
+                }
+            }
         }
 
         // Run any special cleanup logic that needs to be when the app is closed
@@ -86,6 +97,7 @@ namespace SourceRewrite.Rendering
         void OnLoad(RendererContext renderer);
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
+        void RenderMesh(Mesh meshObject);
     }
 
     /// <summary>

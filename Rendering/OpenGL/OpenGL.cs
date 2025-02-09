@@ -59,29 +59,24 @@ namespace SourceRewrite.Rendering.OpenGL
 
             //Binding and using our VAO and shader.
             Vao.Bind();
-
-            foreach (GameObject gameobject in GameObject.ActiveObjects)
-            {
-                if (gameobject.GetType() == typeof(Mesh))
-                {
-                    Mesh meshobject = (Mesh)gameobject;
-
-                    OpenGLShader openglShader = (OpenGLShader)meshobject.shader.GetShaderInterface();
-                    OpenGLTexture openglTexture = (OpenGLTexture)meshobject.texture.GetTextureInterface();
-
-                    openglShader.Use();
-                    openglTexture.Bind(TextureUnit.Texture0);
-
-                    openglShader.SetUniform("uModel", meshobject.Transform.ViewMatrix);
-
-                    OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshobject.Indices.Length, DrawElementsType.UnsignedInt, null);
-                }
-            }
         }
 
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
             OpenGL.Viewport(newSize);
+        }
+
+        public unsafe void RenderMesh(Mesh meshObject)
+        {
+            OpenGLShader openglShader = (OpenGLShader)meshObject.shader.GetShaderInterface();
+            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.texture.GetTextureInterface();
+
+            openglShader.Use();
+            openglTexture.Bind(TextureUnit.Texture0);
+
+            openglShader.SetUniform("uModel", meshObject.Transform.ViewMatrix);
+
+            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Indices.Length, DrawElementsType.UnsignedInt, null);
         }
         
         public void OnClose()
