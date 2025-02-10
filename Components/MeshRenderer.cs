@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
+using SourceRewrite.Windowing;
 
-namespace SourceRewrite.Objects
+namespace SourceRewrite.Components
 {
-    public class Mesh : GameObject
+    public class MeshRenderer : GameComponent
     {
         public Texture texture;
         public Shader shader;
-        public Mesh(Texture inputTexture, Shader inputShader)
+        public MeshRenderer(Texture inputTexture, Shader inputShader)
         {
             shader = inputShader;
             texture = inputTexture;
+
+            GameWindow.CurrentWindow.Renderer.InitMesh(this); // Render our mesh
         }
         // Placeholder Array of vertex positions
         public float[] Vertices =
@@ -23,7 +27,7 @@ namespace SourceRewrite.Objects
              0.5f,  0.5f, 0.0f, 1f, 0f,
              0.5f, -0.5f, 0.0f, 1f, 1f,
             -0.5f, -0.5f, 0.0f, 0f, 1f,
-            -0.5f,  0.5f, 0.5f, 0f, 0f
+            -0.5f,  0.5f, 0.0f, 0f, 0f
         };
 
         // Placeholder Array of indices

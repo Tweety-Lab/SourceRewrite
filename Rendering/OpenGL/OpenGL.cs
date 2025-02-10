@@ -5,16 +5,18 @@ using Silk.NET.Maths;
 using SourceRewrite.Maths;
 using System.Numerics;
 using SourceRewrite.Objects;
+using SourceRewrite.Components;
+using System.Threading.Tasks.Dataflow;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
     // Disgusting horrid piece of code but luckily the render system is modular enough it doesnt matter right now
     public class OpenGLContext : IRendererAPI
     {
-
-        private static OpenGLBufferObject<float> Vbo;
-        private static OpenGLBufferObject<uint> Ebo;
-        private static OpenGLVertexArrayObject<float, uint> Vao;
+        // Store all lists
+        private List<OpenGLBufferObject<uint>> eboList = new List<OpenGLBufferObject<uint>>();
+        private List<OpenGLBufferObject<float>> vboList = new List<OpenGLBufferObject<float>>();
+        private List<OpenGLVertexArrayObject<float, uint>> vaoList = new List<OpenGLVertexArrayObject<float, uint>>();
 
         public GL OpenGL;
         public OpenGLContext(GameWindow targetWindow)
@@ -33,32 +35,13 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
-            // Create a mesh for testing
-            Mesh testMesh = new Mesh(new Texture("../../../Assets/bricks.jpg"), new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag"));
 
-            foreach (GameObject gameObject in GameObject.ActiveObjects)
-            {
-                if (gameObject.GetType() == typeof(Mesh))
-                {
-                    Mesh meshobject = (Mesh)gameObject;
-                    // Instantiating our new abstractions
-                    Ebo = new OpenGLBufferObject<uint>(OpenGL, meshobject.Indices, BufferTargetARB.ElementArrayBuffer);
-                    Vbo = new OpenGLBufferObject<float>(OpenGL, meshobject.Vertices, BufferTargetARB.ArrayBuffer);
-                    Vao = new OpenGLVertexArrayObject<float, uint>(OpenGL, Vbo, Ebo);
-
-                    //Telling the VAO object how to lay out the attribute pointers
-                    Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-                    Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-                }
-            }
         }
 
         public unsafe void OnRender(RendererContext renderer)
         {
             OpenGL.Clear((uint)ClearBufferMask.ColorBufferBit);
 
-            //Binding and using our VAO and shader.
-            Vao.Bind();
         }
 
         public void OnFramebufferResize(Vector2D<int> newSize)
@@ -66,7 +49,7 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.Viewport(newSize);
         }
 
-        public unsafe void RenderMesh(Mesh meshObject)
+        public unsafe void RenderMesh(MeshRenderer meshObject)
         {
             OpenGLShader openglShader = (OpenGLShader)meshObject.shader.GetShaderInterface();
             OpenGLTexture openglTexture = (OpenGLTexture)meshObject.texture.GetTextureInterface();
@@ -74,16 +57,45 @@ namespace SourceRewrite.Rendering.OpenGL
             openglShader.Use();
             openglTexture.Bind(TextureUnit.Texture0);
 
-            openglShader.SetUniform("uModel", meshObject.Transform.ViewMatrix);
+            openglShader.SetUniform("uModel", meshObject.GameObject.GetComponentFromType<Transform>().ViewMatrix);
 
-            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Indices.Length, DrawElementsType.UnsignedInt, null);
+            foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
+            {
+                // Binding and using our VAO and shader.
+                vao.Bind();
+                OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Indices.Length, DrawElementsType.UnsignedInt, null);
+            }
+        }
+
+        public unsafe void InitMesh(MeshRenderer meshObject)
+        {
+            // Instantiating our new abstractions
+            eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));
+            vboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Vertices, BufferTargetARB.ArrayBuffer));
+            vaoList.Add(new OpenGLVertexArrayObject<float, uint>(OpenGL, vboList[vboList.Count - 1], eboList[eboList.Count - 1]));
+
+            //Telling the VAO object how to lay out the attribute pointers
+            vaoList[vaoList.Count - 1].VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
+            vaoList[vaoList.Count - 1].VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
         }
         
         public void OnClose()
         {
-            Vbo.Dispose();
-            Ebo.Dispose();
-            Vao.Dispose();
+
+            foreach (OpenGLBufferObject<uint> ebo in eboList)
+            {
+                ebo.Dispose();
+            }
+
+            foreach (OpenGLBufferObject<float> vbo in vboList)
+            {
+                vbo.Dispose();
+            }
+
+            foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
+            {
+                vao.Dispose();
+            }
         }
     }
 }

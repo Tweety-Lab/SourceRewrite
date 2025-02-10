@@ -5,9 +5,9 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceRewrite.Maths
+namespace SourceRewrite.Components
 {
-    public class Transform
+    public class Transform : GameComponent
     {
         public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
 

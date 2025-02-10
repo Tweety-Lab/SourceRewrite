@@ -1,5 +1,7 @@
-﻿using Silk.NET.Maths;
+﻿using System.Numerics;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
@@ -55,7 +57,28 @@ namespace SourceRewrite.Rendering
         // Run any special logic that needs to be ran on load
         public void OnLoad()
         {
+            // Create a mesh GameObject for testing
+            GameObject testObject = new GameObject();
+            MeshRenderer testRenderer = new MeshRenderer(new Texture("../../../Assets/bricks.jpg"), new Shader("../../../Assets/shader.vert", "../../../Assets/shader.frag"));
+
+            testObject.AddComponent(testRenderer);
+
+            testObject.Transform.Position = new Vector3(0.0f, 0.0f, 0.0f);
+            testObject.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 1f);
+
+            Console.WriteLine(testObject.Components);
+
             _apiInterface.OnLoad(this);
+
+            // Init Every Mesh Renderer
+            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            {
+                MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    _apiInterface.InitMesh(meshRenderer);
+                }
+            }
         }
 
         // Run any special logic that needs to be ran per frame
@@ -63,16 +86,17 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.OnRender(this);
 
-            // Render every Mesh GameObject
+            // Render every Mesh Renderer
             foreach (GameObject gameobject in GameObject.ActiveObjects)
             {
-                if (gameobject.GetType() == typeof(Mesh))
+                MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
+                if (meshRenderer != null)
                 {
-                    Mesh meshObject = (Mesh)gameobject;
-                    _apiInterface.RenderMesh(meshObject);
+                    _apiInterface.RenderMesh(meshRenderer);
                 }
             }
         }
+
 
         // Run any special cleanup logic that needs to be when the app is closed
         public void OnClose()
@@ -84,6 +108,11 @@ namespace SourceRewrite.Rendering
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
             _apiInterface.OnFramebufferResize(newSize);
+        }
+
+        public void InitMesh(MeshRenderer meshObject)
+        {
+            _apiInterface.InitMesh(meshObject);
         }
     }
 
@@ -97,7 +126,8 @@ namespace SourceRewrite.Rendering
         void OnLoad(RendererContext renderer);
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
-        void RenderMesh(Mesh meshObject);
+        void RenderMesh(MeshRenderer meshObject);
+        void InitMesh(MeshRenderer meshObject);
     }
 
     /// <summary>
