@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>Engine</AssemblyName>
+    <OutputPath>..\Output\bin</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
