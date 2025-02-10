@@ -7,6 +7,8 @@ using System.Numerics;
 using SourceRewrite.Objects;
 using SourceRewrite.Components;
 using System.Threading.Tasks.Dataflow;
+using Silk.NET.Windowing;
+using System.Reflection;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -57,7 +59,25 @@ namespace SourceRewrite.Rendering.OpenGL
             openglShader.Use();
             openglTexture.Bind(TextureUnit.Texture0);
 
+
+            // Projection matrix
+            var projection = Matrix4x4.CreatePerspectiveFieldOfView(
+                MathF.PI / 4, // FOV
+                GameWindow.CurrentWindow.GetSilkWindow().Size.X / GameWindow.CurrentWindow.GetSilkWindow().Size.Y, // Aspect ratio
+                0.1f, 100f // Near and far planes
+            );
+
+            // Get the camera's position and front direction
+            Vector3 cameraPosition = Camera.ActiveCamera.GameObject.Transform.Position;
+            Vector3 cameraFront = Camera.ActiveCamera.CameraFront;
+            Vector3 cameraUp = Camera.ActiveCamera.CameraUp;
+
+            // View matrix
+            var view = Matrix4x4.CreateLookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
+
             openglShader.SetUniform("uModel", meshObject.GameObject.GetComponentFromType<Transform>().ViewMatrix);
+            openglShader.SetUniform("uView", view);
+            openglShader.SetUniform("uProjection", projection);
 
             foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
             {

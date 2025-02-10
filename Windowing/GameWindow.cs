@@ -1,6 +1,7 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
+using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
@@ -61,9 +62,16 @@ namespace SourceRewrite.Windowing
             Renderer.OnLoad();
 
             Renderer.SetClearColour(13, 13, 13, 255);
+
+            // Load GameObjects
+            GameObject.GameObjectStart();
         }
 
-        private void OnUpdate(double deltaTime) { }
+        private void OnUpdate(double deltaTime) 
+        {
+            // Update GameObjects
+            GameObject.GameObjectUpdate(deltaTime);
+        }
 
         private unsafe void OnRender(double deltaTime) {
             // Render

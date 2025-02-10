@@ -26,6 +26,38 @@ namespace SourceRewrite.Objects
         }
 
         /// <summary>
+        /// Runs all GameObject update logic.
+        /// </summary>
+        public static void GameObjectUpdate(double deltaTime)
+        {
+            // Loop through every GameObject
+            foreach(GameObject obj in ActiveObjects)
+            {
+                // Loop through every GameComponent in GameObject
+                foreach(GameComponent comp in obj.Components)
+                {
+                    comp.Update(deltaTime);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs all GameObject initialization logic.
+        /// </summary>
+        public static void GameObjectStart()
+        {
+            // Loop through every GameObject
+            foreach (GameObject obj in ActiveObjects)
+            {
+                // Loop through every GameComponent in GameObject
+                foreach (GameComponent comp in obj.Components)
+                {
+                    comp.Start();
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns the first found Component of specified type.
         /// </summary>
         public ComponentType GetComponentFromType<ComponentType>() where ComponentType : GameComponent

@@ -64,9 +64,18 @@ namespace SourceRewrite.Rendering
             testObject.AddComponent(testRenderer);
 
             testObject.Transform.Position = new Vector3(0.0f, 0.0f, 0.0f);
-            testObject.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 1f);
+            testObject.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 0f);
 
-            Console.WriteLine(testObject.Components);
+            // Test camera object
+            GameObject cameraObject = new GameObject();
+            cameraObject.AddComponent(new Camera());
+
+            cameraObject.Transform.Position = new Vector3(0f, 0f, -4f);
+            cameraObject.Transform.Rotate(0,0,90);
+
+            Camera.ActiveCamera.UpdateCameraFront();
+
+            Console.WriteLine(Camera.ActiveCamera.CameraFront);
 
             _apiInterface.OnLoad(this);
 
