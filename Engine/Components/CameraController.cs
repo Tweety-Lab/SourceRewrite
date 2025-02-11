@@ -13,12 +13,14 @@ namespace SourceRewrite.Components
     public class CameraController : GameComponent
     {
         public int MovementSpeed = 4;
-        public int Sensitivity = 20;
+        public int Sensitivity = 30;
+
+        private Camera camera;
 
         public override void Start()
         {
             // Get the camera thats attached to the same game object as the controller
-            Camera camera = GameObject.GetComponentFromType<Camera>();
+            camera = GameObject.GetComponentFromType<Camera>();
         }
 
         public override void Update(double deltaTime)
@@ -26,32 +28,32 @@ namespace SourceRewrite.Components
             // Forward Movement
             if (Input.Input.GetKeyDown(Key.W))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + new Vector3(0, 0, MovementSpeed * (float)deltaTime);
+                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * (float)deltaTime * GameObject.Transform.Forward;
             }
 
             // Backward Movement
             if (Input.Input.GetKeyDown(Key.S))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - new Vector3(0, 0, MovementSpeed * (float)deltaTime);
+                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * (float)deltaTime * GameObject.Transform.Forward;
             }
 
             // Left Movement
             if (Input.Input.GetKeyDown(Key.A))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + new Vector3(MovementSpeed * (float)deltaTime, 0, 0);
+                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * (float)deltaTime * GameObject.Transform.Right;
             }
 
             // Right Movement
             if (Input.Input.GetKeyDown(Key.D))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - new Vector3(MovementSpeed * (float)deltaTime, 0, 0);
+                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * (float)deltaTime * GameObject.Transform.Right;
             }
 
             // Mouse Movement
             float mouseX = -Input.Input.GetMouseXMovement() * Sensitivity * (float)deltaTime;
             float mouseY = -Input.Input.GetMouseYMovement() * Sensitivity * (float)deltaTime;
 
-            GameObject.Transform.RotateBy(mouseX, mouseY, 0);
+            GameObject.Transform.RotateBy(mouseY, mouseX, 0);
         }
     }
 }

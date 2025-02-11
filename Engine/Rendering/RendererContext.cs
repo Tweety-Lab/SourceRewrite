@@ -72,7 +72,7 @@ namespace SourceRewrite.Rendering
             cameraObject.AddComponent(new CameraController());
 
             cameraObject.Transform.Position = new Vector3(0f, 0f, -4f);
-            cameraObject.Transform.RotateTo(0,0,90);
+            cameraObject.Transform.RotateTo(0,0,0);
 
             Console.WriteLine(Camera.ActiveCamera.CameraFront);
 

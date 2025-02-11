@@ -67,13 +67,8 @@ namespace SourceRewrite.Rendering.OpenGL
                 0.1f, 100f // Near and far planes
             );
 
-            // Get the camera's position and front direction
-            Vector3 cameraPosition = Camera.ActiveCamera.GameObject.Transform.Position;
-            Vector3 cameraFront = Camera.ActiveCamera.CameraFront;
-            Vector3 cameraUp = Camera.ActiveCamera.CameraUp;
-
-            // View matrix
-            var view = Matrix4x4.CreateLookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
+            // View matrix from active camera
+            var view = Camera.ActiveCamera.GetViewMatrix();
 
             openglShader.SetUniform("uModel", meshObject.GameObject.GetComponentFromType<Transform>().ViewMatrix);
             openglShader.SetUniform("uView", view);

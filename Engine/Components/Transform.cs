@@ -15,6 +15,21 @@ namespace SourceRewrite.Components
 
         public Quaternion Rotation { get; set; } = Quaternion.Identity;
 
+        /// <summary>
+        /// Forward Vector.
+        /// </summary>
+        public Vector3 Forward => Vector3.Transform(-Vector3.UnitZ, Rotation);
+
+        /// <summary>
+        /// Right Vector.
+        /// </summary>
+        public Vector3 Right => Vector3.Transform(Vector3.UnitX, Rotation);
+
+        /// <summary>
+        /// Up Vector.
+        /// </summary>
+        public Vector3 Up => Vector3.Transform(Vector3.UnitY, Rotation);
+
         //Note: The order here does matter.
         public Matrix4x4 ViewMatrix => Matrix4x4.Identity * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale) * Matrix4x4.CreateTranslation(Position);
 
