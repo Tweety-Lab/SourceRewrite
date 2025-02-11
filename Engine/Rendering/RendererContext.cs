@@ -59,7 +59,7 @@ namespace SourceRewrite.Rendering
         {
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(new Texture("../../materials/bricks.jpg"), new Shader("../../shaders/shader.vert", "../../shaders/shader.frag"));
+            MeshRenderer testRenderer = new MeshRenderer("../../models/cube.obj", new Texture("../../materials/bricks.jpg"), new Shader("../../shaders/shader.vert", "../../shaders/shader.frag"));
 
             testObject.AddComponent(testRenderer);
 
@@ -69,9 +69,10 @@ namespace SourceRewrite.Rendering
             // Test camera object
             GameObject cameraObject = new GameObject();
             cameraObject.AddComponent(new Camera());
+            cameraObject.AddComponent(new CameraController());
 
             cameraObject.Transform.Position = new Vector3(0f, 0f, -4f);
-            cameraObject.Transform.Rotate(0,0,90);
+            cameraObject.Transform.RotateTo(0,0,90);
 
             Console.WriteLine(Camera.ActiveCamera.CameraFront);
 

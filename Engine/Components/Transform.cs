@@ -19,11 +19,11 @@ namespace SourceRewrite.Components
         public Matrix4x4 ViewMatrix => Matrix4x4.Identity * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale) * Matrix4x4.CreateTranslation(Position);
 
         /// <summary>
-        /// Rotate the transform from Degrees.
+        /// Rotate to the input Degrees.
         /// </summary>
-        public void Rotate(float x, float y, float z)
+        public void RotateTo(float x, float y, float z)
         {
-            // Convert Euler angles from degrees to radians (if needed)
+            // Convert Euler angles from degrees to radians
             float pitchRad = x * MathF.PI / 180f;
             float yawRad = y * MathF.PI / 180f;
             float rollRad = z * MathF.PI / 180f;
@@ -43,6 +43,31 @@ namespace SourceRewrite.Components
             float qz = cy * cp * sr - sy * sp * cr;
 
             Rotation = new Quaternion(qx, qy, qz, qw);
+        }
+
+        /// <summary>
+        /// Rotate by the input Degrees. (Adds to rotation, doesn't set it)
+        /// </summary>
+        public void RotateBy(float x, float y, float z)
+        {
+            // Convert Euler angles from degrees to radians
+            float pitchRad = x * MathF.PI / 180f;
+            float yawRad = y * MathF.PI / 180f;
+            float rollRad = z * MathF.PI / 180f;
+
+            // Create rotation quaternions for each axis
+            Quaternion rotX = Quaternion.CreateFromAxisAngle(Vector3.UnitX, pitchRad);
+            Quaternion rotY = Quaternion.CreateFromAxisAngle(Vector3.UnitY, yawRad);
+            Quaternion rotZ = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, rollRad);
+
+            // Combine the rotations (order matters: Z * Y * X is common)
+            Quaternion deltaRotation = rotZ * rotY * rotX;
+
+            // Apply the new rotation to the current rotation
+            Rotation = Rotation * deltaRotation;
+
+            // Normalize to prevent accumulation of floating-point errors
+            Rotation = Quaternion.Normalize(Rotation);
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
+using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
+using System.Reflection;
+using SourceRewrite.Input;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -11,6 +14,7 @@ namespace SourceRewrite.Windowing
     {
         public static GameWindow? CurrentWindow { get; private set; } // Active Game Window currently running
         public RendererContext Renderer { get; private set; } // Active Renderer 
+        public InputContext Input { get; private set; } // Active Input Manager
 
         public string WindowTitle { get; private set; }
         public Vector2D<int> WindowSize { get; private set; }
@@ -57,11 +61,15 @@ namespace SourceRewrite.Windowing
         }
 
         private unsafe async void OnLoad() {
+
             // Load Renderer (OpenGL)
             Renderer = new RendererContext(RendererAPI.OpenGL, this);
             Renderer.OnLoad();
 
             Renderer.SetClearColour(13, 13, 13, 255);
+
+            // Load Input
+            Input = new InputContext(_window.CreateInput());
 
             // Load GameObjects
             GameObject.GameObjectStart();
