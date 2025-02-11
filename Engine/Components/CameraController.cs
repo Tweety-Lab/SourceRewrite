@@ -13,6 +13,7 @@ namespace SourceRewrite.Components
     public class CameraController : GameComponent
     {
         public int MovementSpeed = 4;
+        public int Sensitivity = 20;
 
         public override void Start()
         {
@@ -45,6 +46,12 @@ namespace SourceRewrite.Components
             {
                 GameObject.Transform.Position = GameObject.Transform.Position - new Vector3(MovementSpeed * (float)deltaTime, 0, 0);
             }
+
+            // Mouse Movement
+            float mouseX = -Input.Input.GetMouseXMovement() * Sensitivity * (float)deltaTime;
+            float mouseY = -Input.Input.GetMouseYMovement() * Sensitivity * (float)deltaTime;
+
+            GameObject.Transform.RotateBy(mouseX, mouseY, 0);
         }
     }
 }

@@ -77,6 +77,9 @@ namespace SourceRewrite.Windowing
 
         private void OnUpdate(double deltaTime) 
         {
+            // Update Input
+            Input.InputUpdate();
+
             // Update GameObjects
             GameObject.GameObjectUpdate(deltaTime);
         }
