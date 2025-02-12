@@ -28,7 +28,7 @@ namespace SourceRewrite.FileSystem
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine($"A GameInfo error occurred: {ex.Message}");
             }
         }
     }

@@ -8,6 +8,7 @@ using Silk.NET.Assimp;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using Silk.NET.Maths;
+using SourceRewrite.FileSystem;
 
 namespace SourceRewrite.Components
 {
@@ -16,10 +17,10 @@ namespace SourceRewrite.Components
 
         public Rendering.Texture texture;
         public Shader shader;
-        public unsafe MeshRenderer(string filePath, Rendering.Texture inputTexture, Shader inputShader)
+        public unsafe MeshRenderer(string filePath, FileSystem.FileTypes.Material material)
         {
-            shader = inputShader;
-            texture = inputTexture;
+            shader = material.Shader;
+            texture = material.Texture;
 
             // PLACEHOLDER: Use Assimp to load OBJ
             var assimp = Assimp.GetApi();
