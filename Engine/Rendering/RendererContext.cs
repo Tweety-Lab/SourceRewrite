@@ -59,7 +59,7 @@ namespace SourceRewrite.Rendering
         {
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer("../../models/cube.obj", new Texture("../../materials/bricks.jpg"), new Shader("../../shaders/shader.vert", "../../shaders/shader.frag"));
+            MeshRenderer testRenderer = new MeshRenderer("../../models/cube.model", new Texture("../../materials/bricks.jpg"), new Shader("../../shaders/shader.vert", "../../shaders/shader.frag"));
 
             testObject.AddComponent(testRenderer);
 
