@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.FileSystem.FileTypes
 {
+    /// <summary>
+    /// Material Class.
+    /// </summary>
     public class Material
     {
         public Shader Shader;
@@ -18,14 +21,11 @@ namespace SourceRewrite.FileSystem.FileTypes
             try
             {
                 string content = File.ReadAllText(filePath);
+                
+                KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
 
-                KeyValuesFormat keyValues = new KeyValuesFormat(content);
-
-                Shader = FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Get the Shader
-
-                Texture = new Texture(FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("basetexture").Value)); // Get the Texture
-
-                Console.WriteLine(keyValues.ParentKeys[0].Name);
+                Shader = FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
+                Texture = new Texture(FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("basetexture").Value)); // Set the Texture
             }
             catch (Exception ex)
             {
