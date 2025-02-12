@@ -1,0 +1,8 @@
+GameInfo
+{
+	game 		"EngineTest"
+	TestIndentKey
+	{
+		testKey2 		"TestValue2"
+	}
+}

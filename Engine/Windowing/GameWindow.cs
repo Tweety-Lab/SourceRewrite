@@ -6,6 +6,7 @@ using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using System.Reflection;
 using SourceRewrite.Input;
+using SourceRewrite.FileSystem;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -15,6 +16,7 @@ namespace SourceRewrite.Windowing
         public static GameWindow? CurrentWindow { get; private set; } // Active Game Window currently running
         public RendererContext Renderer { get; private set; } // Active Renderer 
         public InputContext Input { get; private set; } // Active Input Manager
+        public GameInfoContext GameInfo { get; private set; } // Active GameInfo.txt
 
         public string WindowTitle { get; private set; }
         public Vector2D<int> WindowSize { get; private set; }
@@ -61,6 +63,9 @@ namespace SourceRewrite.Windowing
         }
 
         private unsafe async void OnLoad() {
+
+            // Load GameInfo
+            GameInfo = new GameInfoContext("../../gameinfo.txt");
 
             // Load Renderer (OpenGL)
             Renderer = new RendererContext(RendererAPI.OpenGL, this);
