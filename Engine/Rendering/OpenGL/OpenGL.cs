@@ -54,32 +54,45 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void RenderMesh(MeshRenderer meshObject)
         {
-            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Shader.GetShaderInterface();
-            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Texture.GetTextureInterface();
+            if (meshObject == null || meshObject.Mesh == null)
+                throw new ArgumentNullException(nameof(meshObject));
+
+            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Shader?.GetShaderInterface();
+            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Texture?.GetTextureInterface();
+
+            if (openglShader == null || openglTexture == null)
+                throw new InvalidOperationException("Shader or Texture is not valid.");
 
             openglShader.Use();
             openglTexture.Bind(TextureUnit.Texture0);
 
-
             // Projection matrix
+            var windowSize = GameWindow.CurrentWindow.GetSilkWindow().Size;
+            float aspectRatio = windowSize.X / (float)windowSize.Y;
+            if (aspectRatio <= 0)
+                aspectRatio = 1.0f; // Fallback to avoid division by zero
+
             var projection = Matrix4x4.CreatePerspectiveFieldOfView(
                 MathF.PI / 4, // FOV
-                GameWindow.CurrentWindow.GetSilkWindow().Size.X / GameWindow.CurrentWindow.GetSilkWindow().Size.Y, // Aspect ratio
+                aspectRatio, // Aspect ratio
                 0.1f, 100f // Near and far planes
             );
 
             // View matrix from active camera
-            var view = Camera.ActiveCamera.GetViewMatrix();
+            var view = Camera.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
 
-            openglShader.SetUniform("uModel", meshObject.GameObject.GetComponentFromType<Transform>().ViewMatrix);
+            // Model matrix from transform
+            var model = meshObject.GameObject.GetComponentFromType<Transform>()?.ViewMatrix ?? Matrix4x4.Identity;
+
+            openglShader.SetUniform("uModel", model);
             openglShader.SetUniform("uView", view);
             openglShader.SetUniform("uProjection", projection);
 
             foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
             {
-                // Binding and using our VAO and shader.
                 vao.Bind();
                 OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
+                vao.Unbind();
             }
         }
 

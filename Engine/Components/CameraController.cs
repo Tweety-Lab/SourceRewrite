@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using Silk.NET.Input;
 using SourceRewrite.InputSystem;
+using Silk.NET.Assimp;
 
 namespace SourceRewrite.Components
 {
@@ -58,7 +59,8 @@ namespace SourceRewrite.Components
                 float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
                 float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
 
-                Console.WriteLine($"Right Vector: {GameObject.Transform.Right}");
+                Console.WriteLine("Right: " + GameObject.Transform.Right);
+                Console.WriteLine("Forward: " + GameObject.Transform.Forward);
 
                 GameObject.Transform.RotateBy(mouseY, mouseX, 0);
             } else

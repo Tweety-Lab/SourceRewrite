@@ -41,8 +41,6 @@ namespace SourceRewrite.Components
 
             // Ensure vectors are normalized
             CameraFront = Vector3.Normalize(CameraFront);
-
-            Console.WriteLine(MathsHelper.QuaternionToEulerDegrees(rotation));
         }
 
         public Matrix4x4 GetViewMatrix()
