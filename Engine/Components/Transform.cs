@@ -34,33 +34,18 @@ namespace SourceRewrite.Components
         public Vector3 Up => Vector3.Transform(Vector3.UnitY, Rotation);
 
         //Note: The order here does matter.
-        public Matrix4x4 ViewMatrix => Matrix4x4.Identity * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale) * Matrix4x4.CreateTranslation(Position);
+        public Matrix4x4 ViewMatrix => Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale);
 
         /// <summary>
         /// Rotate to the input Degrees.
         /// </summary>
         public void RotateTo(float x, float y, float z)
         {
-            // Convert Euler angles from degrees to radians
             float pitchRad = x * MathF.PI / 180f;
             float yawRad = y * MathF.PI / 180f;
             float rollRad = z * MathF.PI / 180f;
 
-            // Compute the sine and cosine of half angles
-            float cy = MathF.Cos(yawRad * 0.5f);
-            float sy = MathF.Sin(yawRad * 0.5f);
-            float cp = MathF.Cos(pitchRad * 0.5f);
-            float sp = MathF.Sin(pitchRad * 0.5f);
-            float cr = MathF.Cos(rollRad * 0.5f);
-            float sr = MathF.Sin(rollRad * 0.5f);
-
-            // Compute the quaternion
-            float qw = cy * cp * cr + sy * sp * sr;
-            float qx = sy * cp * cr - cy * sp * sr;
-            float qy = cy * sp * cr + sy * cp * sr;
-            float qz = cy * cp * sr - sy * sp * cr;
-
-            Rotation = new Quaternion(qx, qy, qz, qw);
+            Rotation = Quaternion.CreateFromYawPitchRoll(yawRad, pitchRad, rollRad);
         }
 
         /// <summary>
