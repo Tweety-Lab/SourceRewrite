@@ -36,7 +36,7 @@ namespace SourceRewrite.Assets
                         Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string)keyValue.Value)); // Set the Texture
                     }
                     // Keys starting with '$' are Shader properties
-                    else if (keyValue.Key.StartsWith('$')) 
+                    else if (keyValue.Key.StartsWith('$'))
                     {
                         string propertyName = keyValue.Key.Split('$')[1];
                         object propertyValue = keyValue.Value;

@@ -9,7 +9,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceRewrite.Input
+namespace SourceRewrite.InputSystem
 {
     public class InputContext
     {

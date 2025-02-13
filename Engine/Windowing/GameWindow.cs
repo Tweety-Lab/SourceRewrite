@@ -5,7 +5,7 @@ using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using System.Reflection;
-using SourceRewrite.Input;
+using SourceRewrite.InputSystem;
 using SourceRewrite.FileSystem;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.

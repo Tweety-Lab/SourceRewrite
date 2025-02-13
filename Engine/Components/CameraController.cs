@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
-using SourceRewrite.Input;
 using Silk.NET.Input;
+using SourceRewrite.InputSystem;
 
 namespace SourceRewrite.Components
 {
@@ -26,32 +26,32 @@ namespace SourceRewrite.Components
         public override void Update(double deltaTime)
         {
             // Forward Movement
-            if (Input.Input.GetKeyDown(Key.W))
+            if (Input.GetKeyDown(Key.W))
             {
                 GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * (float)deltaTime * GameObject.Transform.Forward;
             }
 
             // Backward Movement
-            if (Input.Input.GetKeyDown(Key.S))
+            if (Input.GetKeyDown(Key.S))
             {
                 GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * (float)deltaTime * GameObject.Transform.Forward;
             }
 
             // Left Movement
-            if (Input.Input.GetKeyDown(Key.A))
+            if (Input.GetKeyDown(Key.A))
             {
                 GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * (float)deltaTime * GameObject.Transform.Right;
             }
 
             // Right Movement
-            if (Input.Input.GetKeyDown(Key.D))
+            if (Input.GetKeyDown(Key.D))
             {
                 GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * (float)deltaTime * GameObject.Transform.Right;
             }
 
             // Mouse Movement
-            float mouseX = -Input.Input.GetMouseXMovement() * Sensitivity * (float)deltaTime;
-            float mouseY = -Input.Input.GetMouseYMovement() * Sensitivity * (float)deltaTime;
+            float mouseX = -Input.GetMouseXMovement() * Sensitivity * (float)deltaTime;
+            float mouseY = -Input.GetMouseYMovement() * Sensitivity * (float)deltaTime;
 
             GameObject.Transform.RotateBy(mouseY, mouseX, 0);
         }

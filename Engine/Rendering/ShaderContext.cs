@@ -1,5 +1,4 @@
 ﻿using System;
-using SourceRewrite.Input;
 using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
