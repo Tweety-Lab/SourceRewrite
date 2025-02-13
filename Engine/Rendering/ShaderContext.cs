@@ -1,4 +1,5 @@
 ﻿using System;
+using SourceRewrite.Input;
 using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
@@ -41,6 +42,14 @@ namespace SourceRewrite.Rendering
         {
             _shaderInterface.SetFragmentCode(input);
         }
+
+        /// <summary>
+        /// Sets the shader's uniform to the specified value.
+        /// </summary>
+        public void SetUniform(string uniformName, object value)
+        {
+            _shaderInterface.SetUniform(uniformName, value);
+        }
     }
 
     /// <summary>
@@ -49,5 +58,6 @@ namespace SourceRewrite.Rendering
     public interface IShader
     {
         void SetFragmentCode(string input);
+        void SetUniform(string uniformName, object value);
     }
 }

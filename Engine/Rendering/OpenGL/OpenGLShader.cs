@@ -39,38 +39,33 @@ namespace SourceRewrite.Rendering.OpenGL
             _gl.UseProgram(_handle);
         }
 
-        // Uniforms are properties that applies to the entire geometry
-        public void SetUniform(string name, int value)
+        /// <summary>
+        /// Set Shader Uniform.
+        /// </summary>
+        public unsafe void SetUniform(string name, object value)
         {
-            // Setting a uniform on a shader using a name.
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1) // If GetUniformLocation returns -1 the uniform is not found.
             {
                 throw new Exception($"{name} uniform not found on shader.");
             }
-            _gl.Uniform1(location, value);
+
+            // Automatically handle different data types
+            switch (value)
+            {
+                case float f:
+                    _gl.Uniform1(location, f);
+                    break;
+                case int i:
+                    _gl.Uniform1(location, i);
+                    break;
+                case Matrix4x4 matrix4:
+                    _gl.UniformMatrix4(location, 1, false, (float*)&matrix4);
+                    break;
+            }
+
         }
 
-        public unsafe void SetUniform(string name, Matrix4x4 value)
-        {
-            //A new overload has been created for setting a uniform so we can use the transform in our shader.
-            int location = _gl.GetUniformLocation(_handle, name);
-            if (location == -1)
-            {
-                throw new Exception($"{name} uniform not found on shader.");
-            }
-            _gl.UniformMatrix4(location, 1, false, (float*)&value);
-        }
-
-        public void SetUniform(string name, float value)
-        {
-            int location = _gl.GetUniformLocation(_handle, name);
-            if (location == -1)
-            {
-                throw new Exception($"{name} uniform not found on shader.");
-            }
-            _gl.Uniform1(location, value);
-        }
 
         public void Dispose()
         {
