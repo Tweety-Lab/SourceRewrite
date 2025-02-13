@@ -9,10 +9,23 @@ using SourceRewrite.Windowing;
 
 namespace SourceRewrite.Assets
 {
+    /// <summary>
+    /// Mesh Class, Constructed from filePath to model.
+    /// </summary>
     public class Mesh
     {
         public Rendering.Texture Texture;
         public Shader Shader;
+
+        // Array of Vertex positions
+        public float[] Vertices =
+        {
+        };
+
+        // Array of Indices
+        public uint[] Indices =
+        {
+        };
 
         public unsafe Mesh(string filePath, Material material)
         {
@@ -63,15 +76,5 @@ namespace SourceRewrite.Assets
 
             assimp.FreeScene(scene); // Cleanup
         }
-
-        // Array of Vertex positions
-        public float[] Vertices =
-        {
-        };
-
-        // Array of Indices
-        public uint[] Indices =
-        {
-        };
     }
 }

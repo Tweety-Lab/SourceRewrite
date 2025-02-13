@@ -17,7 +17,6 @@ namespace SourceRewrite.Components
         // Setup Camera Data with OpenGL coordinate system (-Z forward)
         public Vector3 CameraFront = new Vector3(0f, 0f, -1f);
         public Vector3 CameraUp = Vector3.UnitY;
-        public Vector3 CameraRight => Vector3.Normalize(Vector3.Cross(CameraFront, CameraUp));
 
         /// <summary>
         /// Currently active Camera Component.
@@ -39,11 +38,9 @@ namespace SourceRewrite.Components
 
             // Update camera direction vectors based on transform's rotation
             CameraFront = Vector3.Transform(-Vector3.UnitZ, rotation);
-            CameraUp = Vector3.Transform(Vector3.UnitY, rotation);
 
             // Ensure vectors are normalized
             CameraFront = Vector3.Normalize(CameraFront);
-            CameraUp = Vector3.Normalize(CameraUp);
         }
 
         public Matrix4x4 GetViewMatrix()

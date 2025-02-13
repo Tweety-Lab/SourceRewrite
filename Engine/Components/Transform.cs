@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Components
 {
+    /// <summary>
+    /// GameObject Transform Component, manages position, rotation, scale, etc.
+    /// </summary>
     public class Transform : GameComponent
     {
         public Vector3 Position { get; set; } = new Vector3(0, 0, 0);

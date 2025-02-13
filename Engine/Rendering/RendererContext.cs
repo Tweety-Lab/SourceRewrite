@@ -63,9 +63,33 @@ namespace SourceRewrite.Rendering
             // Create a material
             Material material = FileSystem.GetMaterial("bricks.vmt");
 
+            // Create a Mesh
+            Mesh mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
+
+            // Override vertices and indices
+            mesh.Vertices = [
+    // Positions            // Texture Coordinates (u, v)
+    -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Front-bottom-left
+     0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Front-bottom-right
+     0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Front-top-right
+    -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Front-top-left
+    -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Back-bottom-left
+     0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Back-bottom-right
+     0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Back-top-right
+    -0.5f,  0.5f,  0.5f,   0.0f, 1.0f   // Back-top-left
+    ];   // 7: Back-top-left 
+            mesh.Indices = [
+    0, 1, 2,  0, 2, 3,  // Front face
+    4, 5, 6,  4, 6, 7,  // Back face
+    0, 1, 5,  0, 5, 4,  // Bottom face
+    2, 3, 7,  2, 7, 6,  // Top face
+    0, 3, 7,  0, 7, 4,  // Left face
+    1, 2, 6,  1, 6, 5   // Right face
+    ];   // Right face
+
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(FileSystem.GetModelPath("cube.model"), material);
+            MeshRenderer testRenderer = new MeshRenderer(mesh);
 
             testObject.AddComponent(testRenderer);
 
@@ -83,11 +107,6 @@ namespace SourceRewrite.Rendering
             Console.WriteLine(Camera.ActiveCamera.CameraFront);
 
             _apiInterface.OnLoad(this);
-
-            // Init Every Mesh Renderer
-            foreach (GameObject gameobject in GameObject.ActiveObjects)
-            {
-            }
         }
 
         // Run any special logic that needs to be ran per frame

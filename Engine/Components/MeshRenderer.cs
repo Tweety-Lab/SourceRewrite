@@ -8,10 +8,10 @@ namespace SourceRewrite.Components
 {
     public class MeshRenderer : GameComponent
     {
-        public Mesh Mesh { get; set; }
-        public MeshRenderer(string filePath, Material material)
+        public dynamic Mesh { get; set; }
+        public MeshRenderer(object meshRenderer)
         {
-            Mesh = new Mesh(filePath, material);
+            Mesh = meshRenderer;
             GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
         }
     }
