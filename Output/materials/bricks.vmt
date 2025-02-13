@@ -1,4 +1,5 @@
 shader
 {
 	$basetexture "bricks.jpg"
+	$uBrightness	"1"
 }

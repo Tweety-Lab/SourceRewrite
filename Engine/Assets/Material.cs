@@ -26,7 +26,26 @@ namespace SourceRewrite.Assets
                 KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
 
                 Shader = FileSystem.FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
-                Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("$basetexture").Value)); // Set the Texture
+
+                // Loop through every KeyValue in Material
+                foreach (KeyValue keyValue in keyValues.ParentKeys[0].ChildKeys)
+                {
+                    // Special logic for base texture paths (REPLACE THIS)
+                    if (keyValue.Key == "$basetexture")
+                    {
+                        Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string)keyValue.Value)); // Set the Texture
+                    }
+                    // Keys starting with '$' are Shader properties
+                    else if (keyValue.Key.StartsWith('$')) 
+                    {
+                        string propertyName = keyValue.Key.Split('$')[1];
+                        object propertyValue = keyValue.Value;
+
+                        // Set Shader uniform (property) to input property
+                        Shader.SetUniform(propertyName, propertyValue);
+                    }
+                }
+
             }
             catch (Exception ex)
             {

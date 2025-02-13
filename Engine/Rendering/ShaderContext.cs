@@ -50,6 +50,14 @@ namespace SourceRewrite.Rendering
         {
             _shaderInterface.SetUniform(uniformName, value);
         }
+
+        /// <summary>
+        /// Sets the shader's uniform to the specified value.
+        /// </summary>
+        public int GetIntUniform(string uniformName)
+        {
+           return _shaderInterface.GetIntUniform(uniformName);
+        }
     }
 
     /// <summary>
@@ -59,5 +67,6 @@ namespace SourceRewrite.Rendering
     {
         void SetFragmentCode(string input);
         void SetUniform(string uniformName, object value);
+        int GetIntUniform(string uniformName);
     }
 }

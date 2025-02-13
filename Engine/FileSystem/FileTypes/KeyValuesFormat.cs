@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -73,7 +74,9 @@ namespace SourceRewrite.FileSystem.FileTypes
                     var key = match.Groups[1].Value;
                     var value = match.Groups[2].Value;
 
-                    var keyValue = new KeyValue(key, value)
+                    var trueValue = ConvertValueToType(value); // Convert the string to it's actual type
+
+                    var keyValue = new KeyValue(key, trueValue)
                     {
                         ParentKey = parentKey
                     };
@@ -130,6 +133,23 @@ namespace SourceRewrite.FileSystem.FileTypes
                 }
             }
             return null; // Didn't find KeyValue, return null
+        }
+
+        /// <summary>
+        /// Convert a Value to it's type.
+        /// </summary>
+        private object ConvertValueToType(string input)
+        {
+            // Try parsing as an int
+            if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out int intValue))
+                return intValue;
+
+            // Try parsing as a float
+            if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatValue))
+                return floatValue;
+
+            // If all else fails, return the original string
+            return input;
         }
     }
 

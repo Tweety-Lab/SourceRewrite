@@ -2,6 +2,7 @@
 using System.IO;
 using Silk.NET.OpenGL;
 using System.Numerics;
+using System.Reflection.Metadata;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -47,8 +48,10 @@ namespace SourceRewrite.Rendering.OpenGL
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1) // If GetUniformLocation returns -1 the uniform is not found.
             {
-                throw new Exception($"{name} uniform not found on shader.");
+                throw new ArgumentException($"Uniform {name} not found in shader");
             }
+
+            _gl.UseProgram(_handle); // Bind our Shader to allow uniform changes
 
             // Automatically handle different data types
             switch (value)
@@ -62,8 +65,26 @@ namespace SourceRewrite.Rendering.OpenGL
                 case Matrix4x4 matrix4:
                     _gl.UniformMatrix4(location, 1, false, (float*)&matrix4);
                     break;
+                case Vector4 vector4:
+                    _gl.Uniform4(location, 1, (float*)&vector4);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Get Shader Int Uniform.
+        /// </summary>
+        public unsafe int GetIntUniform(string name)
+        {
+            int location = _gl.GetUniformLocation(_handle, name);
+            if (location == -1)
+            {
+                throw new ArgumentException($"Uniform {name} not found in shader");
             }
 
+            int[] output = new int[1];
+            _gl.GetUniform(_handle, location, output);
+            return output[0];
         }
 
 
