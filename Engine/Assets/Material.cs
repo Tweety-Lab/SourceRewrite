@@ -26,7 +26,7 @@ namespace SourceRewrite.Assets
                 KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
 
                 Shader = FileSystem.FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
-                Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("basetexture").Value)); // Set the Texture
+                Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("$basetexture").Value)); // Set the Texture
             }
             catch (Exception ex)
             {

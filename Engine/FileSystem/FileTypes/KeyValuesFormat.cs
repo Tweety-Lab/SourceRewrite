@@ -34,7 +34,7 @@ namespace SourceRewrite.FileSystem.FileTypes
                 }
 
                 // Parse parent key
-                var match = Regex.Match(line, @"(\w+)\s*{?");
+                var match = Regex.Match(line, @"([\w$]+)\s*{?");
                 if (match.Success)
                 {
                     var parentKey = new ParentKey(match.Groups[1].Value);
@@ -67,7 +67,7 @@ namespace SourceRewrite.FileSystem.FileTypes
                 }
 
                 // Parse key-value pair
-                var match = Regex.Match(line, @"(\w+)\s+""(.+)""");
+                var match = Regex.Match(line, @"([\w$]+)\s+""(.+)""");
                 if (match.Success)
                 {
                     var key = match.Groups[1].Value;
