@@ -12,8 +12,8 @@ namespace SourceRewrite.Components
     // FPS Camera Controller
     public class CameraController : GameComponent
     {
-        public int MovementSpeed = 4;
-        public int Sensitivity = 30;
+        public float MovementSpeed = 4f;
+        public float Sensitivity = 30f;
 
         private Camera camera;
 
@@ -49,11 +49,22 @@ namespace SourceRewrite.Components
                 GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Right;
             }
 
-            // Mouse Movement
-            float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
-            float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
+            // If right mouse held down move Camera view
+            if (Input.GetMouseButtonDown(1))
+            {
+                Input.LockCursor();
 
-            GameObject.Transform.RotateBy(mouseY, mouseX, 0);
+                // Mouse Movement
+                float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
+                float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
+
+                Console.WriteLine($"Right Vector: {GameObject.Transform.Right}");
+
+                GameObject.Transform.RotateBy(mouseY, mouseX, 0);
+            } else
+            {
+                Input.UnlockCursor();
+            }
         }
     }
 }

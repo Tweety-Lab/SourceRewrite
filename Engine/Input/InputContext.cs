@@ -56,6 +56,18 @@ namespace SourceRewrite.InputSystem
         }
 
         /// <summary>
+        /// Returns True if chosen Mouse Button is down.
+        /// </summary>
+        public static bool GetMouseButtonDown(int mouseButton)
+        {
+            // Convert the int to a Silk.NET MouseButton
+            Silk.NET.Input.MouseButton button = (Silk.NET.Input.MouseButton)mouseButton;
+
+            // Check if the specific mouse button is pressed
+            return GameWindow.CurrentWindow.Input.PrimaryMouse.IsButtonPressed(button);
+        }
+
+        /// <summary>
         /// Returns current Mouse Position as Vector2.
         /// </summary>
         public static Vector2 GetMousePosition()
@@ -101,6 +113,22 @@ namespace SourceRewrite.InputSystem
         public static float GetMouseYMovement()
         {
             return GameWindow.CurrentWindow.Input.MouseDelta.Y;
+        }
+
+        /// <summary>
+        /// Locks the cursor in the Window.
+        /// </summary>
+        public static void LockCursor()
+        {
+            GameWindow.CurrentWindow.Input.PrimaryMouse.Cursor.CursorMode = CursorMode.Hidden;
+        }
+
+        /// <summary>
+        /// Unlocks the cursor from the Window.
+        /// </summary>
+        public static void UnlockCursor()
+        {
+            GameWindow.CurrentWindow.Input.PrimaryMouse.Cursor.CursorMode = CursorMode.Normal;
         }
     }
 }
