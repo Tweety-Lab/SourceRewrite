@@ -6,6 +6,7 @@ using SourceRewrite.FileSystem.FileTypes;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
+using SourceRewrite.Assets;
 
 
 namespace SourceRewrite.Rendering

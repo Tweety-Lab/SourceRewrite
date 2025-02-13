@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SourceRewrite.Rendering;
-using SourceRewrite.FileSystem.FileTypes;
+using SourceRewrite.Assets;
 
 namespace SourceRewrite.FileSystem
 {

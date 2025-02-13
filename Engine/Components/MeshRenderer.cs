@@ -9,6 +9,7 @@ using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using Silk.NET.Maths;
 using SourceRewrite.FileSystem;
+using SourceRewrite.Assets;
 
 namespace SourceRewrite.Components
 {
@@ -17,7 +18,7 @@ namespace SourceRewrite.Components
 
         public Rendering.Texture texture;
         public Shader shader;
-        public unsafe MeshRenderer(string filePath, FileSystem.FileTypes.Material material)
+        public unsafe MeshRenderer(string filePath, Assets.Material material)
         {
             shader = material.Shader;
             texture = material.Texture;

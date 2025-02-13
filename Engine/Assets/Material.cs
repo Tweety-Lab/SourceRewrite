@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SourceRewrite.FileSystem.FileTypes;
 
-namespace SourceRewrite.FileSystem.FileTypes
+namespace SourceRewrite.Assets
 {
     /// <summary>
     /// Material Class.
@@ -24,8 +25,8 @@ namespace SourceRewrite.FileSystem.FileTypes
                 
                 KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
 
-                Shader = FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
-                Texture = new Texture(FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("basetexture").Value)); // Set the Texture
+                Shader = FileSystem.FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
+                Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string) keyValues.GetKeyValue("basetexture").Value)); // Set the Texture
             }
             catch (Exception ex)
             {
