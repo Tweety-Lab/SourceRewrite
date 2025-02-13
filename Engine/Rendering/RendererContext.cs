@@ -2,11 +2,12 @@
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using SourceRewrite.Components;
-using SourceRewrite.FileSystem.FileTypes;
+using SourceRewrite.Files.FileTypes;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.Assets;
+using SourceRewrite.Files;
 
 
 namespace SourceRewrite.Rendering
@@ -60,11 +61,11 @@ namespace SourceRewrite.Rendering
         public void OnLoad()
         {
             // Create a material
-            Material material = FileSystem.FileSystem.GetMaterial("bricks.vmt");
+            Material material = Files.FileSystem.GetMaterial("bricks.vmt");
 
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(FileSystem.FileSystem.GetModelPath("cube.model"), material);
+            MeshRenderer testRenderer = new MeshRenderer(Files.FileSystem.GetModelPath("cube.model"), material);
 
             testObject.AddComponent(testRenderer);
 

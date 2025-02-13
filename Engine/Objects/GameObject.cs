@@ -28,7 +28,7 @@ namespace SourceRewrite.Objects
         /// <summary>
         /// Runs all GameObject update logic.
         /// </summary>
-        public static void GameObjectUpdate(double deltaTime)
+        public static void GameObjectUpdate(float deltaTime)
         {
             // Loop through every GameObject
             foreach(GameObject obj in ActiveObjects)

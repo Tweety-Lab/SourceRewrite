@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using SourceRewrite.Rendering;
 using SourceRewrite.Assets;
 
-namespace SourceRewrite.FileSystem
+namespace SourceRewrite.Files
 {
     /// <summary>
-    /// Interaction with FileSystem.
+    /// Interaction with File.
     /// </summary>
     public static class FileSystem
     {

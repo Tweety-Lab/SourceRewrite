@@ -58,7 +58,7 @@ namespace SourceRewrite.Components
 
         // This method will be automatically called to update the camera's front each frame
         // Dumb. Should Be in OnRender instead of Update.
-        public override void Update(double deltaTime)
+        public override void Update(float deltaTime)
         {
             // Call the method to update the front direction based on the rotation
             UpdateCameraFront();

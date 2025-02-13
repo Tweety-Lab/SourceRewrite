@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 
-namespace SourceRewrite.FileSystem.FileTypes
+namespace SourceRewrite.Files.FileTypes
 {
     // This code is bad. Rewrite.
 

@@ -1,4 +1,4 @@
-﻿using SourceRewrite.FileSystem.FileTypes;
+﻿using SourceRewrite.Files.FileTypes;
 using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace SourceRewrite.FileSystem
+namespace SourceRewrite.Files
 {
     /// <summary>
     /// Holds KeyValue data from gameinfo.txt.

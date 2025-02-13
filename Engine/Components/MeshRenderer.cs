@@ -8,7 +8,7 @@ using Silk.NET.Assimp;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using Silk.NET.Maths;
-using SourceRewrite.FileSystem;
+using SourceRewrite.Files;
 using SourceRewrite.Assets;
 
 namespace SourceRewrite.Components

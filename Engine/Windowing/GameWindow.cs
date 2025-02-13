@@ -6,7 +6,7 @@ using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using System.Reflection;
 using SourceRewrite.InputSystem;
-using SourceRewrite.FileSystem;
+using SourceRewrite.Files;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -85,8 +85,8 @@ namespace SourceRewrite.Windowing
             // Update Input
             Input.InputUpdate();
 
-            // Update GameObjects
-            GameObject.GameObjectUpdate(deltaTime);
+            // Update GameObjects with float deltaTime
+            GameObject.GameObjectUpdate((float)deltaTime);
         }
 
         private unsafe void OnRender(double deltaTime) {

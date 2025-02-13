@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SourceRewrite.FileSystem.FileTypes;
+using SourceRewrite.Files.FileTypes;
+using SourceRewrite.Files;
 
 namespace SourceRewrite.Assets
 {
@@ -25,7 +26,7 @@ namespace SourceRewrite.Assets
                 
                 KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
 
-                Shader = FileSystem.FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
+                Shader = FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
 
                 // Loop through every KeyValue in Material
                 foreach (KeyValue keyValue in keyValues.ParentKeys[0].ChildKeys)
@@ -33,7 +34,7 @@ namespace SourceRewrite.Assets
                     // Special logic for base texture paths (REPLACE THIS)
                     if (keyValue.Key == "$basetexture")
                     {
-                        Texture = new Texture(FileSystem.FileSystem.GetMaterialPath((string)keyValue.Value)); // Set the Texture
+                        Texture = new Texture(FileSystem.GetMaterialPath((string)keyValue.Value)); // Set the Texture
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))
