@@ -6,6 +6,7 @@ using SourceRewrite.Maths;
 using System.Numerics;
 using SourceRewrite.Objects;
 using SourceRewrite.Components;
+using SourceRewrite.Assets;
 using System.Threading.Tasks.Dataflow;
 using Silk.NET.Windowing;
 using System.Reflection;
@@ -53,8 +54,8 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void RenderMesh(MeshRenderer meshObject)
         {
-            OpenGLShader openglShader = (OpenGLShader)meshObject.shader.GetShaderInterface();
-            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.texture.GetTextureInterface();
+            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Shader.GetShaderInterface();
+            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Texture.GetTextureInterface();
 
             openglShader.Use();
             openglTexture.Bind(TextureUnit.Texture0);
@@ -78,11 +79,11 @@ namespace SourceRewrite.Rendering.OpenGL
             {
                 // Binding and using our VAO and shader.
                 vao.Bind();
-                OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Indices.Length, DrawElementsType.UnsignedInt, null);
+                OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
             }
         }
 
-        public unsafe void InitMesh(MeshRenderer meshObject)
+        public unsafe void InitMesh(Mesh meshObject)
         {
             // Instantiating our new abstractions
             eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));

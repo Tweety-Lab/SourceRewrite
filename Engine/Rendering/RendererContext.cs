@@ -61,11 +61,11 @@ namespace SourceRewrite.Rendering
         public void OnLoad()
         {
             // Create a material
-            Material material = Files.FileSystem.GetMaterial("bricks.vmt");
+            Material material = FileSystem.GetMaterial("bricks.vmt");
 
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(Files.FileSystem.GetModelPath("cube.model"), material);
+            MeshRenderer testRenderer = new MeshRenderer(FileSystem.GetModelPath("cube.model"), material);
 
             testObject.AddComponent(testRenderer);
 
@@ -87,11 +87,6 @@ namespace SourceRewrite.Rendering
             // Init Every Mesh Renderer
             foreach (GameObject gameobject in GameObject.ActiveObjects)
             {
-                MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
-                if (meshRenderer != null)
-                {
-                    _apiInterface.InitMesh(meshRenderer);
-                }
             }
         }
 
@@ -124,7 +119,7 @@ namespace SourceRewrite.Rendering
             _apiInterface.OnFramebufferResize(newSize);
         }
 
-        public void InitMesh(MeshRenderer meshObject)
+        public void InitMesh(Mesh meshObject)
         {
             _apiInterface.InitMesh(meshObject);
         }
@@ -141,7 +136,7 @@ namespace SourceRewrite.Rendering
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
         void RenderMesh(MeshRenderer meshObject);
-        void InitMesh(MeshRenderer meshObject);
+        void InitMesh(Mesh meshObject);
     }
 
     /// <summary>
