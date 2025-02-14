@@ -104,8 +104,6 @@ namespace SourceRewrite.Rendering
             cameraObject.Transform.Position = new Vector3(0f, 0f, -4f);
             cameraObject.Transform.RotateTo(0,0,0);
 
-            Console.WriteLine(Camera.ActiveCamera.CameraFront);
-
             _apiInterface.OnLoad(this);
         }
 
