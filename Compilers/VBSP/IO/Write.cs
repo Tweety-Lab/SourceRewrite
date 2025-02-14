@@ -102,10 +102,10 @@ namespace VBSP.IO
             BinaryWriter.Write(input.Header.version);
             BinaryWriter.Write(input.Header.mapRevision);
 
-            Console.WriteLine($"Writing BSP Type {input.Header.ident.ToString()}, version {input.Header.version}");
+            Console.WriteLine($"Writing BSP v{input.Header.version}");
             int index = 0;
             
-            foreach( lump_t lump in input.Header.lumps)
+            foreach( Lump lump in input.Header.lumps)
             {
                 Lump orderedLump = Lump.Lumps[index];
                 Console.WriteLine($"Writing Lump: {orderedLump}, Index of {index}");

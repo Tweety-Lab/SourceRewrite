@@ -33,8 +33,8 @@ namespace SourceRewrite.Files.FileTypes
 
             // Create our lumps TODO: Automate this
             Header.lumps = [
-                new lump_t{version = 1},
-                new lump_t{version = 1}
+                new Lump{version = 1},
+                new Lump{version = 1}
             ];
         }
     }
@@ -46,15 +46,14 @@ namespace SourceRewrite.Files.FileTypes
     {
         public int ident; // BSP file identifier
         public int version; // BSP file version
-        public lump_t[] lumps; // Lump array
+        public Lump[] lumps; // Lump array
         public int mapRevision; // The map's revision (iteration, version) number
     }
 
-
     /// <summary>
-    /// BSP Lump.
+    /// Definition for a Lump in a BSP.
     /// </summary>
-    public struct lump_t
+    public struct Lump
     {
         private static int curOffset = 0;
 
@@ -62,16 +61,60 @@ namespace SourceRewrite.Files.FileTypes
         public int filelen;      // length of lump (bytes)
         public int version;      // lump format version
         char[] fourCC; // lump ident code
-        public lump_t()
+
+
+        public object Data; // Holds lump-specific data (could be vertices, textures, etc.)
+
+        // Static List to store all Lumps.
+        public static List<Lump> Lumps = new List<Lump>();
+
+        // Static method to add a Lump to the list
+        public static void AddLump(Lump lump)
+        {
+            Lumps.Add(lump);
+        }
+
+        // Constructor for Lump
+        public Lump(object data)
         {
             fileofs = curOffset;
             filelen = 256;
+            Data = data;
 
             // Give every lump 256 space
             curOffset += 256;
 
             fourCC = new char[4];    // lump ident code
+
+            // Add this lump to the static list
+            AddLump(this);
+
         }
+
+        // Lump to represent vertices
+        public static Lump LUMP_VERTEXES = new Lump(new float[]
+        {
+            // Positions            // Texture Coordinates (u, v)
+            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Front-bottom-left
+             0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Front-bottom-right
+             0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Front-top-right
+            -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Front-top-left
+            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Back-bottom-left
+             0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Back-bottom-right
+             0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Back-top-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 1.0f   // Back-top-left
+        });
+
+        // Lump to represent indices ( not in bsps under v26 )
+        public static Lump LUMP_INDICES = new Lump(new uint[]
+        {
+    0, 1, 2,  0, 2, 3,  // Front face
+    4, 5, 6,  4, 6, 7,  // Back face
+    0, 1, 5,  0, 5, 4,  // Bottom face
+    2, 3, 7,  2, 7, 6,  // Top face
+    0, 3, 7,  0, 7, 4,  // Left face
+    1, 2, 6,  1, 6, 5   // Right face
+        });
     }
 
 }
