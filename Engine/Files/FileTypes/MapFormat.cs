@@ -11,11 +11,11 @@ namespace SourceRewrite.Files.FileTypes
     /// </summary>
     public class MapFormat
     {
-        public BSPHeader_t Header;
+        public BSPHeader Header;
 
         public MapFormat()
         {
-            Header = new BSPHeader_t();
+            Header = new BSPHeader();
 
             int ident = ('V' << 24) | ('B' << 16) | ('S' << 8) | 'P'; // VBSP Identifier
 
@@ -42,7 +42,7 @@ namespace SourceRewrite.Files.FileTypes
     /// <summary>
     /// BSP Header, stores information about the .bsp.
     /// </summary>
-    public struct BSPHeader_t
+    public struct BSPHeader
     {
         public int ident; // BSP file identifier
         public int version; // BSP file version
