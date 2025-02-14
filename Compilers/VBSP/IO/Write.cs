@@ -23,6 +23,14 @@ namespace VBSP.IO
                 inputText = reader.ReadToEnd(); // Read the entire content of the file
             }
         }
+
+        /// <summary>
+        /// Writes a Lump to BSP.
+        /// </summary>
+        public void WriteLump(Lump input)
+        {
+            Write(input.Data);
+        }
         
         /// <summary>
         /// Writes an input to BSP.
@@ -38,6 +46,33 @@ namespace VBSP.IO
             {
                 // Write integer to binary
                 BinaryWriter.Write(integer);
+            }
+            else if (input is string[] stringArray)
+            {
+                // Write array of strings to binary
+                BinaryWriter.Write(stringArray.Length); // Write the length of the array first
+                foreach (var item in stringArray)
+                {
+                    BinaryWriter.Write(item);
+                }
+            }
+            else if (input is int[] intArray)
+            {
+                // Write array of integers to binary
+                BinaryWriter.Write(intArray.Length); // Write the length of the array first
+                foreach (var item in intArray)
+                {
+                    BinaryWriter.Write(item);
+                }
+            }
+            else if (input is float[] floatArray)
+            {
+                // Write array of floats to binary
+                BinaryWriter.Write(floatArray.Length); // Write the length of the array first
+                foreach (var item in floatArray)
+                {
+                    BinaryWriter.Write(item);
+                }
             }
             // Unsupported Type
             else
@@ -65,9 +100,8 @@ namespace VBSP.IO
             {
                 Console.WriteLine($"Writing Lump Starting at: {lump.fileofs}, length of {lump.filelen}");
 
-                BinaryWriter.Write(lump.fileofs);
-                BinaryWriter.Write(lump.filelen);
-                BinaryWriter.Write(lump.version);
+                Write(lump.filelen);
+                WriteLump(Lump.LUMP_VERTEXES);
             }
 
             BinaryWriter.Write(inputText);
