@@ -31,7 +31,7 @@ namespace VBSP
             AddLump(this);
         }
 
-        // Example lump to represent vertices
+        // Lump to represent vertices
         public static Lump LUMP_VERTEXES = new Lump(new float[]
         {
             // Positions            // Texture Coordinates (u, v)
@@ -43,6 +43,17 @@ namespace VBSP
              0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Back-bottom-right
              0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Back-top-right
             -0.5f,  0.5f,  0.5f,   0.0f, 1.0f   // Back-top-left
+        });
+
+        // Lump to represent indices ( not in bsps under v26 )
+        public static Lump LUMP_INDICES = new Lump(new uint[]
+        {
+    0, 1, 2,  0, 2, 3,  // Front face
+    4, 5, 6,  4, 6, 7,  // Back face
+    0, 1, 5,  0, 5, 4,  // Bottom face
+    2, 3, 7,  2, 7, 6,  // Top face
+    0, 3, 7,  0, 7, 4,  // Left face
+    1, 2, 6,  1, 6, 5   // Right face
         });
     }
 }

@@ -29,8 +29,11 @@ namespace SourceRewrite.Files.FileTypes
 
             Header.version = 26; // Set the unique version (we use 26 for now)
 
+            Header.mapRevision = 1;
+
             // Create our lumps TODO: Automate this
             Header.lumps = [
+                new lump_t{version = 1},
                 new lump_t{version = 1}
             ];
         }
@@ -62,10 +65,10 @@ namespace SourceRewrite.Files.FileTypes
         public lump_t()
         {
             fileofs = curOffset;
-            filelen = 1024;
+            filelen = 256;
 
-            // Give every lump 1024 space
-            curOffset += 1024;
+            // Give every lump 256 space
+            curOffset += 256;
 
             fourCC = new char[4];    // lump ident code
         }

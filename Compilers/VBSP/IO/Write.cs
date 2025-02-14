@@ -74,6 +74,14 @@ namespace VBSP.IO
                     BinaryWriter.Write(item);
                 }
             }
+            else if (input is uint[] uintArray)
+            {
+                BinaryWriter.Write(uintArray.Length); // Write the length of the array first
+                foreach (var item in uintArray)
+                {
+                    BinaryWriter.Write(item);
+                }
+            }
             // Unsupported Type
             else
             {
@@ -95,13 +103,17 @@ namespace VBSP.IO
             BinaryWriter.Write(input.Header.mapRevision);
 
             Console.WriteLine($"Writing BSP Type {input.Header.ident.ToString()}, version {input.Header.version}");
+            int index = 0;
             
             foreach( lump_t lump in input.Header.lumps)
             {
-                Console.WriteLine($"Writing Lump Starting at: {lump.fileofs}, length of {lump.filelen}");
+                Lump orderedLump = Lump.Lumps[index];
+                Console.WriteLine($"Writing Lump: {orderedLump}, Index of {index}");
 
                 Write(lump.filelen);
-                WriteLump(Lump.LUMP_VERTEXES);
+                WriteLump(orderedLump); // Write the Lumps in order
+
+                index++;
             }
 
             BinaryWriter.Write(inputText);
