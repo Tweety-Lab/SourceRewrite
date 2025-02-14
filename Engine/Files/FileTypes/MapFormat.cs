@@ -33,8 +33,8 @@ namespace SourceRewrite.Files.FileTypes
 
             // Create our lumps TODO: Automate this
             Header.lumps = [
-                new Lump{version = 1},
-                new Lump{version = 1}
+                new Lump{Version = 1},
+                new Lump{Version = 1}
             ];
         }
     }
@@ -57,10 +57,10 @@ namespace SourceRewrite.Files.FileTypes
     {
         private static int curOffset = 0;
 
-        public int fileofs;      // offset into file (bytes)
-        public int filelen;      // length of lump (bytes)
-        public int version;      // lump format version
-        char[] fourCC; // lump ident code
+        public int FileOffset;      // offset into file (bytes)
+        public int FileLength;      // length of lump (bytes)
+        public int Version;      // lump format version
+        char[] FourCC; // lump ident code
 
 
         public object Data; // Holds lump-specific data (could be vertices, textures, etc.)
@@ -77,14 +77,14 @@ namespace SourceRewrite.Files.FileTypes
         // Constructor for Lump
         public Lump(object data)
         {
-            fileofs = curOffset;
-            filelen = 256;
+            FileOffset = curOffset;
+            FileLength = 256;
             Data = data;
 
             // Give every lump 256 space
             curOffset += 256;
 
-            fourCC = new char[4];    // lump ident code
+            FourCC = new char[4];    // lump ident code
 
             // Add this lump to the static list
             AddLump(this);

@@ -110,7 +110,7 @@ namespace VBSP.IO
                 Lump orderedLump = Lump.Lumps[index];
                 Console.WriteLine($"Writing Lump: {orderedLump}, Index of {index}");
 
-                Write(lump.filelen);
+                Write(lump.FileLength);
                 WriteLump(orderedLump); // Write the Lumps in order
 
                 index++;
