@@ -1,6 +1,6 @@
-GameInfo
+"GameInfo"
 {
-	game 		"EngineTest"
+	game 		"hl2"
 	TestIndentKey
 	{
 		testKey2 		"TestValue2"
