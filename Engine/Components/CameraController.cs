@@ -29,25 +29,25 @@ namespace SourceRewrite.Components
             // Forward Movement
             if (Input.GetKeyDown(Key.W))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Forward;
+                camera.Transform.Position = camera.Transform.Position + MovementSpeed * deltaTime * camera.Transform.Forward;
             }
 
             // Backward Movement
             if (Input.GetKeyDown(Key.S))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Forward;
+                camera.Transform.Position = camera.Transform.Position - MovementSpeed * deltaTime * camera.Transform.Forward;
             }
 
             // Left Movement
             if (Input.GetKeyDown(Key.A))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Right;
+                camera.Transform.Position = camera.Transform.Position - MovementSpeed * deltaTime * camera.Transform.Right;
             }
 
             // Right Movement
             if (Input.GetKeyDown(Key.D))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Right;
+                camera.Transform.Position = camera.Transform.Position + MovementSpeed * deltaTime * camera.Transform.Right;
             }
 
             // If right mouse held down move Camera view
@@ -59,10 +59,10 @@ namespace SourceRewrite.Components
                 float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
                 float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
 
-                Console.WriteLine("Right: " + GameObject.Transform.Right);
-                Console.WriteLine("Forward: " + GameObject.Transform.Forward);
+                Console.WriteLine("Right: " + camera.Transform.Right);
+                Console.WriteLine("Forward: " + camera.Transform.Forward);
 
-                GameObject.Transform.RotateBy(mouseY, mouseX, 0);
+                camera.Transform.RotateBy(mouseY, mouseX, 0);
             } else
             {
                 Input.UnlockCursor();

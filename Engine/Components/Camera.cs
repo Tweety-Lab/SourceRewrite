@@ -18,6 +18,9 @@ namespace SourceRewrite.Components
         public Vector3 CameraFront = new Vector3(0f, 0f, -1f);
         public Vector3 CameraUp = Vector3.UnitY;
 
+        // Cameras have their own Transform
+        public Transform Transform;
+
         /// <summary>
         /// Currently active Camera Component.
         /// </summary>
@@ -34,7 +37,7 @@ namespace SourceRewrite.Components
         public void UpdateCameraFront()
         {
             // Get the rotation from the transform
-            Quaternion rotation = GameObject.Transform.Rotation;
+            Quaternion rotation = Transform.Rotation;
 
             // Update camera direction vectors based on transform's rotation
             CameraFront = Vector3.Transform(-Vector3.UnitZ, rotation);
@@ -45,7 +48,7 @@ namespace SourceRewrite.Components
 
         public Matrix4x4 GetViewMatrix()
         {
-            Vector3 position = GameObject.Transform.Position;
+            Vector3 position = Transform.Position;
             return Matrix4x4.CreateLookAt(
                 position,                    // Camera position
                 position + CameraFront,      // Look target (position + direction)
@@ -65,6 +68,8 @@ namespace SourceRewrite.Components
         public Camera()
         {
             ActiveCamera = this;
+
+            Transform = new Transform();
         }
     }
 }
