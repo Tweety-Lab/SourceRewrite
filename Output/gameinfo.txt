@@ -8,7 +8,6 @@
 
 		SearchPaths
 		{
-			Game				"|gameinfo_path|."
 			Game				"portal2"
 		}
 	}

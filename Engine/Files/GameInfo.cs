@@ -26,9 +26,6 @@ namespace SourceRewrite.Files
 
                 // Set the Title of the Game Window to as defined in Game Info
                 GameWindow.CurrentWindow.GetSilkWindow().Title = KeyValues.GetKeyValue("game").Value.ToString();
-
-                Console.WriteLine(SteamPaths.GetGamePathFromAppId((int) KeyValues.GetKeyValue("SteamAppId").Value));
-
             }
             catch (Exception ex)
             {
@@ -79,7 +76,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetMountedPaths()
         {
-            return SteamPaths.GetGamePathFromAppId(GetSteamAppID());
+            return $"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("Game").Value.ToString()}";
         }
     }
 }

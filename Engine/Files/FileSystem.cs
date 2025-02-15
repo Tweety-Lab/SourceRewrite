@@ -14,22 +14,16 @@ namespace SourceRewrite.Files
     /// </summary>
     public static class FileSystem
     {
-        // Our Base Game paths
-        public static string ShadersPath { get; private set; } = "../../shaders";
-        public static string MaterialsPath { get; private set; } = "../../materials";
-        public static string ModelsPath { get; private set; } = "../../models";
-
-        /// <summary>
-        /// Path to the Game Folder (Folder containing gameinfo.txt).
-        /// </summary>
-        public static string GamePath { get; private set; } = "../../";
+        public static GamePath GamePath = new GamePath("../../");
+        public static GamePath MountedGamePath = new GamePath(GameInfo.GetMountedPaths());
 
         /// <summary>
         /// Get the path to a Shader from it's name.
         /// </summary>
         public static string GetShaderPath(string name)
         {
-            return $"{ShadersPath}/{name}";
+            // Source 1 doesn't have exposed shaders, no need to search mounted games.
+            return $"{GamePath.ShadersPath}/{name}";
         }
 
         /// <summary>
@@ -37,7 +31,11 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetMaterialPath(string name)
         {
-            return $"{MaterialsPath}/{name}";
+            string path = $"{GamePath.MaterialsPath}/{name}";
+            if (File.Exists(path)) return path;
+
+            string mountedPath = $"{MountedGamePath.MaterialsPath}/{name}";
+            return File.Exists(mountedPath) ? mountedPath : path;
         }
 
         /// <summary>
@@ -45,7 +43,11 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetModelPath(string name)
         {
-            return $"{ModelsPath}/{name}";
+            string path = $"{GamePath.ModelsPath}/{name}";
+            if (File.Exists(path)) return path;
+
+            string mountedPath = $"{MountedGamePath.ModelsPath}/{name}";
+            return File.Exists(mountedPath) ? mountedPath : path;
         }
 
 
@@ -54,7 +56,9 @@ namespace SourceRewrite.Files
         /// </summary>
         public static Shader GetShader(string name)
         {
-            return new Shader($"{ShadersPath}/{name}.vert", $"{ShadersPath}/{name}.frag");
+            string vertPath = GetShaderPath($"{name}.vert");
+            string fragPath = GetShaderPath($"{name}.frag");
+            return new Shader(vertPath, fragPath);
         }
 
         /// <summary>
@@ -62,7 +66,36 @@ namespace SourceRewrite.Files
         /// </summary>
         public static Material GetMaterial(string name)
         {
-            return new Material($"{MaterialsPath}/{name}");
+            return new Material(GetMaterialPath(name));
+        }
+
+        /// <summary>
+        /// Returns the paths to all mounted games defined in gameinfo.txt.
+        /// </summary>
+        public static string GetMountedPaths()
+        {
+            return GameInfo.GetMountedPaths();
+        }
+    }
+
+    public struct GamePath
+    {
+        public string ShadersPath { get; private set; } = "../../shaders";
+        public string MaterialsPath { get; private set; } = "../../materials";
+        public string ModelsPath { get; private set; } = "../../models";
+
+        /// <summary>
+        /// Path to the Game Folder (Folder containing gameinfo.txt).
+        /// </summary>
+        public static string BasePath { get; private set; } = "../../";
+        
+        public GamePath (string basePath)
+        {
+            ShadersPath = $"{basePath}/shaders";
+            MaterialsPath = $"{basePath}/materials";
+            ModelsPath = $"{basePath}/models";
+
+            BasePath = basePath;
         }
     }
 }
