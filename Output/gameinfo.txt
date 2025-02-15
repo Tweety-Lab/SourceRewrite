@@ -1,15 +1,15 @@
 "GameInfo"
 {
-	game 		"PORTAL 2"
+	game 		"PORTALTEST"
 
 	FileSystem
 	{
-		SteamAppId				620
+		SteamAppId				"620"
 
 		SearchPaths
 		{
-			Game				|gameinfo_path|.
-			Game				portal2
+			Game				"|gameinfo_path|."
+			Game				"portal2"
 		}
 	}
 }

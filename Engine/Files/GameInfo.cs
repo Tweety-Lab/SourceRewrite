@@ -25,6 +25,9 @@ namespace SourceRewrite.Files
 
                 // Set the Title of the Game Window to as defined in Game Info
                 GameWindow.CurrentWindow.GetSilkWindow().Title = KeyValues.GetKeyValue("game").Value.ToString();
+
+                Console.WriteLine(KeyValues.GetKeyValue("Game").Value);
+
             }
             catch (Exception ex)
             {
@@ -60,6 +63,14 @@ namespace SourceRewrite.Files
         public static string GetGameName()
         {
             return GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("game").Value.ToString();
+        }
+
+        /// <summary>
+        /// Returns the path to all mounted games defined in gameinfo.txt.
+        /// </summary>
+        public static string GetMountedPaths()
+        {
+            return GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("Game").Value.ToString();
         }
     }
 }

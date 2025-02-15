@@ -14,6 +14,7 @@ namespace SourceRewrite.Files
     /// </summary>
     public static class FileSystem
     {
+        // Our Base Game paths
         public static string ShadersPath { get; private set; } = "../../shaders";
         public static string MaterialsPath { get; private set; } = "../../materials";
         public static string ModelsPath { get; private set; } = "../../models";
