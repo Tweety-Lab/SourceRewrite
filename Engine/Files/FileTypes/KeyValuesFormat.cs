@@ -108,14 +108,7 @@ namespace SourceRewrite.Files.FileTypes
         /// </summary>
         public ParentKey GetParentKey(string name)
         {
-            foreach (ParentKey parentKey in ParentKeys)
-            {
-                if (parentKey.Name == name)
-                {
-                    return parentKey;
-                }
-            }
-            return null;
+            return ParentKeys.Find(pk => pk.Name == name);
         }
 
         /// <summary>
@@ -125,14 +118,11 @@ namespace SourceRewrite.Files.FileTypes
         {
             foreach (ParentKey parentKey in ParentKeys)
             {
-                foreach (KeyValue keyValue in parentKey.ChildKeys)
-                {
-                    if (keyValue.Key == key) {
-                        return keyValue;
-                    }
-                }
+                KeyValue keyValue = parentKey.GetKeyValue(key);
+                if (keyValue != null) return keyValue;
             }
-            return null; // Didn't find KeyValue, return null
+
+            return null;
         }
 
         /// <summary>

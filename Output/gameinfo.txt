@@ -1,8 +1,15 @@
 "GameInfo"
 {
-	game 		"hl2"
-	TestIndentKey
+	game 		"PORTAL 2"
+
+	FileSystem
 	{
-		testKey2 		"TestValue2"
+		SteamAppId				620
+
+		SearchPaths
+		{
+			Game				|gameinfo_path|.
+			Game				portal2
+		}
 	}
 }
