@@ -27,8 +27,7 @@ namespace SourceRewrite.Files
                 // Set the Title of the Game Window to as defined in Game Info
                 GameWindow.CurrentWindow.GetSilkWindow().Title = KeyValues.GetKeyValue("game").Value.ToString();
 
-                Console.WriteLine(KeyValues.GetKeyValue("Game").Value);
-                Console.WriteLine(SteamPaths.GetGamePathFromAppId(620));
+                Console.WriteLine(SteamPaths.GetGamePathFromAppId((int) KeyValues.GetKeyValue("SteamAppId").Value));
 
             }
             catch (Exception ex)
@@ -68,11 +67,19 @@ namespace SourceRewrite.Files
         }
 
         /// <summary>
-        /// Returns the path to all mounted games defined in gameinfo.txt.
+        /// Returns the mounted SteamAppId defined in gameinfo.txt.
+        /// </summary>
+        public static int GetSteamAppID()
+        {
+            return (int) GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("SteamAppId").Value;
+        }
+
+        /// <summary>
+        /// Returns the paths to all mounted games defined in gameinfo.txt.
         /// </summary>
         public static string GetMountedPaths()
         {
-            return GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("Game").Value.ToString();
+            return SteamPaths.GetGamePathFromAppId(GetSteamAppID());
         }
     }
 }
