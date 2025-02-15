@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using SourceRewrite.Steam;
 
 namespace SourceRewrite.Files
 {
@@ -27,6 +28,7 @@ namespace SourceRewrite.Files
                 GameWindow.CurrentWindow.GetSilkWindow().Title = KeyValues.GetKeyValue("game").Value.ToString();
 
                 Console.WriteLine(KeyValues.GetKeyValue("Game").Value);
+                Console.WriteLine(SteamPaths.GetGamePathFromAppId(620));
 
             }
             catch (Exception ex)
