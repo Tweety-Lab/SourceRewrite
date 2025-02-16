@@ -1,5 +1,5 @@
 shader
 {
-	$basetexture "bricks.jpg"
+	$basetexture "metal/underground_metal_corrugated001..vtf"
 	$uBrightness	"1"
 }

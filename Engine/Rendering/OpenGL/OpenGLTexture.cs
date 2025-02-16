@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Silk.NET.OpenGL;
+using Sledge.Formats.Texture.Vtf;
+using SourceRewrite.Files.FileTypes;
 using StbImageSharp;
 
 namespace SourceRewrite.Rendering.OpenGL
@@ -19,14 +21,15 @@ namespace SourceRewrite.Rendering.OpenGL
             _handle = _gl.GenTexture();
             Bind();
 
-            // Load the image from memory.
-            ImageResult result = ImageResult.FromMemory(File.ReadAllBytes(path), ColorComponents.RedGreenBlueAlpha);
+            // Load VTF
+            TextureFormat texture = new TextureFormat(path);
+            byte[] data = texture.GetBgra32Data();
 
-            fixed (byte* ptr = result.Data)
+            // Upload the VTF Texture data to OpenGL.
+            fixed (byte* ptr = data)
             {
-                // Create our texture and upload the image data.
-                _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, (uint)result.Width,
-                    (uint)result.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+                _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, (uint)texture.Width,
+                    (uint)texture.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, ptr);
             }
 
             SetParameters();
@@ -52,13 +55,10 @@ namespace SourceRewrite.Rendering.OpenGL
 
         private void SetParameters()
         {
-            //Setting some texture perameters so the texture behaves as expected.
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.LinearMipmapLinear);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 8);
+            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
             //Generating mipmaps.
             _gl.GenerateMipmap(TextureTarget.Texture2D);
