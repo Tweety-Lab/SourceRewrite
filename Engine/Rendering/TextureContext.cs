@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
+using SourceRewrite.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace SourceRewrite.Rendering
         private ITexture _textureInterface; // Use an interface for better abstraction
         public Texture(string path)
         {
+            // If Texture cant be found, set it to missing
+            if (!File.Exists(path)) path = FileSystem.GetMaterialPath("missing.vtf");
+
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)
             {
