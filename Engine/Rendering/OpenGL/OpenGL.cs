@@ -10,6 +10,7 @@ using SourceRewrite.Assets;
 using System.Threading.Tasks.Dataflow;
 using Silk.NET.Windowing;
 using System.Reflection;
+using Silk.NET.Vulkan;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -38,13 +39,12 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
-
         }
 
         public unsafe void OnRender(RendererContext renderer)
         {
-            OpenGL.Clear((uint)ClearBufferMask.ColorBufferBit);
-
+            OpenGL.Clear((uint)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            OpenGL.Enable(EnableCap.DepthTest);
         }
 
         public void OnFramebufferResize(Vector2D<int> newSize)
