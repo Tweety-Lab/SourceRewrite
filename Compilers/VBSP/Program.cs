@@ -1,4 +1,4 @@
-﻿using SourceRewrite.Files.FileTypes;
+﻿using FileFormats.BSP;
 using System;
 using VBSP.IO;
 class Program
@@ -8,7 +8,7 @@ class Program
         // Command-line arguments using the 'args' parameter
         if (args.Length > 0)
         {
-            MapFormat testMap = new MapFormat();
+            BSPFormat testMap = new BSPFormat();
 
             // By default, write the BSP to the location of vbsp.exe
             BSPWriter writer = new BSPWriter("./bsp_test.bsp", args[args.Length - 1]);

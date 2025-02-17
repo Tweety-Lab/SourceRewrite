@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceRewrite.Files.FileTypes
+namespace FileFormats.BSP
 {
     /// <summary>
     /// Modified version of Valve's Source 1 .bsp map format.
     /// </summary>
-    public class MapFormat
+    public class BSPFormat
     {
         public BSPHeader Header;
 
-        public MapFormat()
+        public BSPFormat()
         {
             Header = new BSPHeader();
 

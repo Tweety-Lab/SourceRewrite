@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Engine\SourceRewrite.csproj" />
+    <ProjectReference Include="..\..\FileFormats\FileFormats.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using SourceRewrite.Files.FileTypes;
+﻿using FileFormats.BSP;
 using System;
 using System.IO;
 using System.Text;
@@ -87,7 +87,7 @@ namespace VBSP.IO
         /// <summary>
         /// Writes a map to file.
         /// </summary>
-        public void WriteToMap(MapFormat input)
+        public void WriteToMap(BSPFormat input)
         {
             // Write header
             _binaryWriter.Write(input.Header.ident);
