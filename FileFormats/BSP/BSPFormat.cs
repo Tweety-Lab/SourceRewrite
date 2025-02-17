@@ -93,6 +93,33 @@ namespace FileFormats.BSP
             });
 
         }
+
+        /// <summary>
+        /// Gets a lump from the BSP file by its type.
+        /// </summary>
+        public Lump GetLump(Lump.LumpType type)
+        {
+            if (Header.lumps == null)
+                return new Lump();
+
+            int index = (int)type;
+            if (index < 0 || index >= Header.lumps.Length)
+                return new Lump();
+
+            return Header.lumps[index];
+        }
+
+        /// <summary>
+        /// Gets the data from a lump cast to the specified type.
+        /// </summary>
+        public T GetLumpData<T>(Lump.LumpType type) where T : class
+        {
+            var lump = GetLump(type);
+            if (lump.Data == null)
+                return null;
+
+            return lump.Data as T;
+        }
     }
 
     /// <summary>
