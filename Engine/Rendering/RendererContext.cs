@@ -2,7 +2,6 @@
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using SourceRewrite.Components;
-using SourceRewrite.Files.FileTypes;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;

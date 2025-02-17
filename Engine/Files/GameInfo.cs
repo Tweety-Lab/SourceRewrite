@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Files.FileTypes;
-using SourceRewrite.Windowing;
+﻿using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
 using System.Linq;

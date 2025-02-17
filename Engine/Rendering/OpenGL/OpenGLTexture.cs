@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using Silk.NET.OpenGL;
-using Sledge.Formats.Texture.Vtf;
-using SourceRewrite.Files.FileTypes;
 using StbImageSharp;
+using FileFormats.VTF;
 
 namespace SourceRewrite.Rendering.OpenGL
 {

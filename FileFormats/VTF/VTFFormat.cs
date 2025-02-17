@@ -1,12 +1,11 @@
-﻿using Silk.NET.OpenGL;
-using Sledge.Formats.Texture.Vtf;
+﻿using Sledge.Formats.Texture.Vtf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceRewrite.Files.FileTypes
+namespace FileFormats.VTF
 {
     /// <summary>
     /// Valve's Source 1 .vtf texture format.
