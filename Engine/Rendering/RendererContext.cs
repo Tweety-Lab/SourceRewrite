@@ -5,7 +5,7 @@ using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
-using SourceRewrite.Assets;
+using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 
 
@@ -59,15 +59,11 @@ namespace SourceRewrite.Rendering
         // Run any special logic that needs to be ran on load
         public void OnLoad()
         {
-            // Create a material
-            Material material = FileSystem.GetMaterial("bricks.vmt");
-
-            // Create a Mesh
-            Mesh mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
+            BSPMesh bspMesh = new BSPMesh("../../maps/bsp_test.bsp");
 
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(mesh);
+            MeshRenderer testRenderer = new MeshRenderer(bspMesh.Mesh);
 
             testObject.AddComponent(testRenderer);
 
@@ -78,9 +74,6 @@ namespace SourceRewrite.Rendering
             GameObject cameraObject = new GameObject();
             cameraObject.AddComponent(new Camera());
             cameraObject.AddComponent(new CameraController());
-
-            cameraObject.Transform.Position = new Vector3(0f, 0f, -4f);
-            cameraObject.Transform.RotateTo(0,0,0);
 
             _apiInterface.OnLoad(this);
         }

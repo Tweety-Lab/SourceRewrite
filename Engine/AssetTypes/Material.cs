@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using FileFormats.KeyValues;
 using SourceRewrite.Files;
 
-namespace SourceRewrite.Assets
+namespace SourceRewrite.AssetTypes
 {
     /// <summary>
     /// Material Class.

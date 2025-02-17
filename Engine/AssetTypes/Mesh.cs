@@ -8,7 +8,7 @@ using Silk.NET.Assimp;
 using SourceRewrite.Rendering;
 using SourceRewrite.Files;
 
-namespace SourceRewrite.Assets
+namespace SourceRewrite.AssetTypes
 {
     /// <summary>
     /// Mesh Class, Constructed from filePath to model.

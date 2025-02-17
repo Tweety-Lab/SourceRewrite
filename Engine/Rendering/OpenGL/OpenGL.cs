@@ -6,7 +6,7 @@ using SourceRewrite.Maths;
 using System.Numerics;
 using SourceRewrite.Objects;
 using SourceRewrite.Components;
-using SourceRewrite.Assets;
+using SourceRewrite.AssetTypes;
 using System.Threading.Tasks.Dataflow;
 using Silk.NET.Windowing;
 using System.Reflection;
