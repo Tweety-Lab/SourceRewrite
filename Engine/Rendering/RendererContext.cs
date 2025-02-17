@@ -64,7 +64,7 @@ namespace SourceRewrite.Rendering
             Material material = FileSystem.GetMaterial("bricks.vmt");
 
             // Create a Mesh
-            Mesh mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
+            Mesh mesh = new Mesh(FileSystem.GetModelPath("cubes.model"), material);
 
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();

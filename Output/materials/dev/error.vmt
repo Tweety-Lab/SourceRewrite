@@ -1,0 +1,5 @@
+shader
+{
+	$basetexture "dev/error.vtf"
+	$uBrightness	"1"
+}

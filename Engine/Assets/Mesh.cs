@@ -34,8 +34,8 @@ namespace SourceRewrite.Assets
             if (!System.IO.File.Exists(filePath))
             {
                 Console.WriteLine($"Could not find model at '{filePath}'");
-                filePath = FileSystem.GetModelPath("error.model");
-                material = FileSystem.GetMaterial("error.vmt");
+                filePath = FileSystem.GetModelPath("dev/error.model");
+                material = FileSystem.GetMaterial("dev/error.vmt");
             }
 
             Texture = material.Texture;
