@@ -27,9 +27,7 @@ namespace SourceRewrite.AssetTypes
             Material material = FileSystem.GetMaterial("bricks.vmt");
 
             // Create a Mesh
-            Mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
-            Mesh.Vertices = vertices;
-            Mesh.Indices = indices;
+            Mesh = new Mesh(vertices, indices, material);
         }
     }
 }

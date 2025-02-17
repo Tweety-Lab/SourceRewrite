@@ -28,6 +28,7 @@ namespace SourceRewrite.AssetTypes
         {
         };
 
+        // Create a Mesh from file path
         public unsafe Mesh(string filePath, Material material)
         {
             // If Mesh cant be found, set it to ERROR
@@ -98,6 +99,16 @@ namespace SourceRewrite.AssetTypes
             Indices = indexData.ToArray();
 
             assimp.FreeScene(scene); // Cleanup
+        }
+
+        // Create a Mesh from vertices and indices
+        public Mesh(float[] vertices, uint[] indices, Material material)
+        {
+            Texture = material.Texture;
+            Shader = material.Shader;
+
+            Vertices = vertices;
+            Indices = indices;
         }
     }
 }
