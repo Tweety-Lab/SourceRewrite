@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using SourceRewrite.Steam;
+using FileFormats.KeyValues;
 
 namespace SourceRewrite.Files
 {

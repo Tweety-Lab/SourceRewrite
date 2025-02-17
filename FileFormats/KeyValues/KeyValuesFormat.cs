@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 
-namespace SourceRewrite.Files.FileTypes
+namespace FileFormats.KeyValues
 {
     // This code is bad. Rewrite.
 
@@ -180,8 +180,8 @@ namespace SourceRewrite.Files.FileTypes
         {
             foreach (KeyValue keyValue in ChildKeys)
             {
-                if (keyValue.Key == key) 
-                { 
+                if (keyValue.Key == key)
+                {
                     return keyValue;
                 }
             }

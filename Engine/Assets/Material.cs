@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SourceRewrite.Files.FileTypes;
+using FileFormats.KeyValues;
 using SourceRewrite.Files;
 
 namespace SourceRewrite.Assets
