@@ -17,25 +17,81 @@ namespace SourceRewrite.Files.FileTypes
         {
             Header = new BSPHeader();
 
-            int ident = ('V' << 24) | ('B' << 16) | ('S' << 8) | 'P'; // VBSP Identifier
-
-            // Adjust for little-endian systems
-            if (BitConverter.IsLittleEndian)
-            {
-                ident = BitConverter.ToInt32(BitConverter.GetBytes(ident).Reverse().ToArray(), 0);
-            }
+            int ident = ('P' << 24) | ('S' << 16) | ('B' << 8) | 'V'; // VBSP Identifier
 
             Header.ident = ident;
-
-            Header.version = 26; // Set the unique version (we use 26 for now)
-
+            Header.version = 26;
             Header.mapRevision = 1;
 
-            // Create our lumps TODO: Automate this
-            Header.lumps = [
-                new Lump{Version = 1},
-                new Lump{Version = 1}
-            ];
+            // Initialize all 64 lumps as empty first
+            Header.lumps = new Lump[64];
+            for (int i = 0; i < 64; i++)
+            {
+                Header.lumps[i] = new Lump { Version = 0 };
+            }
+
+            // Write Entities
+            Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(new float[]
+            {
+    // Front face
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  // Top-right
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  // Top-left
+
+    // Back face
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  // Bottom-left
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  // Bottom-right
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // Top-left
+
+    // Left face
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
+    -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Top-left
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // Bottom-right
+
+    // Right face
+     0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
+     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Top-left
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
+     0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // Bottom-right
+
+    // Top face
+    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
+     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // Top-left
+
+    // Bottom face
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
+     0.5f, -0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f   // Top-left
+            });
+
+            // Write Vertex Indices Lump (for rendering with indexed drawing)
+            Header.lumps[(int)Lump.LumpType.LUMP_INDICES] = new Lump(new uint[]
+            {
+    // Front face
+    0, 1, 2,  0, 2, 3,
+
+    // Back face
+    4, 5, 6,  4, 6, 7,
+
+    // Left face
+    8, 9, 10,  8, 10, 11,
+
+    // Right face
+    12, 13, 14,  12, 14, 15,
+
+    // Top face
+    16, 17, 18,  16, 18, 19,
+
+    // Bottom face
+    20, 21, 22,  20, 22, 23
+            });
+
         }
     }
 
@@ -55,66 +111,48 @@ namespace SourceRewrite.Files.FileTypes
     /// </summary>
     public struct Lump
     {
-        private static int curOffset = 0;
-
-        public int FileOffset;      // offset into file (bytes)
-        public int FileLength;      // length of lump (bytes)
-        public int Version;      // lump format version
-        char[] FourCC; // lump ident code
-
-
-        public object Data; // Holds lump-specific data (could be vertices, textures, etc.)
-
-        // Static List to store all Lumps.
-        public static List<Lump> Lumps = new List<Lump>();
-
-        // Static method to add a Lump to the list
-        public static void AddLump(Lump lump)
+        // Lump directory indices
+        public enum LumpType
         {
-            Lumps.Add(lump);
+            LUMP_VERTEXES,           // Brush Vertices
+            LUMP_INDICES             // Brush Indices ( not in < v26 )
+                                     // ... continue
         }
 
-        // Constructor for Lump
+        private static int curOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
+
+        public int FileOffset;
+        public int FileLength;
+        public int Version;
+        public int FourCC; // Changed to int for proper alignment
+        public object Data;
+
         public Lump(object data)
         {
+            // Align offset to 4-byte boundary
+            curOffset = (curOffset + 3) & ~3;
             FileOffset = curOffset;
-            FileLength = 256;
+
+            // Calculate actual data size
+            FileLength = CalculateDataSize(data);
             Data = data;
+            Version = 0;
+            FourCC = 0;
 
-            // Give every lump 256 space
-            curOffset += 256;
-
-            FourCC = new char[4];    // lump ident code
-
-            // Add this lump to the static list
-            AddLump(this);
-
+            curOffset += FileLength;
         }
 
-        // Lump to represent vertices
-        public static Lump LUMP_VERTEXES = new Lump(new float[]
+        private int CalculateDataSize(object data)
         {
-            // Positions            // Texture Coordinates (u, v)
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Front-bottom-left
-             0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Front-bottom-right
-             0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Front-top-right
-            -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Front-top-left
-            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Back-bottom-left
-             0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Back-bottom-right
-             0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Back-top-right
-            -0.5f,  0.5f,  0.5f,   0.0f, 1.0f   // Back-top-left
-        });
-
-        // Lump to represent indices ( not in bsps under v26 )
-        public static Lump LUMP_INDICES = new Lump(new uint[]
-        {
-    0, 1, 2,  0, 2, 3,  // Front face
-    4, 5, 6,  4, 6, 7,  // Back face
-    0, 1, 5,  0, 5, 4,  // Bottom face
-    2, 3, 7,  2, 7, 6,  // Top face
-    0, 3, 7,  0, 7, 4,  // Left face
-    1, 2, 6,  1, 6, 5   // Right face
-        });
+            return data switch
+            {
+                byte[] byteArray => byteArray.Length,
+                int[] intArray => intArray.Length * sizeof(int),
+                float[] floatArray => floatArray.Length * sizeof(float),
+                uint[] uintArray => uintArray.Length * sizeof(uint),
+                string stringData => Encoding.ASCII.GetByteCount(stringData),
+                _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
+            };
+        }
     }
-
 }

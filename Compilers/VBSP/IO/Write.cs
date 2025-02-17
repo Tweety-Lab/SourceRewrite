@@ -1,95 +1,87 @@
 ﻿using SourceRewrite.Files.FileTypes;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace VBSP.IO
 {
-    public class BSPWriter
+    public class BSPWriter : IDisposable
     {
-        public BinaryWriter BinaryWriter;
-        private string inputText;
+        private readonly BinaryWriter _binaryWriter;
 
         public BSPWriter(string outputPath, string inputPath)
         {
-            BinaryWriter = new BinaryWriter(File.Open(outputPath, FileMode.Create));
-
-            // Read the input text from the specified input file (.vmf)
-            using (StreamReader reader = new StreamReader(inputPath))
-            {
-                inputText = reader.ReadToEnd(); // Read the entire content of the file
-            }
+            _binaryWriter = new BinaryWriter(File.Open(outputPath, FileMode.Create));
         }
 
         /// <summary>
         /// Writes a Lump to BSP.
         /// </summary>
-        public void WriteLump(Lump input)
+        public void WriteLumpData(Lump input)
         {
-            Write(input.Data);
+            // Type check and cast the Data property before writing
+            switch (input.Data)
+            {
+                case byte[] byteData:
+                    _binaryWriter.Write(byteData);
+                    break;
+                case int[] intData:
+                    foreach (int value in intData)
+                        _binaryWriter.Write(value);
+                    break;
+                case float[] floatData:
+                    foreach (float value in floatData)
+                        _binaryWriter.Write(value);
+                    break;
+                case string stringData:
+                    // Convert string to bytes if needed
+                    byte[] stringBytes = Encoding.ASCII.GetBytes(stringData);
+                    _binaryWriter.Write(stringBytes);
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unsupported lump data type: {input.Data?.GetType().Name ?? "null"}");
+            }
         }
-        
+
         /// <summary>
         /// Writes an input to BSP.
         /// </summary>
         public void Write(object input)
         {
-            if (input is string str)
+            switch (input)
             {
-                // Write string to binary
-                BinaryWriter.Write(str);
-            }
-            else if (input is int integer)
-            {
-                // Write integer to binary
-                BinaryWriter.Write(integer);
-            }
-            else if (input is string[] stringArray)
-            {
-                // Write array of strings to binary
-                BinaryWriter.Write(stringArray.Length); // Write the length of the array first
-                foreach (var item in stringArray)
-                {
-                    BinaryWriter.Write(item);
-                }
-            }
-            else if (input is int[] intArray)
-            {
-                // Write array of integers to binary
-                BinaryWriter.Write(intArray.Length); // Write the length of the array first
-                foreach (var item in intArray)
-                {
-                    BinaryWriter.Write(item);
-                }
-            }
-            else if (input is float[] floatArray)
-            {
-                // Write array of floats to binary
-                BinaryWriter.Write(floatArray.Length); // Write the length of the array first
-                foreach (var item in floatArray)
-                {
-                    BinaryWriter.Write(item);
-                }
-            }
-            else if (input is uint[] uintArray)
-            {
-                BinaryWriter.Write(uintArray.Length); // Write the length of the array first
-                foreach (var item in uintArray)
-                {
-                    BinaryWriter.Write(item);
-                }
-            }
-            // Unsupported Type
-            else
-            {
-                throw new InvalidOperationException("Unsupported type");
+                case string str:
+                    _binaryWriter.Write(str);
+                    break;
+                case int integer:
+                    _binaryWriter.Write(integer);
+                    break;
+                case string[] stringArray:
+                    WriteArray(stringArray, _binaryWriter.Write);
+                    break;
+                case int[] intArray:
+                    WriteArray(intArray, _binaryWriter.Write);
+                    break;
+                case float[] floatArray:
+                    WriteArray(floatArray, _binaryWriter.Write);
+                    break;
+                case uint[] uintArray:
+                    WriteArray(uintArray, _binaryWriter.Write);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported type");
             }
 
-            // Add to file
-            BinaryWriter.Flush();
+            _binaryWriter.Flush();
+        }
+
+        private void WriteArray<T>(T[] array, Action<T> writeAction)
+        {
+            _binaryWriter.Write(array.Length);
+            foreach (var item in array)
+            {
+                writeAction(item);
+            }
         }
 
         /// <summary>
@@ -97,29 +89,45 @@ namespace VBSP.IO
         /// </summary>
         public void WriteToMap(MapFormat input)
         {
-            // Write the bsp header
-            BinaryWriter.Write(input.Header.ident);
-            BinaryWriter.Write(input.Header.version);
-            BinaryWriter.Write(input.Header.mapRevision);
+            // Write header
+            _binaryWriter.Write(input.Header.ident);
+            _binaryWriter.Write(input.Header.version);
+            _binaryWriter.Write(input.Header.mapRevision);
 
-            Console.WriteLine($"Writing BSP v{input.Header.version}");
-            int index = 0;
-            
-            foreach( Lump lump in input.Header.lumps)
+            // Write all 64 lump entries
+            for (int i = 0; i < 64; i++)
             {
-                Lump orderedLump = Lump.Lumps[index];
-                Console.WriteLine($"Writing Lump: {orderedLump}, Index of {index}");
-
-                Write(lump.FileLength);
-                WriteLump(orderedLump); // Write the Lumps in order
-
-                index++;
+                var lump = i < input.Header.lumps.Length ? input.Header.lumps[i] : new Lump();
+                _binaryWriter.Write(lump.FileOffset);
+                _binaryWriter.Write(lump.FileLength);
+                _binaryWriter.Write(lump.Version);
+                _binaryWriter.Write(lump.FourCC);
             }
 
-            BinaryWriter.Write(inputText);
+            Console.WriteLine($"Writing BSP v{input.Header.version}");
 
-            // Add to file
-            BinaryWriter.Flush();
+            // Write lump data at correct offsets
+            foreach (var lump in input.Header.lumps)
+            {
+                if (lump.FileLength > 0 && lump.Data != null)
+                {
+                    _binaryWriter.BaseStream.Seek(lump.FileOffset, SeekOrigin.Begin);
+                    WriteLumpData(lump);
+
+                    // Pad to 4-byte alignment
+                    long pos = _binaryWriter.BaseStream.Position;
+                    int padding = (4 - (int)(pos % 4)) % 4;
+                    for (int i = 0; i < padding; i++)
+                        _binaryWriter.Write((byte)0);
+                }
+            }
+
+            _binaryWriter.Flush();
+        }
+
+        public void Dispose()
+        {
+            _binaryWriter?.Dispose();
         }
     }
 }
