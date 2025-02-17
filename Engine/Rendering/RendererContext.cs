@@ -66,52 +66,6 @@ namespace SourceRewrite.Rendering
             // Create a Mesh
             Mesh mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
 
-            // Override vertices and indices
-            mesh.Vertices = [
-    // Front face
-    -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // 0
-     0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // 1
-     0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // 2
-    -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // 3
-    
-    // Back face
-    -0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // 4
-     0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // 5
-     0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // 6
-    -0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // 7
-    
-    // Top face
-    -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // 8
-     0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // 9
-     0.5f,  0.5f,  0.5f,   1.0f, 0.0f,  // 10
-    -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,  // 11
-    
-    // Bottom face
-    -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // 12
-     0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // 13
-     0.5f, -0.5f,  0.5f,   1.0f, 1.0f,  // 14
-    -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // 15
-    
-    // Right face
-     0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // 16
-     0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // 17
-     0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // 18
-     0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // 19
-    
-    // Left face
-    -0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // 20
-    -0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // 21
-    -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // 22
-    -0.5f, -0.5f,  0.5f,   0.0f, 0.0f   // 23
-];
-            mesh.Indices = [
-    0,  1,  2,    0,  2,  3,   // Front
-    4,  5,  6,    4,  6,  7,   // Back
-    8,  9,  10,   8,  10, 11,  // Top
-    12, 13, 14,   12, 14, 15,  // Bottom
-    16, 17, 18,   16, 18, 19,  // Right
-    20, 21, 22,   20, 22, 23   // Left
-];
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();
             MeshRenderer testRenderer = new MeshRenderer(mesh);

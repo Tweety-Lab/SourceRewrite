@@ -1,0 +1,5 @@
+shader
+{
+	$basetexture "missing.vtf"
+	$uBrightness	"1"
+}

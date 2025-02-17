@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Silk.NET.Assimp;
 using SourceRewrite.Rendering;
-using SourceRewrite.Windowing;
+using SourceRewrite.Files;
 
 namespace SourceRewrite.Assets
 {
@@ -29,6 +30,14 @@ namespace SourceRewrite.Assets
 
         public unsafe Mesh(string filePath, Material material)
         {
+            // If Mesh cant be found, set it to ERROR
+            if (!System.IO.File.Exists(filePath))
+            {
+                Console.WriteLine($"Could not find model at '{filePath}'");
+                filePath = FileSystem.GetModelPath("error.model");
+                material = FileSystem.GetMaterial("error.vmt");
+            }
+
             Texture = material.Texture;
             Shader = material.Shader;
 
@@ -56,6 +65,20 @@ namespace SourceRewrite.Assets
                 vertexData.Add(vertexPosition.X);
                 vertexData.Add(vertexPosition.Y);
                 vertexData.Add(vertexPosition.Z);
+
+                // Add texture coordinates (U, V)
+                if (mesh->MTextureCoords[0] != null)
+                {
+                    var texCoord = mesh->MTextureCoords[0][i];
+                    vertexData.Add(texCoord.X);
+                    vertexData.Add(texCoord.Y);
+                }
+                else
+                {
+                    // Default texture coordinates if none are provided
+                    vertexData.Add(0.0f);
+                    vertexData.Add(0.0f);
+                }
             }
 
             // Extract indices
