@@ -1,6 +1,5 @@
 ﻿using FileFormats.BSP;
 using System;
-using VBSP.IO;
 class Program
 {
     static void Main(string[] args)

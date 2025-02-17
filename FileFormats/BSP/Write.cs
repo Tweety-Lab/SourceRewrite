@@ -101,7 +101,11 @@ namespace FileFormats.BSP
                 _binaryWriter.Write(lump.FileOffset);
                 _binaryWriter.Write(lump.FileLength);
                 _binaryWriter.Write(lump.Version);
-                _binaryWriter.Write(lump.FourCC);
+
+                // Convert FourCC (char[]) to byte[]
+                byte[] fourCCBytes = Encoding.ASCII.GetBytes(new string(lump.FourCC));
+
+                _binaryWriter.Write(fourCCBytes);
             }
 
             Console.WriteLine($"Writing BSP v{input.Header.version}");

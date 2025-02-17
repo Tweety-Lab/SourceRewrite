@@ -124,7 +124,7 @@ namespace FileFormats.BSP
         public int FileOffset;
         public int FileLength;
         public int Version;
-        public int FourCC; // Changed to int for proper alignment
+        public char[] FourCC;
         public object Data;
 
         public Lump(object data)
@@ -137,7 +137,8 @@ namespace FileFormats.BSP
             FileLength = CalculateDataSize(data);
             Data = data;
             Version = 0;
-            FourCC = 0;
+
+            FourCC = new char[] { '\0', '\0', '\0', '\0' };
 
             curOffset += FileLength;
         }
