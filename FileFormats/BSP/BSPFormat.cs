@@ -30,7 +30,7 @@ namespace FileFormats.BSP
                 Header.lumps[i] = new Lump { Version = 0 };
             }
 
-            // Write Entities
+            // Write Vertices
             Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(new float[]
             {
     // Front face

@@ -12,6 +12,11 @@ class Program
             // By default, write the BSP to the location of vbsp.exe
             BSPWriter writer = new BSPWriter("./bsp_test.bsp", args[args.Length - 1]);
             writer.WriteToMap(testMap);
+            writer.Dispose();
+
+            BSPReader reader = new BSPReader("./bsp_test.bsp");
+            Console.WriteLine(reader.ReadFromMap().Header.lumps[0].Data);
+            Console.ReadLine();
         }
     }
 }

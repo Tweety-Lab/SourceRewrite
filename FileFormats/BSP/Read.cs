@@ -18,37 +18,51 @@ namespace FileFormats.BSP
         /// <summary>
         /// Reads a Lump from BSP.
         /// </summary>
-        public Lump ReadLumpData(Lump input)
+        public void AddLumpData(Lump input)
         {
+            // Ensure that we don't attempt to read beyond the stream length
+            if (input.FileLength == 0)
+                return;
+
+            if (_binaryReader.BaseStream.Position + input.FileLength > _binaryReader.BaseStream.Length)
+            {
+                throw new InvalidOperationException("Attempting to read beyond the end of the stream.");
+            }
+
+            // Read the data according to the Lump's type and length
             switch (input.Data)
             {
                 case byte[] byteData:
-                    byteData = _binaryReader.ReadBytes(input.FileLength);
+                    input.Data = _binaryReader.ReadBytes(input.FileLength);
                     break;
+
                 case int[] intData:
                     intData = new int[input.FileLength / sizeof(int)];
                     for (int i = 0; i < intData.Length; i++)
                     {
                         intData[i] = _binaryReader.ReadInt32();
                     }
+                    input.Data = intData;
                     break;
+
                 case float[] floatData:
                     floatData = new float[input.FileLength / sizeof(float)];
                     for (int i = 0; i < floatData.Length; i++)
                     {
                         floatData[i] = _binaryReader.ReadSingle();
                     }
+                    input.Data = floatData;
                     break;
+
                 case string stringData:
                     byte[] stringBytes = _binaryReader.ReadBytes(input.FileLength);
                     stringData = Encoding.ASCII.GetString(stringBytes);
+                    input.Data = stringData;
                     break;
-                default:
-                    throw new InvalidOperationException($"Unsupported lump data type: {input.Data?.GetType().Name ?? "null"}");
-            }
 
-            input.Data = input.Data ?? new object();  // Assign the data to the Lump object if not already set
-            return input;
+                default:
+                    throw new InvalidOperationException($"Unsupported lump data type: '{input.Data?.GetType().Name ?? "null"}'");
+            }
         }
 
         /// <summary>
@@ -84,13 +98,13 @@ namespace FileFormats.BSP
         public BSPFormat ReadFromMap()
         {
             BSPFormat bspFormat = new BSPFormat();
+
             // Read header
             bspFormat.Header.ident = _binaryReader.ReadInt32();
             bspFormat.Header.version = _binaryReader.ReadInt32();
             bspFormat.Header.mapRevision = _binaryReader.ReadInt32();
 
             // Read all 64 lump entries
-            bspFormat.Header.lumps = new Lump[64];
             for (int i = 0; i < 64; i++)
             {
                 var lump = new Lump
@@ -98,11 +112,13 @@ namespace FileFormats.BSP
                     FileOffset = _binaryReader.ReadInt32(),
                     FileLength = _binaryReader.ReadInt32(),
                     Version = _binaryReader.ReadInt32(),
-                    FourCC = _binaryReader.ReadChars(4)  // Read 4 bytes for the FourCC
+                    FourCC = _binaryReader.ReadChars(4),  // Read 4 bytes for the FourCC
+                    Data = bspFormat.Header.lumps[i].Data // Let us know the datatype of the lump as defined in BSPFormat
                 };
                 bspFormat.Header.lumps[i] = lump;
             }
 
+            Console.WriteLine($"Lump Offset: {bspFormat.Header.lumps[0].FileOffset}\nLump Length: {bspFormat.Header.lumps[0].FileLength}");
             Console.WriteLine($"Reading BSP v{bspFormat.Header.version}");
 
             // Read lump data at correct offsets
@@ -110,8 +126,19 @@ namespace FileFormats.BSP
             {
                 if (lump.FileLength > 0)
                 {
+                    // Seek to the appropriate lump offset
                     _binaryReader.BaseStream.Seek(lump.FileOffset, SeekOrigin.Begin);
-                    ReadLumpData(lump);
+
+                    // Ensure there is enough data to read before calling ReadInt32
+                    if (_binaryReader.BaseStream.Position + lump.FileLength <= _binaryReader.BaseStream.Length)
+                    {
+                        AddLumpData(lump);
+                        Console.WriteLine($"Lump data read successfully for lump with offset {lump.FileOffset}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Not enough data available for lump at offset {lump.FileOffset}, skipping.");
+                    }
                 }
             }
 
