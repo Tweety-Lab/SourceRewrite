@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace VBSP.IO
+namespace FileFormats.BSP
 {
     public class BSPWriter : IDisposable
     {
