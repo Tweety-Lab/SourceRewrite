@@ -14,9 +14,9 @@ class Program
             writer.WriteToMap(testMap);
             writer.Dispose();
 
+            // Reading Reference
             BSPReader reader = new BSPReader("./bsp_test.bsp");
             Console.WriteLine(reader.ReadFromMap().Header.lumps[0].Data);
-            Console.ReadLine();
         }
     }
 }
