@@ -59,7 +59,7 @@ namespace SourceRewrite.Rendering
         // Run any special logic that needs to be ran on load
         public void OnLoad()
         {
-            BSPMesh bspMesh = new BSPMesh("../../maps/bsp_test.bsp");
+            BSPMesh bspMesh = new BSPMesh(FileSystem.GetMapPath("bsp_test.bsp"));
 
             // Create a mesh GameObject for testing
             GameObject testObject = new GameObject();

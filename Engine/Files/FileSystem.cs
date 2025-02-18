@@ -18,16 +18,16 @@ namespace SourceRewrite.Files
         public static GamePath MountedGamePath = new GamePath(GameInfo.GetMountedPaths());
 
         /// <summary>
-        /// Get the path to a Shader from it's name.
+        /// Get the path to a Shader from it's path relative to "shaders" folder.
         /// </summary>
         public static string GetShaderPath(string name)
         {
-            // Source 1 doesn't have exposed shaders, no need to search mounted games.
+            // Source 1 doesn't have exposed shaders, no need to search mounted games
             return $"{GamePath.ShadersPath}/{name}";
         }
 
         /// <summary>
-        /// Get the path to a Material from it's name.
+        /// Get the path to a Material from it's path relative to "materials" folder.
         /// </summary>
         public static string GetMaterialPath(string name)
         {
@@ -39,7 +39,7 @@ namespace SourceRewrite.Files
         }
 
         /// <summary>
-        /// Get the path to a Model from it's name.
+        /// Get the path to a Model from it's path relative to "models" folder.
         /// </summary>
         public static string GetModelPath(string name)
         {
@@ -50,9 +50,18 @@ namespace SourceRewrite.Files
             return File.Exists(mountedPath) ? mountedPath : path;
         }
 
+        /// <summary>
+        /// Get the path to a Map from it's path relative to "maps" folder.
+        /// </summary>
+        public static string GetMapPath(string name)
+        {
+            // Source 1 doesn't have packed maps, no need to search mounted games.
+            return $"{GamePath.MapsPath}/{name}";
+        }
+
 
         /// <summary>
-        /// Get a Shader from it's name.
+        /// Get a Shader from it's path relative to "shaders" folder
         /// </summary>
         public static Shader GetShader(string name)
         {
@@ -62,7 +71,7 @@ namespace SourceRewrite.Files
         }
 
         /// <summary>
-        /// Get a Material from it's name.
+        /// Get a Material from it's path relative to "materials" folder.
         /// </summary>
         public static Material GetMaterial(string name)
         {
@@ -83,6 +92,7 @@ namespace SourceRewrite.Files
         public string ShadersPath { get; private set; } = "../../shaders";
         public string MaterialsPath { get; private set; } = "../../materials";
         public string ModelsPath { get; private set; } = "../../models";
+        public string MapsPath { get; private set; } = "../../maps";
 
         /// <summary>
         /// Path to the Game Folder (Folder containing gameinfo.txt).
@@ -94,6 +104,7 @@ namespace SourceRewrite.Files
             ShadersPath = $"{basePath}/shaders";
             MaterialsPath = $"{basePath}/materials";
             ModelsPath = $"{basePath}/models";
+            MapsPath = $"{basePath}/maps";
 
             BasePath = basePath;
         }
