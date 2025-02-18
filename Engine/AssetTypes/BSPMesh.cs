@@ -31,6 +31,9 @@ namespace SourceRewrite.AssetTypes
 
             // Create a Mesh
             Mesh = new Mesh(vertices, indices, material);
+
+            // Free the BSP from memory
+            reader.Dispose();
         }
     }
 }
