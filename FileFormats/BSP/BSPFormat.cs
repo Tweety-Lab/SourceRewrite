@@ -33,7 +33,7 @@ namespace FileFormats.BSP
             // LUMP DEFINITONS
 
             // Write Brush Material, placeholder
-            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump(typeof(string), "dev/error.vmt");
+            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump(typeof(string), "bricks.vmt");
 
             // Write Vertices
             Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(typeof(float[]), new float[]

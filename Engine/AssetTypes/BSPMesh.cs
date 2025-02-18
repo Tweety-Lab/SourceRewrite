@@ -19,7 +19,6 @@ namespace SourceRewrite.AssetTypes
             // Read the BSP
             reader = new BSPReader(bspPath);
 
-            BSPFormat bspMap = reader.ReadFromMap();
             float[] vertices = reader.GetLumpData<float[]>(Lump.LumpType.LUMP_VERTEXES); // Load Vertices Lump
             uint[] indices = reader.GetLumpData<uint[]>(Lump.LumpType.LUMP_INDICES); // Load Indices Lump
 

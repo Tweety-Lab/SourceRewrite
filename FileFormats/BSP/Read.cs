@@ -27,7 +27,7 @@ namespace FileFormats.BSP
                 throw new InvalidOperationException("Attempting to read beyond the end of the stream.");
             }
 
-            // Determine data type based on lump index
+            // Determine reading logic based on data type
             switch (input.DataType)
             {
                 case Type t when t == typeof(float[]):
