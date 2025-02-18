@@ -30,74 +30,11 @@ namespace FileFormats.BSP
                 Header.lumps[i] = new Lump { Version = 0 };
             }
 
-            // LUMP DEFINITONS
-
-            // Write Brush Material, placeholder
-            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump(typeof(string), "bricks.vmt");
-
-            // Write Vertices
-            Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(typeof(float[]), new float[]
+            // Create all our lump definitions
+            foreach (LumpDefinition definition in LumpDefinitions.Definitions)
             {
-    // Front face
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  // Top-left
-
-    // Back face
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // Top-left
-
-    // Left face
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
-    -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Top-left
-    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
-    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // Bottom-right
-
-    // Right face
-     0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
-     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Top-left
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
-     0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // Bottom-right
-
-    // Top face
-    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
-     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // Top-left
-
-    // Bottom face
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // Bottom-right
-     0.5f, -0.5f,  0.5f,  1.0f, 1.0f,  // Top-right
-    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f   // Top-left
-            });
-
-            // Write Vertex Indices Lump (for rendering with indexed drawing)
-            Header.lumps[(int)Lump.LumpType.LUMP_INDICES] = new Lump(typeof(uint[]), new uint[]
-            {
-    // Front face
-    0, 1, 2,  0, 2, 3,
-
-    // Back face
-    4, 5, 6,  4, 6, 7,
-
-    // Left face
-    8, 9, 10,  8, 10, 11,
-
-    // Right face
-    12, 13, 14,  12, 14, 15,
-
-    // Top face
-    16, 17, 18,  16, 18, 19,
-
-    // Bottom face
-    20, 21, 22,  20, 22, 23
-            });
-
-
+                Header.lumps[(int)definition.Type] = definition.Lump;
+            }
         }
     }
 
@@ -123,7 +60,7 @@ namespace FileFormats.BSP
             LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
             LUMP_VERTEXES,          // Brush Vertices
             LUMP_INDICES            // Brush Indices ( not in < v26 )
-                                    // ... continue
+                                   // ... continue
         }
 
         private static int curOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
