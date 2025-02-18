@@ -54,14 +54,7 @@ namespace FileFormats.BSP
     /// </summary>
     public struct Lump
     {
-        // Lump directory indices
-        public enum LumpType
-        {
-            LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
-            LUMP_VERTEXES,          // Brush Vertices
-            LUMP_INDICES            // Brush Indices ( not in < v26 )
-                                   // ... continue
-        }
+
 
         private static int curOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
 

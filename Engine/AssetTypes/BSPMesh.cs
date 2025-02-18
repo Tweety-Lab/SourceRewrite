@@ -19,10 +19,10 @@ namespace SourceRewrite.AssetTypes
             // Read the BSP
             reader = new BSPReader(bspPath);
 
-            float[] vertices = reader.GetLumpData<float[]>(Lump.LumpType.LUMP_VERTEXES); // Load Vertices Lump
-            uint[] indices = reader.GetLumpData<uint[]>(Lump.LumpType.LUMP_INDICES); // Load Indices Lump
+            float[] vertices = reader.GetLumpData<float[]>(LumpType.LUMP_VERTEXES); // Load Vertices Lump
+            uint[] indices = reader.GetLumpData<uint[]>(LumpType.LUMP_INDICES); // Load Indices Lump
 
-            string materialPath = reader.GetLumpData<string>(Lump.LumpType.LUMP_MATERIAL); // Load Material
+            string materialPath = reader.GetLumpData<string>(LumpType.LUMP_MATERIAL); // Load Material
 
             Console.WriteLine(materialPath);
 

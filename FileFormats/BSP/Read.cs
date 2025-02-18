@@ -134,7 +134,7 @@ namespace FileFormats.BSP
         /// <summary>
         /// Gets a lump from the BSP file by its type.
         /// </summary>
-        public Lump GetLump(Lump.LumpType type)
+        public Lump GetLump(LumpType type)
         {
             if (BSP == null)
                 ReadFromMap();
@@ -149,7 +149,7 @@ namespace FileFormats.BSP
         /// <summary>
         /// Gets the data from a lump cast to the specified type.
         /// </summary>
-        public T GetLumpData<T>(Lump.LumpType type) where T : class
+        public T GetLumpData<T>(LumpType type) where T : class
         {
             var lump = GetLump(type);
             if (lump.Data == null)

@@ -15,7 +15,7 @@ namespace FileFormats.BSP
         public static LumpDefinition[] Definitions = {
 
             //                 Type            Data          Lump Type
-            new LumpDefinition(typeof(string), "bricks.vmt", Lump.LumpType.LUMP_MATERIAL), // Materials
+            new LumpDefinition(typeof(string), "bricks.vmt", LumpType.LUMP_MATERIAL), // Materials
             new LumpDefinition(typeof(float[]), new float[] {     // Front face
                 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,  // Bottom-left
                 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,  // Bottom-right
@@ -52,7 +52,7 @@ namespace FileFormats.BSP
                 0.5f, -0.5f, 0.5f, 1.0f, 1.0f,  // Top-right
                 -0.5f, -0.5f, 0.5f, 0.0f, 1.0f   // Top-left }, Lump.LumpType.LUMP_VERTEXES), // Vertices
 
-            }, Lump.LumpType.LUMP_VERTEXES), // Vertices
+            }, LumpType.LUMP_VERTEXES), // Vertices
             new LumpDefinition(typeof(uint[]), new uint[] {     // Front face
     0, 1, 2,  0, 2, 3,
 
@@ -69,7 +69,7 @@ namespace FileFormats.BSP
     16, 17, 18,  16, 18, 19,
 
     // Bottom face
-    20, 21, 22,  20, 22, 23 }, Lump.LumpType.LUMP_INDICES) // Indices
+    20, 21, 22,  20, 22, 23 }, LumpType.LUMP_INDICES) // Indices
 
         };
     };
@@ -78,13 +78,22 @@ namespace FileFormats.BSP
     public class LumpDefinition
     {
         public Lump Lump;
-        public Lump.LumpType Type;
+        public LumpType Type;
 
-        public LumpDefinition(Type type, object data, Lump.LumpType lumpType)
+        public LumpDefinition(Type type, object data, LumpType lumpType)
         {
             Lump = new Lump(type, data);
             Type = lumpType;
         }
 
+    }
+
+    // Lump Types
+    public enum LumpType
+    {
+        LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
+        LUMP_VERTEXES,          // Brush Vertices
+        LUMP_INDICES            // Brush Indices ( not in < v26 )
+                                // ... continue
     }
 }
