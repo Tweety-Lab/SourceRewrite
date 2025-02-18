@@ -30,6 +30,11 @@ namespace FileFormats.BSP
                 Header.lumps[i] = new Lump { Version = 0 };
             }
 
+            // LUMP DEFINITONS
+
+            // Write Brush Material, placeholder
+            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump("dev/error.vmt");
+
             // Write Vertices
             Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(new float[]
             {
@@ -92,33 +97,7 @@ namespace FileFormats.BSP
     20, 21, 22,  20, 22, 23
             });
 
-        }
 
-        /// <summary>
-        /// Gets a lump from the BSP file by its type.
-        /// </summary>
-        public Lump GetLump(Lump.LumpType type)
-        {
-            if (Header.lumps == null)
-                return new Lump();
-
-            int index = (int)type;
-            if (index < 0 || index >= Header.lumps.Length)
-                return new Lump();
-
-            return Header.lumps[index];
-        }
-
-        /// <summary>
-        /// Gets the data from a lump cast to the specified type.
-        /// </summary>
-        public T GetLumpData<T>(Lump.LumpType type) where T : class
-        {
-            var lump = GetLump(type);
-            if (lump.Data == null)
-                return null;
-
-            return lump.Data as T;
         }
     }
 
@@ -141,8 +120,9 @@ namespace FileFormats.BSP
         // Lump directory indices
         public enum LumpType
         {
+            LUMP_MATERIAL, // Brush Material Path ( not in < v26 )
             LUMP_VERTEXES,           // Brush Vertices
-            LUMP_INDICES             // Brush Indices ( not in < v26 )
+            LUMP_INDICES           // Brush Indices ( not in < v26 )
                                      // ... continue
         }
 
@@ -178,7 +158,7 @@ namespace FileFormats.BSP
                 int[] intArray => intArray.Length * sizeof(int),
                 float[] floatArray => floatArray.Length * sizeof(float),
                 uint[] uintArray => uintArray.Length * sizeof(uint),
-                string stringData => Encoding.ASCII.GetByteCount(stringData),
+                string stringData => Encoding.UTF8.GetByteCount(stringData) + 1, // +1 for null terminator
                 _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
             };
         }

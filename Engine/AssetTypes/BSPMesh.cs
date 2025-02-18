@@ -20,11 +20,15 @@ namespace SourceRewrite.AssetTypes
             reader = new BSPReader(bspPath);
 
             BSPFormat bspMap = reader.ReadFromMap();
-            float[] vertices = bspMap.GetLumpData<float[]>(Lump.LumpType.LUMP_VERTEXES); // Load Vertices Lump
-            uint[] indices = bspMap.GetLumpData<uint[]>(Lump.LumpType.LUMP_INDICES); // Load Indices Lump
+            float[] vertices = reader.GetLumpData<float[]>(Lump.LumpType.LUMP_VERTEXES); // Load Vertices Lump
+            uint[] indices = reader.GetLumpData<uint[]>(Lump.LumpType.LUMP_INDICES); // Load Indices Lump
+
+            string materialPath = reader.GetLumpData<string>(Lump.LumpType.LUMP_MATERIAL); // Load Material
+
+            Console.WriteLine(materialPath);
 
             // Create a Material
-            Material material = FileSystem.GetMaterial("bricks.vmt");
+            Material material = FileSystem.GetMaterial(materialPath);
 
             // Create a Mesh
             Mesh = new Mesh(vertices, indices, material);

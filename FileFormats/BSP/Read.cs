@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Sledge.Formats.Texture.Wad;
+using Sledge.Formats.Texture.Wad.Lumps;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +12,7 @@ namespace FileFormats.BSP
     public class BSPReader : IDisposable
     {
         private readonly BinaryReader _binaryReader;
+        public BSPFormat BSP;
 
         public BSPReader(string inputPath)
         {
@@ -18,50 +22,49 @@ namespace FileFormats.BSP
         /// <summary>
         /// Reads a Lump from BSP.
         /// </summary>
-        public void AddLumpData(Lump input)
+        public void ProcessLumpData(Lump input, int lumpIndex)
         {
-            // Ensure that we don't attempt to read beyond the stream length
+            // Return early if no data to read
             if (input.FileLength == 0)
                 return;
 
+            // Check if we're trying to read beyond stream length
             if (_binaryReader.BaseStream.Position + input.FileLength > _binaryReader.BaseStream.Length)
             {
                 throw new InvalidOperationException("Attempting to read beyond the end of the stream.");
             }
 
-            // Read the data according to the Lump's type and length
-            switch (input.Data)
+            // Determine data type based on lump index
+            switch ((Lump.LumpType)lumpIndex)
             {
-                case byte[] byteData:
-                    input.Data = _binaryReader.ReadBytes(input.FileLength);
-                    break;
-
-                case int[] intData:
-                    intData = new int[input.FileLength / sizeof(int)];
-                    for (int i = 0; i < intData.Length; i++)
+                case Lump.LumpType.LUMP_VERTEXES:
+                    float[] vertexData = new float[input.FileLength / sizeof(float)];
+                    for (int i = 0; i < vertexData.Length; i++)
                     {
-                        intData[i] = _binaryReader.ReadInt32();
+                        vertexData[i] = _binaryReader.ReadSingle();
                     }
-                    input.Data = intData;
+                    BSP.Header.lumps[lumpIndex].Data = vertexData; // Update the Lump with our data
                     break;
 
-                case float[] floatData:
-                    floatData = new float[input.FileLength / sizeof(float)];
-                    for (int i = 0; i < floatData.Length; i++)
+                case Lump.LumpType.LUMP_INDICES:
+                    uint[] indexData = new uint[input.FileLength / sizeof(uint)];
+                    for (int i = 0; i < indexData.Length; i++)
                     {
-                        floatData[i] = _binaryReader.ReadSingle();
+                        indexData[i] = _binaryReader.ReadUInt32();
                     }
-                    input.Data = floatData;
+                    BSP.Header.lumps[lumpIndex].Data = indexData;
                     break;
 
-                case string stringData:
+                case Lump.LumpType.LUMP_MATERIAL:
                     byte[] stringBytes = _binaryReader.ReadBytes(input.FileLength);
-                    stringData = Encoding.ASCII.GetString(stringBytes);
-                    input.Data = stringData;
+                    string materialPath = Encoding.UTF8.GetString(stringBytes).TrimEnd('\0');
+                    BSP.Header.lumps[lumpIndex].Data = materialPath;
                     break;
 
                 default:
-                    throw new InvalidOperationException($"Unsupported lump data type: '{input.Data?.GetType().Name ?? "null"}'");
+                    // For unknown lump types, just read raw bytes
+                    input.Data = _binaryReader.ReadBytes(input.FileLength);
+                    break;
             }
         }
 
@@ -97,12 +100,12 @@ namespace FileFormats.BSP
         /// </summary>
         public BSPFormat ReadFromMap()
         {
-            BSPFormat bspFormat = new BSPFormat();
+            BSP = new BSPFormat();
 
             // Read header
-            bspFormat.Header.ident = _binaryReader.ReadInt32();
-            bspFormat.Header.version = _binaryReader.ReadInt32();
-            bspFormat.Header.mapRevision = _binaryReader.ReadInt32();
+            BSP.Header.ident = _binaryReader.ReadInt32();
+            BSP.Header.version = _binaryReader.ReadInt32();
+            BSP.Header.mapRevision = _binaryReader.ReadInt32();
 
             // Read all 64 lump entries
             for (int i = 0; i < 64; i++)
@@ -113,36 +116,51 @@ namespace FileFormats.BSP
                     FileLength = _binaryReader.ReadInt32(),
                     Version = _binaryReader.ReadInt32(),
                     FourCC = _binaryReader.ReadChars(4),  // Read 4 bytes for the FourCC
-                    Data = bspFormat.Header.lumps[i].Data // Let us know the datatype of the lump as defined in BSPFormat
                 };
-                bspFormat.Header.lumps[i] = lump;
+                BSP.Header.lumps[i] = lump;
             }
 
-            Console.WriteLine($"Lump Offset: {bspFormat.Header.lumps[0].FileOffset}\nLump Length: {bspFormat.Header.lumps[0].FileLength}");
-            Console.WriteLine($"Reading BSP v{bspFormat.Header.version}");
+            Console.WriteLine($"Lump Offset: {BSP.Header.lumps[0].FileOffset}\nLump Length: {BSP.Header.lumps[0].FileLength}");
+            Console.WriteLine($"Reading BSP v{BSP.Header.version}");
 
             // Read lump data at correct offsets
-            foreach (var lump in bspFormat.Header.lumps)
+            foreach (var lumpPair in BSP.Header.lumps.Select((lump, index) => new { lump, index }))
             {
-                if (lump.FileLength > 0)
+                if (lumpPair.lump.FileLength > 0)
                 {
-                    // Seek to the appropriate lump offset
-                    _binaryReader.BaseStream.Seek(lump.FileOffset, SeekOrigin.Begin);
-
-                    // Ensure there is enough data to read before calling ReadInt32
-                    if (_binaryReader.BaseStream.Position + lump.FileLength <= _binaryReader.BaseStream.Length)
-                    {
-                        AddLumpData(lump);
-                        Console.WriteLine($"Lump data read successfully for lump with offset {lump.FileOffset}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Not enough data available for lump at offset {lump.FileOffset}, skipping.");
-                    }
+                    _binaryReader.BaseStream.Seek(lumpPair.lump.FileOffset, SeekOrigin.Begin);
+                    ProcessLumpData(lumpPair.lump, lumpPair.index);
                 }
             }
 
-            return bspFormat;
+            return BSP;
+        }
+
+        /// <summary>
+        /// Gets a lump from the BSP file by its type.
+        /// </summary>
+        public Lump GetLump(Lump.LumpType type)
+        {
+            if (BSP == null)
+                ReadFromMap();
+
+            int index = (int)type;
+            if (index < 0 || index >= BSP.Header.lumps.Length)
+                return new Lump();
+
+            return BSP.Header.lumps[index];
+        }
+
+        /// <summary>
+        /// Gets the data from a lump cast to the specified type.
+        /// </summary>
+        public T GetLumpData<T>(Lump.LumpType type) where T : class
+        {
+            var lump = GetLump(type);
+            if (lump.Data == null)
+                return null;
+
+            return lump.Data as T;
         }
 
         public void Dispose()
