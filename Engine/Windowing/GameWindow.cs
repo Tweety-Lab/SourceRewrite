@@ -7,6 +7,7 @@ using SourceRewrite.Rendering;
 using System.Reflection;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Files;
+using SourceRewrite.Maps;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -75,6 +76,9 @@ namespace SourceRewrite.Windowing
 
             // Load Input
             Input = new InputContext(_window.CreateInput());
+
+            // Load a bsp
+            MapSystem.LoadMap("bsp_test.bsp");
 
             // Load GameObjects
             GameObject.GameObjectStart();

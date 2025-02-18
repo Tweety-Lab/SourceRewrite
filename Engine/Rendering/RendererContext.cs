@@ -60,9 +60,6 @@ namespace SourceRewrite.Rendering
         // Run any special logic that needs to be ran on load
         public void OnLoad()
         {
-            // Load a bsp
-            MapSystem.LoadMap("bsp_test.bsp");
-
             _apiInterface.OnLoad(this);
         }
 
