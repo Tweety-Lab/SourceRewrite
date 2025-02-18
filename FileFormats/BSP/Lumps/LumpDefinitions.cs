@@ -69,7 +69,8 @@ namespace FileFormats.BSP
     16, 17, 18,  16, 18, 19,
 
     // Bottom face
-    20, 21, 22,  20, 22, 23 }, LumpType.LUMP_INDICES) // Indices
+    20, 21, 22,  20, 22, 23 }, LumpType.LUMP_INDICES), // Indices
+            new LumpDefinition(typeof(string), "SourceRewrite.Components.MeshRenderer", LumpType.LUMP_MAP_COMPONENTS) // Global Map Components
 
         };
     };
@@ -97,7 +98,8 @@ namespace FileFormats.BSP
     {
         LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
         LUMP_VERTEXES,          // Brush Vertices
-        LUMP_INDICES            // Brush Indices ( not in < v26 )
-                                // ... continue
+        LUMP_INDICES,           // Brush Indices ( not in < v26 )
+        LUMP_MAP_COMPONENTS,    // Standalone Game Components with no attached GameObject ( not in < v26 )
+                                  // ... continue
     }
 }

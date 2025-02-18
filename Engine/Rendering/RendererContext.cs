@@ -7,6 +7,7 @@ using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
+using SourceRewrite.Maps;
 
 
 namespace SourceRewrite.Rendering
@@ -59,21 +60,8 @@ namespace SourceRewrite.Rendering
         // Run any special logic that needs to be ran on load
         public void OnLoad()
         {
-            BSPMesh bspMesh = new BSPMesh(FileSystem.GetMapPath("bsp_test.bsp"));
-
-            // Create a mesh GameObject for testing
-            GameObject testObject = new GameObject();
-            MeshRenderer testRenderer = new MeshRenderer(bspMesh.Mesh);
-
-            testObject.AddComponent(testRenderer);
-
-            testObject.Transform.Position = new Vector3(0.0f, 0.0f, 0.0f);
-            testObject.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 0f);
-
-            // Test camera object
-            GameObject cameraObject = new GameObject();
-            cameraObject.AddComponent(new Camera());
-            cameraObject.AddComponent(new CameraController());
+            // Load a bsp
+            MapSystem.LoadMap("bsp_test.bsp");
 
             _apiInterface.OnLoad(this);
         }
