@@ -15,7 +15,14 @@ namespace SourceRewrite.Components
         public MeshRenderer(object meshRenderer)
         {
             Mesh = meshRenderer;
-            GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
+
+            if (Mesh == null)
+            {
+                Console.WriteLine("Could not initialize MeshRenderer, Mesh is Null!");
+            } else
+            {
+                GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
+            }
         }
     }
 }
