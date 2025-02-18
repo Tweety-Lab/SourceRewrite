@@ -70,7 +70,7 @@ namespace FileFormats.BSP
 
     // Bottom face
     20, 21, 22,  20, 22, 23 }, LumpType.LUMP_INDICES), // Indices
-            new LumpDefinition(typeof(string), "SourceRewrite.Components.MeshRenderer", LumpType.LUMP_MAP_COMPONENTS) // Global Map Components
+            new LumpDefinition(typeof(string), "SourceRewrite.Components.MeshRenderer(0, 16, 0)", LumpType.LUMP_MAP_COMPONENTS) // Global Map Components
 
         };
     };
