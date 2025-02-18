@@ -13,13 +13,6 @@ class Program
             BSPWriter writer = new BSPWriter("./bsp_test.bsp", args[args.Length - 1]);
             writer.WriteToMap(testMap);
             writer.Dispose();
-
-
-            // Reading Reference
-            BSPReader reader = new BSPReader("./bsp_test.bsp");
-            Console.WriteLine($"Material: {reader.GetLumpData<string>(Lump.LumpType.LUMP_MATERIAL)}");
-
-            Console.ReadLine();
         }
     }
 }
