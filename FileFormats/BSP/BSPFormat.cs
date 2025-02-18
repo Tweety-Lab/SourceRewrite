@@ -33,10 +33,10 @@ namespace FileFormats.BSP
             // LUMP DEFINITONS
 
             // Write Brush Material, placeholder
-            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump("dev/error.vmt");
+            Header.lumps[(int)Lump.LumpType.LUMP_MATERIAL] = new Lump(typeof(string), "dev/error.vmt");
 
             // Write Vertices
-            Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(new float[]
+            Header.lumps[(int)Lump.LumpType.LUMP_VERTEXES] = new Lump(typeof(float[]), new float[]
             {
     // Front face
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // Bottom-left
@@ -76,7 +76,7 @@ namespace FileFormats.BSP
             });
 
             // Write Vertex Indices Lump (for rendering with indexed drawing)
-            Header.lumps[(int)Lump.LumpType.LUMP_INDICES] = new Lump(new uint[]
+            Header.lumps[(int)Lump.LumpType.LUMP_INDICES] = new Lump(typeof(uint[]), new uint[]
             {
     // Front face
     0, 1, 2,  0, 2, 3,
@@ -120,10 +120,10 @@ namespace FileFormats.BSP
         // Lump directory indices
         public enum LumpType
         {
-            LUMP_MATERIAL, // Brush Material Path ( not in < v26 )
-            LUMP_VERTEXES,           // Brush Vertices
-            LUMP_INDICES           // Brush Indices ( not in < v26 )
-                                     // ... continue
+            LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
+            LUMP_VERTEXES,          // Brush Vertices
+            LUMP_INDICES            // Brush Indices ( not in < v26 )
+                                    // ... continue
         }
 
         private static int curOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
@@ -134,11 +134,16 @@ namespace FileFormats.BSP
         public char[] FourCC;
         public object Data;
 
-        public Lump(object data)
+        public Type DataType;
+
+        public Lump(Type dataType, object data)
         {
             // Align offset to 4-byte boundary
             curOffset = (curOffset + 3) & ~3;
             FileOffset = curOffset;
+
+            // Assign the Lump's Data Type
+            DataType = dataType;
 
             // Calculate actual data size
             FileLength = CalculateDataSize(data);

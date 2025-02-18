@@ -1,11 +1,4 @@
-﻿using Sledge.Formats.Texture.Wad;
-using Sledge.Formats.Texture.Wad.Lumps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace FileFormats.BSP
 {
@@ -35,9 +28,9 @@ namespace FileFormats.BSP
             }
 
             // Determine data type based on lump index
-            switch ((Lump.LumpType)lumpIndex)
+            switch (input.DataType)
             {
-                case Lump.LumpType.LUMP_VERTEXES:
+                case Type t when t == typeof(float[]):
                     float[] vertexData = new float[input.FileLength / sizeof(float)];
                     for (int i = 0; i < vertexData.Length; i++)
                     {
@@ -46,7 +39,7 @@ namespace FileFormats.BSP
                     BSP.Header.lumps[lumpIndex].Data = vertexData; // Update the Lump with our data
                     break;
 
-                case Lump.LumpType.LUMP_INDICES:
+                case Type t when t == typeof(uint[]):
                     uint[] indexData = new uint[input.FileLength / sizeof(uint)];
                     for (int i = 0; i < indexData.Length; i++)
                     {
@@ -55,7 +48,7 @@ namespace FileFormats.BSP
                     BSP.Header.lumps[lumpIndex].Data = indexData;
                     break;
 
-                case Lump.LumpType.LUMP_MATERIAL:
+                case Type t when t == typeof(string):
                     byte[] stringBytes = _binaryReader.ReadBytes(input.FileLength);
                     string materialPath = Encoding.UTF8.GetString(stringBytes).TrimEnd('\0');
                     BSP.Header.lumps[lumpIndex].Data = materialPath;
@@ -116,6 +109,8 @@ namespace FileFormats.BSP
                     FileLength = _binaryReader.ReadInt32(),
                     Version = _binaryReader.ReadInt32(),
                     FourCC = _binaryReader.ReadChars(4),  // Read 4 bytes for the FourCC
+
+                    DataType = BSP.Header.lumps[i].DataType // Load the datatype as defined in BSPFormat
                 };
                 BSP.Header.lumps[i] = lump;
             }

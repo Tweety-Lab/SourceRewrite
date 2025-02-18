@@ -18,6 +18,8 @@ class Program
             // Reading Reference
             BSPReader reader = new BSPReader("./bsp_test.bsp");
             Console.WriteLine($"Material: {reader.GetLumpData<string>(Lump.LumpType.LUMP_MATERIAL)}");
+
+            Console.ReadLine();
         }
     }
 }
