@@ -14,7 +14,7 @@ namespace FileFormats.BSP
         ////////////////////////////////////////////////////////
         public static LumpDefinition[] Definitions = {
 
-            //                 Type            Data          Lump Type
+            //                 Data Type       Data          Lump Type
             new LumpDefinition(typeof(string), "bricks.vmt", LumpType.LUMP_MATERIAL), // Materials
             new LumpDefinition(typeof(float[]), new float[] {     // Front face
                 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,  // Bottom-left
@@ -74,21 +74,25 @@ namespace FileFormats.BSP
         };
     };
 
-    // Used to define Lumps
+    /// <summary>
+    /// Definition of a BSP Lump.
+    /// </summary>
     public class LumpDefinition
     {
         public Lump Lump;
         public LumpType Type;
 
-        public LumpDefinition(Type type, object data, LumpType lumpType)
+        public LumpDefinition(Type dataType, object data, LumpType lumpType)
         {
-            Lump = new Lump(type, data);
+            Lump = new Lump(dataType, data);
             Type = lumpType;
         }
 
     }
 
-    // Lump Types
+    /// <summary>
+    /// Lump Definition Type.
+    /// </summary>
     public enum LumpType
     {
         LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
