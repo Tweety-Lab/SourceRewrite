@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Silk.NET.Assimp;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Windowing;
+using SourceRewrite.Files;
 
 namespace SourceRewrite.Components
 {
@@ -26,8 +26,19 @@ namespace SourceRewrite.Components
             }
         }
 
+        /// <summary>
+        /// Optional override, if set will create Mesh from this path instead of set Mesh.
+        /// </summary>
+        public string MeshPath;
+
         public override void Start()
         {
+            if (MeshPath != null)
+            {
+                Material defaultMaterial = FileSystem.GetMaterial("bricks.vmt");
+                Mesh = new Mesh(FileSystem.GetModelPath(MeshPath), defaultMaterial);
+            }
+
             if (Mesh == null)
             {
                 // If no mesh exists, make an empty one

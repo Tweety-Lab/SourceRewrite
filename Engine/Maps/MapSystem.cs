@@ -14,6 +14,7 @@ using System.ComponentModel;
 using Silk.NET.Vulkan;
 using Silk.NET.Core.Native;
 using System.Globalization;
+using System.Reflection;
 
 // Beware those trying to read this, it might try to fight back.
 // This code is so horrible, rewrite from scratch.
@@ -117,12 +118,26 @@ namespace SourceRewrite.Maps
                 // Create GameComponent
                 GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
 
-                MeshRenderer meshRenderer = (MeshRenderer) gameComponent;
-                Material material = FileSystem.GetMaterial("bricks.vmt");
-                meshRenderer.Mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
-
                 // Add Component to GameObject
                 targetObject.AddComponent(gameComponent);
+
+                // Init properties
+                SetGameComponentProperties(gameComponentPK, gameComponent);
+            }
+        }
+
+        private static void SetGameComponentProperties(ParentKey gameComponentPK, GameComponent gameComponent)
+        {
+            // Loop through every Property
+            foreach(KeyValue propertyKV in gameComponentPK.ChildKeyValues)
+            {
+                // Get Property Data
+                string propertyName = propertyKV.Key;
+                string propertyValue = propertyKV.GetValueAsType<string>();
+
+                // Set the Property
+                FieldInfo field = gameComponent.GetType().GetField(propertyName);
+                field.SetValue(gameComponent, propertyValue);
             }
         }
     }

@@ -79,7 +79,7 @@ namespace FileFormats.BSP
     position   "0,3,0"
         GameComponents {
             SourceRewrite_Components_MeshRenderer {
-                testkey   "testvalue"
+                MeshPath   "cube.model"
             }
         }
     }
