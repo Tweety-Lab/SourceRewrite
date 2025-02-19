@@ -77,6 +77,9 @@ namespace FileFormats.BSP
             """
     GameObject01 {
     position   "0,3,0"
+        GameComponents {
+            test    "testvalue"
+        }
     }
     """,
             """

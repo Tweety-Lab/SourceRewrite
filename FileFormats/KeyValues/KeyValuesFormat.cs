@@ -28,15 +28,13 @@ namespace FileFormats.KeyValues
             while (currentLine < lines.Length)
             {
                 var line = lines[currentLine].Trim();
-
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//")) // Ignore comments and empty lines
                 {
                     currentLine++;
                     continue;
                 }
 
-                // Parse parent key
-                var match = Regex.Match(line, @"([\w$]+)\s*{?");
+                var match = Regex.Match(line, @"^""?([\w$]+)""?\s*{?");
                 if (match.Success)
                 {
                     var parentKey = new ParentKey(match.Groups[1].Value);
@@ -55,52 +53,42 @@ namespace FileFormats.KeyValues
             while (currentLine < lines.Length)
             {
                 var line = lines[currentLine].Trim();
-
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//")) // Ignore comments
                 {
                     currentLine++;
                     continue;
                 }
 
-                // Check if we're at the end of a block
-                if (line == "}")
+                if (line == "}") // Block end
                 {
                     return currentLine + 1;
                 }
 
                 // Parse key-value pair
-                var match = Regex.Match(line, @"([\w$]+)\s+""(.+)""");
+                var match = Regex.Match(line, @"^""?([\w$]+)""?\s+""(.+?)""$");
                 if (match.Success)
                 {
                     var key = match.Groups[1].Value;
                     var value = match.Groups[2].Value;
 
-                    var trueValue = ConvertValueToType(value); // Convert the string to it's actual type
-
-                    var keyValue = new KeyValue(key, trueValue)
-                    {
-                        ParentKey = parentKey
-                    };
-                    parentKey.ChildKeys.Add(keyValue);
+                    var trueValue = ConvertValueToType(value);
+                    parentKey.ChildKeyValues.Add(new KeyValue(key, trueValue));
                     currentLine++;
+                    continue;
                 }
-                // Check for nested block
-                else
-                {
-                    match = Regex.Match(line, @"(\w+)\s*{");
-                    if (match.Success)
-                    {
-                        var nestedParentKey = new ParentKey(match.Groups[1].Value);
-                        ParentKeys.Add(nestedParentKey);
-                        currentLine = ParseBlock(lines, currentLine + 1, nestedParentKey);
-                    }
-                    else
-                    {
-                        currentLine++;
-                    }
-                }
-            }
 
+                // Parse nested parent key
+                match = Regex.Match(line, @"^""?([\w$]+)""?\s*{?");
+                if (match.Success)
+                {
+                    var nestedParentKey = new ParentKey(match.Groups[1].Value);
+                    parentKey.ChildParentKeys.Add(nestedParentKey);
+                    currentLine = ParseBlock(lines, currentLine + 1, nestedParentKey);
+                    continue;
+                }
+
+                currentLine++;
+            }
             return currentLine;
         }
 
@@ -197,8 +185,9 @@ namespace FileFormats.KeyValues
     /// </summary>
     public class ParentKey
     {
-        public List<KeyValue> ChildKeys = new List<KeyValue>();
-        public string Name;
+        public string Name { get; }
+        public List<KeyValue> ChildKeyValues { get; } = new List<KeyValue>();
+        public List<ParentKey> ChildParentKeys { get; } = new List<ParentKey>();
 
         public ParentKey(string name)
         {
@@ -210,9 +199,20 @@ namespace FileFormats.KeyValues
         /// </summary>
         public KeyValue GetKeyValue(string key)
         {
-            foreach (KeyValue keyValue in ChildKeys)
+            // Search KeyValues
+            foreach (KeyValue keyValue in ChildKeyValues)
             {
                 if (keyValue.Key == key)
+                {
+                    return keyValue;
+                }
+            }
+
+            // Search recursively in nested parent keys
+            foreach (ParentKey childParentKey in ChildParentKeys)
+            {
+                KeyValue keyValue = childParentKey.GetKeyValue(key);
+                if (keyValue != null)
                 {
                     return keyValue;
                 }

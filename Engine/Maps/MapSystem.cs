@@ -86,6 +86,7 @@ namespace SourceRewrite.Maps
 
                 // Get the specified Position
                 KeyValue positionKV = gameObjectKV.GetKeyValue("position");
+                Console.WriteLine(gameObjectKV.ParentKeys[gameObjectKV.ParentKeys.Count - 1].Name);
                 Vector3 position = positionKV.GetValueAsType<Vector3>();
 
                 gameObject.Transform.Position = position;
