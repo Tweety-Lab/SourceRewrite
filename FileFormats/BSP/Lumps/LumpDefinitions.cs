@@ -79,6 +79,7 @@ namespace FileFormats.BSP
     position   "0,3,0"
         GameComponents {
             SourceRewrite_Components_MeshRenderer {
+                MaterialPath    "bricks.vmt"
                 MeshPath   "cube.model"
             }
         }

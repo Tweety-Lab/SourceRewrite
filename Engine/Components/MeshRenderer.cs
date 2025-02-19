@@ -31,12 +31,17 @@ namespace SourceRewrite.Components
         /// </summary>
         public string MeshPath;
 
+        /// <summary>
+        /// Optional override, if set will create Mesh with Mateial from this path.
+        /// </summary>
+        public string MaterialPath;
+
         public override void Start()
         {
             if (MeshPath != null)
             {
-                Material defaultMaterial = FileSystem.GetMaterial("bricks.vmt");
-                Mesh = new Mesh(FileSystem.GetModelPath(MeshPath), defaultMaterial);
+                Material material = FileSystem.GetMaterial(MaterialPath);
+                Mesh = new Mesh(FileSystem.GetModelPath(MeshPath), material);
             }
 
             if (Mesh == null)
