@@ -33,6 +33,14 @@ namespace FileFormats.BSP
                     foreach (float value in floatData)
                         _binaryWriter.Write(value);
                     break;
+                case string[] stringArray:
+                    foreach(string str in stringArray)
+                    {
+                        byte[] stringArrayBytes = Encoding.ASCII.GetBytes(str);
+                        _binaryWriter.Write(stringArrayBytes);
+                        _binaryWriter.Write('\0'); // Seperate strings with Null Terminator
+                    }
+                    break;
                 case string stringData:
                     // Convert string to bytes if needed
                     byte[] stringBytes = Encoding.ASCII.GetBytes(stringData);

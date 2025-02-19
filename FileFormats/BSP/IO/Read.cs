@@ -54,6 +54,29 @@ namespace FileFormats.BSP
                     BSP.Header.lumps[lumpIndex].Data = stringOutput;
                     break;
 
+                case Type t when t == typeof(string[]):
+                    List<string> stringList = new();
+                    int bytesRead = 0;
+
+                    while (bytesRead < input.FileLength)
+                    {
+                        // Read until a null terminator (null-separated strings)
+                        List<byte> byteBuffer = new();
+                        byte currentByte;
+
+                        while (bytesRead < input.FileLength && (currentByte = _binaryReader.ReadByte()) != 0)
+                        {
+                            byteBuffer.Add(currentByte);
+                            bytesRead++;
+                        }
+
+                        bytesRead++; // Skip null terminator
+                        stringList.Add(Encoding.UTF8.GetString(byteBuffer.ToArray()));
+                    }
+
+                    BSP.Header.lumps[lumpIndex].Data = stringList.ToArray();
+                    break;
+
                 default:
                     // For unknown lump types, just read raw bytes
                     input.Data = _binaryReader.ReadBytes(input.FileLength);
