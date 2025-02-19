@@ -15,7 +15,7 @@ namespace FileFormats.BSP
         public static LumpDefinition[] Definitions = {
 
             //                 Data Type       Data          Lump Type
-            new LumpDefinition(typeof(string), "bricks.vmt", LumpType.LUMP_MATERIAL), // Materials
+            new LumpDefinition(typeof(string), "metal_sheet.vmt", LumpType.LUMP_MATERIAL), // Materials
             new LumpDefinition(typeof(float[]), new float[] {     // Front face
                 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,  // Bottom-left
                 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,  // Bottom-right
@@ -79,7 +79,7 @@ namespace FileFormats.BSP
     position   "0,3,0"
         GameComponents {
             SourceRewrite_Components_MeshRenderer {
-                MaterialPath    "bricks.vmt"
+                MaterialPath    "metal_sheet.vmt"
                 MeshPath   "cube.model"
             }
         }
