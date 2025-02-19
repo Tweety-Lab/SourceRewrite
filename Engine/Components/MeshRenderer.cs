@@ -50,6 +50,7 @@ namespace SourceRewrite.Components
             {
                 GameWindow.CurrentWindow.Renderer.InitMesh(_mesh);
             }
+
         }
     }
 }

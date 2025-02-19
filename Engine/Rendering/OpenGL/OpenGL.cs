@@ -17,7 +17,10 @@ namespace SourceRewrite.Rendering.OpenGL
     // Disgusting horrid piece of code but luckily the render system is modular enough it doesnt matter right now
     public class OpenGLContext : IRendererAPI
     {
-        // Store all lists
+        // Add dictionary to map meshes to their buffer indices
+        private Dictionary<MeshAsset, (int VaoIndex, int VboIndex, int EboIndex)> meshBufferMap =
+            new Dictionary<MeshAsset, (int VaoIndex, int VboIndex, int EboIndex)>();
+
         private List<OpenGLBufferObject<uint>> eboList = new List<OpenGLBufferObject<uint>>();
         private List<OpenGLBufferObject<float>> vboList = new List<OpenGLBufferObject<float>>();
         private List<OpenGLVertexArrayObject<float, uint>> vaoList = new List<OpenGLVertexArrayObject<float, uint>>();
@@ -57,6 +60,9 @@ namespace SourceRewrite.Rendering.OpenGL
             if (meshObject == null || meshObject.Mesh == null)
                 throw new ArgumentNullException(nameof(meshObject));
 
+            if (!meshBufferMap.ContainsKey(meshObject.Mesh))
+                throw new InvalidOperationException("Mesh has not been initialized.");
+
             OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
             OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Texture?.GetTextureInterface();
 
@@ -88,26 +94,33 @@ namespace SourceRewrite.Rendering.OpenGL
             openglShader.SetUniform("uView", view);
             openglShader.SetUniform("uProjection", projection);
 
-            foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
-            {
-                vao.Bind();
-                OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
-                vao.Unbind();
-            }
+            // Get the VAO for this specific mesh
+            var bufferIndices = meshBufferMap[meshObject.Mesh];
+            var vao = vaoList[bufferIndices.VaoIndex];
+
+            vao.Bind();
+            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
+            vao.Unbind();
         }
 
         public unsafe void InitMesh(MeshAsset meshObject)
         {
-            // Instantiating our new abstractions
             eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));
             vboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Vertices, BufferTargetARB.ArrayBuffer));
             vaoList.Add(new OpenGLVertexArrayObject<float, uint>(OpenGL, vboList[vboList.Count - 1], eboList[eboList.Count - 1]));
 
-            //Telling the VAO object how to lay out the attribute pointers
-            vaoList[vaoList.Count - 1].VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            vaoList[vaoList.Count - 1].VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
+            // Store the mapping
+            meshBufferMap[meshObject] = (
+                VaoIndex: vaoList.Count - 1,
+                VboIndex: vboList.Count - 1,
+                EboIndex: eboList.Count - 1
+            );
+
+            var vao = vaoList[vaoList.Count - 1];
+            vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
+            vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
         }
-        
+
         public void OnClose()
         {
 
