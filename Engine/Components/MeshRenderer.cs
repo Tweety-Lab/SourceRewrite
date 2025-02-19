@@ -12,9 +12,9 @@ namespace SourceRewrite.Components
     public class MeshRenderer : GameComponent
     {
         public dynamic Mesh { get; set; }
-        public MeshRenderer(object meshRenderer)
+        public MeshRenderer(object mesh)
         {
-            Mesh = meshRenderer;
+            Mesh = mesh;
 
             if (Mesh == null)
             {
@@ -23,6 +23,11 @@ namespace SourceRewrite.Components
             {
                 GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
             }
+        }
+
+        public override void Start()
+        {
+            
         }
     }
 }
