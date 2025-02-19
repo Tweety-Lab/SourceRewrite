@@ -27,6 +27,14 @@ namespace SourceRewrite.Maps
 
             CreateBspGeometry(path); // Create Brush Geo
             CreateCamera(); // Create a test camera for viewing
+
+            BSPReader reader = new BSPReader(path); // Begin reading BSP
+
+            List<KeyValuesFormat> gameObjects = GetGameObjectKeyValues(reader);
+
+            Console.WriteLine(gameObjects[0].GetKeyValue("position").Value);
+
+            reader.Dispose(); // Close the reader
         }
 
         // Create a BSPMesh and render it from BSP Vertices/Indices Lump
@@ -47,6 +55,24 @@ namespace SourceRewrite.Maps
             var cameraObject = new GameObject();
             cameraObject.AddComponent(new Camera());
             cameraObject.AddComponent(new CameraController());
+        }
+
+        // Get the BSP's GameObjects as KeyValuesFormats
+        private static List<KeyValuesFormat> GetGameObjectKeyValues(BSPReader reader)
+        {
+            // Read data from BSP
+            string[] gameObjectData = reader.GetLumpData<string[]>(LumpType.LUMP_GAME_OBJECTS);
+            List<KeyValuesFormat> output = new List<KeyValuesFormat>();
+
+            // Loop through every Game Object
+            foreach(var gameObject in gameObjectData)
+            {
+                // Read KeyValues
+                KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObject);
+                output.Add(gameObjectKeyValues);
+            }
+
+            return output;
         }
 
     }
