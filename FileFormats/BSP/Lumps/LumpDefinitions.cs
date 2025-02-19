@@ -75,15 +75,13 @@ namespace FileFormats.BSP
     new string[]
     {
             """
-    SourceRewrite_Components_MeshRenderer {
+    GameObject01 {
     position   "0,3,0"
-    Mesh   "M:cube.model"
     }
     """,
             """
-    SourceRewrite_Components_MeshRenderer {
+    GameObject02 {
     position   "0,6,0"
-    Mesh   "M:cube.model"
     }
     """
     },

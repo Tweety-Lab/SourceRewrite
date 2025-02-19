@@ -12,6 +12,8 @@ using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using System.ComponentModel;
 using Silk.NET.Vulkan;
+using Silk.NET.Core.Native;
+using System.Globalization;
 
 // Beware those trying to read this, it might try to fight back.
 // This code is so horrible, rewrite from scratch.
@@ -31,8 +33,7 @@ namespace SourceRewrite.Maps
             BSPReader reader = new BSPReader(path); // Begin reading BSP
 
             List<KeyValuesFormat> gameObjects = GetGameObjectKeyValues(reader);
-
-            Console.WriteLine(gameObjects[0].GetKeyValue("position").Value);
+            CreateGameObjects(gameObjects); // Create GameObjects
 
             reader.Dispose(); // Close the reader
         }
@@ -75,5 +76,20 @@ namespace SourceRewrite.Maps
             return output;
         }
 
+        // Create GameObjects from a list of them
+        private static void CreateGameObjects(List<KeyValuesFormat> gameObjects)
+        {
+            // Loop through every GameObject
+            foreach (KeyValuesFormat gameObjectKV in gameObjects)
+            {
+                GameObject gameObject = new GameObject(); // Make the GameObject
+
+                // Get the specified Position
+                KeyValue positionKV = gameObjectKV.GetKeyValue("position");
+                Vector3 position = positionKV.GetValueAsType<Vector3>();
+
+                gameObject.Transform.Position = position;
+            }
+        }
     }
 }
