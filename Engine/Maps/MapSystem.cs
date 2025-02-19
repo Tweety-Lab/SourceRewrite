@@ -12,8 +12,10 @@ using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using System.ComponentModel;
 using Silk.NET.Vulkan;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
+// Beware those trying to read this, it might try to fight back.
+// This code is so horrible, rewrite from scratch.
+// REWRITE PRIORITY: HIGH!!!
 namespace SourceRewrite.Maps
 {
     public static class MapSystem
