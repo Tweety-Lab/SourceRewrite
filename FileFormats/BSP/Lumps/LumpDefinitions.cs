@@ -78,13 +78,18 @@ namespace FileFormats.BSP
     GameObject01 {
     position   "0,3,0"
         GameComponents {
-            test    "testvalue"
+            SourceRewrite_Components_MeshRenderer {
+                testkey   "testvalue"
+            }
         }
     }
     """,
             """
     GameObject02 {
     position   "0,6,0"
+        GameComponents {
+            test    "testvalue"
+        }
     }
     """
     },

@@ -86,10 +86,43 @@ namespace SourceRewrite.Maps
 
                 // Get the specified Position
                 KeyValue positionKV = gameObjectKV.GetKeyValue("position");
-                Console.WriteLine(gameObjectKV.ParentKeys[gameObjectKV.ParentKeys.Count - 1].Name);
+
                 Vector3 position = positionKV.GetValueAsType<Vector3>();
 
                 gameObject.Transform.Position = position;
+
+                CreateGameComponents(gameObjectKV, gameObject); // Populate with GameComponents defined in BSP
+            }
+        }
+
+        // Populate a GameObject with components from KeyValues
+        private static void CreateGameComponents(KeyValuesFormat gameObjectKV, GameObject targetObject)
+        {
+            // Get Game Components Parent Key
+            ParentKey gameComponentsPK = gameObjectKV.ParentKeys[0].ChildParentKeys[0];
+
+            if (gameComponentsPK == null) return;
+
+            // Loop through every Game Component
+            foreach (ParentKey gameComponentPK in gameComponentsPK.ChildParentKeys)
+            {
+                // We store namespaces as SourceRewrite_Components_CompName in BSP
+                string componentNameSpace = gameComponentPK.Name.Replace('_', '.');
+
+                // Convert from namespace to Type
+                Type componentType = Type.GetType(componentNameSpace);
+
+                Console.WriteLine(componentNameSpace);
+
+                // Create GameComponent
+                GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
+
+                MeshRenderer meshRenderer = (MeshRenderer) gameComponent;
+                Material material = FileSystem.GetMaterial("bricks.vmt");
+                meshRenderer.Mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
+
+                // Add Component to GameObject
+                targetObject.AddComponent(gameComponent);
             }
         }
     }

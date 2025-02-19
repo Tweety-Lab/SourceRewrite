@@ -195,6 +195,14 @@ namespace FileFormats.KeyValues
         }
 
         /// <summary>
+        /// Returns the first found Parent Key with the specified name.
+        /// </summary>
+        public ParentKey GetChildParentKey(string name)
+        {
+            return ChildParentKeys.Find(pk => pk.Name == name);
+        }
+
+        /// <summary>
         /// Returns a KeyValue inside this ParentKey from its Key.
         /// </summary>
         public KeyValue GetKeyValue(string key)
