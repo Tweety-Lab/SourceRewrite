@@ -93,7 +93,7 @@ namespace FileFormats.BSP
                 int[] intArray => intArray.Length * sizeof(int),
                 float[] floatArray => floatArray.Length * sizeof(float),
                 uint[] uintArray => uintArray.Length * sizeof(uint),
-                string stringData => Encoding.UTF8.GetByteCount(stringData) + 1, // +1 for null terminator
+                string stringData => Encoding.UTF8.GetByteCount(stringData),
                 _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
             };
         }

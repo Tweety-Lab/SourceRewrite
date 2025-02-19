@@ -50,8 +50,8 @@ namespace FileFormats.BSP
 
                 case Type t when t == typeof(string):
                     byte[] stringBytes = _binaryReader.ReadBytes(input.FileLength);
-                    string materialPath = Encoding.UTF8.GetString(stringBytes).TrimEnd('\0');
-                    BSP.Header.lumps[lumpIndex].Data = materialPath;
+                    string stringOutput = Encoding.UTF8.GetString(stringBytes).TrimEnd('\0');
+                    BSP.Header.lumps[lumpIndex].Data = stringOutput;
                     break;
 
                 default:
