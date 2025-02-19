@@ -78,7 +78,7 @@ namespace SourceRewrite.Windowing
             Input = new InputContext(_window.CreateInput());
 
             // Load a bsp
-            MapSystem.LoadMap("bsp_test.bsp");
+            MapSystem.LoadMap(FileSystem.GetMapPath("bsp_test.bsp"));
 
             // Load GameObjects
             GameObject.GameObjectStart();
