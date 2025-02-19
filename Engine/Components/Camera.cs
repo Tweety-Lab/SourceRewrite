@@ -64,8 +64,7 @@ namespace SourceRewrite.Components
             UpdateCameraFront();
         }
 
-
-        public Camera()
+        public override void Start()
         {
             ActiveCamera = this;
 
