@@ -9,28 +9,24 @@ using SourceRewrite.Files;
 
 namespace SourceRewrite.AssetTypes
 {
-    public class BSPMesh
+    public class BSPMesh : MeshAsset
     {
         private BSPReader reader;
 
-        public Mesh Mesh;
         public BSPMesh(string bspPath)
         {
             // Read the BSP
             reader = new BSPReader(bspPath);
 
-            float[] vertices = reader.GetLumpData<float[]>(LumpType.LUMP_VERTEXES); // Load Vertices Lump
-            uint[] indices = reader.GetLumpData<uint[]>(LumpType.LUMP_INDICES); // Load Indices Lump
+            Vertices = reader.GetLumpData<float[]>(LumpType.LUMP_VERTEXES); // Load Vertices Lump
+            Indices = reader.GetLumpData<uint[]>(LumpType.LUMP_INDICES); // Load Indices Lump
 
             string materialPath = reader.GetLumpData<string>(LumpType.LUMP_MATERIAL); // Load Material
 
             Console.WriteLine(materialPath);
 
             // Create a Material
-            Material material = FileSystem.GetMaterial(materialPath);
-
-            // Create a Mesh
-            Mesh = new Mesh(vertices, indices, material);
+            Material = FileSystem.GetMaterial(materialPath);
 
             // Free the BSP from memory
             reader.Dispose();

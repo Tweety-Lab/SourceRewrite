@@ -92,7 +92,7 @@ namespace SourceRewrite.Rendering
             _apiInterface.OnFramebufferResize(newSize);
         }
 
-        public void InitMesh(Mesh meshObject)
+        public void InitMesh(MeshAsset meshObject)
         {
             _apiInterface.InitMesh(meshObject);
         }
@@ -109,7 +109,7 @@ namespace SourceRewrite.Rendering
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
         void RenderMesh(MeshRenderer meshObject);
-        void InitMesh(Mesh meshObject);
+        void InitMesh(MeshAsset meshObject);
     }
 
     /// <summary>

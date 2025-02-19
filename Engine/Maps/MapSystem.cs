@@ -9,6 +9,10 @@ using SourceRewrite.AssetTypes;
 using SourceRewrite.Components;
 using SourceRewrite.Files;
 using SourceRewrite.Objects;
+using FileFormats.KeyValues;
+using System.ComponentModel;
+using Silk.NET.Vulkan;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SourceRewrite.Maps
 {
@@ -19,20 +23,25 @@ namespace SourceRewrite.Maps
             if (!File.Exists(path))
                 return;
 
-            CreateBspGeometry(path);
-            CreateCamera();
-            ProcessBspData(path);
+            CreateBspGeometry(path); // Create Brush Geo
+            CreateCamera(); // Create a test camera for viewing
+
+            ProcessBspGlobalComponents(path); // Create Global Components
         }
 
+        // Create a BSPMesh and render it from BSP Vertices/Indices Lump
         private static void CreateBspGeometry(string path)
         {
             var bspMesh = new BSPMesh(path);
-            var bspRenderer = new MeshRenderer(bspMesh.Mesh);
+            var bspRenderer = new MeshRenderer();
+
+            bspRenderer.Mesh = bspMesh; // Set the Mesh
 
             var bspGeometry = new GameObject();
             bspGeometry.AddComponent(bspRenderer);
         }
 
+        // Create a Camera
         private static void CreateCamera()
         {
             var cameraObject = new GameObject();
@@ -40,68 +49,73 @@ namespace SourceRewrite.Maps
             cameraObject.AddComponent(new CameraController());
         }
 
-        private static void ProcessBspData(string path)
+        // Process BSP Global Components
+        private static void ProcessBspGlobalComponents(string path)
         {
             var reader = new BSPReader(path);
-            var mapComponents = reader.GetLumpData<string>(LumpType.LUMP_MAP_COMPONENTS);
+            string globalComponents = reader.GetLumpData<string>(LumpType.LUMP_GLOBAL_COMPONENTS);
 
-            var material = FileSystem.GetMaterial("bricks.vmt");
-            var mesh = new Mesh(FileSystem.GetModelPath("cube.model"), material);
+            // Read the component as a KeyValue format
+            KeyValuesFormat kvComponent = new KeyValuesFormat(globalComponents);
 
-            ParseAndCreateComponent(mapComponents, mesh);
-        }
+            // Get the NameSpace of the component
+            string componentNamespace = kvComponent.ParentKeys[0].Name;
+            componentNamespace = componentNamespace.Replace('_', '.'); // In a .bsp, namespaces are stored as source_components_component.
 
-        private static void ParseAndCreateComponent(string mapComponents, Mesh mesh)
-        {
-            // Input format: "Namespace.Namespace(0, 0, 0)"
-            var openParenIndex = mapComponents.IndexOf('(');
-            var closeParenIndex = mapComponents.IndexOf(')');
+            // Get the Positions xyz as Strings
+            string[] positionVectors = kvComponent.GetKeyValue("position").Value.ToString().Split(',');
 
-            if (openParenIndex == -1 || closeParenIndex == -1)
+            float vectorX = float.Parse(positionVectors[0]); // Get the X
+            float vectorY = float.Parse(positionVectors[1]); // Get the Y
+            float vectorZ = float.Parse(positionVectors[2]); // Get the Z
+
+            Vector3 position = new Vector3(vectorX, vectorY, vectorZ); // Create a Position
+
+            Console.WriteLine(componentNamespace);
+            Console.WriteLine(position);
+
+            // Create the Component
+            GameComponent component = (GameComponent)ComponentCreator.CreateClassFromNamespace(componentNamespace);
+
+            // Loop through every KeyValue
+            foreach (KeyValue property in kvComponent.ParentKeys[0].ChildKeys)
             {
-                throw new FormatException($"Invalid component format: {mapComponents}");
+                string key = property.Key; // Property Name
+                string value = property.Value.ToString(); // Property Value
+
+                // If Key starts with an uppercase letter, assume it's a property
+                if (char.IsUpper(key[0]))
+                {
+                    string[] splitValue = value.Split(':');
+
+                    if (splitValue.Length == 2)
+                    {
+                        string propertyType = splitValue[0]; // Type Prefix (e.g., "M" for Mesh)
+                        string propertyValue = splitValue[1]; // Actual value
+
+                        object propertyObject = ComponentCreator.CreateProperty(propertyType, propertyValue);
+
+                        if (propertyObject != null)
+                        {
+                            ComponentCreator.SetProperty(component, key, propertyObject);
+                        }
+                    }
+                }
             }
 
-            // Get namespace part before the parentheses
-            var nameSpace = mapComponents.Substring(0, openParenIndex).Trim();
 
-            // Get the coordinates between the parentheses
-            var transformString = mapComponents.Substring(
-                openParenIndex + 1,
-                closeParenIndex - openParenIndex - 1
-            );
+            GameObject gameObject = new GameObject(); // Create a GameObject to hold Component
+            gameObject.AddComponent(component); // Add Component
 
-            // Parse the vector components
-            var transformValues = transformString.Split(',')
-                .Select(x => float.Parse(x.Trim()))
-                .ToArray();
-
-            if (transformValues.Length != 3)
-            {
-                throw new FormatException($"Expected 3 coordinates, got {transformValues.Length}");
-            }
-
-            var position = new Vector3(
-                transformValues[0],
-                transformValues[1],
-                transformValues[2]  // Fixed: Using index 2 for z-coordinate
-            );
-
-            var componentCreator = new ComponentCreator();
-            var component = (GameComponent)componentCreator.CreateClassFromNamespace(
-                nameSpace,
-                new object[] { mesh }
-            );
-
-            var gameObject = new GameObject();
-            gameObject.AddComponent(component);
             gameObject.Transform.Position = position;
+
+            reader.Dispose(); // Close BSPReader
         }
     }
 
-    public class ComponentCreator
+    public static class ComponentCreator
     {
-        public object CreateClassFromNamespace(string fullClassName, object[] constructorArguments)
+        public static object CreateClassFromNamespace(string fullClassName)
         {
             Type classType = Type.GetType(fullClassName);
 
@@ -110,7 +124,45 @@ namespace SourceRewrite.Maps
                 throw new InvalidOperationException($"Class with name {fullClassName} not found.");
             }
 
-            return Activator.CreateInstance(classType, constructorArguments);
+            return Activator.CreateInstance(classType);
         }
+
+        public static object CreateProperty(string propertyType, string propertyValue)
+        {
+            switch (propertyType)
+            {
+                // Model Path
+                case "M":
+                    Material testMaterial = FileSystem.GetMaterial("bricks.vmt");
+                    Mesh outputMesh = new Mesh(FileSystem.GetModelPath(propertyValue), testMaterial);
+                    return outputMesh;
+            }
+
+            return null;
+        }
+
+        public static void SetProperty(object obj, string propertyName, object value)
+        {
+            Type type = obj.GetType();
+
+            // Check if a PROPERTY with the given name exists
+            var property = type.GetProperty(propertyName);
+            if (property != null && property.CanWrite)
+            {
+                property.SetValue(obj, value);
+                return;
+            }
+
+            // Check if a FIELD with the given name exists
+            var field = type.GetField(propertyName);
+            if (field != null)
+            {
+                field.SetValue(obj, value);
+                return;
+            }
+
+            Console.WriteLine($"Property or Field '{propertyName}' not found on {type.Name}");
+        }
+
     }
 }

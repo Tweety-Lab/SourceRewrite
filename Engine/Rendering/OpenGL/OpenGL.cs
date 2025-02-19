@@ -57,8 +57,8 @@ namespace SourceRewrite.Rendering.OpenGL
             if (meshObject == null || meshObject.Mesh == null)
                 throw new ArgumentNullException(nameof(meshObject));
 
-            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Shader?.GetShaderInterface();
-            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Texture?.GetTextureInterface();
+            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
+            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Texture?.GetTextureInterface();
 
             if (openglShader == null || openglTexture == null)
                 throw new InvalidOperationException("Shader or Texture is not valid.");
@@ -96,7 +96,7 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
-        public unsafe void InitMesh(Mesh meshObject)
+        public unsafe void InitMesh(MeshAsset meshObject)
         {
             // Instantiating our new abstractions
             eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Silk.NET.Assimp;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Windowing;
 
@@ -11,23 +12,44 @@ namespace SourceRewrite.Components
     /// </summary>
     public class MeshRenderer : GameComponent
     {
-        public dynamic Mesh { get; set; }
-        public MeshRenderer(object mesh)
+        private MeshAsset _mesh;
+        public MeshAsset Mesh
         {
-            Mesh = mesh;
-
-            if (Mesh == null)
+            get => _mesh;
+            set
             {
-                Console.WriteLine("Could not initialize MeshRenderer, Mesh is Null!");
-            } else
-            {
-                GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
+                if (_mesh != value)
+                {
+                    _mesh = value;
+                    RefreshMesh(); // Automatically update when changed
+                }
             }
         }
 
         public override void Start()
         {
-            
+            if (Mesh == null)
+            {
+                // If no mesh exists, make an empty one
+                Mesh = new MeshAsset();
+                Mesh.Vertices = [];
+                Mesh.Indices = [];
+
+                GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the (empty) mesh
+            }
+            else
+            {
+                GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
+            }
+        }
+
+        // Render Mesh when it gets changed
+        private void RefreshMesh()
+        {
+            if (GameWindow.CurrentWindow?.Renderer != null && _mesh != null)
+            {
+                GameWindow.CurrentWindow.Renderer.InitMesh(_mesh);
+            }
         }
     }
 }

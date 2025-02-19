@@ -13,20 +13,10 @@ namespace SourceRewrite.AssetTypes
     /// <summary>
     /// Mesh Class, Constructed from filePath to model.
     /// </summary>
-    public class Mesh
+    public class Mesh : MeshAsset
     {
         public Rendering.Texture Texture;
         public Shader Shader;
-
-        // Array of Vertex positions
-        public float[] Vertices =
-        {
-        };
-
-        // Array of Indices
-        public uint[] Indices =
-        {
-        };
 
         // Create a Mesh from file path
         public unsafe Mesh(string filePath, Material material)
@@ -39,8 +29,10 @@ namespace SourceRewrite.AssetTypes
                 material = FileSystem.GetMaterial("dev/error.vmt");
             }
 
-            Texture = material.Texture;
-            Shader = material.Shader;
+            Material = material;
+
+            Texture = Material.Texture;
+            Shader = Material.Shader;
 
             // PLACEHOLDER: Use Assimp to load OBJ
             var assimp = Assimp.GetApi();

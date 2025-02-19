@@ -70,7 +70,7 @@ namespace FileFormats.BSP
 
     // Bottom face
     20, 21, 22,  20, 22, 23 }, LumpType.LUMP_INDICES), // Indices
-            new LumpDefinition(typeof(string), "SourceRewrite.Components.MeshRenderer(0, 16, 0)", LumpType.LUMP_MAP_COMPONENTS) // Global Map Components
+            new LumpDefinition(typeof(string), "\"SourceRewrite_Components_MeshRenderer {\nposition   \"0,6,0\"\nMesh   \"M:/cube.model\"\n}\"", LumpType.LUMP_GLOBAL_COMPONENTS) // Global Map Components
 
         };
     };
@@ -99,7 +99,7 @@ namespace FileFormats.BSP
         LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
         LUMP_VERTEXES,          // Brush Vertices
         LUMP_INDICES,           // Brush Indices ( not in < v26 )
-        LUMP_MAP_COMPONENTS,    // Standalone Game Components with no attached GameObject ( not in < v26 )
+        LUMP_GLOBAL_COMPONENTS,    // Standalone Game Components with no attached GameObject ( not in < v26 )
                                   // ... continue
     }
 }
