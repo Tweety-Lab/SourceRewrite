@@ -16,12 +16,12 @@ namespace SourceRewrite.Components
         public float MovementSpeed = 4f;
         public float Sensitivity = 30f;
 
-        private Camera camera;
+        private Camera GameObject;
 
         public override void Start()
         {
             // Get the camera thats attached to the same game object as the controller
-            camera = GameObject.GetComponentFromType<Camera>();
+            GameObject = base.GameObject.GetComponentFromType<Camera>();
         }
 
         public override void Update(float deltaTime)
@@ -29,25 +29,25 @@ namespace SourceRewrite.Components
             // Forward Movement
             if (Input.GetKeyDown(Key.W))
             {
-                camera.Transform.Position = camera.Transform.Position + MovementSpeed * deltaTime * camera.Transform.Forward;
+                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Forward;
             }
 
             // Backward Movement
             if (Input.GetKeyDown(Key.S))
             {
-                camera.Transform.Position = camera.Transform.Position - MovementSpeed * deltaTime * camera.Transform.Forward;
+                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Forward;
             }
 
             // Left Movement
             if (Input.GetKeyDown(Key.A))
             {
-                camera.Transform.Position = camera.Transform.Position - MovementSpeed * deltaTime * camera.Transform.Right;
+                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Right;
             }
 
             // Right Movement
             if (Input.GetKeyDown(Key.D))
             {
-                camera.Transform.Position = camera.Transform.Position + MovementSpeed * deltaTime * camera.Transform.Right;
+                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Right;
             }
 
             // If right mouse held down move Camera view
@@ -59,10 +59,10 @@ namespace SourceRewrite.Components
                 float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
                 float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
 
-                Console.WriteLine("Right: " + camera.Transform.Right);
-                Console.WriteLine("Forward: " + camera.Transform.Forward);
+                Console.WriteLine("Right: " + GameObject.Transform.Right);
+                Console.WriteLine("Forward: " + GameObject.Transform.Forward);
 
-                camera.Transform.RotateBy(mouseY, mouseX, 0);
+                GameObject.Transform.RotateBy(mouseY, mouseX, 0);
             } else
             {
                 Input.UnlockCursor();
