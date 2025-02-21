@@ -84,13 +84,16 @@ namespace SourceRewrite.Maps
                 // Get the specified Transforms
                 KeyValue positionKV = gameObjectKV.GetKeyValue("position");
                 KeyValue scaleKV = gameObjectKV.GetKeyValue("scale");
+                KeyValue rotationKV = gameObjectKV.GetKeyValue("rotation");
 
                 // Apply Transforms
                 Vector3 position = positionKV.GetValueAsType<Vector3>();
                 Vector3 scale = scaleKV.GetValueAsType<Vector3>();
+                Vector3 rotation = rotationKV.GetValueAsType<Vector3>();
 
                 gameObject.Transform.Position = position;
                 gameObject.Transform.Scale = scale;
+                gameObject.Transform.Rotation = Maths.MathsHelper.EulerToQuaternion(rotation);
 
                 CreateGameComponents(gameObjectKV, gameObject); // Populate with GameComponents defined in BSP
             }

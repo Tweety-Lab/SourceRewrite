@@ -14,6 +14,31 @@ namespace SourceRewrite.Maths
             return MathF.PI / 180f * degrees;
         }
 
+        // Method to convert Euler angles (in degrees) to a quaternion
+        public static Quaternion EulerToQuaternion(Vector3 euler)
+        {
+            // Convert Euler angles from degrees to radians
+            float roll = euler.X * (float)Math.PI / 180f;  // x-axis rotation
+            float pitch = euler.Y * (float)Math.PI / 180f; // y-axis rotation
+            float yaw = euler.Z * (float)Math.PI / 180f;   // z-axis rotation
+
+            // Compute the quaternion components
+            float cy = (float)Math.Cos(yaw * 0.5f);
+            float sy = (float)Math.Sin(yaw * 0.5f);
+            float cr = (float)Math.Cos(roll * 0.5f);
+            float sr = (float)Math.Sin(roll * 0.5f);
+            float cp = (float)Math.Cos(pitch * 0.5f);
+            float sp = (float)Math.Sin(pitch * 0.5f);
+
+            // Calculate the quaternion components
+            float w = cy * cr * cp + sy * sr * sp;
+            float x = cy * sr * cp - sy * cr * sp;
+            float y = cy * cr * sp + sy * sr * cp;
+            float z = sy * cr * cp - cy * sr * sp;
+
+            return new Quaternion(x, y, z, w);
+        }
+
         public static Vector3 QuaternionToEulerDegrees(Quaternion quat)
         {
             // Extract Euler angles (pitch, yaw, roll) in radians
