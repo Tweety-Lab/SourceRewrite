@@ -9,10 +9,6 @@ namespace SourceRewrite.Maths
 {
     public static class MathsHelper
     {
-        public static float DegreesToRadians(float degrees)
-        {
-            return MathF.PI / 180f * degrees;
-        }
 
         /// <summary>
         /// Convert Euler degrees to Quaternion.
@@ -41,7 +37,7 @@ namespace SourceRewrite.Maths
             return new Quaternion(x, y, z, w);
         }
 
-        public static Vector3 QuaternionToEulerDegrees(Quaternion quat)
+        public static Vector3 QuaternionToEuler(Quaternion quat)
         {
             // Extract Euler angles (pitch, yaw, roll) in radians
             float pitch = MathF.Atan2(2.0f * (quat.W * quat.X + quat.Y * quat.Z), 1.0f - 2.0f * (quat.X * quat.X + quat.Y * quat.Y));
