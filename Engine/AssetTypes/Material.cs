@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FileFormats.KeyValues;
 using SourceRewrite.Files;
+using System.IO;
 
 namespace SourceRewrite.AssetTypes
 {
@@ -22,6 +23,13 @@ namespace SourceRewrite.AssetTypes
         {
             try
             {
+                // If Material cant be found, set it to missing
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"Could not find material at '{filePath}'");
+                    filePath = FileSystem.GetMaterialPath("dev/missing.vmt");
+                }
+
                 string content = File.ReadAllText(filePath);
                 
                 KeyValuesFormat keyValues = new KeyValuesFormat(content); // Parse the Material file
