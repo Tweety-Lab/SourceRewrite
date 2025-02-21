@@ -14,7 +14,9 @@ namespace SourceRewrite.Maths
             return MathF.PI / 180f * degrees;
         }
 
-        // Method to convert Euler angles (in degrees) to a quaternion
+        /// <summary>
+        /// Convert Euler degrees to Quaternion.
+        /// </summary>
         public static Quaternion EulerToQuaternion(Vector3 euler)
         {
             // Convert Euler angles from degrees to radians

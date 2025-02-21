@@ -36,17 +36,6 @@ namespace SourceRewrite.Components
         //Note: The order here does matter.
         public Matrix4x4 ViewMatrix => Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale);
 
-        /// <summary>
-        /// Rotate to the input Degrees.
-        /// </summary>
-        public void RotateTo(float x, float y, float z)
-        {
-            float pitchRad = x * MathF.PI / 180f;
-            float yawRad = y * MathF.PI / 180f;
-            float rollRad = z * MathF.PI / 180f;
-
-            Rotation = Quaternion.CreateFromYawPitchRoll(yawRad, pitchRad, rollRad);
-        }
 
         /// <summary>
         /// Rotate by the input Degrees. (Adds to rotation, doesn't set it)
