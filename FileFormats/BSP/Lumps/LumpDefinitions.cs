@@ -77,6 +77,7 @@ namespace FileFormats.BSP
             """
     GameObject01 {
     position   "0,3,0"
+    scale "1,2,1"
         GameComponents {
             SourceRewrite_Components_MeshRenderer {
                 MaterialPath    "metal_sheet.vmt"
@@ -88,6 +89,7 @@ namespace FileFormats.BSP
             """
     GameObject02 {
     position   "0,6,0"
+    scale   "1,1,1"
         GameComponents {
             test    "testvalue"
         }

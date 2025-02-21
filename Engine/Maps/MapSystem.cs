@@ -10,10 +10,6 @@ using SourceRewrite.Components;
 using SourceRewrite.Files;
 using SourceRewrite.Objects;
 using FileFormats.KeyValues;
-using System.ComponentModel;
-using Silk.NET.Vulkan;
-using Silk.NET.Core.Native;
-using System.Globalization;
 using System.Reflection;
 
 // Beware those trying to read this, it might try to fight back.
@@ -85,12 +81,16 @@ namespace SourceRewrite.Maps
             {
                 GameObject gameObject = new GameObject(); // Make the GameObject
 
-                // Get the specified Position
+                // Get the specified Transforms
                 KeyValue positionKV = gameObjectKV.GetKeyValue("position");
+                KeyValue scaleKV = gameObjectKV.GetKeyValue("scale");
 
+                // Apply Transforms
                 Vector3 position = positionKV.GetValueAsType<Vector3>();
+                Vector3 scale = scaleKV.GetValueAsType<Vector3>();
 
                 gameObject.Transform.Position = position;
+                gameObject.Transform.Scale = scale;
 
                 CreateGameComponents(gameObjectKV, gameObject); // Populate with GameComponents defined in BSP
             }
