@@ -21,45 +21,19 @@ namespace SourceRewrite.Components
         /// <summary>
         /// Forward Vector.
         /// </summary>
-        public Vector3 Forward => Vector3.Transform(-Vector3.UnitZ, Rotation);
+        public Vector3 Forward => Vector3.Normalize(Vector3.Transform(-Vector3.UnitZ, Rotation));
 
         /// <summary>
         /// Right Vector.
         /// </summary>
-        public Vector3 Right => Vector3.Transform(Vector3.UnitX, Rotation);
+        public Vector3 Right => Vector3.Normalize(Vector3.Transform(Vector3.UnitX, Rotation));
 
         /// <summary>
         /// Up Vector.
         /// </summary>
-        public Vector3 Up => Vector3.Transform(Vector3.UnitY, Rotation);
+        public Vector3 Up => Vector3.Normalize(Vector3.Transform(Vector3.UnitY, Rotation));
 
         //Note: The order here does matter.
         public Matrix4x4 ViewMatrix => Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateScale(Scale);
-
-
-        /// <summary>
-        /// Rotate by the input Degrees. (Adds to rotation, doesn't set it)
-        /// </summary>
-        public void RotateBy(float x, float y, float z)
-        {
-            // Convert Euler angles from degrees to radians
-            float pitchRad = x * MathF.PI / 180f;
-            float yawRad = y * MathF.PI / 180f;
-            float rollRad = z * MathF.PI / 180f;
-
-            // Create rotation quaternions for each axis
-            Quaternion rotX = Quaternion.CreateFromAxisAngle(Vector3.UnitX, pitchRad);
-            Quaternion rotY = Quaternion.CreateFromAxisAngle(Vector3.UnitY, yawRad);
-            Quaternion rotZ = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, rollRad);
-
-            // Combine the rotations (order matters: Z * Y * X is common)
-            Quaternion deltaRotation = rotZ * rotY * rotX;
-
-            // Apply the new rotation to the current rotation
-            Rotation = Rotation * deltaRotation;
-
-            // Normalize to prevent accumulation of floating-point errors
-            Rotation = Quaternion.Normalize(Rotation);
-        }
     }
 }
