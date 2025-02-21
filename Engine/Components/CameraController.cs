@@ -16,12 +16,12 @@ namespace SourceRewrite.Components
         public float MovementSpeed = 4f;
         public float Sensitivity = 30f;
 
-        private Camera GameObject;
+        private Camera camera;
 
         public override void Start()
         {
             // Get the camera thats attached to the same game object as the controller
-            GameObject = base.GameObject.GetComponentFromType<Camera>();
+            camera = base.GameObject.GetComponentFromType<Camera>();
         }
 
         public override void Update(float deltaTime)
