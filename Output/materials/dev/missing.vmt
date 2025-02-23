@@ -1,4 +1,4 @@
-shader
+UnlitGeneric
 {
 	$basetexture "dev/missing.vtf"
 	$uBrightness	"1"
