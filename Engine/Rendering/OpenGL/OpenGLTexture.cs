@@ -21,7 +21,7 @@ namespace SourceRewrite.Rendering.OpenGL
             Bind();
 
             // Load VTF
-            TextureFormat texture = new TextureFormat(path);
+            VTFFormat texture = new VTFFormat(path);
             byte[] data = texture.GetBgra32Data();
 
             // Upload the VTF Texture data to OpenGL.

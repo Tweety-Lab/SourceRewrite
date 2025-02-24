@@ -10,7 +10,7 @@ namespace FileFormats.VTF
     /// <summary>
     /// Valve's Source 1 .vtf texture format.
     /// </summary>
-    public class TextureFormat
+    public class VTFFormat
     {
         private VtfFile vtfFile;
         private VtfImage vtfImage;
@@ -20,7 +20,7 @@ namespace FileFormats.VTF
         public int Width;
 
 
-        public TextureFormat(string path)
+        public VTFFormat(string path)
         {
             // Load the VTF file using Sledge.Formats.Texture
             using (var stream = File.OpenRead(path))
