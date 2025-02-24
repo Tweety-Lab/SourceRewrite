@@ -41,9 +41,9 @@ namespace SourceRewrite.Rendering.OpenGL
         }
 
         /// <summary>
-        /// Set Shader Uniform.
+        /// Set Shader Parameter (Uniform).
         /// </summary>
-        public unsafe void SetUniform(string name, object value)
+        public unsafe void SetParameter(string name, object value)
         {
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1) // If GetUniformLocation returns -1 the uniform is not found.
@@ -73,9 +73,9 @@ namespace SourceRewrite.Rendering.OpenGL
         }
 
         /// <summary>
-        /// Get Shader Int Uniform.
+        /// Get Shader Int Parameter (Uniform).
         /// </summary>
-        public unsafe int GetIntUniform(string name)
+        public unsafe int GetIntParameter(string name)
         {
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1)

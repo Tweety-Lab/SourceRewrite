@@ -43,19 +43,19 @@ namespace SourceRewrite.Rendering
         }
 
         /// <summary>
-        /// Sets the shader's uniform to the specified value.
+        /// Sets the shader's specified parameter (uniform) to the specified value.
         /// </summary>
-        public void SetUniform(string uniformName, object value)
+        public void SetParameter(string uniformName, object value)
         {
-            _shaderInterface.SetUniform(uniformName, value);
+            _shaderInterface.SetParameter(uniformName, value);
         }
 
         /// <summary>
         /// Sets the shader's uniform to the specified value.
         /// </summary>
-        public int GetIntUniform(string uniformName)
+        public int GetIntParameter(string uniformName)
         {
-           return _shaderInterface.GetIntUniform(uniformName);
+           return _shaderInterface.GetIntParameter(uniformName);
         }
     }
 
@@ -65,7 +65,7 @@ namespace SourceRewrite.Rendering
     public interface IShader
     {
         void SetFragmentCode(string input);
-        void SetUniform(string uniformName, object value);
-        int GetIntUniform(string uniformName);
+        void SetParameter(string uniformName, object value);
+        int GetIntParameter(string uniformName);
     }
 }

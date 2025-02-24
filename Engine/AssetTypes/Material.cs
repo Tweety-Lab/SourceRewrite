@@ -51,7 +51,7 @@ namespace SourceRewrite.AssetTypes
                         object propertyValue = keyValue.Value;
 
                         // Set Shader uniform (property) to input property
-                        Shader.SetUniform(propertyName, propertyValue);
+                        Shader.SetParameter(propertyName, propertyValue);
                     }
                 }
 

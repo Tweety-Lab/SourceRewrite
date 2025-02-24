@@ -90,9 +90,9 @@ namespace SourceRewrite.Rendering.OpenGL
             // Model matrix from transform
             var model = meshObject.GameObject.GetComponentFromType<Transform>()?.ViewMatrix ?? Matrix4x4.Identity;
 
-            openglShader.SetUniform("uModel", model);
-            openglShader.SetUniform("uView", view);
-            openglShader.SetUniform("uProjection", projection);
+            openglShader.SetParameter("uModel", model);
+            openglShader.SetParameter("uView", view);
+            openglShader.SetParameter("uProjection", projection);
 
             // Get the VAO for this specific mesh
             var bufferIndices = meshBufferMap[meshObject.Mesh];
