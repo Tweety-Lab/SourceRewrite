@@ -14,15 +14,15 @@ namespace FileFormats.Shaders
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
 
-        public ShaderFormat(string contents)
+        public ShaderFormat(string shaderSource)
         {
-            var lines = contents.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             int currentLine = 0;
 
-            StringBuilder currentShaderContent = new StringBuilder();
+            StringBuilder currentFunctionContent = new StringBuilder();
             string currentFunctionName = null;
             int braceCount = 0;
-            bool insideShaderBlock = false;
+            bool insideFunctionBlock = false;
             bool firstBraceFound = false; // Track the first brace
 
             while (currentLine < lines.Length)
@@ -40,8 +40,8 @@ namespace FileFormats.Shaders
                 if (match.Success && braceCount == 0) // Only match top-level functions
                 {
                     currentFunctionName = match.Groups[1].Value;
-                    currentShaderContent.Clear();
-                    insideShaderBlock = false;
+                    currentFunctionContent.Clear();
+                    insideFunctionBlock = false;
                     braceCount = 0;
                     firstBraceFound = false;
                     currentLine++;
@@ -52,7 +52,7 @@ namespace FileFormats.Shaders
                 if (line.Contains("{"))
                 {
                     braceCount++;
-                    insideShaderBlock = true;
+                    insideFunctionBlock = true;
 
                     // Skip appending the first brace
                     if (!firstBraceFound)
@@ -67,18 +67,18 @@ namespace FileFormats.Shaders
                 if (line.Contains("}"))
                 {
                     braceCount--;
-                    if (braceCount == 0 && insideShaderBlock) // End of shader block
+                    if (braceCount == 0 && insideFunctionBlock) // End of shader block
                     {
-                        insideShaderBlock = false;
+                        insideFunctionBlock = false;
 
                         // Store function content
-                        string shaderContent = currentShaderContent.ToString().Trim();
+                        string functionContent = currentFunctionContent.ToString().Trim();
 
                         // Store all functions in the Functions list
                         Functions.Add(new ShaderFormatFunction
                         {
                             Name = currentFunctionName,
-                            Content = shaderContent
+                            Content = functionContent
                         });
 
                         currentFunctionName = null;
@@ -88,9 +88,9 @@ namespace FileFormats.Shaders
                 }
 
                 // Add content if inside a shader block
-                if (insideShaderBlock && braceCount > 0)
+                if (insideFunctionBlock && braceCount > 0)
                 {
-                    currentShaderContent.AppendLine(line);
+                    currentFunctionContent.AppendLine(line);
                 }
 
                 currentLine++;
