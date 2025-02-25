@@ -19,8 +19,8 @@ namespace SourceRewrite.Rendering
             string shaderContents = File.ReadAllText(shaderPath);
             ShaderFormat shader = new ShaderFormat(shaderContents);
 
-            string vertexSource = shader.VertexShader;
-            string fragmentSource = shader.FragmentShader;
+            string vertexSource = shader.GetFunction("vertex").Content; // Get the Vertex Source
+            string fragmentSource = shader.GetFunction("fragment").Content; // Get the Fragment Source
 
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)

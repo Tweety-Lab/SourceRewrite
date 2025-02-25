@@ -1,5 +1,5 @@
 // Vertex Code
-vertex() 
+void vertex() 
 {
     #version 330 core
     layout (location = 0) in vec3 vPos;
@@ -20,7 +20,7 @@ vertex()
 }
 
 // Fragment Code
-fragment() 
+void fragment() 
 {
     #version 330 core
     in vec2 fUv;

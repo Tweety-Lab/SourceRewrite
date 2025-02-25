@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FileFormats.Shaders
 {
     public class ShaderFormat
     {
-        public string VertexShader { get; private set; }
-        public string FragmentShader { get; private set; }
+        /// <summary>
+        /// All functions in the shader file, for example vertex() or fragment().
+        /// </summary>
+        public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
+
+        // Regular expression to identify shader function declarations
+        private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
 
         public ShaderFormat(string contents)
         {
@@ -14,7 +20,7 @@ namespace FileFormats.Shaders
             int currentLine = 0;
 
             StringBuilder currentShaderContent = new StringBuilder();
-            string currentShaderType = null;
+            string currentFunctionName = null;
             int braceCount = 0;
             bool insideShaderBlock = false;
             bool firstBraceFound = false; // Track the first brace
@@ -29,24 +35,15 @@ namespace FileFormats.Shaders
                     continue;
                 }
 
-                // Check for shader section start
-                if (line.StartsWith("vertex()"))
+                // Check for shader function declaration
+                Match match = FunctionDeclarationRegex.Match(line);
+                if (match.Success && braceCount == 0) // Only match top-level functions
                 {
-                    currentShaderType = "vertex";
+                    currentFunctionName = match.Groups[1].Value;
                     currentShaderContent.Clear();
                     insideShaderBlock = false;
                     braceCount = 0;
-                    firstBraceFound = false; // Reset for new shader block
-                    currentLine++;
-                    continue;
-                }
-                else if (line.StartsWith("fragment()"))
-                {
-                    currentShaderType = "fragment";
-                    currentShaderContent.Clear();
-                    insideShaderBlock = false;
-                    braceCount = 0;
-                    firstBraceFound = false; // Reset for new shader block
+                    firstBraceFound = false;
                     currentLine++;
                     continue;
                 }
@@ -73,11 +70,18 @@ namespace FileFormats.Shaders
                     if (braceCount == 0 && insideShaderBlock) // End of shader block
                     {
                         insideShaderBlock = false;
-                        if (currentShaderType == "vertex")
-                            VertexShader = currentShaderContent.ToString().Trim();
-                        else if (currentShaderType == "fragment")
-                            FragmentShader = currentShaderContent.ToString().Trim();
-                        currentShaderType = null;
+
+                        // Store function content
+                        string shaderContent = currentShaderContent.ToString().Trim();
+
+                        // Store all functions in the Functions list
+                        Functions.Add(new ShaderFormatFunction
+                        {
+                            Name = currentFunctionName,
+                            Content = shaderContent
+                        });
+
+                        currentFunctionName = null;
                         currentLine++;
                         continue;
                     }
@@ -92,5 +96,19 @@ namespace FileFormats.Shaders
                 currentLine++;
             }
         }
+
+        /// <summary>
+        /// Gets a function from the shader file, for example vertex() or fragment().
+        /// </summary>
+        public ShaderFormatFunction GetFunction(string name)
+        {
+            return Functions.Find(f => f.Name == name);
+        }
+    }
+
+    public struct ShaderFormatFunction
+    {
+        public string Name { get; set; }
+        public string Content { get; set; }
     }
 }
