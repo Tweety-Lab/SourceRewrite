@@ -1,4 +1,5 @@
 ﻿using System;
+using FileFormats.Shaders;
 using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
@@ -13,10 +14,13 @@ namespace SourceRewrite.Rendering
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
         private IShader _shaderInterface; // Use an interface for better abstraction
 
-        public Shader(string vertexPath, string fragmentPath)
+        public Shader(string shaderPath)
         {
-            string vertexSource = File.ReadAllText(vertexPath);
-            string fragmentSource = File.ReadAllText(fragmentPath);
+            string shaderContents = File.ReadAllText(shaderPath);
+            ShaderFormat shader = new ShaderFormat(shaderContents);
+
+            string vertexSource = shader.VertexShader;
+            string fragmentSource = shader.FragmentShader;
 
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)
@@ -54,7 +58,7 @@ namespace SourceRewrite.Rendering
         }
 
         /// <summary>
-        /// Sets the shader's uniform to the specified value.
+        /// Get's an int parameter from the shader.
         /// </summary>
         public int GetIntParameter(string uniformName)
         {

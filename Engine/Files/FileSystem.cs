@@ -65,9 +65,8 @@ namespace SourceRewrite.Files
         /// </summary>
         public static Shader GetShader(string name)
         {
-            string vertPath = GetShaderPath($"{name}.vert");
-            string fragPath = GetShaderPath($"{name}.frag");
-            return new Shader(vertPath, fragPath);
+            string path = GetShaderPath($"{name}.shader");
+            return new Shader(path);
         }
 
         /// <summary>

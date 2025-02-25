@@ -20,9 +20,9 @@ namespace FileFormats.KeyValues
     public class KeyValuesFormat
     {
         public List<ParentKey> ParentKeys = new List<ParentKey>();
-        public KeyValuesFormat(string input)
+        public KeyValuesFormat(string contents)
         {
-            var lines = input.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var lines = contents.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             int currentLine = 0;
 
             while (currentLine < lines.Length)
