@@ -15,6 +15,9 @@ namespace SourceRewrite.Rendering
 
         public Shader(string vertexPath, string fragmentPath)
         {
+            string vertexSource = File.ReadAllText(vertexPath);
+            string fragmentSource = File.ReadAllText(fragmentPath);
+
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)
             {
@@ -23,7 +26,7 @@ namespace SourceRewrite.Rendering
                     OpenGLContext glContext = (OpenGLContext) _rendererAPI;
 
                     // Create a new OpenGL shader
-                    _shaderInterface = new OpenGLShader(glContext.OpenGL, vertexPath, fragmentPath);
+                    _shaderInterface = new OpenGLShader(glContext.OpenGL, vertexSource, fragmentSource);
 
                     break;
             }

@@ -13,21 +13,24 @@ namespace SourceRewrite.Rendering.OpenGL
         private uint _handle;
         private GL _gl;
 
-        public OpenGLShader(GL gl, string vertexPath, string fragmentPath)
+        public OpenGLShader(GL gl, string vertexSource, string fragmentSource)
         {
             _gl = gl;
 
-            uint vertex = LoadShader(ShaderType.VertexShader, vertexPath);
-            uint fragment = LoadShader(ShaderType.FragmentShader, fragmentPath);
+            uint vertex = LoadShader(ShaderType.VertexShader, vertexSource);
+            uint fragment = LoadShader(ShaderType.FragmentShader, fragmentSource);
+
             _handle = _gl.CreateProgram();
             _gl.AttachShader(_handle, vertex);
             _gl.AttachShader(_handle, fragment);
             _gl.LinkProgram(_handle);
             _gl.GetProgram(_handle, GLEnum.LinkStatus, out var status);
+
             if (status == 0)
             {
                 throw new Exception($"Program failed to link with error: {_gl.GetProgramInfoLog(_handle)}");
             }
+
             _gl.DetachShader(_handle, vertex);
             _gl.DetachShader(_handle, fragment);
             _gl.DeleteShader(vertex);
@@ -95,17 +98,15 @@ namespace SourceRewrite.Rendering.OpenGL
             _gl.DeleteProgram(_handle);
         }
 
-        private uint LoadShader(ShaderType type, string path)
+        private uint LoadShader(ShaderType type, string source)
         {
             // To load a single shader we need to:
-            // 1) Load the shader from a file.
-            // 2) Create the handle.
-            // 3) Upload the source to opengl.
-            // 4) Compile the shader.
-            // 5) Check for errors.
-            string src = File.ReadAllText(path);
+            // 1) Create the handle.
+            // 2) Upload the source to OpenGL.
+            // 3) Compile the shader.
+            // 4) Check for errors.
             uint handle = _gl.CreateShader(type);
-            _gl.ShaderSource(handle, src);
+            _gl.ShaderSource(handle, source);
             _gl.CompileShader(handle);
             string infoLog = _gl.GetShaderInfoLog(handle);
             if (!string.IsNullOrWhiteSpace(infoLog))
