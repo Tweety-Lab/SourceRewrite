@@ -20,7 +20,7 @@ namespace FileFormats.Shaders
         public ShaderFormat(string shaderSource)
         {
             string[] lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-            List<string> globalScopeLines = new List<string>();
+            HashSet<string> globalScopeSet = new HashSet<string>();
 
             int currentLine = 0;
 
@@ -68,11 +68,11 @@ namespace FileFormats.Shaders
                     }
                 }
 
-                // Check for Global Scope code
+                // Check for Global Scope code (code outside of functions)
                 // Code in the Global Scope gets replicated across all functions
-                if (!insideFunctionBlock)
+                if (braceCount == 0 && !line.StartsWith("void") && !FunctionDeclarationRegex.IsMatch(line))
                 {
-                    globalScopeLines.Add(line);
+                    globalScopeSet.Add(line);
                     currentLine++;
                     continue;
                 }
@@ -85,24 +85,21 @@ namespace FileFormats.Shaders
                     {
                         insideFunctionBlock = false;
 
-                        // Store function content
-                        string functionContent = currentFunctionContent.ToString().Trim();
-
                         // Build the complete function content with shader version and global scope
                         StringBuilder completeFunction = new StringBuilder();
                         completeFunction.AppendLine(shaderVersion + "\n");
 
-                        // Add global scope lines (if not already defined locally)
-                        foreach (string globalLine in globalScopeLines)
+                        // Add global scope lines if they are not already in the function
+                        foreach (string globalLine in globalScopeSet)
                         {
-                            if (!functionContent.Contains(globalLine))
+                            if (!FunctionContainsLine(currentFunctionContent, globalLine))
                             {
                                 completeFunction.AppendLine(globalLine);
                             }
                         }
 
                         // Add the function content
-                        completeFunction.Append(functionContent);
+                        completeFunction.Append(currentFunctionContent.ToString().Trim());
 
                         // Create the function
                         ShaderFormatFunction function = new ShaderFormatFunction
@@ -130,6 +127,21 @@ namespace FileFormats.Shaders
 
                 currentLine++;
             }
+        }
+
+        /// <summary>
+        /// Checks if a function already contains a specific global scope line.
+        /// </summary>
+        private bool FunctionContainsLine(StringBuilder functionContent, string globalLine)
+        {
+            foreach (var line in functionContent.ToString().Split('\n'))
+            {
+                if (line.Trim() == globalLine) // Exact match check
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
