@@ -92,10 +92,13 @@ namespace FileFormats.Shaders
                         StringBuilder completeFunction = new StringBuilder();
                         completeFunction.AppendLine(shaderVersion + "\n");
 
-                        // Add global scope lines
+                        // Add global scope lines (if not already defined locally)
                         foreach (string globalLine in globalScopeLines)
                         {
-                            completeFunction.AppendLine(globalLine);
+                            if (!functionContent.Contains(globalLine))
+                            {
+                                completeFunction.AppendLine(globalLine);
+                            }
                         }
 
                         // Add the function content
