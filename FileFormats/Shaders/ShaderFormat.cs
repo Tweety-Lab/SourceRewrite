@@ -110,8 +110,6 @@ namespace FileFormats.Shaders
                         // Store all functions in the Functions list
                         Functions.Add(function);
 
-                        Console.WriteLine(completeFunction.ToString());
-
                         currentFunctionName = null;
                         currentLine++;
                         continue;
