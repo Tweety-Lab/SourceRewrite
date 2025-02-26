@@ -1,4 +1,5 @@
 ﻿using FileFormats.Shaders;
+using SourceRewrite.Files;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 
@@ -19,6 +20,15 @@ namespace SourceRewrite.Rendering
 
             string vertexSource = shader.GetFunction("vertex").Content; // Get the Vertex Source
             string fragmentSource = shader.GetFunction("fragment").Content; // Get the Fragment Source
+
+            // If vertex or fragment source is undefined, use the generic unlit shader definitions
+            if (vertexSource == null || fragmentSource == null)
+            {
+                ShaderFormat unlitShader = new ShaderFormat(File.ReadAllText(FileSystem.GetShaderPath("UnlitGeneric.shader")));
+
+                vertexSource ??= unlitShader.GetFunction("vertex").Content;
+                fragmentSource ??= unlitShader.GetFunction("fragment").Content;
+            }
 
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)

@@ -33,7 +33,7 @@ void fragment()
         // Sample the texture using the UV coordinates
         vec4 texColor = texture(uTexture0, fUv);
 
-        // Apply tint by multiplying the texture color by the integer value
+        // Apply tint by multiplying the texture color by the tint color
         FragColor = texColor * tint / 255;
     }
 }
