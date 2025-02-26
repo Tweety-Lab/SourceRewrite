@@ -1,5 +1,5 @@
 UnlitGeneric
 {
 	$basetexture "metal/underground_metal_corrugated001..vtf"
-	$uTint	"0,255,255,1"
+	$tint	"255,255,255,1"
 }

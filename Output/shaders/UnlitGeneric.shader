@@ -4,7 +4,7 @@ uniform mat4 uView;
 uniform mat4 uProjection;
 
 uniform sampler2D uTexture0;
-uniform vec4 uTint; // Color to multiply with the texture
+uniform vec4 tint; // Color to multiply with the texture
 
 // Vertex Code
 void vertex() 
@@ -34,6 +34,6 @@ void fragment()
         vec4 texColor = texture(uTexture0, fUv);
 
         // Apply tint by multiplying the texture color by the integer value
-        FragColor = texColor * uTint / 255;
+        FragColor = texColor * tint / 255;
     }
 }
