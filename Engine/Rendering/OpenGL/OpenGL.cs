@@ -111,8 +111,9 @@ namespace SourceRewrite.Rendering.OpenGL
             );
 
             var vao = vaoList[vaoList.Count - 1];
-            vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
+            vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 8, 0); // Position
+            vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 8, 3); // Normals
+            vao.VertexAttributePointer(2, 2, VertexAttribPointerType.Float, 8, 6); // UVs
         }
 
         public void OnClose()

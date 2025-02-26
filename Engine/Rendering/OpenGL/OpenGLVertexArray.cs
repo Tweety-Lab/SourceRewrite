@@ -46,7 +46,7 @@ namespace SourceRewrite.Rendering.OpenGL
         /// <param name="type">The data type of each component.</param>
         /// <param name="vertexSize">The stride (in bytes) between consecutive vertices.</param>
         /// <param name="offset">The offset (in bytes) of the first component in the vertex.</param>
-        public unsafe void VertexAttributePointer(uint index, int count, VertexAttribPointerType type, uint vertexSize, int offset)
+        public unsafe void VertexAttributePointer(uint index, int count, VertexAttribPointerType type, int stride, int offset)
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(OpenGLVertexArrayObject<TVertexType, TIndexType>));
@@ -56,8 +56,8 @@ namespace SourceRewrite.Rendering.OpenGL
                 count,
                 type,
                 false, // Normalized (set to false for most cases)
-                vertexSize * (uint)sizeof(TVertexType),
-                (void*)(offset * sizeof(TVertexType))
+                (uint)stride * sizeof(float), // Assuming stride is in float count
+                (void*)(offset * sizeof(float)) // Assuming offset is in float count
             );
             _gl.EnableVertexAttribArray(index);
         }

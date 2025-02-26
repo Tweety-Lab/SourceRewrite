@@ -11,16 +11,24 @@ uniform vec4 tint; // Color to multiply with the texture
 // Vertex Code
 void vertex() 
 {
-    layout (location = 0) in vec3 vPos;
-    layout (location = 1) in vec2 vUv;
+    // Input attributes
+    layout(location = 0) in vec3 vPos;    // Vertex position
+    layout(location = 1) in vec3 vNormal; // Vertex normal (from location 1)
+    layout(location = 2) in vec2 vUv;     // UVs (from location 2)
 
     out vec2 fUv;
+    out vec3 fNormal; // Pass the normal to the fragment shader
+    out vec3 fFragPos; // Pass the fragment position to the fragment shader
 
     void main()
     {
-        // Multiplying our uniform with the vertex position, the multiplication order here does matter.
+        // Transform the vertex position to clip space
         gl_Position = uProjection * uView * uModel * vec4(vPos, 1.0);
+    
+        // Pass the UV and normal to the fragment shader
         fUv = vUv;
+        fNormal = normalize(mat3(transpose(inverse(uModel))) * vNormal); // Transform normal
+        fFragPos = vec3(uModel * vec4(vPos, 1.0)); // Transform position to world space
     }
 }
 

@@ -42,16 +42,22 @@ namespace SourceRewrite.AssetTypes
             // Get the first mesh
             var mesh = scene->MMeshes[0];
 
-            // Extract vertices
+            // Extract vertices, normals, and texture coordinates
             List<float> vertexData = new();
             for (uint i = 0; i < mesh->MNumVertices; i++)
             {
                 var vertexPosition = mesh->MVertices[i];
+                var vertexNormal = mesh->MNormals[i];  // Extract normal for each vertex
 
-                // Add X, Y, Z components
+                // Add X, Y, Z components for position
                 vertexData.Add(vertexPosition.X);
                 vertexData.Add(vertexPosition.Y);
                 vertexData.Add(vertexPosition.Z);
+
+                // Add X, Y, Z components for normal
+                vertexData.Add(vertexNormal.X);
+                vertexData.Add(vertexNormal.Y);
+                vertexData.Add(vertexNormal.Z);
 
                 // Add texture coordinates (U, V)
                 if (mesh->MTextureCoords[0] != null)
