@@ -13,6 +13,11 @@ namespace SourceRewrite.Rendering
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
         private IShader _shaderInterface; // Use an interface for better abstraction
 
+        /// <summary>
+        /// List of all shaders.
+        /// </summary>
+        public static List<Shader> Shaders = new List<Shader>();
+
         public Shader(string shaderPath)
         {
             string shaderContents = File.ReadAllText(shaderPath);
@@ -42,6 +47,8 @@ namespace SourceRewrite.Rendering
 
                     break;
             }
+
+            Shaders.Add(this); // Add this to the list of all shaders
         }
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace SourceRewrite.Rendering.OpenGL
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1) // If GetUniformLocation returns -1 the uniform is not found.
             {
-                Console.WriteLine($"Uniform {name} not found in shader");
+                // Console.WriteLine($"Uniform {name} not found in shader");
                 return;
             }
 
