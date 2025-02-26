@@ -1,3 +1,5 @@
+// Unlit Object Shader
+
 // Global Uniforms
 uniform mat4 uModel;
 uniform mat4 uView;

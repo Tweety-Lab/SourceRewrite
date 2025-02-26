@@ -1,5 +1,4 @@
 LightMappedGeneric
 {
 	$basetexture "metal/underground_metal_corrugated001..vtf"
-	$tint	"255,255,255,1"
 }
