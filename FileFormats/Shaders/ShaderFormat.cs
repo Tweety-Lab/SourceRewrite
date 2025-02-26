@@ -11,23 +11,17 @@ namespace FileFormats.Shaders
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
-        /// <summary>
-        /// All Global Uniforms in the shader file, global uniforms are accessible by all shader functions.
-        /// </summary>
-        public List<GlobalUniform> GlobalUniforms = new List<GlobalUniform>();
-
         // OpenGL Shader Version
         private string shaderVersion = "#version 330 core";
 
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
 
-        // Regular expression to identify uniforms
-        private static readonly Regex UniformDeclerationRegex = new Regex(@"uniform\s+(\w+)\s+(\w+)\s*;", RegexOptions.Compiled);
-
         public ShaderFormat(string shaderSource)
         {
             string[] lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            List<string> globalScopeLines = new List<string>();
+
             int currentLine = 0;
 
             StringBuilder currentFunctionContent = new StringBuilder();
@@ -42,17 +36,6 @@ namespace FileFormats.Shaders
 
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//")) // Ignore comments and empty lines
                 {
-                    currentLine++;
-                    continue;
-                }
-
-                // Check for Global Uniforms
-                Match uniformMatch = UniformDeclerationRegex.Match(line);
-                if (uniformMatch.Success && insideFunctionBlock == false)
-                {
-                    string uniformType = uniformMatch.Groups[1].Value;
-                    string uniformName = uniformMatch.Groups[2].Value;
-                    GlobalUniforms.Add(new GlobalUniform { Type = uniformType, Name = uniformName });
                     currentLine++;
                     continue;
                 }
@@ -85,6 +68,15 @@ namespace FileFormats.Shaders
                     }
                 }
 
+                // Check for Global Scope code
+                // Code in the Global Scope gets replicated across all functions
+                if (!insideFunctionBlock)
+                {
+                    globalScopeLines.Add(line);
+                    currentLine++;
+                    continue;
+                }
+
                 // Detect closing brace
                 if (line.Contains("}"))
                 {
@@ -96,28 +88,30 @@ namespace FileFormats.Shaders
                         // Store function content
                         string functionContent = currentFunctionContent.ToString().Trim();
 
-                        // Insert shader version at the beginning of the function
-                        functionContent = functionContent.Insert(0, shaderVersion + "\n");
+                        // Build the complete function content with shader version and global scope
+                        StringBuilder completeFunction = new StringBuilder();
+                        completeFunction.AppendLine(shaderVersion + "\n");
 
-                        // Insert global uniforms after the shader version
-                        foreach (var uniform in GlobalUniforms)
+                        // Add global scope lines
+                        foreach (string globalLine in globalScopeLines)
                         {
-                            // Only add the uniform if it isn't already defined in the function
-                            if (!functionContent.Contains($"uniform {uniform.Type} {uniform.Name};"))
-                            {
-                                functionContent = functionContent.Insert(shaderVersion.Length + 1, $"uniform {uniform.Type} {uniform.Name};\n");
-                            }
+                            completeFunction.AppendLine(globalLine);
                         }
+
+                        // Add the function content
+                        completeFunction.Append(functionContent);
 
                         // Create the function
                         ShaderFormatFunction function = new ShaderFormatFunction
                         {
                             Name = currentFunctionName,
-                            Content = functionContent
+                            Content = completeFunction.ToString()
                         };
 
                         // Store all functions in the Functions list
                         Functions.Add(function);
+
+                        Console.WriteLine(completeFunction.ToString());
 
                         currentFunctionName = null;
                         currentLine++;
@@ -148,12 +142,5 @@ namespace FileFormats.Shaders
     {
         public string Name { get; set; }
         public string Content { get; set; }
-    }
-
-    // Global Uniforms are Uniforms accessible by all shader functions
-    public struct GlobalUniform
-    {
-        public string Type { get; set; }
-        public string Name { get; set; }
     }
 }
