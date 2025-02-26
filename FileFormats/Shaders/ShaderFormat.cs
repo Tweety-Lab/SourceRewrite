@@ -102,9 +102,14 @@ namespace FileFormats.Shaders
                         // Insert global uniforms after the shader version
                         foreach (var uniform in GlobalUniforms)
                         {
-                            functionContent = functionContent.Insert(shaderVersion.Length + 1, $"uniform {uniform.Type} {uniform.Name};\n");
+                            // Only add the uniform if it isn't already defined in the function
+                            if (!functionContent.Contains($"uniform {uniform.Type} {uniform.Name};"))
+                            {
+                                functionContent = functionContent.Insert(shaderVersion.Length + 1, $"uniform {uniform.Type} {uniform.Name};\n");
+                            }
                         }
 
+                        // Create the function
                         ShaderFormatFunction function = new ShaderFormatFunction
                         {
                             Name = currentFunctionName,
