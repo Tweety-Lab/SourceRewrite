@@ -1,10 +1,4 @@
 ﻿using FileFormats.BSP;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SourceRewrite.Files;
 
 namespace SourceRewrite.AssetTypes

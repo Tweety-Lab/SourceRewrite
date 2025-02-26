@@ -1,10 +1,8 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
-using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
-using System.Reflection;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Files;
 using SourceRewrite.Maps;

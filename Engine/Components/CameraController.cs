@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
+﻿using System.Numerics;
 using Silk.NET.Input;
 using SourceRewrite.InputSystem;
-using Silk.NET.Assimp;
 using SourceRewrite.Maths;
 
 namespace SourceRewrite.Components

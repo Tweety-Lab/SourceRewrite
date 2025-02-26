@@ -1,7 +1,4 @@
-﻿using FileFormats.BSP;
-using System;
-using System.IO;
-using System.Text;
+﻿using System.Text;
 
 namespace FileFormats.BSP
 {

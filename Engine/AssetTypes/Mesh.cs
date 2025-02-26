@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Silk.NET.Assimp;
+﻿using Silk.NET.Assimp;
 using SourceRewrite.Rendering;
 using SourceRewrite.Files;
 

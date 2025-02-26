@@ -1,5 +1,4 @@
-﻿using System;
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
 using SourceRewrite.Windowing;
 
 // Entry Point

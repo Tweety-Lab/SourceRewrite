@@ -1,13 +1,6 @@
-﻿using Silk.NET.GLFW;
-using Silk.NET.Input;
+﻿using Silk.NET.Input;
 using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.InputSystem
 {

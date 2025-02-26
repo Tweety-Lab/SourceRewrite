@@ -1,13 +1,6 @@
 ﻿using SourceRewrite.Rendering;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileFormats.KeyValues;
 using SourceRewrite.Files;
-using System.IO;
 
 namespace SourceRewrite.AssetTypes
 {

@@ -2,15 +2,9 @@
 using SourceRewrite.Windowing;
 using System.Drawing;
 using Silk.NET.Maths;
-using SourceRewrite.Maths;
 using System.Numerics;
-using SourceRewrite.Objects;
 using SourceRewrite.Components;
 using SourceRewrite.AssetTypes;
-using System.Threading.Tasks.Dataflow;
-using Silk.NET.Windowing;
-using System.Reflection;
-using Silk.NET.Vulkan;
 
 namespace SourceRewrite.Rendering.OpenGL
 {

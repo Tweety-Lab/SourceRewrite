@@ -1,6 +1,4 @@
-﻿using System;
-using FileFormats.Shaders;
-using SourceRewrite.Rendering;
+﻿using FileFormats.Shaders;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using Silk.NET.OpenGL;
+﻿using Silk.NET.OpenGL;
 using System.Numerics;
-using System.Reflection.Metadata;
 
 namespace SourceRewrite.Rendering.OpenGL
 {

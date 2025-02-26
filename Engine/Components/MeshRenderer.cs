@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SourceRewrite.AssetTypes;
+﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Windowing;
 using SourceRewrite.Files;
 

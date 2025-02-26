@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Silk.NET.OpenGL;
-using StbImageSharp;
+﻿using Silk.NET.OpenGL;
 using FileFormats.VTF;
 
 namespace SourceRewrite.Rendering.OpenGL

@@ -1,13 +1,7 @@
 ﻿using FileFormats.BSP;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Components;
-using SourceRewrite.Files;
 using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using System.Reflection;

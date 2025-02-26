@@ -1,11 +1,4 @@
-﻿using Sledge.Formats.Texture.Wad;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileFormats.BSP
+﻿namespace FileFormats.BSP
 {
     public static class LumpDefinitions
     {

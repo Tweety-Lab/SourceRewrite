@@ -1,13 +1,9 @@
-﻿using System.Numerics;
-using Silk.NET.Maths;
-using Silk.NET.OpenGL;
+﻿using Silk.NET.Maths;
 using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
-using SourceRewrite.Files;
-using SourceRewrite.Maps;
 
 
 namespace SourceRewrite.Rendering

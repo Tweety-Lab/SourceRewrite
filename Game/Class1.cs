@@ -1,8 +1,4 @@
 ﻿using SourceRewrite.Components;
-using Silk.NET;
-using System.Reflection;
-using SourceRewrite.Windowing;
-using SourceRewrite.Objects;
 
 namespace Game
 {
