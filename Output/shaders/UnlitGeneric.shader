@@ -16,9 +16,9 @@ void vertex()
     layout(location = 1) in vec3 vNormal; // Vertex normal (from location 1)
     layout(location = 2) in vec2 vUv;     // UVs (from location 2)
 
-    out vec2 fUv;
-    out vec3 fNormal; // Pass the normal to the fragment shader
-    out vec3 fFragPos; // Pass the fragment position to the fragment shader
+    out vec2 Uv;
+    out vec3 Normal; // Pass the normal to the fragment shader
+    out vec3 FragPos; // Pass the fragment position to the fragment shader
 
     void main()
     {
@@ -26,9 +26,9 @@ void vertex()
         gl_Position = uProjection * uView * uModel * vec4(vPos, 1.0);
     
         // Pass the UV and normal to the fragment shader
-        fUv = vUv;
-        fNormal = normalize(mat3(transpose(inverse(uModel))) * vNormal); // Transform normal
-        fFragPos = vec3(uModel * vec4(vPos, 1.0)); // Transform position to world space
+        Uv = vUv;
+        Normal = normalize(mat3(transpose(inverse(uModel))) * vNormal); // Transform normal
+        FragPos = vec3(uModel * vec4(vPos, 1.0)); // Transform position to world space
     }
 }
 
