@@ -11,12 +11,15 @@ namespace FileFormats.Shaders
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
+        // OpenGL Shader Version
+        private string shaderVersion = "#version 330 core";
+
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
 
         public ShaderFormat(string shaderSource)
         {
-            var lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            string[] lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             int currentLine = 0;
 
             StringBuilder currentFunctionContent = new StringBuilder();
@@ -74,12 +77,17 @@ namespace FileFormats.Shaders
                         // Store function content
                         string functionContent = currentFunctionContent.ToString().Trim();
 
-                        // Store all functions in the Functions list
-                        Functions.Add(new ShaderFormatFunction
+                        // Insert shader version at the beginning of the function
+                        functionContent = functionContent.Insert(0, shaderVersion + "\n");
+
+                        ShaderFormatFunction function = new ShaderFormatFunction
                         {
                             Name = currentFunctionName,
                             Content = functionContent
-                        });
+                        };
+
+                        // Store all functions in the Functions list
+                        Functions.Add(function);
 
                         currentFunctionName = null;
                         currentLine++;

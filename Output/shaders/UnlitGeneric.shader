@@ -1,7 +1,6 @@
 // Vertex Code
 void vertex() 
 {
-    #version 330 core
     layout (location = 0) in vec3 vPos;
     layout (location = 1) in vec2 vUv;
 
@@ -22,7 +21,6 @@ void vertex()
 // Fragment Code
 void fragment() 
 {
-    #version 330 core
     in vec2 fUv;
 
     uniform sampler2D uTexture0;
