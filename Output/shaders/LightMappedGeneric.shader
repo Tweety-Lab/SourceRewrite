@@ -25,6 +25,6 @@ void fragment()
         vec4 texColor = texture(uTexture0, fUv);
 
         // Apply tint by multiplying the texture color by the tint color
-        FragColor = texColor;
+            FragColor = texColor * vec4(test_light.color, 1.0);
     }
 }

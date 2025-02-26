@@ -16,6 +16,9 @@ namespace FileFormats.Shaders
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
 
+        // Regular expression to identify struct declarations
+        private static readonly Regex StructDeclarationRegex = new Regex(@"^\s*struct\s+\w+\s*\{", RegexOptions.Compiled);
+
         public ShaderFormat(string shaderSource)
         {
             string[] lines = shaderSource.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
@@ -48,6 +51,16 @@ namespace FileFormats.Shaders
                     insideFunctionBlock = false;
                     braceCount = 0;
                     firstBraceFound = false;
+                    currentLine++;
+                    continue;
+                }
+
+                // Check for struct declaration in global scope
+                Match structMatch = StructDeclarationRegex.Match(line);
+                if (structMatch.Success && braceCount == 0)
+                {
+                    // Add the struct declaration to the global scope
+                    globalScopeSet.Add(line);
                     currentLine++;
                     continue;
                 }
