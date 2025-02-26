@@ -81,9 +81,9 @@ namespace SourceRewrite.Maps
                 KeyValue rotationKV = gameObjectKV.GetKeyValue("rotation");
 
                 // Apply Transforms
-                Vector3 position = positionKV.GetValueAsType<Vector3>();
-                Vector3 scale = scaleKV.GetValueAsType<Vector3>();
-                Vector3 rotation = rotationKV.GetValueAsType<Vector3>();
+                Vector3 position = (Vector3)positionKV.Value;
+                Vector3 scale = (Vector3)scaleKV.Value;
+                Vector3 rotation = (Vector3)rotationKV.Value;
 
                 gameObject.Transform.Position = position;
                 gameObject.Transform.Scale = scale;

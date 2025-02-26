@@ -69,6 +69,9 @@ namespace SourceRewrite.Rendering.OpenGL
                 case Vector4 vector4:
                     _gl.Uniform4(location, 1, (float*)&vector4);
                     break;
+                case Vector3 vector3:
+                    _gl.Uniform3(location, 1, (float*)&vector3);
+                    break;
             }
         }
 

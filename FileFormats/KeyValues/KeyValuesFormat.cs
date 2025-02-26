@@ -64,8 +64,10 @@ namespace FileFormats.KeyValues
                     var key = match.Groups[1].Value;
                     var value = match.Groups[2].Value;
 
-                    var trueValue = ConvertValueToType(value);
-                    parentKey.ChildKeyValues.Add(new KeyValue(key, trueValue));
+                    KeyValue keyValue = new KeyValue(key, value);
+                    keyValue.Value = keyValue.ConvertValueToType(value);
+
+                    parentKey.ChildKeyValues.Add(keyValue);
                     currentLine++;
                     continue;
                 }
@@ -105,23 +107,6 @@ namespace FileFormats.KeyValues
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Convert a Value to it's type.
-        /// </summary>
-        private object ConvertValueToType(string input)
-        {
-            // Try parsing as an int
-            if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out int intValue))
-                return intValue;
-
-            // Try parsing as a float
-            if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatValue))
-                return floatValue;
-
-            // If all else fails, return the original string
-            return input;
         }
     }
 
@@ -168,8 +153,61 @@ namespace FileFormats.KeyValues
                     result = new Vector3(x, y, z);
                 }
             }
+            else if (typeof(T) == typeof(Vector4))
+            {
+                string[] parts = stringValue.Split(',');
+                if (parts.Length == 4 &&
+                    float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
+                    float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
+                    float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z) &&
+                    float.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float w))
+                {
+                    result = new Vector4(x, y, z, w);
+                }
+            }
 
             return (T)result;
+        }
+
+        /// <summary>
+        /// Convert a Value to it's type.
+        /// </summary>
+        public object ConvertValueToType(string input)
+        {
+            // Try parsing as an int
+            if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out int intValue))
+                return intValue;
+
+            // Try parsing as a float
+            if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float floatValue))
+                return floatValue;
+
+            // Try parsing as a bool
+            if (bool.TryParse(input, out bool boolValue))
+                return boolValue;
+
+            // Try parsing as a vector3
+            string[] parts = input.Split(',');
+            if (parts.Length == 3 &&
+                float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
+                float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
+                float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
+            {
+                return new Vector3(x, y, z);
+            }
+
+            // Try parsing as a vector4
+            if (parts.Length == 4 &&
+                float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out x) &&
+                float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out y) &&
+                float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out z) &&
+                float.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float w))
+            {
+                return new Vector4(x, y, z, w);
+            }
+
+            // If all else fails, return the original string
+            return input;
         }
     }
 
