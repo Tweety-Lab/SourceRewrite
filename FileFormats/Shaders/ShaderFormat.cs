@@ -11,11 +11,19 @@ namespace FileFormats.Shaders
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
+        /// <summary>
+        /// All Global Uniforms in the shader file, global uniforms are accessible by all shader functions.
+        /// </summary>
+        public List<GlobalUniform> GlobalUniforms = new List<GlobalUniform>();
+
         // OpenGL Shader Version
         private string shaderVersion = "#version 330 core";
 
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
+
+        // Regular expression to identify uniforms
+        private static readonly Regex UniformDeclerationRegex = new Regex(@"uniform\s+(\w+)\s+(\w+)\s*;", RegexOptions.Compiled);
 
         public ShaderFormat(string shaderSource)
         {
@@ -38,11 +46,22 @@ namespace FileFormats.Shaders
                     continue;
                 }
 
-                // Check for shader function declaration
-                Match match = FunctionDeclarationRegex.Match(line);
-                if (match.Success && braceCount == 0) // Only match top-level functions
+                // Check for Global Uniforms
+                Match uniformMatch = UniformDeclerationRegex.Match(line);
+                if (uniformMatch.Success && insideFunctionBlock == false)
                 {
-                    currentFunctionName = match.Groups[1].Value;
+                    string uniformType = uniformMatch.Groups[1].Value;
+                    string uniformName = uniformMatch.Groups[2].Value;
+                    GlobalUniforms.Add(new GlobalUniform { Type = uniformType, Name = uniformName });
+                    currentLine++;
+                    continue;
+                }
+
+                // Check for shader function declaration
+                Match functionMatch = FunctionDeclarationRegex.Match(line);
+                if (functionMatch.Success && braceCount == 0) // Only match top-level functions
+                {
+                    currentFunctionName = functionMatch.Groups[1].Value;
                     currentFunctionContent.Clear();
                     insideFunctionBlock = false;
                     braceCount = 0;
@@ -79,6 +98,12 @@ namespace FileFormats.Shaders
 
                         // Insert shader version at the beginning of the function
                         functionContent = functionContent.Insert(0, shaderVersion + "\n");
+
+                        // Insert global uniforms after the shader version
+                        foreach (var uniform in GlobalUniforms)
+                        {
+                            functionContent = functionContent.Insert(shaderVersion.Length + 1, $"uniform {uniform.Type} {uniform.Name};\n");
+                        }
 
                         ShaderFormatFunction function = new ShaderFormatFunction
                         {
@@ -118,5 +143,12 @@ namespace FileFormats.Shaders
     {
         public string Name { get; set; }
         public string Content { get; set; }
+    }
+
+    // Global Uniforms are Uniforms accessible by all shader functions
+    public struct GlobalUniform
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
     }
 }

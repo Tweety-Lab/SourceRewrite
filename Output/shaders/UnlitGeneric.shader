@@ -1,12 +1,16 @@
+// Uniforms
+uniform mat4 uModel;
+uniform mat4 uView;
+uniform mat4 uProjection;
+
+uniform sampler2D uTexture0;
+uniform int uBrightness; // Color to multiply with the texture
+
 // Vertex Code
 void vertex() 
 {
     layout (location = 0) in vec3 vPos;
     layout (location = 1) in vec2 vUv;
-
-    uniform mat4 uModel;
-    uniform mat4 uView;
-    uniform mat4 uProjection;
 
     out vec2 fUv;
 
@@ -22,10 +26,6 @@ void vertex()
 void fragment() 
 {
     in vec2 fUv;
-
-    uniform sampler2D uTexture0;
-    uniform int uBrightness; // Color to multiply with the texture
-
     out vec4 FragColor;
 
     void main()
