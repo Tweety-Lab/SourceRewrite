@@ -4,30 +4,14 @@ using System.Text.RegularExpressions;
 namespace FileFormats.Shaders
 {
     public class ShaderFormat
-    {
+    { 
         /// <summary>
         /// All functions in the shader file, for example vertex() or fragment().
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
-        /// <summary>
-        /// All Uniforms that come from the engine, i.e. viewPos.
-        /// </summary>
-        public List<EngineUniform> EngineUniforms { get; private set; } = new List<EngineUniform>()
-        {
-            new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
-        };
-
-        /// <summary>
-        /// All Outs that come from the engine, i.e. FRAG_COLOR.
-        /// </summary>
-        public List<EngineOutput> EngineOutputs { get; private set; } = new List<EngineOutput>()
-        {
-            new EngineOutput { Type = "vec4", Name = "FRAG_COLOR" }
-        };
-
-        // OpenGL Shader Version
-        private string shaderVersion = "#version 330 core";
+        // Create shaderformatsettings
+        private ShaderFormatSettings settings = new();
 
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
@@ -115,7 +99,7 @@ namespace FileFormats.Shaders
 
                         // Build the complete function content with shader version and global scope
                         StringBuilder completeFunction = new StringBuilder();
-                        completeFunction.AppendLine(shaderVersion + "\n");
+                        completeFunction.AppendLine(settings.ShaderVersion + "\n");
 
                         // Add global scope lines if they are not already in the function
                         foreach (string globalLine in globalScopeSet)
@@ -130,7 +114,7 @@ namespace FileFormats.Shaders
                         string functionContentStr = currentFunctionContent.ToString();
 
                         // Add engine uniforms if referenced in the function
-                        foreach (EngineUniform uniform in EngineUniforms)
+                        foreach (EngineUniform uniform in settings.EngineUniforms)
                         {
                             if (functionContentStr.Contains(uniform.Name))
                             {
@@ -139,7 +123,7 @@ namespace FileFormats.Shaders
                         }
 
                         // Add engine outputs if referenced in the function
-                        foreach (EngineOutput output in EngineOutputs)
+                        foreach (EngineOutput output in settings.EngineOutputs)
                         {
                             if (functionContentStr.Contains(output.Name))
                             {
@@ -198,6 +182,30 @@ namespace FileFormats.Shaders
         {
             return Functions.Find(f => f.Name == name);
         }
+    }
+
+    public class ShaderFormatSettings
+    {
+        /// <summary>
+        /// OpenGL Shader version.
+        /// </summary>
+        public string ShaderVersion { get; set; } = "#version 330 core";
+
+        /// <summary>
+        /// All Uniforms that come from the engine, i.e. viewPos.
+        /// </summary>
+        public List<EngineUniform> EngineUniforms { get; set; } = new List<EngineUniform>
+        {
+        new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
+        };
+
+        /// <summary>
+        /// All Outs that come from the engine, i.e. FRAG_COLOR.
+        /// </summary>
+        public List<EngineOutput> EngineOutputs { get; set; } = new List<EngineOutput>
+        {
+        new EngineOutput { Type = "vec4", Name = "FRAG_COLOR" }
+        };
     }
 
     public struct ShaderFormatFunction
