@@ -39,10 +39,10 @@ namespace SourceRewrite.Components
             Vector3 currentCameraPos = GameObject.Transform.Position;
             if (currentCameraPos != lastCameraPos)
             {
-                // If it has changed, update the uniform in all shaders
+                // If it has changed, update the engine uniform
                 foreach (Shader shader in Shader.Shaders)
                 {
-                    shader.SetParameter("viewPos", currentCameraPos);
+                    shader.SetParameter("VIEW_POS", currentCameraPos);
                 }
 
                 // Store the new camera position for future comparisons

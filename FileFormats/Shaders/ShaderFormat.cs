@@ -10,6 +10,14 @@ namespace FileFormats.Shaders
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
+        /// <summary>
+        /// All Uniforms that come from the engine, i.e. viewPos.
+        /// </summary>
+        public List<EngineUniform> EngineUniforms { get; private set; } = new List<EngineUniform>()
+        {
+            new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
+        };
+
         // OpenGL Shader Version
         private string shaderVersion = "#version 330 core";
 
@@ -110,6 +118,18 @@ namespace FileFormats.Shaders
                             }
                         }
 
+                        // Store function content for reference
+                        string functionContentStr = currentFunctionContent.ToString();
+
+                        // Add engine uniforms if referenced in the function
+                        foreach (EngineUniform uniform in EngineUniforms)
+                        {
+                            if (functionContentStr.Contains(uniform.Name))
+                            {
+                                completeFunction.AppendLine($"uniform {uniform.Type} {uniform.Name};");
+                            }
+                        }
+
                         // Add the function content
                         completeFunction.Append(currentFunctionContent.ToString().Trim());
 
@@ -167,5 +187,11 @@ namespace FileFormats.Shaders
     {
         public string Name { get; set; }
         public string Content { get; set; }
+    }
+
+    public struct EngineUniform
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 
 // Global Uniforms
 uniform sampler2D uTexture0;
-uniform vec3 viewPos; // Position of active camera
 
 struct PointLight {
     vec3 position;
@@ -42,7 +41,7 @@ void fragment()
 
         // Specular
         float specularStrength = 0.5;
-        vec3 viewDir = normalize(viewPos - FragPos);
+        vec3 viewDir = normalize(VIEW_POS - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);  
 
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
