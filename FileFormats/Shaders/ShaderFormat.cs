@@ -10,8 +10,19 @@ namespace FileFormats.Shaders
         /// </summary>
         public List<ShaderFormatFunction> Functions { get; private set; } = new List<ShaderFormatFunction>();
 
-        // Create shaderformatsettings
-        private ShaderFormatSettings settings = new();
+        // Create Settings for the ShaderFormat
+        private ShaderFormatSettings settings = new ShaderFormatSettings
+        {
+            ShaderVersion = "#version 330 core",
+            EngineUniforms = new List<EngineUniform>
+            {
+                new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
+            },
+            EngineOutputs = new List<EngineOutput>
+            {
+                new EngineOutput { Type = "vec4", Name = "FRAG_COLOR" }
+            }
+        };
 
         // Regular expression to identify shader function declarations
         private static readonly Regex FunctionDeclarationRegex = new Regex(@"^\s*void\s+(\w+)\s*\(\s*\)", RegexOptions.Compiled);
@@ -194,18 +205,12 @@ namespace FileFormats.Shaders
         /// <summary>
         /// All Uniforms that come from the engine, i.e. viewPos.
         /// </summary>
-        public List<EngineUniform> EngineUniforms { get; set; } = new List<EngineUniform>
-        {
-        new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
-        };
+        public List<EngineUniform> EngineUniforms { get; set; } = new List<EngineUniform>();
 
         /// <summary>
         /// All Outs that come from the engine, i.e. FRAG_COLOR.
         /// </summary>
-        public List<EngineOutput> EngineOutputs { get; set; } = new List<EngineOutput>
-        {
-        new EngineOutput { Type = "vec4", Name = "FRAG_COLOR" }
-        };
+        public List<EngineOutput> EngineOutputs { get; set; } = new List<EngineOutput>();
     }
 
     public struct ShaderFormatFunction
