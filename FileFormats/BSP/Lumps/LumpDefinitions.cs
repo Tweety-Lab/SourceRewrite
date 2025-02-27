@@ -80,11 +80,18 @@ new LumpDefinition(typeof(uint[]), new uint[] {
     """,
             """
     GameObject02 {
-    position   "0,6,0"
-    scale   "1,1,1"
+    position   "3,5,0"
+    scale   "0.2,0.2,0.2"
     rotation    "0,0,0"
         GameComponents {
-            test    "testvalue"
+            SourceRewrite_Components_MeshRenderer {
+                MaterialPath    "dev/error.vmt"
+                MeshPath   "cube.model"
+            }
+
+            SourceRewrite_Components_Lighting_PointLight {
+
+            }
         }
     }
     """
