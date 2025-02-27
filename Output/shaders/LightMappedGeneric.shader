@@ -7,6 +7,8 @@ uniform vec3 light_position;
 uniform vec3 light_color;
 uniform float light_intensity;
 
+uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
+
 // Fragment Code
 void fragment() 
 {
@@ -27,7 +29,7 @@ void fragment()
         vec3 lightDir = normalize(light_position - FragPos);  
 
         // Ambient
-        float ambientStrength = 0.1;
+        float ambientStrength = 0.4;
         vec3 ambient = ambientStrength * light_color;
 
         // Diffuse
@@ -40,10 +42,19 @@ void fragment()
         vec3 reflectDir = reflect(-lightDir, norm);  
 
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-        vec3 specular = specularStrength * spec * light_color;  
+        vec3 specular = specularStrength * spec * light_color;
 
-        // Final color result: (ambient + diffuse) and multiply by texture color
-        vec3 result = (ambient + diffuse + specular) * texColor.rgb;  // texColor.rgb to exclude alpha
+        // Distance to light
+        float distance = length(light_position - FragPos);
+
+        // Calculate attenuation
+        float attenuation = 1.0 / (light_attenuation.x + light_attenuation.y * distance + light_attenuation.z * (distance * distance));
+
+        // Final lighting calculations
+        vec3 finalLight = (ambient + diffuse + specular) * attenuation;
+
+        // Final result with texture
+        vec3 result = finalLight * texColor.rgb; // texColor.rgb to exclude alpha
 
         // Apply final color by multiplying the texture color by the ambient color
         FragColor = vec4(result, texColor.a);

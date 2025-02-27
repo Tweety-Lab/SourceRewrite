@@ -89,7 +89,7 @@ new LumpDefinition(typeof(uint[]), new uint[] {
                 MeshPath   "cube.model"
             }
 
-            SourceRewrite_Components_Lighting_PointLight {
+            SourceRewrite_Components_Lighting_BaseLight {
 
             }
         }
