@@ -36,7 +36,6 @@ void vertex()
 void fragment() 
 {
     in vec2 Uv;
-    out vec4 FragColor;
 
     void main()
     {
@@ -44,6 +43,6 @@ void fragment()
         vec4 texColor = texture(uTexture0, Uv);
 
         // Apply tint by multiplying the texture color by the tint color
-        FragColor = texColor * tint / 255;
+        FRAG_COLOR = texColor * tint / 255;
     }
 }
