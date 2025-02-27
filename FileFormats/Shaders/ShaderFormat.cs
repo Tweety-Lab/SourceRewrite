@@ -18,6 +18,14 @@ namespace FileFormats.Shaders
             new EngineUniform { Type = "vec3", Name = "VIEW_POS" }
         };
 
+        /// <summary>
+        /// All Outs that come from the engine, i.e. FRAG_COLOR.
+        /// </summary>
+        public List<EngineOutput> EngineOutputs { get; private set; } = new List<EngineOutput>()
+        {
+            new EngineOutput { Type = "vec4", Name = "FRAG_COLOR" }
+        };
+
         // OpenGL Shader Version
         private string shaderVersion = "#version 330 core";
 
@@ -130,6 +138,15 @@ namespace FileFormats.Shaders
                             }
                         }
 
+                        // Add engine outputs if referenced in the function
+                        foreach (EngineOutput output in EngineOutputs)
+                        {
+                            if (functionContentStr.Contains(output.Name))
+                            {
+                                completeFunction.AppendLine($"out {output.Type} {output.Name};");
+                            }
+                        }
+
                         // Add the function content
                         completeFunction.Append(currentFunctionContent.ToString().Trim());
 
@@ -190,6 +207,12 @@ namespace FileFormats.Shaders
     }
 
     public struct EngineUniform
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
+    }
+
+    public struct EngineOutput
     {
         public string Type { get; set; }
         public string Name { get; set; }

@@ -17,8 +17,6 @@ void fragment()
     in vec3 Normal;  // Normal information passed from vertex shader
     in vec3 FragPos; // Fragment position passed from vertex shader
 
-    out vec4 FragColor;
-
     void main()
     {
         // Sample the texture using the UV coordinates
@@ -29,7 +27,7 @@ void fragment()
         vec3 lightDir = normalize(light_position - FragPos);  
 
         // Ambient
-        float ambientStrength = 0.4;
+        float ambientStrength = 0.7;
         vec3 ambient = ambientStrength * light_color;
 
         // Diffuse
@@ -57,6 +55,6 @@ void fragment()
         vec3 result = finalLight * texColor.rgb; // texColor.rgb to exclude alpha
 
         // Apply final color by multiplying the texture color by the ambient color
-        FragColor = vec4(result, texColor.a);
+        FRAG_COLOR = vec4(result, texColor.a);
     }
 }
