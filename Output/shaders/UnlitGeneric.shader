@@ -35,13 +35,13 @@ void vertex()
 // Fragment Code
 void fragment() 
 {
-    in vec2 fUv;
+    in vec2 Uv;
     out vec4 FragColor;
 
     void main()
     {
         // Sample the texture using the UV coordinates
-        vec4 texColor = texture(uTexture0, fUv);
+        vec4 texColor = texture(uTexture0, Uv);
 
         // Apply tint by multiplying the texture color by the tint color
         FragColor = texColor * tint / 255;
