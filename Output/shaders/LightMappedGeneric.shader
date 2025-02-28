@@ -13,7 +13,7 @@ void fragment()
 {
     // Input attributes from the vertex shader
     in vec2 Uv;
-    in vec3 Normal;  // Normal information passed from vertex shader
+    in vec3 VERT_NORMAL;  // Normal information passed from vertex shader
     in vec3 FragPos; // Fragment position passed from vertex shader
 
     void main()
@@ -22,7 +22,7 @@ void fragment()
         vec4 texColor = texture(uTexture0, Uv);
 
         // Light Variables
-        vec3 norm = normalize(Normal);
+        vec3 norm = normalize(VERT_NORMAL);
         vec3 lightDir = normalize(light_position - FragPos);  
 
         // Ambient
@@ -37,7 +37,6 @@ void fragment()
         float specularStrength = 0.5;
         vec3 viewDir = normalize(VIEW_POS - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);  
-
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
         vec3 specular = specularStrength * spec * light_color;
 
