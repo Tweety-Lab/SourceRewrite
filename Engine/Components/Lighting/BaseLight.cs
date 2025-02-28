@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using SourceRewrite.Windowing;
 
 namespace SourceRewrite.Components.Lighting
 {
@@ -12,7 +13,7 @@ namespace SourceRewrite.Components.Lighting
     {
         // Light
         public Vector3 Color { get; set; } = new Vector3(1f, 1f, 1);
-        public float Intensity { get; set; } = 1.0f;
+        public float Intensity { get; set; } = 2.0f;
 
         // Attenuation
         public float ConstantAttenuation { get; set; } = 1.0f;
@@ -20,17 +21,22 @@ namespace SourceRewrite.Components.Lighting
         public float QuadraticAttenuation { get; set; } = 0.032f;
 
         // Animation
-        private int circleRadius = 10;
+        private int circleRadius = 7;
+        private float animationTime = 0.0f; // Time accumulator for smooth animation
 
         // Update Shader Uniforms
         public override void Update(float deltaTime)
         {
-            // Animate the light moving in a sphere
+            // Accumulate time passed to ensure smooth animation
+            animationTime += deltaTime;
+
+            // Animate the light moving in a sphere (smooth animation)
             GameObject.Transform.Position = new Vector3(
-                (float)Math.Cos(Environment.TickCount / 700.0f) * circleRadius, // X
-                (float)Math.Cos(Environment.TickCount / 700.0f) * circleRadius, // Y
-                (float)Math.Sin(Environment.TickCount / 700.0f) * circleRadius  // Z
+                (float)Math.Cos(animationTime / 1.0f) * circleRadius, // X
+                (float)Math.Cos(animationTime / 1.0f) * circleRadius, // Y
+                (float)Math.Sin(animationTime / 1.0f) * circleRadius  // Z
             );
+
 
             // Update Uniforms
             foreach (Shader shader in Shader.Shaders)
