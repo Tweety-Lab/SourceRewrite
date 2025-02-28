@@ -61,43 +61,7 @@ new LumpDefinition(typeof(uint[]), new uint[] {
     // Bottom face
     20, 21, 22,  20, 22, 23
 }, LumpType.LUMP_INDICES), // Indices
-            new LumpDefinition(
-    typeof(string[]),
-    new string[]
-    {
-            """
-    GameObject01 {
-    position   "0,3,0"
-    scale "1,2,1"
-    rotation    "0,45,0"
-        GameComponents {
-            SourceRewrite_Components_MeshRenderer {
-                MaterialPath    "metal_sheet.vmt"
-                MeshPath   "cube.model"
-            }
-        }
-    }
-    """,
-            """
-    GameObject02 {
-    position   "3,5,0"
-    scale   "0.2,0.2,0.2"
-    rotation    "0,0,0"
-        GameComponents {
-            SourceRewrite_Components_MeshRenderer {
-                MaterialPath    "dev/error.vmt"
-                MeshPath   "cube.model"
-            }
-
-            SourceRewrite_Components_Lighting_BaseLight {
-
-            }
-        }
-    }
-    """
-    },
-    LumpType.LUMP_GAME_OBJECTS
-) // Global Map Components
+            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS) // Game Objects
 
         };
     };
