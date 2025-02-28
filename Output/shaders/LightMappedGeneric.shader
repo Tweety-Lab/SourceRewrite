@@ -5,7 +5,6 @@ uniform sampler2D uTexture0;
 
 uniform vec3 light_position;
 uniform vec3 light_color;
-uniform float light_intensity;
 
 uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
 
@@ -27,7 +26,7 @@ void fragment()
         vec3 lightDir = normalize(light_position - FragPos);  
 
         // Ambient
-        float ambientStrength = 0.7;
+        float ambientStrength = 0.2;
         vec3 ambient = ambientStrength * light_color;
 
         // Diffuse
