@@ -5,7 +5,6 @@ uniform sampler2D uTexture0;
 
 uniform vec3 light_position;
 uniform vec3 light_color;
-
 uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
 
 // Fragment Code

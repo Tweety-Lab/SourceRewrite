@@ -1,10 +1,5 @@
 // Unlit Object Shader
 
-// Global Uniforms
-uniform mat4 uModel;
-uniform mat4 uView;
-uniform mat4 uProjection;
-
 uniform sampler2D uTexture0;
 uniform vec4 tint; // Color to multiply with the texture
 
@@ -23,12 +18,12 @@ void vertex()
     void main()
     {
         // Transform the vertex position to clip space
-        gl_Position = uProjection * uView * uModel * vec4(vPos, 1.0);
+        gl_Position = PROJECTION_MATRIX * VIEW_MATRIX * MODEL_MATRIX * vec4(vPos, 1.0);
     
         // Pass the UV and normal to the fragment shader
         Uv = vUv;
-        VERT_NORMAL = normalize(mat3(transpose(inverse(uModel))) * vNormal); // Transform normal
-        FragPos = vec3(uModel * vec4(vPos, 1.0)); // Convert position to world space
+        VERT_NORMAL = normalize(mat3(transpose(inverse(MODEL_MATRIX))) * vNormal); // Transform normal
+        FragPos = vec3(MODEL_MATRIX * vec4(vPos, 1.0)); 
     }
 }
 
