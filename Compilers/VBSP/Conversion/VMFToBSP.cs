@@ -1,10 +1,5 @@
 ﻿using FileFormats.BSP;
 using FileFormats.VMF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VBSP.Conversion
 {
@@ -20,7 +15,7 @@ namespace VBSP.Conversion
 
             BSPFormat outputBSP = new BSPFormat();
 
-            // Set the BSP header
+            // Set the BSP header to the VMF MapVersion
             outputBSP.Header.mapRevision = VMF.VersionInfo.MapVersion;
 
             string[] entities = new string[VMF.Entities.Count];

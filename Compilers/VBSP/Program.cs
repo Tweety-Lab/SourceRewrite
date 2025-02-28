@@ -1,6 +1,4 @@
 ﻿using FileFormats.BSP;
-using FileFormats.VMF;
-using System.Globalization;
 using VBSP.Conversion;
 class Program
 {
