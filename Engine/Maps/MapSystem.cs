@@ -112,7 +112,13 @@ namespace SourceRewrite.Maps
 
                 Console.WriteLine(componentNameSpace);
 
-                // Create GameComponent
+                // Try to create game component
+                if (componentType == null)
+                {
+                    Console.WriteLine("Component of type " + componentNameSpace + " not found");
+                    continue;
+                }
+
                 GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
 
                 // Add Component to GameObject

@@ -22,7 +22,7 @@ void fragment()
 
         // Light Variables
         vec3 norm = normalize(VERT_NORMAL);
-        vec3 lightDir = normalize(light_position - FragPos);  
+        vec3 lightDir = normalize(light_position - FragPos);
 
         // Ambient
         float ambientStrength = 0.2;

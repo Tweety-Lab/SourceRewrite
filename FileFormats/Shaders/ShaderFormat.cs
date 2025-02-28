@@ -17,6 +17,7 @@ namespace FileFormats.Shaders
             EngineUniforms = new List<EngineUniform>
             {
                 new EngineUniform { Type = "vec3", Name = "VIEW_POS" },
+
                 new EngineUniform { Type = "mat4", Name = "VIEW_MATRIX" },
                 new EngineUniform { Type = "mat4", Name = "PROJECTION_MATRIX" },
                 new EngineUniform { Type = "mat4", Name = "MODEL_MATRIX" }

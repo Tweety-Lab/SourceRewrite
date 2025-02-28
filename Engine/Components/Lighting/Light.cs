@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SourceRewrite.Windowing;
 
-namespace SourceRewrite.Components.Lighting
+namespace SourceRewrite.Components
 {
-    public class BaseLight : GameComponent
+    public class Light : GameComponent
     {
         // Light
         public Vector3 Color { get; set; } = new Vector3(1.0f, 1.0f, 1.0f);
@@ -20,25 +20,9 @@ namespace SourceRewrite.Components.Lighting
         public float LinearAttenuation { get; set; } = 0.09f;
         public float QuadraticAttenuation { get; set; } = 0.032f;
 
-        // Animation
-        private int circleRadius = 7;
-        private int verticalAmplitude = 3;
-        private int verticalSpeed = 3;
-        private float animationTime = 0.0f; // Time accumulator for smooth animation
-
         // Update Shader Uniforms
         public override void Update(float deltaTime)
         {
-            // Accumulate time passed to ensure smooth animation
-            animationTime += deltaTime;
-
-            // Animate the light moving in a sphere (smooth animation)
-            GameObject.Transform.Position = new Vector3(
-                (float)Math.Cos(animationTime) * circleRadius,  // X
-                (float)Math.Sin(animationTime * verticalSpeed) * verticalAmplitude, // Y Vertical oscillation
-                (float)Math.Sin(animationTime) * circleRadius   // Z
-            );
-
             // Update Uniforms
             foreach (Shader shader in Shader.Shaders)
             {

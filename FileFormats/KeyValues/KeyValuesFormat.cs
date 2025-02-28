@@ -144,7 +144,8 @@ namespace FileFormats.KeyValues
                 result = doubleValue;
             else if (typeof(T) == typeof(Vector3))
             {
-                string[] parts = stringValue.Split(',');
+                string[] parts = stringValue.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine(parts);
                 if (parts.Length == 3 &&
                     float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                     float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
@@ -155,7 +156,8 @@ namespace FileFormats.KeyValues
             }
             else if (typeof(T) == typeof(Vector4))
             {
-                string[] parts = stringValue.Split(',');
+                string[] parts = stringValue.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine(parts);
                 if (parts.Length == 4 &&
                     float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                     float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
@@ -187,7 +189,7 @@ namespace FileFormats.KeyValues
                 return boolValue;
 
             // Try parsing as a vector3
-            string[] parts = input.Split(',');
+            string[] parts = input.Split(new char[] { ',', ' ' });
             if (parts.Length == 3 &&
                 float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&

@@ -14,8 +14,15 @@ namespace FileFormats.BSP
         /// <summary>
         /// Writes a Lump to BSP.
         /// </summary>
+        // And ensure the WriteLumpData method is consistent with this calculation
         public void WriteLumpData(Lump input)
         {
+            // Early return if no data
+            if (input.Data == null) return;
+
+            long startPosition = _binaryWriter.BaseStream.Position;
+            int expectedLength = input.FileLength;
+
             // Type check and cast the Data property before writing
             switch (input.Data)
             {
@@ -30,21 +37,38 @@ namespace FileFormats.BSP
                     foreach (float value in floatData)
                         _binaryWriter.Write(value);
                     break;
+                case uint[] uintData:
+                    foreach (uint value in uintData)
+                        _binaryWriter.Write(value);
+                    break;
                 case string[] stringArray:
-                    foreach(string str in stringArray)
+                    foreach (string str in stringArray)
                     {
-                        byte[] stringArrayBytes = Encoding.ASCII.GetBytes(str);
-                        _binaryWriter.Write(stringArrayBytes);
-                        _binaryWriter.Write('\0'); // Seperate strings with Null Terminator
+                        if (str != null)
+                        {
+                            byte[] stringArrayBytes = Encoding.ASCII.GetBytes(str);
+                            _binaryWriter.Write(stringArrayBytes);
+                        }
+                        _binaryWriter.Write((byte)0); // Separate strings with Null Terminator
                     }
                     break;
                 case string stringData:
-                    // Convert string to bytes if needed
+                    // Convert string to bytes
                     byte[] stringBytes = Encoding.ASCII.GetBytes(stringData);
                     _binaryWriter.Write(stringBytes);
+                    _binaryWriter.Write((byte)0); // Add Null Terminator
                     break;
                 default:
-                    throw new InvalidOperationException($"Unsupported lump data type: {input.Data?.GetType().Name ?? "null"}");
+                    throw new InvalidOperationException($"Unsupported lump data type: {input.Data.GetType().Name}");
+            }
+
+            // Verify we wrote the expected amount of data
+            long bytesWritten = _binaryWriter.BaseStream.Position - startPosition;
+            if (bytesWritten != expectedLength)
+            {
+                Console.WriteLine($"Warning: Expected to write {expectedLength} bytes but wrote {bytesWritten} bytes for lump type {input.DataType}");
+                // Optionally adjust the file length to match what was actually written
+                // input.FileLength = (int)bytesWritten;
             }
         }
 
@@ -108,7 +132,7 @@ namespace FileFormats.BSP
                 _binaryWriter.Write(lump.Version);
 
                 // Convert FourCC (char[]) to byte[]
-                byte[] fourCCBytes = Encoding.ASCII.GetBytes(new string(lump.FourCC));
+                byte[] fourCCBytes = Encoding.UTF8.GetBytes(new string(lump.FourCC));
 
                 _binaryWriter.Write(fourCCBytes);
             }

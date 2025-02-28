@@ -108,7 +108,7 @@ namespace FileFormats.BSP
         private string ReadString()
         {
             byte[] stringBytes = _binaryReader.ReadBytes(256);  // Assuming a max string length of 256 bytes
-            return Encoding.ASCII.GetString(stringBytes).TrimEnd('\0');
+            return Encoding.UTF8.GetString(stringBytes).TrimEnd('\0');
         }
 
         /// <summary>

@@ -32,7 +32,36 @@ namespace FileFormats.BSP
                 Header.lumps[(int)definition.Type] = definition.Lump;
             }
         }
+
+        /// <summary>
+        /// Set Lump Data.
+        /// </summary>
+        // And update the SetLumpData method to recalculate FileLength
+        public void SetLumpData(LumpType type, object data)
+        {
+            // Get the lump index
+            int index = (int)type;
+
+            // Set the data
+            Header.lumps[index].Data = data;
+
+            // Recalculate the file length based on the new data
+            if (data != null)
+            {
+                int calculatedSize = Header.lumps[index].CalculateDataSize(data);
+                Header.lumps[index].FileLength = calculatedSize;
+
+                // Debug output
+                Console.WriteLine($"Set lump data for type {type}. Calculated size: {calculatedSize} bytes");
+            }
+            else
+            {
+                Header.lumps[index].FileLength = 0;
+            }
+        }
     }
+
+
 
     /// <summary>
     /// BSP Header, stores information about the .bsp.
@@ -50,8 +79,6 @@ namespace FileFormats.BSP
     /// </summary>
     public struct Lump
     {
-
-
         private static int curOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
 
         public int FileOffset;
@@ -81,18 +108,22 @@ namespace FileFormats.BSP
             curOffset += FileLength;
         }
 
-        private int CalculateDataSize(object data)
+        public int CalculateDataSize(object data)
         {
+            if (data == null) return 0;
+
             return data switch
             {
                 byte[] byteArray => byteArray.Length,
                 int[] intArray => intArray.Length * sizeof(int),
                 float[] floatArray => floatArray.Length * sizeof(float),
                 uint[] uintArray => uintArray.Length * sizeof(uint),
-                string[] stringArray => stringArray.Sum(str => Encoding.UTF8.GetByteCount(str)),
-                string stringData => Encoding.UTF8.GetByteCount(stringData),
+                string[] stringArray => stringArray.Sum(str =>
+                    str != null ? Encoding.ASCII.GetByteCount(str) + 1 : 1), // +1 for each null terminator
+                string stringData => Encoding.ASCII.GetByteCount(stringData) + 1, // +1 for null terminator
                 _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
             };
         }
+
     }
 }
