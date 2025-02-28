@@ -9,7 +9,7 @@ using SourceRewrite.Windowing;
 
 namespace SourceRewrite.Components
 {
-    public class Light : GameComponent
+    public class PointLight : GameComponent
     {
         // Light
         public Vector3 Color { get; set; } = new Vector3(1.0f, 1.0f, 1.0f);

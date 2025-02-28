@@ -1,6 +1,7 @@
 ﻿using FileFormats.BSP;
 using FileFormats.VMF;
 using System.Globalization;
+using VBSP.Conversion;
 class Program
 {
     static void Main(string[] args)
@@ -38,7 +39,7 @@ class Program
                 rotation ""0 0 0""
                 scale ""1 1 1""
                 GameComponents {{
-                    SourceRewrite_Components_{ConvertToPascalCase(vmfEntity.ClassName)} {{
+                    {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
 
                     }}
                 }}
@@ -62,11 +63,5 @@ class Program
         }
 
         Console.WriteLine($"BSP successfully written to: {bspOutputPath}");
-    }
-
-    public static string ConvertToPascalCase(string input)
-    {
-        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-        return textInfo.ToTitleCase(input.Replace("_", "")).Replace("_", "");
     }
 }
