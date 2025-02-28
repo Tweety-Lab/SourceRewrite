@@ -13,7 +13,7 @@ namespace SourceRewrite.Components
     {
         // Light
         public Vector3 Color { get; set; } = new Vector3(1.0f, 1.0f, 1.0f);
-        public float Intensity { get; set; } = 2.0f;
+        public float Intensity { get; set; } = 1.0f;
 
         // Attenuation
         public float ConstantAttenuation { get; set; } = 1.0f;

@@ -27,16 +27,11 @@ namespace FileFormats.VMF
 
             // Version Info
             ParentKey pkVersionInfo = kvVMF.GetParentKey("versioninfo");
-            VersionInfo.EditorVersion = (int) pkVersionInfo.GetKeyValue("editorversion").Value; // Set the Editor Version
-            VersionInfo.EditorBuild = (int)pkVersionInfo.GetKeyValue("editorbuild").Value; // Set the Editor Build
-            VersionInfo.MapVersion = (int) pkVersionInfo.GetKeyValue("mapversion").Value; // Set the Map Version
-            VersionInfo.FormatVersion = (int) pkVersionInfo.GetKeyValue("formatversion").Value; // Set the Format Version
+            LoadVersionInfo(pkVersionInfo);
 
             // World
             ParentKey pkWorld = kvVMF.GetParentKey("world");
-            World.ID = (int)pkWorld.GetKeyValue("id").Value; // Set the World ID
-            World.MapVersion = (int)pkWorld.GetKeyValue("mapversion").Value; // Set the World Map Version (is this any different from version info?)
-            World.Solids = new List<Solid>(); // Init solids for later storage
+            LoadWorld(pkWorld);
 
             // Loop through every parent key in the world
             foreach (ParentKey parentKey in pkWorld.ChildParentKeys)
@@ -124,6 +119,22 @@ namespace FileFormats.VMF
             };
         }
 
+        // Loads Version Info
+        private void LoadVersionInfo(ParentKey pkVersionInfo)
+        {
+            VersionInfo.EditorVersion = (int)pkVersionInfo.GetKeyValue("editorversion").Value; // Set the Editor Version
+            VersionInfo.EditorBuild = (int)pkVersionInfo.GetKeyValue("editorbuild").Value; // Set the Editor Build
+            VersionInfo.MapVersion = (int)pkVersionInfo.GetKeyValue("mapversion").Value; // Set the Map Version
+            VersionInfo.FormatVersion = (int)pkVersionInfo.GetKeyValue("formatversion").Value; // Set the Format Version
+        }
+        
+        // Loads World Info
+        private void LoadWorld(ParentKey pkWorld)
+        {
+            World.ID = (int)pkWorld.GetKeyValue("id").Value; // Set the World ID
+            World.MapVersion = (int)pkWorld.GetKeyValue("mapversion").Value; // Set the World Map Version (is this any different from version info?)
+            World.Solids = new List<Solid>(); // Init solids for later storage
+        }
     }
 
     // Version information
