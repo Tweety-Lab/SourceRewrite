@@ -12,7 +12,7 @@ namespace SourceRewrite.Components.Lighting
     public class BaseLight : GameComponent
     {
         // Light
-        public Vector3 Color { get; set; } = new Vector3(1f, 1f, 1);
+        public Vector3 Color { get; set; } = new Vector3(1.5f, 1.5f, 1.5f);
         public float Intensity { get; set; } = 2.0f;
 
         // Attenuation
@@ -22,6 +22,8 @@ namespace SourceRewrite.Components.Lighting
 
         // Animation
         private int circleRadius = 7;
+        private int verticalAmplitude = 3;
+        private int verticalSpeed = 3;
         private float animationTime = 0.0f; // Time accumulator for smooth animation
 
         // Update Shader Uniforms
@@ -32,10 +34,14 @@ namespace SourceRewrite.Components.Lighting
 
             // Animate the light moving in a sphere (smooth animation)
             GameObject.Transform.Position = new Vector3(
-                (float)Math.Cos(animationTime / 1.0f) * circleRadius, // X
-                (float)Math.Cos(animationTime / 1.0f) * circleRadius, // Y
-                (float)Math.Sin(animationTime / 1.0f) * circleRadius  // Z
+                (float)Math.Cos(animationTime) * circleRadius, // X
+                (float)Math.Sin(animationTime) * circleRadius, // Y
+                (float)Math.Sin(animationTime) * circleRadius  // Z
             );
+
+            // Add vertical oscillation to the light
+            float verticalMovement = (float)Math.Sin(animationTime * verticalSpeed) * verticalAmplitude; // Add vertical oscillation
+            GameObject.Transform.Position = new Vector3(GameObject.Transform.Position.X, verticalMovement, GameObject.Transform.Position.Z); // Modify the Y-position for up and down movement
 
 
             // Update Uniforms
