@@ -12,7 +12,7 @@ namespace SourceRewrite.Components.Lighting
     public class BaseLight : GameComponent
     {
         // Light
-        public Vector3 Color { get; set; } = new Vector3(1.5f, 1.5f, 1.5f);
+        public Vector3 Color { get; set; } = new Vector3(1.0f, 1.0f, 1.0f);
         public float Intensity { get; set; } = 2.0f;
 
         // Attenuation
@@ -48,8 +48,7 @@ namespace SourceRewrite.Components.Lighting
             foreach (Shader shader in Shader.Shaders)
             {
                 shader.SetParameter("light_position", GameObject.Transform.Position);
-                shader.SetParameter("light_color", Color);
-                shader.SetParameter("light_intensity", Intensity);
+                shader.SetParameter("light_color", Color * Intensity);
                 shader.SetParameter("light_attenuation", new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
             }
         }
