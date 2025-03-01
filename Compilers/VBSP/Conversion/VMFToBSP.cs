@@ -34,7 +34,7 @@ namespace VBSP.Conversion
                 }
 
                 string entityString = @$" GameObject{i} {{
-                position ""{vmfEntity.Origin.X} {vmfEntity.Origin.Z} {vmfEntity.Origin.Y}""
+                position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
                 rotation ""0 0 0""
                 scale ""1 1 1""
                 GameComponents {{
