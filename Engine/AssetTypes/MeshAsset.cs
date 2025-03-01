@@ -18,6 +18,6 @@ namespace SourceRewrite.AssetTypes
         };
 
         // Material
-        public Material Material = FileSystem.GetMaterial("dev/error.vmt");
+        public Material Material = FileSystem.GetMaterial("dev/error");
     }
 }

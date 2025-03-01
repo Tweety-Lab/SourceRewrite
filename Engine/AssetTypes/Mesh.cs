@@ -20,7 +20,7 @@ namespace SourceRewrite.AssetTypes
             {
                 Console.WriteLine($"Could not find model at '{filePath}'");
                 filePath = FileSystem.GetModelPath("dev/error.model");
-                material = FileSystem.GetMaterial("dev/error.vmt");
+                material = FileSystem.GetMaterial("dev/error");
             }
 
             Material = material;
