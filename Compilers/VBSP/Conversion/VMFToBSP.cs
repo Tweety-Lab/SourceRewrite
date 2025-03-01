@@ -25,8 +25,7 @@ namespace VBSP.Conversion
             int i = 0;
             foreach (Entity vmfEntity in VMF.Entities)
             {
-                string entityString = @$"
-            GameObject{i} {{
+                string entityString = @$" GameObject{i} {{
                 position ""{vmfEntity.Origin.X} {vmfEntity.Origin.Z} {vmfEntity.Origin.Y}""
                 rotation ""0 0 0""
                 scale ""1 1 1""
