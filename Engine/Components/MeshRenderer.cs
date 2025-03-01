@@ -27,11 +27,13 @@ namespace SourceRewrite.Components
         /// <summary>
         /// Optional override, if set will create Mesh from this path instead of set Mesh.
         /// </summary>
+        [MapProperty("model")]
         public string MeshPath;
 
         /// <summary>
         /// Optional override, if set will create Mesh with Mateial from this path.
         /// </summary>
+        [MapProperty("skin")]
         public string MaterialPath;
 
         public override void Start()
