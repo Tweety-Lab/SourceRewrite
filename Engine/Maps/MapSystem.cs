@@ -56,12 +56,15 @@ namespace SourceRewrite.Maps
             string[] gameObjectData = reader.GetLumpData<string[]>(LumpType.LUMP_GAME_OBJECTS);
             List<KeyValuesFormat> output = new List<KeyValuesFormat>();
 
-            // Loop through every Game Object
-            foreach (var gameObject in gameObjectData)
+            if (gameObjectData != null)
             {
-                // Read KeyValues
-                KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObject);
-                output.Add(gameObjectKeyValues);
+                // Loop through every Game Object
+                foreach (var gameObject in gameObjectData)
+                {
+                    // Read KeyValues
+                    KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObject);
+                    output.Add(gameObjectKeyValues);
+                }
             }
 
             return output;

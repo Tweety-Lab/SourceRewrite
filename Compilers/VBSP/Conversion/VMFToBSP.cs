@@ -19,39 +19,46 @@ namespace VBSP.Conversion
             // Set the BSP header to the VMF MapVersion
             outputBSP.Header.mapRevision = VMF.VersionInfo.MapVersion;
 
-            string[] entities = new string[VMF.Entities.Count];
-
-            // Convert entities to GameObject strings
-            // Right now this is just entity = component
-            int i = 0;
-            foreach (Entity vmfEntity in VMF.Entities)
+            // Handle entities only if they exist
+            if (VMF.Entities != null && VMF.Entities.Count > 0)
             {
-                // Get their properties
-                string entityPropertiesString = string.Empty;
-                foreach (KeyValue kvProperty in vmfEntity.Properties)
+                string[] entities = new string[VMF.Entities.Count];
+
+                // Convert entities to GameObject strings
+                int i = 0;
+                foreach (Entity vmfEntity in VMF.Entities)
                 {
-                    entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
+                    // Get their properties
+                    string entityPropertiesString = string.Empty;
+                    foreach (KeyValue kvProperty in vmfEntity.Properties)
+                    {
+                        entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
+                    }
+
+                    string entityString = @$" GameObject{i} {{
+                        position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
+                        rotation ""0 0 0""
+                        scale ""1 1 1""
+                        GameComponents {{
+                            {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
+                                {entityPropertiesString}
+                            }}
+                        }}
+                    }}";
+
+                    entities[i] = entityString;
+
+                    i++;
                 }
 
-                string entityString = @$" GameObject{i} {{
-                position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
-                rotation ""0 0 0""
-                scale ""1 1 1""
-                GameComponents {{
-                    {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
-                        {entityPropertiesString}
-                    }}
-                }}
-            }}
-            ";
-
-                entities[i] = entityString;
-
-                i++;
+                outputBSP.SetLumpData(LumpType.LUMP_GAME_OBJECTS, entities);
             }
 
-            outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
-            outputBSP.SetLumpData(LumpType.LUMP_GAME_OBJECTS, entities);
+            // Handle solids only if they exist
+            if (VMF.World.Solids != null && VMF.World.Solids.Count > 0)
+            {
+                outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
+            }
 
             return outputBSP;
         }

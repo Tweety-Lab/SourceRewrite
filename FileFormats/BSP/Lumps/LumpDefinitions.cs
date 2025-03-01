@@ -9,58 +9,8 @@
 
             //                 Data Type       Data          Lump Type
             new LumpDefinition(typeof(string[]), new string[] { "FOR_SOME_REASON_THIS_DETERMINES_MAX_MATERIAL_FILE_NAME_LENGTH???" }, LumpType.LUMP_MATERIAL), // Materials
-new LumpDefinition(typeof(float[]), new float[] {
-    // Front face - Normal: (0, 0, -1)
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f,  // Top-left
-
-    // Back face - Normal: (0, 0, 1)
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,  // Top-left
-
-    // Left face - Normal: (-1, 0, 0)
-    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
-    -0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,  // Top-left
-    -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,  // Top-right
-    -0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  // Bottom-right
-
-    // Right face - Normal: (1, 0, 0)
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
-     0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f,  // Top-left
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,  // Top-right
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  // Bottom-right
-
-    // Top face - Normal: (0, 1, 0)
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
-     0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,  // Bottom-right
-     0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // Top-right
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,  // Top-left
-
-    // Bottom face - Normal: (0, -1, 0)
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,  1.0f, 0.0f,  // Bottom-right
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  1.0f, 1.0f,  // Top-right
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f   // Top-left
-}, LumpType.LUMP_VERTEXES), // Vertices
-
-new LumpDefinition(typeof(uint[]), new uint[] {
-    // Front face
-    0, 1, 2,  0, 2, 3,
-    // Back face
-    4, 5, 6,  4, 6, 7,
-    // Left face
-    8, 9, 10,  8, 10, 11,
-    // Right face
-    12, 13, 14,  12, 14, 15,
-    // Top face
-    16, 17, 18,  16, 18, 19,
-    // Bottom face
-    20, 21, 22,  20, 22, 23
-}, LumpType.LUMP_INDICES), // Indices
+            new LumpDefinition(typeof(float[]), new float[] {0, 0, 0}, LumpType.LUMP_VERTEXES), // Vertices
+            new LumpDefinition(typeof(uint[]), new uint[] {0, 0, 0}, LumpType.LUMP_INDICES), // Indices
             new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS) // Game Objects
 
         };
