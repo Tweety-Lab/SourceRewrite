@@ -8,7 +8,7 @@ namespace SourceRewrite.Components
     {
         // Light Properties
         [MapProperty("light")]
-        public Vector4 Color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+        public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
 
         // Attenuation Properties
         [MapProperty("constant_attn")]
@@ -23,11 +23,12 @@ namespace SourceRewrite.Components
         // Update Shader Uniforms
         public override void Update(float deltaTime)
         {
+
             // Update Uniforms
             foreach (Shader shader in Shader.Shaders)
             {
                 shader.SetParameter("light_position", GameObject.Transform.Position);
-                shader.SetParameter("light_color", Color);
+                shader.SetParameter("light_color", Color / 255.0f); // Convert Color from 1-255 range to 0-1 range
                 shader.SetParameter("light_attenuation", new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
             }
         }
