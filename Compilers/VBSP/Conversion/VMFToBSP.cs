@@ -26,13 +26,13 @@ namespace VBSP.Conversion
             int i = 0;
             foreach (Entity vmfEntity in VMF.Entities)
             {
-                // Get their attributes
-                string entityAttributesString = string.Empty;
-                foreach (KeyValue kvAttribute in vmfEntity.Attributes)
+                // Get their properties
+                string entityPropertiesString = string.Empty;
+                foreach (KeyValue kvProperty in vmfEntity.Properties)
                 {
-                    // Attributes start with "_"
-                    if (kvAttribute.Key.StartsWith("_"))
-                        entityAttributesString += $" {kvAttribute.Key} \"{kvAttribute.Value}\"\n";
+                    // Properties start with "_"
+                    if (kvProperty.Key.StartsWith("_"))
+                        entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
                 }
 
                 string entityString = @$" GameObject{i} {{
@@ -41,7 +41,7 @@ namespace VBSP.Conversion
                 scale ""1 1 1""
                 GameComponents {{
                     {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
-                        {entityAttributesString}
+                        {entityPropertiesString}
                     }}
                 }}
             }}";

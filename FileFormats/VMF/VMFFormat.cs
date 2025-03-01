@@ -61,12 +61,12 @@ namespace FileFormats.VMF
                     entity.ID = (int)parentKey.GetKeyValue("id").Value; // Set the Entity ID
                     entity.ClassName = (string)parentKey.GetKeyValue("classname").Value; // Set the Entity Class Name
                     entity.Origin = (Vector3)parentKey.GetKeyValue("origin").Value; // Set the Entity Origin
-                    entity.Attributes = new List<KeyValue>(); // Init attributes for later storage
+                    entity.Properties = new List<KeyValue>(); // Init properties for later storage
 
                     // Loop through every key value attribute in the entity
                     foreach (KeyValue keyValue in parentKey.ChildKeyValues)
                     {
-                        entity.Attributes.Add(keyValue); // Add the attribute
+                        entity.Properties.Add(keyValue); // Add the attribute
                     }
 
                     Entities.Add(entity);
