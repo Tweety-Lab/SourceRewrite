@@ -60,6 +60,8 @@ namespace VBSP.Conversion
                 outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
             }
 
+            outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, new string[] { "prop_static", "light" });
+
             return outputBSP;
         }
     }

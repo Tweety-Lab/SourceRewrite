@@ -8,10 +8,11 @@
         public static LumpDefinition[] Definitions = {
 
             //                 Data Type       Data          Lump Type
-            new LumpDefinition(typeof(string[]), new string[] { "FOR_SOME_REASON_THIS_DETERMINES_MAX_MATERIAL_FILE_NAME_LENGTH???" }, LumpType.LUMP_MATERIAL), // Materials
-            new LumpDefinition(typeof(float[]), new float[] {0, 0, 0}, LumpType.LUMP_VERTEXES), // Vertices
-            new LumpDefinition(typeof(uint[]), new uint[] {0, 0, 0}, LumpType.LUMP_INDICES), // Indices
-            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS) // Game Objects
+            new LumpDefinition(typeof(string[]), new string[] { "" }, LumpType.LUMP_MATERIAL), // Materials
+            new LumpDefinition(typeof(float[]), new float[] {0,0,0}, LumpType.LUMP_VERTEXES), // Vertices
+            new LumpDefinition(typeof(uint[]), new uint[] {0,0,0}, LumpType.LUMP_INDICES), // Indices
+            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS), // Game Objects
+            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_ENTITIES) // Entities
 
         };
     };
@@ -40,7 +41,8 @@
         LUMP_MATERIAL,          // Brush Material Path ( not in < v26 )
         LUMP_VERTEXES,          // Brush Vertices
         LUMP_INDICES,           // Brush Indices ( not in < v26 )
-        LUMP_GAME_OBJECTS      // Game Objects and their associated Game Components ( not in < v26 )
+        LUMP_GAME_OBJECTS,      // Game Objects and their associated Game Components ( not in < v26 )
+        LUMP_ENTITIES           // Entities
                                   // ... continue
     }
 }

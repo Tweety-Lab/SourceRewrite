@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Sledge.Formats.Texture.Wad;
+using System.Text;
 
 namespace FileFormats.BSP
 {
@@ -14,7 +15,6 @@ namespace FileFormats.BSP
         /// <summary>
         /// Writes a Lump to BSP.
         /// </summary>
-        // And ensure the WriteLumpData method is consistent with this calculation
         public void WriteLumpData(Lump input)
         {
             // Early return if no data
@@ -122,6 +122,8 @@ namespace FileFormats.BSP
             _binaryWriter.Write(input.Header.ident);
             _binaryWriter.Write(input.Header.version);
             _binaryWriter.Write(input.Header.mapRevision);
+
+            input.RecalculateLumpOffsets();
 
             // Write all 64 lump entries
             for (int i = 0; i < 64; i++)

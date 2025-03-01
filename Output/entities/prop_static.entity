@@ -1,0 +1,11 @@
+GameObject0 {
+        position "-0 0 -0"
+        rotation "0 0 0"
+        scale "1 1 1"
+	GameComponents {
+		SourceRewrite_Components_MeshRenderer {
+			model	"cube.model"
+			skin	"missing"
+		}		
+	}
+}

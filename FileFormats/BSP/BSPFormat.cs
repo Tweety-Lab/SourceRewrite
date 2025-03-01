@@ -58,6 +58,30 @@ namespace FileFormats.BSP
                 Header.lumps[index].FileLength = 0;
             }
         }
+
+        public void RecalculateLumpOffsets()
+        {
+            int currentOffset = sizeof(int) * 4 + (64 * 16); // Start after header + lump directory
+
+            for (int i = 0; i < Header.lumps.Length; i++)
+            {
+                if (Header.lumps[i].FileLength > 0 && Header.lumps[i].Data != null)
+                {
+                    // Align offset to 4-byte boundary
+                    currentOffset = (currentOffset + 3) & ~3;
+
+                    // Create a temporary copy with the updated offset
+                    Lump updatedLump = Header.lumps[i];
+                    updatedLump.FileOffset = currentOffset;
+
+                    // Replace the original lump with the updated one
+                    Header.lumps[i] = updatedLump;
+
+                    // Move to the next position
+                    currentOffset += Header.lumps[i].FileLength;
+                }
+            }
+        }
     }
 
 
@@ -123,6 +147,8 @@ namespace FileFormats.BSP
                 _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
             };
         }
+
+
 
     }
 }
