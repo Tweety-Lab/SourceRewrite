@@ -7,17 +7,17 @@ namespace SourceRewrite.Components
     public class PointLight : GameComponent
     {
         // Light Properties
-        [MapProperty("light")]
+        [MapProperty("_light")]
         public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
 
         // Attenuation Properties
-        [MapProperty("constant_attn")]
+        [MapProperty("_constant_attn")]
         public float ConstantAttenuation = 1.0f;
 
-        [MapProperty("linear_attn")]
+        [MapProperty("_linear_attn")]
         public float LinearAttenuation = 0.09f;
 
-        [MapProperty("quadratic_attn")]
+        [MapProperty("_quadratic_attn")]
         public float QuadraticAttenuation = 0.032f;
 
         // Update Shader Uniforms

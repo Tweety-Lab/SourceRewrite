@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Windowing;
 using SourceRewrite.Files;
+using SourceRewrite.Maps;
 
 namespace SourceRewrite.Components
 {

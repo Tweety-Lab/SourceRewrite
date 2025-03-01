@@ -22,9 +22,6 @@ namespace SourceRewrite.Maps
         {
             // Assign the name
             Name = name;
-
-            // Add the underscore at the start
-            Name = "_" + Name;
         }
     }
 }

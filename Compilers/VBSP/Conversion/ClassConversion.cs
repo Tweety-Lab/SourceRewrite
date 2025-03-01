@@ -6,7 +6,8 @@
         public static Dictionary<string, string> ClassMap = new Dictionary<string, string>()
         {
             // Valve Class Name | Our Class Name
-            { "light",          "SourceRewrite_Components_PointLight" }
+            { "light",          "SourceRewrite_Components_PointLight" },
+            { "prop_static",    "SourceRewrite_Components_MeshRenderer" }
         };
     }
 }
