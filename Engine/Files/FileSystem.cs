@@ -25,10 +25,24 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetMaterialPath(string name)
         {
-            string path = $"{GamePath.MaterialsPath}/{name}";
+            string path = $"{GamePath.MaterialsPath}/{name}.vmt";
             if (File.Exists(path)) return path;
 
-            string mountedPath = $"{MountedGamePath.MaterialsPath}/{name}";
+            
+            string mountedPath = $"{MountedGamePath.MaterialsPath}/{name}.vmt";
+            return File.Exists(mountedPath) ? mountedPath : path;
+        }
+
+        /// <summary>
+        /// Get the path to a Texture from it's path relative to "materials" folder.
+        /// </summary>
+        public static string GetTexturePath(string name)
+        {
+            string path = $"{GamePath.MaterialsPath}/{name}.vtf";
+            if (File.Exists(path)) return path;
+
+
+            string mountedPath = $"{MountedGamePath.MaterialsPath}/{name}.vtf";
             return File.Exists(mountedPath) ? mountedPath : path;
         }
 

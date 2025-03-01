@@ -1,5 +1,5 @@
 UnlitGeneric
 {
-	$basetexture "dev/error.vtf"
+	$basetexture "dev/error"
 	$tint	"255 255 255 1"
 }

@@ -17,6 +17,8 @@ namespace SourceRewrite.AssetTypes
 
             string materialPath = reader.GetLumpData<string[]>(LumpType.LUMP_MATERIAL)[0]; // Load Material
 
+            Console.WriteLine(FileSystem.GetMaterialPath(materialPath));
+
             // Create a Material
             Material = FileSystem.GetMaterial(materialPath);
 

@@ -17,7 +17,7 @@ namespace SourceRewrite.Rendering
             if (!File.Exists(path)) 
             {
                 Console.WriteLine($"Could not find texture at '{path}'");
-                path = FileSystem.GetMaterialPath("dev/missing.vtf");
+                path = FileSystem.GetTexturePath("dev/missing");
             }
 
             // Create a shader based on current renderer

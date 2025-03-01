@@ -42,6 +42,7 @@ namespace VBSP.Conversion
             }
 
             outputBSP.SetLumpData(LumpType.LUMP_GAME_OBJECTS, entities);
+            outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
 
             return outputBSP;
         }

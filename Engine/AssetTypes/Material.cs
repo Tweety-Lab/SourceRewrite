@@ -20,7 +20,7 @@ namespace SourceRewrite.AssetTypes
                 if (!File.Exists(filePath))
                 {
                     Console.WriteLine($"Could not find material at '{filePath}'");
-                    filePath = FileSystem.GetMaterialPath("dev/missing.vmt");
+                    filePath = FileSystem.GetMaterialPath("dev/missing");
                 }
 
                 string content = File.ReadAllText(filePath);
@@ -35,7 +35,7 @@ namespace SourceRewrite.AssetTypes
                     // Special logic for base texture paths (REPLACE THIS)
                     if (keyValue.Key == "$basetexture")
                     {
-                        Texture = new Texture(FileSystem.GetMaterialPath((string)keyValue.Value)); // Set the Texture
+                        Texture = new Texture(FileSystem.GetTexturePath((string)keyValue.Value)); // Set the Texture
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))
