@@ -136,11 +136,19 @@ namespace SourceRewrite.Maps
             {
                 // Get Property Data
                 string propertyName = propertyKV.Key;
-                string propertyValue = propertyKV.GetValueAsType<string>();
+                object propertyValue = propertyKV.Value;
 
                 // Set the Property
                 FieldInfo field = gameComponent.GetType().GetField(propertyName);
-                field.SetValue(gameComponent, propertyValue);
+
+                if (field != null)
+                {
+                    field.SetValue(gameComponent, propertyValue);
+                }
+                else
+                {
+                    Console.WriteLine($"Field '{propertyName}' not found in type '{gameComponent.GetType().Name}'.");
+                }
             }
         }
     }

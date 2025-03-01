@@ -1,4 +1,5 @@
 ﻿using FileFormats.BSP;
+using FileFormats.KeyValues;
 using FileFormats.VMF;
 
 namespace VBSP.Conversion
@@ -25,13 +26,22 @@ namespace VBSP.Conversion
             int i = 0;
             foreach (Entity vmfEntity in VMF.Entities)
             {
+                // Get their attributes
+                string entityAttributesString = string.Empty;
+                foreach (KeyValue kvAttribute in vmfEntity.Attributes)
+                {
+                    // Attributes start with "_"
+                    if (kvAttribute.Key.StartsWith("_"))
+                        entityAttributesString += $" {kvAttribute.Key} \"{kvAttribute.Value}\"\n";
+                }
+
                 string entityString = @$" GameObject{i} {{
                 position ""{vmfEntity.Origin.X} {vmfEntity.Origin.Z} {vmfEntity.Origin.Y}""
                 rotation ""0 0 0""
                 scale ""1 1 1""
                 GameComponents {{
                     {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
-
+                        {entityAttributesString}
                     }}
                 }}
             }}";

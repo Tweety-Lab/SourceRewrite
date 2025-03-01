@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using FileFormats.KeyValues;
+using System.Numerics;
 
 namespace FileFormats.VMF
 {
@@ -48,5 +49,6 @@ namespace FileFormats.VMF
         public int ID;
         public string ClassName;
         public Vector3 Origin;
+        public List<KeyValue> Attributes;
     }
 }

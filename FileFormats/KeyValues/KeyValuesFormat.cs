@@ -127,51 +127,6 @@ namespace FileFormats.KeyValues
         }
 
         /// <summary>
-        /// Casts the Value to a specified Type.
-        /// </summary>
-        public T GetValueAsType<T>()
-        {
-            object result = Value; // Default to string
-            string stringValue = (string)Value;
-
-            if (typeof(T) == typeof(int) && int.TryParse(stringValue, out int intValue))
-                result = intValue;
-            else if (typeof(T) == typeof(float) && float.TryParse(stringValue, out float floatValue))
-                result = floatValue;
-            else if (typeof(T) == typeof(bool) && bool.TryParse(stringValue, out bool boolValue))
-                result = boolValue;
-            else if (typeof(T) == typeof(double) && double.TryParse(stringValue, out double doubleValue))
-                result = doubleValue;
-            else if (typeof(T) == typeof(Vector3))
-            {
-                string[] parts = stringValue.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                Console.WriteLine(parts);
-                if (parts.Length == 3 &&
-                    float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
-                    float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
-                    float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
-                {
-                    result = new Vector3(x, y, z);
-                }
-            }
-            else if (typeof(T) == typeof(Vector4))
-            {
-                string[] parts = stringValue.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                Console.WriteLine(parts);
-                if (parts.Length == 4 &&
-                    float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
-                    float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
-                    float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z) &&
-                    float.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float w))
-                {
-                    result = new Vector4(x, y, z, w);
-                }
-            }
-
-            return (T)result;
-        }
-
-        /// <summary>
         /// Convert a Value to it's type.
         /// </summary>
         public object ConvertValueToType(string input)
