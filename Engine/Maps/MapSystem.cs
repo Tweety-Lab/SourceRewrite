@@ -135,7 +135,7 @@ namespace SourceRewrite.Maps
         {
             // Get all fields in the game component type that have the MapProperty attribute
             var fields = gameComponent.GetType().GetFields()
-                .Where(f => f.GetCustomAttributes(typeof(MapProperty), true).Length > 0);
+                .Where(f => f.GetCustomAttributes(typeof(MapPropertyAttribute), true).Length > 0);
 
             // Loop through every Property
             foreach (KeyValue propertyKV in gameComponentPK.ChildKeyValues)
@@ -147,7 +147,7 @@ namespace SourceRewrite.Maps
                 // Find field with matching MapProperty.Name
                 foreach (var field in fields)
                 {
-                    var mapAttr = (MapProperty)field.GetCustomAttributes(typeof(MapProperty), true)[0];
+                    var mapAttr = (MapPropertyAttribute)field.GetCustomAttributes(typeof(MapPropertyAttribute), true)[0];
                     if (mapAttr.Name == propertyName)
                     {
                         field.SetValue(gameComponent, propertyValue);
