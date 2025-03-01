@@ -25,36 +25,54 @@ namespace SourceRewrite.Components
 
         public override void Update(float deltaTime)
         {
-            // Forward Movement
+            // Handle camera movement input (W, A, S, D keys)
+            HandleMovementInput(deltaTime);
+
+            // Handle mouse input for camera rotation
+            HandleMouseInput(deltaTime);
+        }
+
+        // Movement input (W, A, S, D)
+        private void HandleMovementInput(float deltaTime)
+        {
+            Vector3 movement = Vector3.Zero;
+
+            // Forward Movement (W)
             if (Input.GetKeyDown(Key.W))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Forward;
+                movement += GameObject.Transform.Forward;
             }
 
-            // Backward Movement
+            // Backward Movement (S)
             if (Input.GetKeyDown(Key.S))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Forward;
+                movement -= GameObject.Transform.Forward;
             }
 
-            // Left Movement
+            // Left Movement (A)
             if (Input.GetKeyDown(Key.A))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position - MovementSpeed * deltaTime * GameObject.Transform.Right;
+                movement -= GameObject.Transform.Right;
             }
 
-            // Right Movement
+            // Right Movement (D)
             if (Input.GetKeyDown(Key.D))
             {
-                GameObject.Transform.Position = GameObject.Transform.Position + MovementSpeed * deltaTime * GameObject.Transform.Right;
+                movement += GameObject.Transform.Right;
             }
 
-            // If right mouse held down move Camera view
-            if (Input.GetMouseButtonDown(1))
+            // Apply movement
+            GameObject.Transform.Position += movement * MovementSpeed * deltaTime;
+        }
+
+        // Mouse input for camera rotation
+        private void HandleMouseInput(float deltaTime)
+        {
+            if (Input.GetMouseButtonDown(1)) // Right Mouse Button held down
             {
                 Input.LockCursor();
 
-                // Mouse Movement
+                // Mouse Movement (X and Y)
                 float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
                 float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
 
@@ -65,13 +83,10 @@ namespace SourceRewrite.Components
                 // Clamp pitch to prevent camera flipping
                 pitch = Math.Clamp(pitch, -89f, 89f);
 
-                // Create rotation quaternion from Euler angles
-                // Note: We only use pitch and yaw, keeping roll at 0
-                GameObject.Transform.Rotation = MathsHelper.EulerToQuaternion(
-                    new Vector3(pitch, yaw, 0f)
-                );
-
-            } else
+                // Update the rotation based on yaw and pitch (roll remains 0)
+                GameObject.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+            }
+            else
             {
                 Input.UnlockCursor();
             }
