@@ -36,7 +36,6 @@ namespace FileFormats.BSP
         /// <summary>
         /// Set Lump Data.
         /// </summary>
-        // And update the SetLumpData method to recalculate FileLength
         public void SetLumpData(LumpType type, object data)
         {
             // Get the lump index
@@ -52,7 +51,7 @@ namespace FileFormats.BSP
                 Header.lumps[index].FileLength = calculatedSize;
 
                 // Debug output
-                Console.WriteLine($"Set lump data for type {type}. Calculated size: {calculatedSize} bytes");
+                Console.WriteLine($"Set lump data for type {type} to: {data}. Calculated size: {calculatedSize} bytes");
             }
             else
             {
