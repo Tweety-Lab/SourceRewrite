@@ -7,7 +7,8 @@
         {
             // Valve Class Name | Our Class Name
             { "light",          "SourceRewrite_Components_PointLight" },
-            { "prop_static",    "SourceRewrite_Components_MeshRenderer" }
+            { "prop_static",    "SourceRewrite_Components_MeshRenderer" },
+            { "info_player_start", "SourceRewrite_Components_CameraSpawn" }
         };
     }
 }
