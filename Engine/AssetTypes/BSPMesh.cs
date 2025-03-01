@@ -15,7 +15,7 @@ namespace SourceRewrite.AssetTypes
             Vertices = reader.GetLumpData<float[]>(LumpType.LUMP_VERTEXES); // Load Vertices Lump
             Indices = reader.GetLumpData<uint[]>(LumpType.LUMP_INDICES); // Load Indices Lump
 
-            string materialPath = reader.GetLumpData<string>(LumpType.LUMP_MATERIAL); // Load Material
+            string materialPath = reader.GetLumpData<string[]>(LumpType.LUMP_MATERIAL)[0]; // Load Material
 
             Console.WriteLine(materialPath);
 

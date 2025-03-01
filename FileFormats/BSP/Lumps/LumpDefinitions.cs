@@ -8,7 +8,7 @@
         public static LumpDefinition[] Definitions = {
 
             //                 Data Type       Data          Lump Type
-            new LumpDefinition(typeof(string), "metal_sheet.vmt", LumpType.LUMP_MATERIAL), // Materials
+            new LumpDefinition(typeof(string[]), new string[] { "metal_sheet.vmt" }, LumpType.LUMP_MATERIAL), // Materials
 new LumpDefinition(typeof(float[]), new float[] {
     // Front face - Normal: (0, 0, -1)
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,  // Bottom-left
