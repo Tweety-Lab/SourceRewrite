@@ -8,7 +8,8 @@ namespace SourceRewrite.Components
     // FPS Camera Controller
     public class CameraController : GameComponent
     {
-        public float MovementSpeed = 4f;
+        // Move at 1512 units per second
+        public float MovementSpeed = 1512f;
         public float Sensitivity = 20f;
 
         private float pitch = 0f;

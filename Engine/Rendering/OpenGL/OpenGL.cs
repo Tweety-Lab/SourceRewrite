@@ -75,7 +75,7 @@ namespace SourceRewrite.Rendering.OpenGL
             var projection = Matrix4x4.CreatePerspectiveFieldOfView(
                 MathF.PI / 4, // FOV
                 aspectRatio, // Aspect ratio
-                0.1f, 100f // Near and far planes
+                0.1f, 99999.0f // Near and far planes
             );
 
             // View matrix from active camera
