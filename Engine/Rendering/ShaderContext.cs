@@ -29,7 +29,7 @@ namespace SourceRewrite.Rendering
             // If vertex or fragment source is undefined, use the generic unlit shader definitions
             if (vertexSource == null || fragmentSource == null)
             {
-                ShaderFormat unlitShader = new ShaderFormat(File.ReadAllText(FileSystem.GetShaderPath("UnlitGeneric.shader")));
+                ShaderFormat unlitShader = new ShaderFormat(File.ReadAllText(FileSystem.GetShaderPath("UnlitGeneric")));
 
                 vertexSource ??= unlitShader.GetFunction("vertex").Content;
                 fragmentSource ??= unlitShader.GetFunction("fragment").Content;

@@ -17,7 +17,7 @@ namespace SourceRewrite.Files
         public static string GetShaderPath(string name)
         {
             // Source 1 doesn't have exposed shaders, no need to search mounted games
-            return $"{GamePath.ShadersPath}/{name}";
+            return $"{GamePath.ShadersPath}/{name}.shader";
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static Shader GetShader(string name)
         {
-            string path = GetShaderPath($"{name}.shader");
+            string path = GetShaderPath($"{name}");
             return new Shader(path);
         }
 
