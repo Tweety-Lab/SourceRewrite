@@ -143,8 +143,15 @@ namespace FileFormats.KeyValues
             if (bool.TryParse(input, out bool boolValue))
                 return boolValue;
 
+            // Clean vector input if it has angle brackets
+            string vectorInput = input;
+            if (vectorInput.StartsWith("<") && vectorInput.EndsWith(">"))
+            {
+                vectorInput = vectorInput.Substring(1, vectorInput.Length - 2);
+            }
+
             // Try parsing as a vector3
-            string[] parts = input.Split(new char[] { ',', ' ' });
+            string[] parts = vectorInput.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length == 3 &&
                 float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
@@ -152,7 +159,6 @@ namespace FileFormats.KeyValues
             {
                 return new Vector3(x, y, z);
             }
-
             // Try parsing as a vector4
             if (parts.Length == 4 &&
                 float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out x) &&

@@ -57,7 +57,7 @@ namespace SourceRewrite.Maps
             List<KeyValuesFormat> output = new List<KeyValuesFormat>();
 
             // Loop through every Game Object
-            foreach(var gameObject in gameObjectData)
+            foreach (var gameObject in gameObjectData)
             {
                 // Read KeyValues
                 KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObject);
@@ -119,7 +119,7 @@ namespace SourceRewrite.Maps
                     continue;
                 }
 
-                GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
+                GameComponent gameComponent = (GameComponent)Activator.CreateInstance(componentType);
 
                 // Add Component to GameObject
                 targetObject.AddComponent(gameComponent);
@@ -129,25 +129,30 @@ namespace SourceRewrite.Maps
             }
         }
 
+
+        // Set Game Component Properties
         private static void SetGameComponentProperties(ParentKey gameComponentPK, GameComponent gameComponent)
         {
+            // Get all fields in the game component type that have the MapProperty attribute
+            var fields = gameComponent.GetType().GetFields()
+                .Where(f => f.GetCustomAttributes(typeof(MapProperty), true).Length > 0);
+
             // Loop through every Property
-            foreach(KeyValue propertyKV in gameComponentPK.ChildKeyValues)
+            foreach (KeyValue propertyKV in gameComponentPK.ChildKeyValues)
             {
                 // Get Property Data
                 string propertyName = propertyKV.Key;
                 object propertyValue = propertyKV.Value;
 
-                // Set the Property
-                FieldInfo field = gameComponent.GetType().GetField(propertyName);
-
-                if (field != null)
+                // Find field with matching MapProperty.Name
+                foreach (var field in fields)
                 {
-                    field.SetValue(gameComponent, propertyValue);
-                }
-                else
-                {
-                    Console.WriteLine($"Field '{propertyName}' not found in type '{gameComponent.GetType().Name}'.");
+                    var mapAttr = (MapProperty)field.GetCustomAttributes(typeof(MapProperty), true)[0];
+                    if (mapAttr.Name == propertyName)
+                    {
+                        field.SetValue(gameComponent, propertyValue);
+                        break;
+                    }
                 }
             }
         }

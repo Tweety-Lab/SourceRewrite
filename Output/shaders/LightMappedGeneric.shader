@@ -4,7 +4,7 @@
 uniform sampler2D uTexture0;
 
 uniform vec3 light_position;
-uniform vec3 light_color;
+uniform vec4 light_color; // RGB = color, A = intensity
 uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
 
 // Fragment Code
@@ -24,20 +24,24 @@ void fragment()
         vec3 norm = normalize(VERT_NORMAL);
         vec3 lightDir = normalize(light_position - FragPos);
 
+        // Extract intensity from light_color.a
+        float intensity = light_color.a;
+        vec3 color = light_color.rgb; // Extract RGB component
+
         // Ambient
         float ambientStrength = 0.2;
-        vec3 ambient = ambientStrength * light_color;
+        vec3 ambient = ambientStrength * color * intensity;
 
         // Diffuse
         float diff = max(dot(norm, lightDir), 0.0);
-        vec3 diffuse = diff * light_color;
+        vec3 diffuse = diff * color * intensity;
 
         // Specular
         float specularStrength = 0.5;
         vec3 viewDir = normalize(VIEW_POS - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);  
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-        vec3 specular = specularStrength * spec * light_color;
+        vec3 specular = specularStrength * spec * color * intensity;
 
         // Distance to light
         float distance = length(light_position - FragPos);
