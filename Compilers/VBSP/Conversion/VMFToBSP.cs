@@ -30,9 +30,7 @@ namespace VBSP.Conversion
                 string entityPropertiesString = string.Empty;
                 foreach (KeyValue kvProperty in vmfEntity.Properties)
                 {
-                    // Properties start with "_"
-                    if (kvProperty.Key.StartsWith("_"))
-                        entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
+                    entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
                 }
 
                 string entityString = @$" GameObject{i} {{
@@ -44,13 +42,15 @@ namespace VBSP.Conversion
                         {entityPropertiesString}
                     }}
                 }}
-            }}";
+            }}
+            ";
 
                 entities[i] = entityString;
 
                 i++;
             }
 
+            Console.WriteLine(entities[1]);
             outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
             outputBSP.SetLumpData(LumpType.LUMP_GAME_OBJECTS, entities);
 
