@@ -4,6 +4,7 @@ using FileFormats.VMF;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 
 namespace VBSP.Conversion
 {
@@ -69,6 +70,9 @@ namespace VBSP.Conversion
                 // Add vertices (Position, Normal, UV)
                 void AddVertex(Vector3 pos, Vector3 norm, Vector2 uv)
                 {
+                    // Normalize the normal vector
+                    norm = Vector3.Normalize(norm);
+
                     vertices.AddRange(new float[]
                     {
                     pos.X, pos.Y, pos.Z,     // Position (3 floats)
@@ -89,9 +93,9 @@ namespace VBSP.Conversion
                         materials.Add(side.Material);
 
                         // Get corners and convert them to Y up coordinate system
-                        Vector3 corner1 = new Vector3(-side.plane.Corner1.Y, side.plane.Corner1.Z, -side.plane.Corner1.X);
-                        Vector3 corner2 = new Vector3(-side.plane.Corner2.Y, side.plane.Corner2.Z, -side.plane.Corner2.X);
-                        Vector3 corner3 = new Vector3(-side.plane.Corner3.Y, side.plane.Corner3.Z, -side.plane.Corner3.X);
+                        Vector3 corner1 = new Vector3(-side.Plane.Corner1.Y, side.Plane.Corner1.Z, -side.Plane.Corner1.X);
+                        Vector3 corner2 = new Vector3(-side.Plane.Corner2.Y, side.Plane.Corner2.Z, -side.Plane.Corner2.X);
+                        Vector3 corner3 = new Vector3(-side.Plane.Corner3.Y, side.Plane.Corner3.Z, -side.Plane.Corner3.X);
 
                         // Calculate the fourth corner
                         Vector3 corner4 = corner1 + (corner3 - corner2);
@@ -99,11 +103,18 @@ namespace VBSP.Conversion
                         // Compute the face normal
                         Vector3 normal = Vector3.Normalize(Vector3.Cross(corner2 - corner1, corner3 - corner1));
 
-                        // Default UVs (this can be adjusted based on mapping needs)
-                        Vector2 uv1 = new Vector2(0, 0);
-                        Vector2 uv2 = new Vector2(1, 0);
-                        Vector2 uv3 = new Vector2(1, 1);
-                        Vector2 uv4 = new Vector2(0, 1);
+                        // Assuming the side contains UVData
+                        UVAxis uvData = side.UAxis;
+
+                        // The UV scale is directly fetched from UVData.UVScale
+                        float textureScale = 1f / (uvData.UVScale * 500f); // Invert textureScale to make lower values result in more tiling
+
+                        // Calculate UVs based on world-space position
+                        Vector2 uv1 = new Vector2(corner1.X * textureScale, corner1.Z * textureScale);
+                        Vector2 uv2 = new Vector2(corner2.X * textureScale, corner2.Z * textureScale);
+                        Vector2 uv3 = new Vector2(corner3.X * textureScale, corner3.Z * textureScale);
+                        Vector2 uv4 = new Vector2(corner4.X * textureScale, corner4.Z * textureScale);
+
 
                         // Populate the vertices
                         AddVertex(corner1, normal, uv1);
