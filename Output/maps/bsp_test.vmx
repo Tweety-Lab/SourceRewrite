@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "3"
+	"mapversion" "20"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,27 +14,27 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "64"
+	"nGridSpacing" "16"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "3"
+	"mapversion" "20"
 	"classname" "worldspawn"
-	"skyname" "sky_black_nofog"
-	"maxpropscreenwidth" "-1"
-	"detailvbsp" "detail.vbsp"
 	"detailmaterial" "detail/detailsprites"
+	"detailvbsp" "detail.vbsp"
 	"maxblobcount" "250"
+	"maxpropscreenwidth" "-1"
+	"skyname" "sky_black_nofog"
 	solid
 	{
-		"id" "16"
+		"id" "75"
 		side
 		{
-			"id" "1"
-			"plane" "(-192 64 -64) (128 64 -64) (128 -128 -64)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "50"
+			"plane" "(-48 48 -64) (272 48 -64) (272 -144 -64)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
@@ -43,9 +43,9 @@ world
 		}
 		side
 		{
-			"id" "2"
-			"plane" "(-192 -128 -132) (128 -128 -132) (128 64 -132)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "51"
+			"plane" "(-48 -144 -256) (272 -144 -256) (272 48 -256)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
@@ -54,9 +54,9 @@ world
 		}
 		side
 		{
-			"id" "3"
-			"plane" "(-192 64 -64) (-192 -128 -64) (-192 -128 -132)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "52"
+			"plane" "(-48 48 -64) (-48 -144 -64) (-48 -144 -256)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
@@ -65,9 +65,9 @@ world
 		}
 		side
 		{
-			"id" "4"
-			"plane" "(128 64 -132) (128 -128 -132) (128 -128 -64)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "53"
+			"plane" "(272 48 -256) (272 -144 -256) (272 -144 -64)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
@@ -76,9 +76,9 @@ world
 		}
 		side
 		{
-			"id" "5"
-			"plane" "(128 64 -64) (-192 64 -64) (-192 64 -132)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "54"
+			"plane" "(272 48 -64) (-48 48 -64) (-48 48 -256)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
@@ -87,9 +87,9 @@ world
 		}
 		side
 		{
-			"id" "6"
-			"plane" "(128 -128 -132) (-192 -128 -132) (-192 -128 -64)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_CHEAP"
+			"id" "55"
+			"plane" "(272 -144 -256) (-48 -144 -256) (-48 -144 -64)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
@@ -98,10 +98,34 @@ world
 		}
 		editor
 		{
-			"color" "0 186 243"
+			"color" "0 130 171"
 			"visgroupshown" "1"
 			"visgroupautoshown" "1"
 		}
+	}
+}
+entity
+{
+	"id" "38"
+	"classname" "light"
+	"_constant_attn" "0"
+	"_distance" "0"
+	"_fifty_percent_distance" "0"
+	"_hardfalloff" "0"
+	"_light" "255 255 255 200"
+	"_lightHDR" "-1 -1 -1 1"
+	"_lightscaleHDR" "1"
+	"_linear_attn" "0"
+	"_quadratic_attn" "1"
+	"_zero_percent_distance" "0"
+	"style" "0"
+	"origin" "32 -32 0"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
 	}
 }
 entity
@@ -131,7 +155,7 @@ entity
 	"shadowdepthnocache" "0"
 	"skin" "missing"
 	"solid" "6"
-	"origin" "0 0 0"
+	"origin" "192 384 0"
 	editor
 	{
 		"color" "255 255 0"

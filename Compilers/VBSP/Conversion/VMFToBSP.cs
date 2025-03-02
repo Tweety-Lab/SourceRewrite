@@ -1,6 +1,9 @@
 ﻿using FileFormats.BSP;
 using FileFormats.KeyValues;
 using FileFormats.VMF;
+using System.Linq;
+using System.Numerics;
+using System.Security.Cryptography;
 
 namespace VBSP.Conversion
 {
@@ -57,12 +60,74 @@ namespace VBSP.Conversion
             // Handle solids only if they exist
             if (VMF.World.Solids != null && VMF.World.Solids.Count > 0)
             {
+                List<float> vertices = new List<float>(); // Store vertex positions
+                List<uint> indices = new List<uint>(); // Store triangle indices
+                uint indexOffset = 0; // Tracks the index of the next vertex
+
                 outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
+
+                // Loop through all solids
+                foreach (Solid solid in VMF.World.Solids)
+                {
+                    // Loop through all solid sides
+                    foreach (Side side in solid.Sides)
+                    {
+                        // Get corners and convert them to Y up coordinate system
+                        Vector3 corner1 = new Vector3(-side.plane.Corner1.Y, side.plane.Corner1.Z, -side.plane.Corner1.X);
+                        Vector3 corner2 = new Vector3(-side.plane.Corner2.Y, side.plane.Corner2.Z, -side.plane.Corner2.X);
+                        Vector3 corner3 = new Vector3(-side.plane.Corner3.Y, side.plane.Corner3.Z, -side.plane.Corner3.X);
+
+                        // Calculate the fourth corner
+                        Vector3 corner4 = corner1 + (corner3 - corner2);
+
+                        // Compute the face normal
+                        Vector3 normal = Vector3.Normalize(Vector3.Cross(corner2 - corner1, corner3 - corner1));
+
+                        // Default UVs (this can be adjusted based on mapping needs)
+                        Vector2 uv1 = new Vector2(0, 0);
+                        Vector2 uv2 = new Vector2(1, 0);
+                        Vector2 uv3 = new Vector2(1, 1);
+                        Vector2 uv4 = new Vector2(0, 1);
+
+
+                        // Add vertices (Position, Normal, UV)
+                        void AddVertex(Vector3 pos, Vector3 norm, Vector2 uv)
+                        {
+                            vertices.AddRange(new float[]
+                            {
+                    pos.X, pos.Y, pos.Z,     // Position (3 floats)
+                    norm.X, norm.Y, norm.Z,  // Normal (3 floats)
+                    uv.X, uv.Y               // UV (2 floats)
+                            });
+                        }
+
+                        AddVertex(corner1, normal, uv1);
+                        AddVertex(corner2, normal, uv2);
+                        AddVertex(corner3, normal, uv3);
+                        AddVertex(corner4, normal, uv4);
+
+                        // Add indices for two triangles (forming a quad)
+                        indices.Add(indexOffset);
+                        indices.Add(indexOffset + 1);
+                        indices.Add(indexOffset + 2);
+
+                        indices.Add(indexOffset);
+                        indices.Add(indexOffset + 2);
+                        indices.Add(indexOffset + 3);
+
+                        indexOffset += 4; // Move to the next set of indices
+                    }
+                }
+                // Store vertices and indices in the BSP lumps
+                outputBSP.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
+                outputBSP.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
             }
 
             outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, new string[] { "prop_static", "light" });
 
             return outputBSP;
         }
+
+
     }
 }

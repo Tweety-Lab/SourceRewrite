@@ -1,4 +1,6 @@
-﻿namespace FileFormats.BSP
+﻿using System.Numerics;
+
+namespace FileFormats.BSP
 {
     public static class LumpDefinitions
     {
@@ -43,6 +45,6 @@
         LUMP_INDICES,           // Brush Indices ( not in < v26 )
         LUMP_GAME_OBJECTS,      // Game Objects and their associated Game Components ( not in < v26 )
         LUMP_ENTITIES           // Entities
-                                  // ... continue
+                                // ... continue
     }
 }
