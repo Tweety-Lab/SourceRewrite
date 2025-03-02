@@ -62,16 +62,32 @@ namespace VBSP.Conversion
             {
                 List<float> vertices = new List<float>(); // Store vertex positions
                 List<uint> indices = new List<uint>(); // Store triangle indices
+                List<string> materials = new List<string>(); // Store material names
+
                 uint indexOffset = 0; // Tracks the index of the next vertex
 
-                outputBSP.SetLumpData(LumpType.LUMP_MATERIAL, $"{VMF.World.Solids[0].Sides[0].Material}");
+                // Add vertices (Position, Normal, UV)
+                void AddVertex(Vector3 pos, Vector3 norm, Vector2 uv)
+                {
+                    vertices.AddRange(new float[]
+                    {
+                    pos.X, pos.Y, pos.Z,     // Position (3 floats)
+                    norm.X, norm.Y, norm.Z,  // Normal (3 floats)
+                    uv.X, uv.Y               // UV (2 floats)
+                    });
+                }
 
                 // Loop through all solids
                 foreach (Solid solid in VMF.World.Solids)
                 {
+                    Console.WriteLine($"Compiling solid with id of {solid.ID}...");
+
                     // Loop through all solid sides
                     foreach (Side side in solid.Sides)
                     {
+                        // Add the material to the list of materials
+                        materials.Add(side.Material);
+
                         // Get corners and convert them to Y up coordinate system
                         Vector3 corner1 = new Vector3(-side.plane.Corner1.Y, side.plane.Corner1.Z, -side.plane.Corner1.X);
                         Vector3 corner2 = new Vector3(-side.plane.Corner2.Y, side.plane.Corner2.Z, -side.plane.Corner2.X);
@@ -89,18 +105,7 @@ namespace VBSP.Conversion
                         Vector2 uv3 = new Vector2(1, 1);
                         Vector2 uv4 = new Vector2(0, 1);
 
-
-                        // Add vertices (Position, Normal, UV)
-                        void AddVertex(Vector3 pos, Vector3 norm, Vector2 uv)
-                        {
-                            vertices.AddRange(new float[]
-                            {
-                    pos.X, pos.Y, pos.Z,     // Position (3 floats)
-                    norm.X, norm.Y, norm.Z,  // Normal (3 floats)
-                    uv.X, uv.Y               // UV (2 floats)
-                            });
-                        }
-
+                        // Populate the vertices
                         AddVertex(corner1, normal, uv1);
                         AddVertex(corner2, normal, uv2);
                         AddVertex(corner3, normal, uv3);
@@ -118,16 +123,20 @@ namespace VBSP.Conversion
                         indexOffset += 4; // Move to the next set of indices
                     }
                 }
+
                 // Store vertices and indices in the BSP lumps
                 outputBSP.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
                 outputBSP.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
+
+                // Store side materials in the BSP lump
+                outputBSP.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
+
+                Console.WriteLine($"Compiled {VMF.World.Solids.Count} solids.");
             }
 
             outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, new string[] { "prop_static", "light" });
 
             return outputBSP;
         }
-
-
     }
 }
