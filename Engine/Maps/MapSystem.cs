@@ -5,159 +5,162 @@ using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using System.Reflection;
+using SourceRewrite.Maths;
+using SourceRewrite.Files;
 
-// Beware those trying to read this, it might try to fight back.
-// This code is so horrible, rewrite from scratch.
-// REWRITE PRIORITY: HIGH!!!
 namespace SourceRewrite.Maps
 {
+    public class Map
+    {
+        // List of GameObjects in the map
+        public List<GameObject> GameObjects = new List<GameObject>();
+
+        public Map(string bspPath)
+        {
+            // Read map data
+            BSPReader reader = new BSPReader(bspPath);
+
+            // Get map data (Lumps)
+            Lump GameObjects = reader.GetLump(LumpType.LUMP_GAME_OBJECTS);
+
+            Lump Vertices = reader.GetLump(LumpType.LUMP_VERTEXES);
+            Lump Indices = reader.GetLump(LumpType.LUMP_INDICES);
+            Lump Materials = reader.GetLump(LumpType.LUMP_SOLID_MATERIALS);
+
+            // Create the map from Lump data
+            CreateGeometry(Vertices, Indices, Materials);
+            CreateGameObjects(GameObjects);
+
+            SpawnPlayerController();
+        }
+
+        // Create Geometry from Lump data
+        public void CreateGeometry(Lump vertices, Lump indices, Lump materials)
+        {
+            // Convert Lump data to arrays
+            float[] verticesData = (float[]) vertices.Data;
+            uint[] indicesData = (uint[]) indices.Data;
+            string[] materialsData = (string[])materials.Data;
+
+            // For now, we just use the first material defined in the lump
+            Material placeHolderMaterial = FileSystem.GetMaterial(materialsData[0]);
+
+            // Create a MeshAsset
+            MeshAsset mapGeometryMesh = new MeshAsset();
+
+            // Populate the MeshAsset with lump data
+            mapGeometryMesh.Vertices = verticesData;
+            mapGeometryMesh.Indices = indicesData;
+            mapGeometryMesh.Material = placeHolderMaterial;
+
+            // Create a MeshRenderer
+            MeshRenderer mapGeometryRenderer = new MeshRenderer();
+            mapGeometryRenderer.Mesh = mapGeometryMesh;
+
+            // Create a GameObject to house the meshrenderer
+            GameObject mapGeometry = new GameObject();
+
+            // Add MeshRenderer to GameObject
+            mapGeometry.AddComponent(mapGeometryRenderer);
+
+            // Add the GameObject to the map's GameObjects list
+            GameObjects.Add(mapGeometry);
+        }
+
+        // Create GameObjects from Lump data
+        public void CreateGameObjects(Lump gameObjects)
+        {
+            // Convert Lump data to array
+            string[] gameObjectData = (string[]) gameObjects.Data;
+
+            // We store GameObjects in a KeyValues format
+            foreach (string gameObjectString in gameObjectData)
+            {
+                // Create GameObject from KeyValues
+                KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObjectString);
+
+                // Get GameObject's GameComponents from KeyValues
+                List<GameComponent> gameObjectComponents = GetGameComponents(gameObjectKeyValues);
+
+                // Get GameObject data as KeyValues
+                KeyValue positionKeyValue = gameObjectKeyValues.GetKeyValue("position");
+                KeyValue rotationKeyValue = gameObjectKeyValues.GetKeyValue("rotation");
+                KeyValue scaleKeyValue = gameObjectKeyValues.GetKeyValue("scale");
+
+                // Create GameObject
+                GameObject gameObject = new GameObject();
+
+                gameObject.Transform.Position = (Vector3) positionKeyValue.Value;
+                gameObject.Transform.Rotation = MathsHelper.EulerToQuaternion((Vector3) rotationKeyValue.Value);
+                gameObject.Transform.Scale = (Vector3) scaleKeyValue.Value;
+
+                // Populate GameObject with gameObjectComponents
+                foreach (GameComponent component in gameObjectComponents)
+                {
+                    gameObject.AddComponent(component);
+                }
+
+                // Add GameObject to maps GameObject list
+                GameObjects.Add(gameObject);
+            }
+        }
+
+        // Return List of GameComponents from GameObject KeyValues
+        public List<GameComponent> GetGameComponents(KeyValuesFormat gameObjectKeyValues)
+        {
+            List<GameComponent> gameComponents = new List<GameComponent>();
+
+            // Get Components from KeyValues
+            List<ParentKey> componentParentKeys = gameObjectKeyValues.ParentKeys[0].GetChildParentKey("GameComponents").ChildParentKeys;
+
+            // Process each component
+            foreach (ParentKey component in componentParentKeys)
+            {
+                // Convert stored component name to namespace
+                string componentNamespace = component.Name.Replace('_', '.');
+
+                // Create component
+                Type componentType = Type.GetType(componentNamespace);
+                GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
+
+                // Process component properties
+                foreach (KeyValue componentKeyValue in component.ChildKeyValues)
+                {
+                    // Set component properties
+                    gameComponent.SetMapProperty(componentKeyValue.Key, componentKeyValue.Value);
+                }
+
+                // Add component to list
+                gameComponents.Add(gameComponent);
+            }
+
+            return gameComponents;
+        }
+
+        // Placeholder for spawning a player controller in the map on load
+        public void SpawnPlayerController()
+        {
+            // Create GameObject for player
+            GameObject player = new GameObject();
+
+            // Create it's Camera Controller
+            Camera playerCamera = new Camera();
+            CameraController cameraController = new CameraController();
+
+            // Attach to Player
+            player.AddComponent(playerCamera);
+            player.AddComponent(cameraController);
+
+            // Add player GameObject to the GameObjects list
+            GameObjects.Add(player);
+        }
+    }
+
     public static class MapSystem
     {
         public static void LoadMap(string path)
         {
-            if (!File.Exists(path))
-                return;
-
-            CreateBspGeometry(path); // Create Brush Geo
-            CreateCamera(); // Create a test camera for viewing
-
-            BSPReader reader = new BSPReader(path); // Begin reading BSP
-
-            List<KeyValuesFormat> gameObjects = GetGameObjectKeyValues(reader);
-            CreateGameObjects(gameObjects); // Create GameObjects
-
-            reader.Dispose(); // Close the reader
-        }
-
-        // Create a BSPMesh and render it from BSP Vertices/Indices Lump
-        private static void CreateBspGeometry(string path)
-        {
-            var bspMesh = new BSPMesh(path);
-            var bspRenderer = new MeshRenderer();
-
-            bspRenderer.Mesh = bspMesh; // Set the Mesh
-
-            var bspGeometry = new GameObject();
-            bspGeometry.AddComponent(bspRenderer);
-        }
-
-        // Create a Camera
-        private static void CreateCamera()
-        {
-            var cameraObject = new GameObject();
-            cameraObject.AddComponent(new Camera());
-            cameraObject.AddComponent(new CameraController());
-        }
-
-        // Get the BSP's GameObjects as KeyValuesFormats
-        private static List<KeyValuesFormat> GetGameObjectKeyValues(BSPReader reader)
-        {
-            // Read data from BSP
-            string[] gameObjectData = reader.GetLumpData<string[]>(LumpType.LUMP_GAME_OBJECTS);
-            List<KeyValuesFormat> output = new List<KeyValuesFormat>();
-
-            if (gameObjectData != null)
-            {
-                // Loop through every Game Object
-                foreach (var gameObject in gameObjectData)
-                {
-                    // Read KeyValues
-                    KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObject);
-                    output.Add(gameObjectKeyValues);
-                }
-            }
-
-            return output;
-        }
-
-        // Create GameObjects from a list of them
-        private static void CreateGameObjects(List<KeyValuesFormat> gameObjects)
-        {
-            // Loop through every GameObject
-            foreach (KeyValuesFormat gameObjectKV in gameObjects)
-            {
-                GameObject gameObject = new GameObject(); // Make the GameObject
-
-                // Get the specified Transforms
-                KeyValue positionKV = gameObjectKV.GetKeyValue("position");
-                KeyValue scaleKV = gameObjectKV.GetKeyValue("scale");
-                KeyValue rotationKV = gameObjectKV.GetKeyValue("rotation");
-
-                // Apply Transforms
-                Vector3 position = (Vector3)positionKV.Value;
-                Vector3 scale = (Vector3)scaleKV.Value;
-                Vector3 rotation = (Vector3)rotationKV.Value;
-
-                gameObject.Transform.Position = position;
-                gameObject.Transform.Scale = scale;
-                gameObject.Transform.Rotation = Maths.MathsHelper.EulerToQuaternion(rotation);
-
-                CreateGameComponents(gameObjectKV, gameObject); // Populate with GameComponents defined in BSP
-            }
-        }
-
-        // Populate a GameObject with components from KeyValues
-        private static void CreateGameComponents(KeyValuesFormat gameObjectKV, GameObject targetObject)
-        {
-            // Get Game Components Parent Key
-            ParentKey gameComponentsPK = gameObjectKV.ParentKeys[0].ChildParentKeys[0];
-
-            if (gameComponentsPK == null) return;
-
-            // Loop through every Game Component
-            foreach (ParentKey gameComponentPK in gameComponentsPK.ChildParentKeys)
-            {
-                // We store namespaces as SourceRewrite_Components_CompName in BSP
-                string componentNameSpace = gameComponentPK.Name.Replace('_', '.');
-
-                // Convert from namespace to Type
-                Type componentType = Type.GetType(componentNameSpace);
-
-                Console.WriteLine(componentNameSpace);
-
-                // Try to create game component
-                if (componentType == null)
-                {
-                    Console.WriteLine("Component of type " + componentNameSpace + " not found");
-                    continue;
-                }
-
-                GameComponent gameComponent = (GameComponent)Activator.CreateInstance(componentType);
-
-                // Add Component to GameObject
-                targetObject.AddComponent(gameComponent);
-
-                // Init properties
-                SetGameComponentProperties(gameComponentPK, gameComponent);
-            }
-        }
-
-
-        // Set Game Component Properties
-        private static void SetGameComponentProperties(ParentKey gameComponentPK, GameComponent gameComponent)
-        {
-            // Get all fields in the game component type that have the MapProperty attribute
-            var fields = gameComponent.GetType().GetFields()
-                .Where(f => f.GetCustomAttributes(typeof(MapPropertyAttribute), true).Length > 0);
-
-            // Loop through every Property
-            foreach (KeyValue propertyKV in gameComponentPK.ChildKeyValues)
-            {
-                // Get Property Data
-                string propertyName = propertyKV.Key;
-                object propertyValue = propertyKV.Value;
-
-                // Find field with matching MapProperty.Name
-                foreach (var field in fields)
-                {
-                    var mapAttr = (MapPropertyAttribute)field.GetCustomAttributes(typeof(MapPropertyAttribute), true)[0];
-                    if (mapAttr.Name == propertyName)
-                    {
-                        field.SetValue(gameComponent, propertyValue);
-                        break;
-                    }
-                }
-            }
+            new Map(path);
         }
     }
 }
