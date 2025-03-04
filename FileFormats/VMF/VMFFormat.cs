@@ -84,39 +84,13 @@ namespace FileFormats.VMF
             return new Side()
             {
                 ID = (int)pkSide.GetKeyValue("id").Value,
-                Plane = new Plane()
+                plane = new Plane()
                 {
                     Corner1 = plane[0],
                     Corner2 = plane[1],
-                    Corner3 = plane[2],
+                    Corner3 = plane[2]
                 },
-                Material = (string)pkSide.GetKeyValue("material").Value,
-                UAxis = ProcessUVAxis(pkSide.GetKeyValue("uaxis").Value.ToString()),
-                VAxis = ProcessUVAxis(pkSide.GetKeyValue("vaxis").Value.ToString())
-            };
-        }
-
-
-        private UVAxis ProcessUVAxis(string input)
-        {
-            // Split the input string into the UV direction part and the scale part
-            string[] parts = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Parse the UV direction as a Vector4 (the first four numbers)
-            Vector4 uvDir = new Vector4(
-                float.Parse(parts[0].TrimStart('[')),  // X
-                float.Parse(parts[1]),                  // Y
-                float.Parse(parts[2]),                  // Z
-                float.Parse(parts[3].TrimEnd(']')));    // W
-
-            // Parse the UV scale (the last part of the string)
-            float uvScale = float.Parse(parts[4]);
-
-            // Return the populated UVAxis object
-            return new UVAxis()
-            {
-                UVDir = uvDir,
-                UVScale = uvScale
+                Material = (string)pkSide.GetKeyValue("material").Value
             };
         }
 

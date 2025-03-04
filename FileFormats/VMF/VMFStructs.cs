@@ -31,18 +31,8 @@ namespace FileFormats.VMF
     public struct Side
     {
         public int ID;
-        public Plane Plane;
+        public Plane plane;
         public string Material;
-
-        public UVAxis UAxis;
-        public UVAxis VAxis;
-    }
-
-    // Side UV Axis
-    public struct UVAxis
-    {
-        public Vector4 UVDir;
-        public float UVScale;
     }
 
     // Solid Brush Side Plane
