@@ -144,7 +144,7 @@ namespace FileFormats.BSP
                 string[] stringArray => stringArray.Sum(str =>
                     str != null ? Encoding.ASCII.GetByteCount(str) + 1 : 1), // +1 for each null terminator
                 string stringData => Encoding.ASCII.GetByteCount(stringData) + 1, // +1 for null terminator
-                _ => throw new InvalidOperationException($"Unsupported data type: {data.GetType().Name}")
+                _ => throw new InvalidOperationException($"Unsupported BSP Lump data type: {data.GetType().Name}")
             };
         }
 

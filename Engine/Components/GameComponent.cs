@@ -27,7 +27,7 @@ namespace SourceRewrite.Components
         /// <summary>
         /// Sets a map property of the component.
         /// </summary>
-        public void SetMapProperty(string name, object value)
+        public void SetProperty(string name, object value)
         {
             // Get the type of the class that contains the fields
             Type classType = this.GetType();

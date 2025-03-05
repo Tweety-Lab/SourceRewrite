@@ -127,7 +127,7 @@ namespace SourceRewrite.Maps
                 foreach (KeyValue componentKeyValue in component.ChildKeyValues)
                 {
                     // Set component properties
-                    gameComponent.SetMapProperty(componentKeyValue.Key, componentKeyValue.Value);
+                    gameComponent.SetProperty(componentKeyValue.Key, componentKeyValue.Value);
                 }
 
                 // Add component to list
