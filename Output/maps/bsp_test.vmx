@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "36"
+	"mapversion" "45"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "36"
+	"mapversion" "45"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -29,44 +29,11 @@ world
 	"skyname" "sky_black_nofog"
 	solid
 	{
-		"id" "96"
+		"id" "110"
 		side
 		{
-			"id" "60"
-			"plane" "(-48 -144 -256) (-48 -144 -64) (272 -144 -64)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "59"
-			"plane" "(-48 48 -256) (-48 -144 -64) (-48 -144 -256)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "58"
-			"plane" "(272 48 -256) (272 -144 -256) (272 -144 -64)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "57"
-			"plane" "(272 48 -256) (-48 48 -256) (-48 -144 -256)"
+			"id" "67"
+			"plane" "(-144 64 -64) (160 64 -64) (160 -192 -64)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
@@ -76,18 +43,62 @@ world
 		}
 		side
 		{
-			"id" "56"
-			"plane" "(-48 48 -256) (272 48 -256) (272 -144 -64)"
+			"id" "68"
+			"plane" "(-144 -192 -160) (160 -192 -160) (160 64 -160)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "69"
+			"plane" "(-144 64 -64) (-144 -192 -64) (-144 -192 -160)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "70"
+			"plane" "(160 64 -160) (160 -192 -160) (160 -192 -64)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "71"
+			"plane" "(160 64 -64) (-144 64 -64) (-144 64 -160)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"uaxis" "[1 0 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "72"
+			"plane" "(160 -192 -160) (-144 -192 -160) (-144 -192 -64)"
+			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"uaxis" "[1 0 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
 		}
 		editor
 		{
-			"color" "0 130 171"
+			"color" "0 194 199"
 			"visgroupshown" "1"
 			"visgroupautoshown" "1"
 		}
@@ -101,7 +112,7 @@ entity
 	"_distance" "0"
 	"_fifty_percent_distance" "0"
 	"_hardfalloff" "0"
-	"_light" "179 11 202 200"
+	"_light" "251 231 254 200"
 	"_lightHDR" "-1 -1 -1 1"
 	"_lightscaleHDR" "1"
 	"_linear_attn" "0"
