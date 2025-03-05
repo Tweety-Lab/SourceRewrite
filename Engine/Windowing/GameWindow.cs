@@ -77,9 +77,6 @@ namespace SourceRewrite.Windowing
 
             // Load a bsp
             MapSystem.LoadMap(FileSystem.GetMapPath("bsp_test.bsp"));
-
-            // Load GameObjects
-            GameObject.GameObjectStart();
         }
 
         private void OnUpdate(double deltaTime) 

@@ -49,6 +49,7 @@ namespace FileFormats.VMF
         public int ID;
         public string ClassName;
         public Vector3 Origin;
+        public Vector3 Angles;
         public List<KeyValue> Properties;
     }
 }

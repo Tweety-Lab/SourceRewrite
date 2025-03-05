@@ -40,7 +40,7 @@ namespace VBSP.Conversion
 
                     string entityString = @$" GameObject{i} {{
                         position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
-                        rotation ""0 0 0""
+                        rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
                         scale ""1 1 1""
                         GameComponents {{
                             {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
@@ -129,8 +129,6 @@ namespace VBSP.Conversion
 
                 Console.WriteLine($"Compiled {VMF.World.Solids.Count} solids.");
             }
-
-            outputBSP.SetLumpData(LumpType.LUMP_PREFABS, new string[] { "prefab_test_1" });
 
             return outputBSP;
         }

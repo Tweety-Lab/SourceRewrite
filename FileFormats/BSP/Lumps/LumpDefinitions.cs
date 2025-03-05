@@ -13,8 +13,7 @@ namespace FileFormats.BSP
             new LumpDefinition(typeof(string[]), new string[] { "" }, LumpType.LUMP_SOLID_MATERIALS), // Solid Brush Materials
             new LumpDefinition(typeof(float[]), new float[] {0,0,0}, LumpType.LUMP_VERTEXES), // Vertices
             new LumpDefinition(typeof(uint[]), new uint[] {0,0,0}, LumpType.LUMP_INDICES), // Indices
-            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS), // Game Objects
-            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_PREFABS) // Prefabs
+            new LumpDefinition( typeof(string[]), new string[] { }, LumpType.LUMP_GAME_OBJECTS) // Game Objects
 
         };
     };
@@ -43,8 +42,7 @@ namespace FileFormats.BSP
         LUMP_SOLID_MATERIALS,          // Brush Material Path ( not in < v26 )
         LUMP_VERTEXES,          // Brush Vertices
         LUMP_INDICES,           // Brush Indices ( not in < v26 )
-        LUMP_GAME_OBJECTS,      // Game Objects and their associated Game Components ( not in < v26 )
-        LUMP_PREFABS            // Prefabs
+        LUMP_GAME_OBJECTS      // Game Objects and their associated Game Components ( not in < v26 )
                                 // ... continue
     }
 }

@@ -20,7 +20,7 @@ namespace SourceRewrite.Objects
         }
 
         /// <summary>
-        /// Runs all GameObject update logic.
+        /// Runs GameObject update logic.
         /// </summary>
         public static void GameObjectUpdate(float deltaTime)
         {
@@ -38,16 +38,12 @@ namespace SourceRewrite.Objects
         /// <summary>
         /// Runs all GameObject initialization logic.
         /// </summary>
-        public static void GameObjectStart()
+        public void GameObjectStart()
         {
-            // Loop through every GameObject
-            foreach (GameObject obj in ActiveObjects)
+            // Loop through every GameComponent in GameObject
+            foreach (GameComponent comp in Components)
             {
-                // Loop through every GameComponent in GameObject
-                foreach (GameComponent comp in obj.Components)
-                {
-                    comp.Start();
-                }
+                comp.Start();
             }
         }
 

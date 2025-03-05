@@ -15,23 +15,39 @@ namespace SourceRewrite.Maps
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
-        public Map(string bspPath)
+        public Transform WorldTransform = new Transform(); // Prefab Transform
+
+        private string bspPath = "";
+
+        public Map(string inputBspPath)
+        {
+            bspPath = inputBspPath;
+        }
+
+        // Load The map to the world
+        public void LoadMap()
         {
             // Read map data
             BSPReader reader = new BSPReader(bspPath);
 
             // Get map data (Lumps)
-            Lump GameObjects = reader.GetLump(LumpType.LUMP_GAME_OBJECTS);
+            Lump GameObjectsLump = reader.GetLump(LumpType.LUMP_GAME_OBJECTS);
 
-            Lump Vertices = reader.GetLump(LumpType.LUMP_VERTEXES);
-            Lump Indices = reader.GetLump(LumpType.LUMP_INDICES);
-            Lump Materials = reader.GetLump(LumpType.LUMP_SOLID_MATERIALS);
+            Lump VerticesLump = reader.GetLump(LumpType.LUMP_VERTEXES);
+            Lump IndicesLump = reader.GetLump(LumpType.LUMP_INDICES);
+            Lump MaterialsLump = reader.GetLump(LumpType.LUMP_SOLID_MATERIALS);
 
             // Create the map from Lump data
-            CreateGeometry(Vertices, Indices, Materials);
-            CreateGameObjects(GameObjects);
+            CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
+            CreateGameObjects(GameObjectsLump);
 
             SpawnPlayerController();
+
+            // Run start logic on all gameobjects
+            foreach (GameObject gameObject in GameObjects)
+            {
+                gameObject.GameObjectStart();
+            }
         }
 
         // Create Geometry from Lump data
@@ -41,6 +57,9 @@ namespace SourceRewrite.Maps
             float[] verticesData = (float[]) vertices.Data;
             uint[] indicesData = (uint[]) indices.Data;
             string[] materialsData = (string[])materials.Data;
+
+            // Create a GameObject to house the meshrenderer
+            GameObject mapGeometry = new GameObject();
 
             // For now, we just use the first material defined in the lump
             Material placeHolderMaterial = FileSystem.GetMaterial(materialsData[0]);
@@ -57,11 +76,17 @@ namespace SourceRewrite.Maps
             MeshRenderer mapGeometryRenderer = new MeshRenderer();
             mapGeometryRenderer.Mesh = mapGeometryMesh;
 
-            // Create a GameObject to house the meshrenderer
-            GameObject mapGeometry = new GameObject();
-
             // Add MeshRenderer to GameObject
             mapGeometry.AddComponent(mapGeometryRenderer);
+
+            // Adjust position relative to the WorldTransform's Position
+            mapGeometry.Transform.Position = WorldTransform.Position;
+
+            // Adjust rotation relative to WorldTransform's Rotation
+            mapGeometry.Transform.Rotation = WorldTransform.Rotation;
+
+            // Adjust scale relative to WorldTransform's Scale
+            mapGeometry.Transform.Scale = WorldTransform.Scale;
 
             // Add the GameObject to the map's GameObjects list
             GameObjects.Add(mapGeometry);
@@ -90,8 +115,14 @@ namespace SourceRewrite.Maps
                 // Create GameObject
                 GameObject gameObject = new GameObject();
 
-                gameObject.Transform.Position = (Vector3) positionKeyValue.Value;
-                gameObject.Transform.Rotation = MathsHelper.EulerToQuaternion((Vector3) rotationKeyValue.Value);
+                // Adjust position relative to the WorldTransform's Position
+                Vector3 adjustedPosition = (Vector3)positionKeyValue.Value - WorldTransform.Position;
+                gameObject.Transform.Position = adjustedPosition;
+
+                // Adjust rotation relative to WorldTransform's Rotation
+                Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value) * Quaternion.Inverse(WorldTransform.Rotation);
+                gameObject.Transform.Rotation = adjustedRotation;
+
                 gameObject.Transform.Scale = (Vector3) scaleKeyValue.Value;
 
                 // Populate GameObject with gameObjectComponents
@@ -160,7 +191,8 @@ namespace SourceRewrite.Maps
     {
         public static void LoadMap(string path)
         {
-            new Map(path);
+            Map map = new Map(path);
+            map.LoadMap();
         }
     }
 }
