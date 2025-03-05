@@ -88,16 +88,12 @@ namespace VBSP.Conversion
                         // Add the material to the list of materials
                         materials.Add(side.Material);
 
-                        // Get corners and convert them to Y up coordinate system
-                        Vector3 corner1 = new Vector3(-side.plane.Point1.Y, side.plane.Point1.Z, -side.plane.Point1.X);
-                        Vector3 corner2 = new Vector3(-side.plane.Point2.Y, side.plane.Point2.Z, -side.plane.Point2.X);
-                        Vector3 corner3 = new Vector3(-side.plane.Point3.Y, side.plane.Point3.Z, -side.plane.Point3.X);
 
-                        // Calculate the fourth corner
-                        Vector3 corner4 = corner1 + (corner3 - corner2);
+                        // Find intersections with other geometry
+                        List<Vector3> intersectionPoints = CalculateSide(side);
 
                         // Compute the face normal
-                        Vector3 normal = Vector3.Normalize(Vector3.Cross(corner2 - corner1, corner3 - corner1));
+                        Vector3 normal = Vector3.Normalize(Vector3.Cross(intersectionPoints[1] - intersectionPoints[0], intersectionPoints[2] - intersectionPoints[0]));
 
                         // Default UVs (this can be adjusted based on mapping needs)
                         Vector2 uv1 = new Vector2(0, 0);
@@ -106,10 +102,10 @@ namespace VBSP.Conversion
                         Vector2 uv4 = new Vector2(0, 1);
 
                         // Populate the vertices
-                        AddVertex(corner1, normal, uv1);
-                        AddVertex(corner2, normal, uv2);
-                        AddVertex(corner3, normal, uv3);
-                        AddVertex(corner4, normal, uv4);
+                        AddVertex(intersectionPoints[0], normal, uv1);
+                        AddVertex(intersectionPoints[1], normal, uv2);
+                        AddVertex(intersectionPoints[2], normal, uv3);
+                        AddVertex(intersectionPoints[3], normal, uv4);
 
                         // Add indices for two triangles (forming a quad)
                         indices.Add(indexOffset);
@@ -137,6 +133,30 @@ namespace VBSP.Conversion
             outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, new string[] { "prop_static", "light" });
 
             return outputBSP;
+        }
+
+        // Returns a list of intersection points between a plane and other geometry
+        private static List<Vector3> CalculateSide(Side side)
+        {
+            List<Vector3> output = new List<Vector3>();
+
+            // Create a Plane for brush processing
+
+            // Get corners and convert them to Y up coordinate system
+            Vector3 corner1 = new Vector3(-side.plane.Point1.Y, side.plane.Point1.Z, -side.plane.Point1.X);
+            Vector3 corner2 = new Vector3(-side.plane.Point2.Y, side.plane.Point2.Z, -side.plane.Point2.X);
+            Vector3 corner3 = new Vector3(-side.plane.Point3.Y, side.plane.Point3.Z, -side.plane.Point3.X);
+
+            // Calculate the fourth corner
+            Vector3 corner4 = corner1 + (corner3 - corner2);
+
+            // Add the corners to the output list
+            output.Add(corner1);
+            output.Add(corner2);
+            output.Add(corner3);
+            output.Add(corner4);
+
+            return output;
         }
     }
 }

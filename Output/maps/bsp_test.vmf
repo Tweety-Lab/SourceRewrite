@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "34"
+	"mapversion" "36"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "34"
+	"mapversion" "36"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -29,33 +29,22 @@ world
 	"skyname" "sky_black_nofog"
 	solid
 	{
-		"id" "75"
+		"id" "96"
 		side
 		{
-			"id" "50"
-			"plane" "(-48 48 -64) (272 48 -64) (272 -144 -64)"
+			"id" "60"
+			"plane" "(-48 -144 -256) (-48 -144 -64) (272 -144 -64)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 -1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
 		}
 		side
 		{
-			"id" "51"
-			"plane" "(-48 -144 -256) (272 -144 -256) (272 48 -256)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 -1 0 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "52"
-			"plane" "(-48 48 -64) (-48 -144 -64) (-48 -144 -256)"
+			"id" "59"
+			"plane" "(-48 48 -256) (-48 -144 -64) (-48 -144 -256)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
@@ -65,7 +54,7 @@ world
 		}
 		side
 		{
-			"id" "53"
+			"id" "58"
 			"plane" "(272 48 -256) (272 -144 -256) (272 -144 -64)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[0 1 0 0] 0.25"
@@ -76,22 +65,22 @@ world
 		}
 		side
 		{
-			"id" "54"
-			"plane" "(272 48 -64) (-48 48 -64) (-48 48 -256)"
+			"id" "57"
+			"plane" "(272 48 -256) (-48 48 -256) (-48 -144 -256)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
 		}
 		side
 		{
-			"id" "55"
-			"plane" "(272 -144 -256) (-48 -144 -256) (-48 -144 -64)"
+			"id" "56"
+			"plane" "(-48 48 -256) (272 48 -256) (272 -144 -64)"
 			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
 			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
