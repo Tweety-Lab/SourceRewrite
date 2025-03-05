@@ -38,9 +38,9 @@ namespace FileFormats.VMF
     // Solid Brush Side Plane
     public struct Plane
     {
-        public Vector3 Corner1;
-        public Vector3 Corner2;
-        public Vector3 Corner3;
+        public Vector3 Point1;
+        public Vector3 Point2;
+        public Vector3 Point3;
     }
 
     // Entity

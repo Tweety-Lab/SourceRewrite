@@ -25,7 +25,7 @@ namespace SourceRewrite.Components
         public virtual void Start() { }
 
         /// <summary>
-        /// Sets a map property of the component.
+        /// Sets a property of the component.
         /// </summary>
         public void SetProperty(string name, object value)
         {

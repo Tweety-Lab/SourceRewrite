@@ -86,9 +86,9 @@ namespace FileFormats.VMF
                 ID = (int)pkSide.GetKeyValue("id").Value,
                 plane = new Plane()
                 {
-                    Corner1 = plane[0],
-                    Corner2 = plane[1],
-                    Corner3 = plane[2]
+                    Point1 = plane[0],
+                    Point2 = plane[1],
+                    Point3 = plane[2]
                 },
                 Material = (string)pkSide.GetKeyValue("material").Value
             };

@@ -89,9 +89,9 @@ namespace VBSP.Conversion
                         materials.Add(side.Material);
 
                         // Get corners and convert them to Y up coordinate system
-                        Vector3 corner1 = new Vector3(-side.plane.Corner1.Y, side.plane.Corner1.Z, -side.plane.Corner1.X);
-                        Vector3 corner2 = new Vector3(-side.plane.Corner2.Y, side.plane.Corner2.Z, -side.plane.Corner2.X);
-                        Vector3 corner3 = new Vector3(-side.plane.Corner3.Y, side.plane.Corner3.Z, -side.plane.Corner3.X);
+                        Vector3 corner1 = new Vector3(-side.plane.Point1.Y, side.plane.Point1.Z, -side.plane.Point1.X);
+                        Vector3 corner2 = new Vector3(-side.plane.Point2.Y, side.plane.Point2.Z, -side.plane.Point2.X);
+                        Vector3 corner3 = new Vector3(-side.plane.Point3.Y, side.plane.Point3.Z, -side.plane.Point3.X);
 
                         // Calculate the fourth corner
                         Vector3 corner4 = corner1 + (corner3 - corner2);
