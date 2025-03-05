@@ -130,7 +130,7 @@ namespace VBSP.Conversion
                 Console.WriteLine($"Compiled {VMF.World.Solids.Count} solids.");
             }
 
-            outputBSP.SetLumpData(LumpType.LUMP_PREFABS, new string[] { "prop_static", "light" });
+            outputBSP.SetLumpData(LumpType.LUMP_PREFABS, new string[] { "prefab_test_1" });
 
             return outputBSP;
         }
