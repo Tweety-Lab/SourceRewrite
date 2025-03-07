@@ -123,8 +123,6 @@ namespace SourceRewrite.Maps
                 Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value) * Quaternion.Inverse(WorldTransform.Rotation);
                 gameObject.Transform.Rotation = adjustedRotation;
 
-                gameObject.Transform.Scale = (Vector3) scaleKeyValue.Value;
-
                 // Populate GameObject with gameObjectComponents
                 foreach (GameComponent component in gameObjectComponents)
                 {
