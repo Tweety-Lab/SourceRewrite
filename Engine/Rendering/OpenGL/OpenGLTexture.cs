@@ -8,7 +8,7 @@ namespace SourceRewrite.Rendering.OpenGL
         private uint _handle;
         private GL _gl;
 
-        public unsafe OpenGLTexture(GL gl, string path)
+        public unsafe OpenGLTexture(GL gl, uint height, uint width, byte[] data)
         {
             //Saving the gl instance.
             _gl = gl;
@@ -17,15 +17,11 @@ namespace SourceRewrite.Rendering.OpenGL
             _handle = _gl.GenTexture();
             Bind();
 
-            // Load VTF
-            VTFFormat texture = new VTFFormat(path);
-            byte[] data = texture.GetBgra32Data();
-
-            // Upload the VTF Texture data to OpenGL.
+            // Upload the data
             fixed (byte* ptr = data)
             {
-                _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, (uint)texture.Width,
-                    (uint)texture.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, ptr);
+                _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, width,
+                    height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, ptr);
             }
 
             SetParameters();

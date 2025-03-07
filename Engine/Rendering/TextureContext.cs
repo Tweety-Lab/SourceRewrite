@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.Files;
+using FileFormats.VTF;
 
 namespace SourceRewrite.Rendering
 {
@@ -20,6 +21,10 @@ namespace SourceRewrite.Rendering
                 path = FileSystem.GetTexturePath("dev/missing");
             }
 
+            // Load VTF
+            VTFFormat texture = new VTFFormat(path);
+            byte[] data = texture.GetBgra32Data();
+
             // Create a shader based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)
             {
@@ -27,7 +32,7 @@ namespace SourceRewrite.Rendering
                     // Convert Renderer API Interface to an OpenGLContext
                     OpenGLContext glContext = (OpenGLContext)_rendererAPI;
 
-                    _textureInterface = new OpenGLTexture(glContext.OpenGL, path);
+                    _textureInterface = new OpenGLTexture(glContext.OpenGL, (uint)texture.Height, (uint)texture.Width, data);
 
                     break;
             }
