@@ -67,8 +67,6 @@ namespace FileFormats.BSP
             if (bytesWritten != expectedLength)
             {
                 Console.WriteLine($"Warning: Expected to write {expectedLength} bytes but wrote {bytesWritten} bytes for lump type {input.DataType}");
-                // Optionally adjust the file length to match what was actually written
-                // input.FileLength = (int)bytesWritten;
             }
         }
 

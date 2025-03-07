@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missing GUI</title>
+    <style>
+        body {
+            height: 25vh; /* Make sure the background covers the entire viewport height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Use flexbox to layout the content */
+            flex-direction: row-reverse; /* Stack items left to right */
+            justify-content: center; /* Horizontally center the content */
+            align-items: center; /* Vertically center the content */
+            font-family: Arial, sans-serif; /* Set a clean font */
+        }
+
+        p, button, img {
+            transform: rotate(90deg) scaleX(-1); /* Apply rotation and mirroring individually to elements */
+            margin: 0; /* Remove spacing between elements */
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <p>GUI DEMO</p>
+    <button>Click Me</button>
+</body>
+</html>
