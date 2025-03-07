@@ -27,24 +27,6 @@ namespace SourceRewrite.Rendering.OpenGL
             SetParameters();
         }
 
-        public unsafe OpenGLTexture(GL gl, Span<byte> data, uint width, uint height)
-        {
-            //Saving the gl instance.
-            _gl = gl;
-
-            //Generating the opengl handle;
-            _handle = _gl.GenTexture();
-            Bind();
-
-            //We want the ability to create a texture using data generated from code aswell.
-            fixed (void* d = &data[0])
-            {
-                //Setting the data of a texture.
-                _gl.TexImage2D(TextureTarget.Texture2D, 0, (int)InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, d);
-                SetParameters();
-            }
-        }
-
         private void SetParameters()
         {
             _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
