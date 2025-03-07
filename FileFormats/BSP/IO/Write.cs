@@ -59,7 +59,7 @@ namespace FileFormats.BSP
                     _binaryWriter.Write((byte)0); // Add Null Terminator
                     break;
                 default:
-                    throw new InvalidOperationException($"Unsupported lump data type: {input.Data.GetType().Name}");
+                    throw new InvalidOperationException($"Can't write Lump Data: Unsupported BSP Lump data type: {input.Data.GetType().Name}");
             }
 
             // Verify we wrote the expected amount of data
