@@ -12,6 +12,8 @@ namespace SourceRewrite.Rendering
     {
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
         private ITexture _textureInterface; // Use an interface for better abstraction
+
+        // Create a texture from a .VTF path
         public Texture(string path)
         {
             // If Texture cant be found, set it to missing
@@ -25,14 +27,30 @@ namespace SourceRewrite.Rendering
             VTFFormat texture = new VTFFormat(path);
             byte[] data = texture.GetBgra32Data();
 
-            // Create a shader based on current renderer
+            // Create a texture based on current renderer
             switch (GameWindow.CurrentWindow.Renderer.API)
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext
                     OpenGLContext glContext = (OpenGLContext)_rendererAPI;
 
-                    _textureInterface = new OpenGLTexture(glContext.OpenGL, (uint)texture.Height, (uint)texture.Width, data);
+                    _textureInterface = new OpenGLTexture(glContext.OpenGL, data, (uint)texture.Height, (uint)texture.Width);
+
+                    break;
+            }
+        }
+
+        // Create a texture from bgra data
+        public Texture(byte[] bgra32Data, uint height, uint width)
+        {
+            // Create a texture based on current renderer
+            switch (GameWindow.CurrentWindow.Renderer.API)
+            {
+                case RendererAPI.OpenGL:
+                    // Convert Renderer API Interface to an OpenGLContext
+                    OpenGLContext glContext = (OpenGLContext)_rendererAPI;
+
+                    _textureInterface = new OpenGLTexture(glContext.OpenGL, bgra32Data, height, width);
 
                     break;
             }

@@ -8,7 +8,7 @@ namespace SourceRewrite.Rendering.OpenGL
         private uint _handle;
         private GL _gl;
 
-        public unsafe OpenGLTexture(GL gl, uint height, uint width, byte[] data)
+        public unsafe OpenGLTexture(GL gl, byte[] data, uint height, uint width)
         {
             //Saving the gl instance.
             _gl = gl;
