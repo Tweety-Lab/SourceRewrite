@@ -17,7 +17,7 @@ namespace SourceRewrite.Rendering.OpenGL
             _handle = _gl.GenTexture();
             Bind();
 
-            // Upload the data
+            // Upload the data assuming its BGRA
             fixed (byte* ptr = data)
             {
                 _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba, width,
@@ -49,12 +49,6 @@ namespace SourceRewrite.Rendering.OpenGL
         {
             //In order to dispose we need to delete the opengl handle for the texure.
             _gl.DeleteTexture(_handle);
-        }
-
-        // ITexture
-        public void SetTexturePath(string path)
-        {
-
         }
 
     }

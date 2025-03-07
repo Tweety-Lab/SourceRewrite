@@ -42,21 +42,10 @@ namespace SourceRewrite.Rendering
         /// Gets the Textures low-level Interface. Can be used for casting from SourceRewrite Texture to OpenGL Texture for example.
         /// </summary>
         public ITexture GetTextureInterface() => _textureInterface;
-
-        /// <summary>
-        /// Dynamically set the path of the Texture.
-        /// </summary>
-        public void SetTexturePath(string path)
-        {
-            _textureInterface.SetTexturePath(path);
-        }
     }
 
     /// <summary>
     /// Texture Interface that allows for easy texture use across different Rendering APIs.
     /// </summary>
-    public interface ITexture
-    {
-        void SetTexturePath(string path);
-    }
+    public interface ITexture;
 }
