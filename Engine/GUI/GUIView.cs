@@ -97,7 +97,7 @@ namespace SourceRewrite.GUI
         {
             AssetTypes.Material guiMaterial = new AssetTypes.Material("dev/missing");
             guiMaterial.Texture = Output;
-            MeshAsset cubeMesh = new AssetTypes.Mesh(FileSystem.GetModelPath("primitives/cube.model"), guiMaterial);
+            MeshAsset cubeMesh = new AssetTypes.Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
 
             GameObject holder = new GameObject();
             MeshRenderer cubeRenderer = new MeshRenderer();
