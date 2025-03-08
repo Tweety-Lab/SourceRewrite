@@ -36,8 +36,12 @@ namespace SourceRewrite.GUI
             var cfg = new ULConfig();
             renderer = ULPlatform.CreateRenderer(cfg);
 
+            // View Config
+            var viewConfig = new ULViewConfig();
+            viewConfig.IsTransparent = true; // Enable transparency
+
             // Create View
-            view = renderer.CreateView((uint)GameWindow.CurrentWindow.GetSilkWindow().Size.X, (uint)GameWindow.CurrentWindow.GetSilkWindow().Size.Y);
+            view = renderer.CreateView((uint)GameWindow.CurrentWindow.GetSilkWindow().Size.X, (uint)GameWindow.CurrentWindow.GetSilkWindow().Size.Y, viewConfig);
 
             view.OnFinishLoading += (_, _, _) =>
             {
