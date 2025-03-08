@@ -38,6 +38,15 @@ void fragment()
         vec4 texColor = texture(uTexture0, Uv);
 
         // Apply tint by multiplying the texture color by the tint color
-        FRAG_COLOR = texColor * tint / 255;
+        vec4 finalColor = texColor * tint / 255.0;
+
+        // Handle transparency: if the alpha value is below a threshold, discard the fragment
+        if (finalColor.a < 0.001)
+        {
+            discard; // Discard fragments with low alpha (this helps in rendering transparent areas)
+        }
+
+        // Output the final color
+        FRAG_COLOR = finalColor;
     }
 }
