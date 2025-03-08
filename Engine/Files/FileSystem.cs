@@ -63,7 +63,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetMapPath(string name)
         {
-            // Source 1 doesn't have packed maps, no need to search mounted games.
+            // Source 1 doesn't have maps like ours, no need to search mounted games.
             return $"{GamePath.MapsPath}/{name}";
         }
 
@@ -75,6 +75,16 @@ namespace SourceRewrite.Files
         {
             string path = GetShaderPath($"{name}");
             return new Shader(path);
+        }
+
+
+        /// <summary>
+        /// Get the path to a GUI file from it's path relative to "gui" folder.
+        /// </summary>
+        public static string GetGUIPath(string name)
+        {
+            // Source 1 doesn't have GUI like ours, no need to search mounted games.
+            return $"{GamePath.GUIPath}/{name}";
         }
 
         /// <summary>
@@ -100,6 +110,7 @@ namespace SourceRewrite.Files
         public string MaterialsPath { get; private set; } = "../../materials";
         public string ModelsPath { get; private set; } = "../../models";
         public string MapsPath { get; private set; } = "../../maps";
+        public string GUIPath { get; private set; } = "../../gui";
 
         /// <summary>
         /// Path to the Game Folder (Folder containing gameinfo.txt).
@@ -112,6 +123,7 @@ namespace SourceRewrite.Files
             MaterialsPath = $"{basePath}/materials";
             ModelsPath = $"{basePath}/models";
             MapsPath = $"{basePath}/maps";
+            GUIPath = $"{basePath}/gui";
 
             BasePath = basePath;
         }

@@ -45,7 +45,7 @@ namespace SourceRewrite.GUI
             };
 
             // Load HTML from GUI Demo file
-            string HTML = System.IO.File.ReadAllText(FileSystem.GetMapPath("../gui/gui_demo.html"));
+            string HTML = System.IO.File.ReadAllText(FileSystem.GetGUIPath("gui_demo.html"));
             view.HTML = HTML;
 
             Output = RenderToTexture();
