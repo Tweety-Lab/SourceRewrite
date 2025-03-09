@@ -1,4 +1,5 @@
-﻿using SourceRewrite.AssetTypes;
+﻿using Silk.NET.Input;
+using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
 using SourceRewrite.Maps;
@@ -29,7 +30,10 @@ namespace SourceRewrite.Components
         private string panelName; // Name of HTML Panel to render
 
         [MapProperty("IsTransparent")]
-        private bool isTransparent;
+        private bool isTransparent; // Is the panel background transparent
+
+        GUIView view;
+        MeshAsset guiMesh;
 
         public override void Start()
         {
@@ -39,23 +43,40 @@ namespace SourceRewrite.Components
             // Create view config
             ULViewConfig config = new ULViewConfig();
             config.IsTransparent = isTransparent;
+            config.EnableJavaScript = true;
 
             // Create a GUI View
-            GUIView view = new GUIView(htmlContent, config, 12, height, width);
+            view = new GUIView(htmlContent, config, 12, height, width);
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
-            RenderViewToObject(view);
+            RenderViewToObject();
+        }
+
+        public override void Update(float deltaTime)
+        {
+            // Send Mouse Position
+            view.SendMousePosition(InputSystem.Input.GetMousePosition());
+
+            // Send Mouse Inputs
+            if (InputSystem.Input.GetMouseButtonDown(0))
+            {
+                view.SendMouseButton(MouseButton.Left);
+            }
+
+            // Update View
+            if (guiMesh != null)
+                guiMesh.Material.Texture = view.Output;
         }
 
         // Render a GUIView in worldspace
-        private void RenderViewToObject(GUIView view)
+        private void RenderViewToObject()
         {
             // Create a Material from the view output
             Material guiMaterial = new Material("dev/missing");
             guiMaterial.Texture = view.Output;
 
             // Create a plane mesh to house the gui
-            MeshAsset guiMesh = new Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
+            guiMesh = new Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
 
             // Create a holder object
             GameObject holder = new GameObject();

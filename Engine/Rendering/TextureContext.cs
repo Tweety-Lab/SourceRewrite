@@ -8,7 +8,7 @@ namespace SourceRewrite.Rendering
     /// <summary>
     /// Texture Interaction Class.
     /// </summary>
-    public class Texture
+    public class Texture : IDisposable
     {
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
         private ITexture _textureInterface; // Use an interface for better abstraction
@@ -60,10 +60,15 @@ namespace SourceRewrite.Rendering
         /// Gets the Textures low-level Interface. Can be used for casting from SourceRewrite Texture to OpenGL Texture for example.
         /// </summary>
         public ITexture GetTextureInterface() => _textureInterface;
+
+        public void Dispose() => _textureInterface.Dispose();
     }
 
     /// <summary>
     /// Texture Interface that allows for easy texture use across different Rendering APIs.
     /// </summary>
-    public interface ITexture;
+    public interface ITexture 
+    {
+        public void Dispose();
+    }
 }

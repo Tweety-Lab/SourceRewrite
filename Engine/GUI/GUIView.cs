@@ -1,4 +1,5 @@
 ﻿using Silk.NET.Assimp;
+using Silk.NET.Input;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Components;
 using SourceRewrite.Files;
@@ -29,6 +30,7 @@ namespace SourceRewrite.GUI
 
         private Renderer renderer;
         private View view;
+        private byte[] pixelBuffer;
 
         private bool hasLoaded = false;
         public GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
@@ -40,7 +42,13 @@ namespace SourceRewrite.GUI
             var cfg = new ULConfig();
             renderer = ULPlatform.CreateRenderer(cfg);
 
-            view = renderer.CreateView((uint)width * (uint)ResolutionScale, (uint)height * (uint)ResolutionScale, viewConfig);
+            uint actualWidth = (uint)width * (uint)ResolutionScale;
+            uint actualHeight = (uint)height * (uint)ResolutionScale;
+
+            view = renderer.CreateView(actualWidth, actualHeight, viewConfig);
+
+            // Pre-allocate the pixel buffer
+            pixelBuffer = new byte[actualWidth * actualHeight * 4];
 
             view.OnFinishLoading += (_, _, _) =>
             {
@@ -50,19 +58,44 @@ namespace SourceRewrite.GUI
             // Set HTML Contents
             view.HTML = HTML;
 
-            Output = RenderToTexture();
+            RenderToTexture();
         }
 
         public void Update()
         {
             renderer.Update();
+
+            if (view.NeedsPaint)
+                RenderToTexture();
         }
 
-        private unsafe Rendering.Texture RenderToTexture()
+        public void SendMouseButton(MouseButton mouseButton)
+        {
+            ULMouseEvent mouseEvent = new ULMouseEvent();
+
+            if (mouseButton == MouseButton.Left)
+                mouseEvent.Button = ULMouseEventButton.Left;
+
+            if (mouseButton == MouseButton.Right)
+                mouseEvent.Button = ULMouseEventButton.Right;
+
+            view.FireMouseEvent(mouseEvent);
+        }
+
+        public void SendMousePosition(Vector2 position)
+        {
+            ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.X = (int)position.X;
+            mouseEvent.Y = (int)position.Y;
+
+            view.FireMouseEvent(mouseEvent);
+        }
+
+        private unsafe void RenderToTexture()
         {
             while (!hasLoaded)
             {
-                Update();
+                renderer.Update();
                 Thread.Sleep(10);
             }
 
@@ -73,24 +106,20 @@ namespace SourceRewrite.GUI
 
             // Get Bitmap
             ULBitmap bitmap = surface.Bitmap;
+            uint dataSize = bitmap.Width * bitmap.Height * 4;
 
-            uint dataSize = bitmap.Width * bitmap.Height * 4; // 4 bytes per pixel
-
-            // Create a byte array to hold the pixel data
-            byte[] byteArray = new byte[dataSize];
-
+            // Copy the data from the IntPtr to the pre-allocated byte array
             byte* rawData = bitmap.RawPixels;
+            Marshal.Copy((IntPtr)rawData, pixelBuffer, 0, (int)dataSize);
 
-            // Copy the data from the IntPtr to the byte array
-            Marshal.Copy((IntPtr)rawData, byteArray, 0, (int)dataSize);
+            // Dispose of old texture
+            if (Output != null)
+                Output.Dispose();
 
-            Output = new Rendering.Texture(byteArray, bitmap.Height, bitmap.Width);
+            // Create new texture
+            Output = new Rendering.Texture(pixelBuffer, bitmap.Height, bitmap.Width);
 
-            // Save bitmap to png file
-            var path = Path.GetDirectoryName(typeof(Program).Assembly.Location)!;
-            bitmap.WritePng(Path.Combine(path, "OUTPUT.png"));
-
-            return Output;
+            bitmap.Dispose();
         }
     }
 }

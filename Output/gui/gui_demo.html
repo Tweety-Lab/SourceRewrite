@@ -36,13 +36,22 @@
             color: white;
             padding: 25px;
             border: none;
+            animation: colorChange 2s infinite alternate; /* Animation that changes color */
+        }
+
+        button:hover {
+            background-color: #12315f;
+        }
+
+        button:active {
+            background-color: #0d213f;
         }
 
     </style>
 </head>
 <body>
     <p>GUI DEMO</p>
-    <button>Click Me</button>
+    <button onclick="printMessage()">Click Me</button>
     <p>Output</p>
 </body>
 </html>
