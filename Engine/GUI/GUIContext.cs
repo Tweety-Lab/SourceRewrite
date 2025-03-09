@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SourceRewrite.Files;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,11 @@ namespace SourceRewrite.GUI
 
         public GUIContext()
         {
+            // Load HTML from GUI Demo
+            string HTMLContent = File.ReadAllText(FileSystem.GetGUIPath("gui_demo.html"));
+
             // Create a new GUI Context
-            Views.Add(new GUIView());
+            Views.Add(new GUIView(HTMLContent));
         }
 
         public void Update()

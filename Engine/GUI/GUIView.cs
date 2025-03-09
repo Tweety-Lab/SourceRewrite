@@ -27,7 +27,7 @@ namespace SourceRewrite.GUI
         private View view;
 
         private bool hasLoaded = false;
-        public GUIView()
+        public GUIView(string HTML)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -48,8 +48,7 @@ namespace SourceRewrite.GUI
                 hasLoaded = true;
             };
 
-            // Load HTML from GUI Demo file
-            string HTML = System.IO.File.ReadAllText(FileSystem.GetGUIPath("gui_demo.html"));
+            // Set HTML Contents
             view.HTML = HTML;
 
             Output = RenderToTexture();
