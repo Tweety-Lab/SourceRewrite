@@ -46,8 +46,24 @@ namespace SourceRewrite.Components
                     // Compare the attribute's Name property with the provided input
                     if (attribute.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Attempt to set the field to the provided value
-                        field.SetValue(this, value);
+                        // Check if the field is of type boolean
+                        if (field.FieldType == typeof(bool))
+                        {
+                            // Convert 0 to false and 1 to true if value is an integer
+                            if (value is int intValue)
+                            {
+                                field.SetValue(this, intValue == 1);
+                            }
+                            else if (value is bool boolValue)
+                            {
+                                field.SetValue(this, boolValue);
+                            }
+                        }
+                        else
+                        {
+                            // Attempt to set the field to the provided value
+                            field.SetValue(this, value);
+                        }
                     }
                 }
             }
