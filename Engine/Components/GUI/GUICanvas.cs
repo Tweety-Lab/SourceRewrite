@@ -33,6 +33,11 @@ namespace SourceRewrite.Components
         [MapProperty("IsTransparent")]
         private bool isTransparent; // Is the panel background transparent
 
+        private int panelType = 0; // Type of panel
+                                   // 0 = Worldspace
+                                   // 1 = Screenspace
+
+
         GUIView view;
         MeshAsset guiMesh;
 
@@ -62,6 +67,11 @@ namespace SourceRewrite.Components
             if (Input.GetMouseButtonDown(0))
             {
                 view.SendMouseButtonDown(MouseButton.Left);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                view.SendMouseButtonUp(MouseButton.Left);
             }
 
             // Update View

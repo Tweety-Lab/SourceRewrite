@@ -87,6 +87,24 @@ namespace SourceRewrite.GUI
             view.FireMouseEvent(mouseEvent);
         }
 
+        public void SendMouseButtonUp(MouseButton mouseButton)
+        {
+            ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.Type = ULMouseEventType.MouseUp;
+
+            mouseEvent.X = (int)InputSystem.Input.GetMouseX();
+            mouseEvent.Y = (int)InputSystem.Input.GetMouseY();
+
+            if (mouseButton == MouseButton.Left)
+                mouseEvent.Button = ULMouseEventButton.Left;
+
+
+            if (mouseButton == MouseButton.Right)
+                mouseEvent.Button = ULMouseEventButton.Right;
+
+            view.FireMouseEvent(mouseEvent);
+        }
+
         public void SendMousePosition(Vector2 position)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();

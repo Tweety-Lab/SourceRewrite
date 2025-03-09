@@ -47,10 +47,16 @@
         }
 
     </style>
+
+<script>
+    function printMessage() {
+        document.getElementById('output').textContent = 'PRESSED';
+    }
+</script>
 </head>
 <body>
     <p>GUI DEMO</p>
     <button onclick="printMessage()">Click Me</button>
-    <p>Output</p>
+    <p id="output">Output</p>
 </body>
 </html>
