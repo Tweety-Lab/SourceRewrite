@@ -17,6 +17,9 @@ using UltralightNet.AppCore;
 
 namespace SourceRewrite.GUI
 {
+    /// <summary>
+    /// Renders GUI to a texture.
+    /// </summary>
     public class GUIView
     {
         /// <summary>
@@ -53,8 +56,6 @@ namespace SourceRewrite.GUI
             view.HTML = HTML;
 
             Output = RenderToTexture();
-
-            RenderToObject(height, width);
         }
 
         public void Update()
@@ -95,21 +96,6 @@ namespace SourceRewrite.GUI
             bitmap.WritePng(Path.Combine(path, "OUTPUT.png"));
 
             return Output;
-        }
-
-        private void RenderToObject(int height, int width)
-        {
-            AssetTypes.Material guiMaterial = new AssetTypes.Material("dev/missing");
-            guiMaterial.Texture = Output;
-            MeshAsset cubeMesh = new AssetTypes.Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
-
-            GameObject holder = new GameObject();
-            holder.Transform.Scale = new Vector3(height, 0.1f, width);
-
-            MeshRenderer cubeRenderer = new MeshRenderer();
-            holder.AddComponent(cubeRenderer);
-
-            cubeRenderer.Mesh = cubeMesh;
         }
     }
 }
