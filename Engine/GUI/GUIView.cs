@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace SourceRewrite.GUI
         private View view;
 
         private bool hasLoaded = false;
-        public GUIView(string HTML)
+        public GUIView(string HTML, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -53,7 +54,7 @@ namespace SourceRewrite.GUI
 
             Output = RenderToTexture();
 
-            RenderToObject();
+            RenderToObject(height, width);
         }
 
         public void Update()
@@ -96,13 +97,15 @@ namespace SourceRewrite.GUI
             return Output;
         }
 
-        private void RenderToObject()
+        private void RenderToObject(int height, int width)
         {
             AssetTypes.Material guiMaterial = new AssetTypes.Material("dev/missing");
             guiMaterial.Texture = Output;
             MeshAsset cubeMesh = new AssetTypes.Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
 
             GameObject holder = new GameObject();
+            holder.Transform.Scale = new Vector3(height, 0.1f, width);
+
             MeshRenderer cubeRenderer = new MeshRenderer();
             holder.AddComponent(cubeRenderer);
 

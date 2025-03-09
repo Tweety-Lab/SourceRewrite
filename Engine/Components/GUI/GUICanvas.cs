@@ -1,4 +1,7 @@
-﻿using SourceRewrite.Maps;
+﻿using SourceRewrite.Files;
+using SourceRewrite.GUI;
+using SourceRewrite.Maps;
+using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +16,22 @@ namespace SourceRewrite.Components
     public class GUICanvas : GameComponent
     {
         [MapProperty("height")]
-        public int height; // Panel Height
+        private int height; // Panel Height
 
         [MapProperty("width")]
-        public int width; // Panel Width
+        private int width; // Panel Width
+
+        [MapProperty("panelname")]
+        private string panelName; // Name of HTML Panel to render
 
         public override void Start()
         {
-            Console.WriteLine(height);
-            Console.WriteLine(width);
+            // Read HTML from panel
+            string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
+
+            // Create a GUI View
+            GUIView view = new GUIView(htmlContent, height, width);
+            GameWindow.CurrentWindow.GUI.Views.Add(view);
         }
     }
 }

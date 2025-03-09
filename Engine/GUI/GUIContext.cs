@@ -13,15 +13,6 @@ namespace SourceRewrite.GUI
     {
         public List<GUIView> Views = new List<GUIView>();
 
-        public GUIContext()
-        {
-            // Load HTML from GUI Demo
-            string HTMLContent = File.ReadAllText(FileSystem.GetGUIPath("gui_demo.html"));
-
-            // Create a new GUI Context
-            Views.Add(new GUIView(HTMLContent));
-        }
-
         public void Update()
         {
             foreach (GUIView view in Views)
