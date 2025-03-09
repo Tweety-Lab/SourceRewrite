@@ -72,9 +72,14 @@ namespace SourceRewrite.GUI
         public void SendMouseButton(MouseButton mouseButton)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.Type = ULMouseEventType.MouseDown;
+
+            mouseEvent.X = (int)InputSystem.Input.GetMouseX();
+            mouseEvent.Y = (int)InputSystem.Input.GetMouseY();
 
             if (mouseButton == MouseButton.Left)
                 mouseEvent.Button = ULMouseEventButton.Left;
+            
 
             if (mouseButton == MouseButton.Right)
                 mouseEvent.Button = ULMouseEventButton.Right;
@@ -85,6 +90,8 @@ namespace SourceRewrite.GUI
         public void SendMousePosition(Vector2 position)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.Type = ULMouseEventType.MouseMoved;
+
             mouseEvent.X = (int)position.X;
             mouseEvent.Y = (int)position.Y;
 
