@@ -31,7 +31,7 @@ namespace SourceRewrite.GUI
         private View view;
 
         private bool hasLoaded = false;
-        public GUIView(string HTML, int ResolutionScale, int height, int width)
+        public GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -39,10 +39,6 @@ namespace SourceRewrite.GUI
             // Create Renderer
             var cfg = new ULConfig();
             renderer = ULPlatform.CreateRenderer(cfg);
-
-            // View Config
-            var viewConfig = new ULViewConfig();
-            viewConfig.IsTransparent = true; // Enable transparency
 
             view = renderer.CreateView((uint)width * (uint)ResolutionScale, (uint)height * (uint)ResolutionScale, viewConfig);
 

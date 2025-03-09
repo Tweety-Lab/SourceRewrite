@@ -10,6 +10,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using UltralightNet;
 
 namespace SourceRewrite.Components
 {
@@ -27,14 +28,20 @@ namespace SourceRewrite.Components
         [MapProperty("panelname")]
         private string panelName; // Name of HTML Panel to render
 
+        [MapProperty("IsTransparent")]
+        private bool isTransparent;
 
         public override void Start()
         {
             // Read HTML from panel
             string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
 
+            // Create view config
+            ULViewConfig config = new ULViewConfig();
+            config.IsTransparent = isTransparent;
+
             // Create a GUI View
-            GUIView view = new GUIView(htmlContent, 12, height, width);
+            GUIView view = new GUIView(htmlContent, config, 12, height, width);
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
             RenderViewToObject(view);
