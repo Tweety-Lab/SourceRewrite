@@ -31,7 +31,7 @@ namespace SourceRewrite.GUI
         private View view;
 
         private bool hasLoaded = false;
-        public GUIView(string HTML, int height, int width)
+        public GUIView(string HTML, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -44,8 +44,7 @@ namespace SourceRewrite.GUI
             var viewConfig = new ULViewConfig();
             viewConfig.IsTransparent = true; // Enable transparency
 
-            // Create View
-            view = renderer.CreateView((uint)GameWindow.CurrentWindow.GetSilkWindow().Size.X, (uint)GameWindow.CurrentWindow.GetSilkWindow().Size.Y, viewConfig);
+            view = renderer.CreateView((uint)width * (uint)ResolutionScale, (uint)height * (uint)ResolutionScale, viewConfig);
 
             view.OnFinishLoading += (_, _, _) =>
             {

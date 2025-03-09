@@ -34,7 +34,7 @@ namespace SourceRewrite.Components
             string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
 
             // Create a GUI View
-            GUIView view = new GUIView(htmlContent, height, width);
+            GUIView view = new GUIView(htmlContent, 12, height, width);
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
             RenderViewToObject(view);
