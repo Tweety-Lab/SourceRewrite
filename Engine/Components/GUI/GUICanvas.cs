@@ -52,7 +52,7 @@ namespace SourceRewrite.Components
 
             // Create a holder object
             GameObject holder = new GameObject();
-            holder.Transform.Scale = new Vector3(height, 0.1f, width);
+            holder.Transform.Scale = new Vector3(height / 32, 1f, width / 32);
 
             // Add Transform
             holder.Transform.Position = GameObject.Transform.Position;

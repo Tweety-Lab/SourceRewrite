@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "80"
+	"mapversion" "81"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "80"
+	"mapversion" "81"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -109,10 +109,10 @@ entity
 	"id" "124"
 	"classname" "vgui_screen"
 	"angles" "0 0 0"
-	"height" "12"
+	"height" "64"
 	"IsTransparent" "0"
 	"panelname" "gui_demo.html"
-	"width" "12"
+	"width" "64"
 	"origin" "8 -16 -48"
 	editor
 	{
