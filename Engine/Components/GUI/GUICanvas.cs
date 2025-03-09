@@ -2,6 +2,7 @@
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
+using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Objects;
 using SourceRewrite.Windowing;
@@ -55,10 +56,10 @@ namespace SourceRewrite.Components
         public override void Update(float deltaTime)
         {
             // Send Mouse Position
-            view.SendMousePosition(InputSystem.Input.GetMousePosition());
+            view.SendMousePosition(Input.GetMousePosition());
 
             // Send Mouse Inputs
-            if (InputSystem.Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 view.SendMouseButtonDown(MouseButton.Left);
             }

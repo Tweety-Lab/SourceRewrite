@@ -61,6 +61,15 @@ namespace SourceRewrite.InputSystem
         }
 
         /// <summary>
+        /// Returns True if chosen Mouse Button is up.
+        /// </summary>
+        public static bool GetMouseButtonUp(int mouseButton)
+        {
+            // Check if the specific mouse button is not pressed
+            return !GetMouseButtonDown(mouseButton);
+        }
+
+        /// <summary>
         /// Returns current Mouse Position as Vector2.
         /// </summary>
         public static Vector2 GetMousePosition()
