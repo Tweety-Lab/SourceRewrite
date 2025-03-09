@@ -11,7 +11,7 @@ namespace SourceRewrite.Components
     public class Prefab : GameComponent
     {
         [MapProperty("file")]
-        public string PrefabPath = string.Empty;
+        public string PrefabPath;
 
         public override void Start()
         {
