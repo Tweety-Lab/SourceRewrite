@@ -60,7 +60,7 @@ namespace SourceRewrite.Components
             // Send Mouse Inputs
             if (InputSystem.Input.GetMouseButtonDown(0))
             {
-                view.SendMouseButton(MouseButton.Left);
+                view.SendMouseButtonDown(MouseButton.Left);
             }
 
             // Update View

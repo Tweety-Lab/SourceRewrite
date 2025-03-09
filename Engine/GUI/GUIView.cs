@@ -69,7 +69,7 @@ namespace SourceRewrite.GUI
                 RenderToTexture();
         }
 
-        public void SendMouseButton(MouseButton mouseButton)
+        public void SendMouseButtonDown(MouseButton mouseButton)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseDown;
