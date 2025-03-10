@@ -33,6 +33,7 @@ namespace SourceRewrite.GUI
         /// Texture the GUI renders to.
         /// </summary>
         public Rendering.Texture Output;
+        public bool Visible = true;
 
         private Renderer renderer;
         private View view;
@@ -75,10 +76,14 @@ namespace SourceRewrite.GUI
         // GUI Update
         public void Update()
         {
-            renderer.Update();
+            // Only update/render if visible
+            if (Visible)
+            {
+                renderer.Update();
 
-            if (view.NeedsPaint)
-                RenderToTexture();
+                if (view.NeedsPaint)
+                    RenderToTexture();
+            }
         }
 
         /// <summary>
@@ -184,6 +189,8 @@ namespace SourceRewrite.GUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonDown(MouseButton mouseButton)
         {
+            if (!Visible) return; // Don't process input if the GUI is not visible
+
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseDown;
 
@@ -206,6 +213,8 @@ namespace SourceRewrite.GUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonUp(MouseButton mouseButton)
         {
+            if (!Visible) return; // Don't process input if the GUI is not visible
+
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseUp;
 
@@ -229,6 +238,8 @@ namespace SourceRewrite.GUI
         /// <param name="position"></param>
         public void SendMousePosition(Vector2 position)
         {
+            if (!Visible) return; // Don't process input if the GUI is not visible
+
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseMoved;
 

@@ -62,6 +62,7 @@ namespace SourceRewrite.Components
             RenderViewToObject();
         }
 
+        bool isVisible = true;
         public override void Update(float deltaTime)
         {
             // Get current mouse position
@@ -78,6 +79,18 @@ namespace SourceRewrite.Components
             if (Input.GetMouseButtonUp(0))
             {
                 view.SendMouseButtonUp(MouseButton.Left);
+            }
+
+            // Toggle GUI Visibility
+            if (Input.GetKeyDown(Key.Escape) && isVisible)
+            {
+                view.Visible = false;
+                isVisible = false;
+            } 
+            else if (Input.GetKeyDown(Key.Escape) && !isVisible)
+            {
+                view.Visible = true;
+                isVisible = true;
             }
 
             // Update View
