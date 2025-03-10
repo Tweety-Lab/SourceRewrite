@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UltralightNet;
+using UltralightNet.JavaScript;
 using UltralightNet.AppCore;
 
 namespace SourceRewrite.GUI

@@ -1,0 +1,181 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>UltralightSharp</AssemblyName>
+        <IncludeSource>True</IncludeSource>
+		<IncludeSymbols>True</IncludeSymbols>
+        <LangVersion>8</LangVersion>
+        <TargetFrameworks>net5;net45;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Supine.UltralightSharp</RootNamespace>
+		<PlatformTarget>x64</PlatformTarget>
+		<RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>Supine.UltralightSharp</PackageId>
+        <Title>Supine.UltralightSharp</Title>
+        <Description>A multi-platform .NET binding of the Ultralight project.</Description>
+        <Authors>Tyler Young</Authors>
+        <Copyright>Copyright © 2020 Tyler Young</Copyright>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageOutputDir>$(SolutionDir)</PackageOutputDir>
+        <RepositoryUrl>https://github.com/Supine/UltralightSharp.git</RepositoryUrl>
+        <PackageTags>ultralight webkit webcore appcore ultralight-ux</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
+        <IsPackable>True</IsPackable>
+        <GenerateAssemblyConfigurationAttribute>False</GenerateAssemblyConfigurationAttribute>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Supine.UltralightSharp.Core" Version="[$(Version)]" IncludeAssets="native;runtime" />
+        <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+        <PackageReference Include="Fody" Version="6.2.4" PrivateAssets="all" />
+        <PackageReference Include="InlineIL.Fody" Version="1.5.0" PrivateAssets="all" />
+        <PackageReference Include="InfoOf.Fody" Version="2.0.1" PrivateAssets="all" />
+        <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
+    </ItemGroup>
+
+    <Choose>
+        <When Condition="'$(TargetFramework)'=='net45'">
+            <ItemGroup>
+                <PackageReference Include="System.Memory" Version="4.5.4" />
+                <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+                <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+                <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
+            </ItemGroup>
+        </When>
+        <When Condition="$(TargetFramework.StartsWith('netstandard'))">
+            <Choose>
+                <When Condition="$(TargetFramework.EndsWith('2.1'))">
+                    <ItemGroup>
+                        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
+                    </ItemGroup>
+                </When>
+                <When Condition="$(TargetFramework.EndsWith('2.0'))">
+                    <ItemGroup>
+                        <PackageReference Include="System.Memory" Version="4.5.4" />
+                    </ItemGroup>
+                </When>
+            </Choose>
+        </When>
+    </Choose>
+
+    <ItemGroup>
+        <None Include="..\icon.png">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath />
+            <Link>icon.png</Link>
+        </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath />
+            <Link>README.md</Link>
+        </None>
+        <None Include="..\LICENSE">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath />
+            <Link>LICENSE</Link>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Ultralight*.txt">
+            <Pack>True</Pack>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>True</PackageCopyToOutput>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="**\*.*.cs">
+            <WouldDependOn>$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)', '^(.*?)\..*$', '$1.cs'))</WouldDependOn>
+            <DependentUpon Condition="'%(DependentUpon)' == '' And '%(WouldDependOn)' != '%(Filename)'">%(WouldDependOn)</DependentUpon>
+        </Compile>
+        <Compile Update="Enums\JsTypedArrayType.cs">
+          <WouldDependOn>JsTypedArrayType</WouldDependOn>
+        </Compile>
+        <Compile Update="Enums\JsPropertyAttribute.cs">
+          <WouldDependOn>JsPropertyAttribute</WouldDependOn>
+        </Compile>
+        <Compile Update="Enums\JsType.cs">
+          <WouldDependOn>JsType</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectCallAsConstructorCallback.cs">
+          <WouldDependOn>ObjectCallAsConstructorCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectCallAsFunctionCallback.cs">
+          <WouldDependOn>ObjectCallAsFunctionCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectConvertToTypeCallback.cs">
+          <WouldDependOn>ObjectConvertToTypeCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectDeletePropertyCallback.cs">
+          <WouldDependOn>ObjectDeletePropertyCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectFinalizeCallback.cs">
+          <WouldDependOn>ObjectFinalizeCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectGetPropertyCallback.cs">
+          <WouldDependOn>ObjectGetPropertyCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectGetPropertyNamesCallback.cs">
+          <WouldDependOn>ObjectGetPropertyNamesCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectHasInstanceCallback.cs">
+          <WouldDependOn>ObjectHasInstanceCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectHasPropertyCallback.cs">
+          <WouldDependOn>ObjectHasPropertyCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectInitializeCallback.cs">
+          <WouldDependOn>ObjectInitializeCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\ObjectSetPropertyCallback.cs">
+          <WouldDependOn>ObjectSetPropertyCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="Callbacks\TypedArrayBytesDeallocatorCallback.cs">
+          <WouldDependOn>TypedArrayBytesDeallocatorCallback</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsString.cs">
+          <WouldDependOn>JsString</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsValue.cs">
+          <WouldDependOn>JsValue</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsPropertyNameAccumulator.cs">
+          <WouldDependOn>JsPropertyNameAccumulator</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsPropertyNameArray.cs">
+          <WouldDependOn>JsPropertyNameArray</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsContextGroup.cs">
+          <WouldDependOn>JsContextGroup</WouldDependOn>
+        </Compile>
+        <Compile Update="Enums\JsClassAttribute.cs">
+          <WouldDependOn>JsClassAttribute</WouldDependOn>
+        </Compile>
+        <Compile Update="OpaqueStructs\JsClass.cs">
+          <WouldDependOn>JsClass</WouldDependOn>
+        </Compile>
+        <Compile Update="CallbackStructs\JsClassDefinition.cs">
+          <WouldDependOn>JsClassDefinition</WouldDependOn>
+        </Compile>
+        <Compile Update="CallbackStructs\JsStaticFunction.cs">
+          <WouldDependOn>JsStaticFunction</WouldDependOn>
+        </Compile>
+        <Compile Update="CallbackStructs\JsStaticValue.cs">
+          <WouldDependOn>JsStaticValue</WouldDependOn>
+        </Compile>
+        <Compile Update="DataStructs\JsObjectPrivate.cs">
+          <WouldDependOn>JsObjectPrivate</WouldDependOn>
+        </Compile>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,125 @@
+name: Main CI
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  # BuildCmake:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+  #   steps:
+  #     - run: echo "todo :3"
+  Build:
+    # needs: BuildCmake
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+      - name: Pack bins
+        run: |
+          chmod +x ./packbinaries.sh
+          ./packbinaries.sh -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+      - name: Build
+        run: |
+          chmod +x ./regenerate.sh
+          ./regenerate.sh
+      - name: Build compat
+        run: |
+          dotnet build src/UltralightNet -c Release
+          dotnet build src/UltralightNet.AppCore -c Release
+      - name: Upload to github packages
+        run: |
+          dotnet nuget add source --username ${{ github.actor }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          version_suffix=dev-$(date -u +%Y%m%d%H%M%S)-$(git rev-parse --short ${{ github.sha }})
+          dotnet pack src/UltralightNet -c Release --version-suffix $version_suffix -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+          dotnet pack src/UltralightNet.AppCore -c Release --version-suffix $version_suffix -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+          dotnet nuget push *.nupkg --api-key ${{ github.token }} --source github --skip-duplicate
+          dotnet nuget push *.snupkg --api-key ${{ github.token }} --source github --skip-duplicate
+  Test:
+    needs: Build
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os : ['windows', 'ubuntu'] # 'macos'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+      #- name: Install missing libraries
+      #  run: | # missing libraries workaround
+      #    sudo add-apt-repository ppa:linuxuprising/libpng12
+      #    sudo apt update
+      #    sudo apt install libpng12-0 libpulse0 libxv1
+      #    find /usr/lib -name "libffi.so*"
+      #    sudo ln -s  /usr/lib/x86_64-linux-gnu/libffi.so.7.1.0  /usr/lib/x86_64-linux-gnu/libffi.so.6
+      #  if: matrix.os=='ubuntu'
+      - name: Pack bins
+        shell: bash
+        run: |
+          chmod +x ./packbinaries.sh
+          ./packbinaries.sh -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+      - name: Build
+        shell: bash
+        run: |
+          chmod +x ./regenerate.sh
+          ./regenerate.sh
+      - name: Build compat
+        run: |
+          dotnet build src/UltralightNet -c Release
+          dotnet build src/UltralightNet.AppCore -c Release
+      - name: Test
+        run: dotnet test src/UltralightNet.Test/UltralightNet.Test.csproj --logger "trx;LogFileName=TestResult.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.UseSourceLink=true -- ParallelizeTestCollections=false
+      - name: Read test results
+        if: always()
+        run: cat src/UltralightNet.Test/TestResults/TestResult.trx
+      - name: Test (Stress)
+        run: dotnet test src/UltralightNet.Test/UltralightNet.Test.csproj -e DOTNET_GCStress=0xC --logger "trx;LogFileName=TestResult.trx" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.UseSourceLink=true -- ParallelizeTestCollections=false
+      - name: Read test results
+        if: always()
+        run: cat src/UltralightNet.Test/TestResults/TestResult.trx
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: src/UltralightNet.Test/TestResults/*/coverage.opencover.xml
+          fail_ci_if_error: true
+          verbose: true
+      - name: Benchmark
+        run: dotnet run -c Release --project src/Benchmarks/Benchmarks.csproj
+        continue-on-error: true # todo
+  Deploy:
+    needs: Test
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'master'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.x
+    - name: Pack bins
+      run: |
+        chmod +x ./packbinaries.sh
+        ./packbinaries.sh -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+    - name: Build
+      run: |
+        chmod +x ./regenerate.sh
+        ./regenerate.sh
+    - name: Pack
+      run: |
+        dotnet pack src/UltralightNet -c Release -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+        dotnet pack src/UltralightNet.AppCore -c Release -p:RepositoryBranch=${{ github.ref_name }} -p:RepositoryCommit=${{ github.sha }}
+    - run: tree
+    - name: Publish
+      run: |
+        dotnet nuget push *.nupkg -k ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push *.snupkg -k ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      # continue-on-error: true

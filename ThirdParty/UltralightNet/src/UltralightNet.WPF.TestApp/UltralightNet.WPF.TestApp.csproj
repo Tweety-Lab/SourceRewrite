@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\UltralightNet.WPF\UltralightNet.WPF.csproj" />
+
+		<PackageReference Include="UltralightNet.Binaries" Version="$(UltralightVersion)" />
+		<PackageReference Include="UltralightNet.AppCore.Binaries" Version="$(UltralightVersion)" />
+	</ItemGroup>
+
+</Project>

@@ -4,12 +4,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceRewrite", "Engine\SourceRewrite.csproj", "{DE5FF3C0-1CAF-4CDB-8101-E9D578B43245}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD} = {AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{C15B48FC-0D71-43D3-AB78-779787993B3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VBSP", "Compilers\VBSP\VBSP.csproj", "{88B326EE-7F8E-423C-8563-ABB74163A7AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileFormats", "FileFormats\FileFormats.csproj", "{8756DF38-4C08-4DB9-9488-D4A367733C70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltralightNet", "ThirdParty\UltralightNet\src\UltralightNet\UltralightNet.csproj", "{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltralightNet.AppCore", "ThirdParty\UltralightNet\src\UltralightNet.AppCore\UltralightNet.AppCore.csproj", "{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", "{A32AD4F4-8DAE-47AE-B6CE-4DBD9F905B22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +42,20 @@ Global
 		{8756DF38-4C08-4DB9-9488-D4A367733C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8756DF38-4C08-4DB9-9488-D4A367733C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8756DF38-4C08-4DB9-9488-D4A367733C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD} = {A32AD4F4-8DAE-47AE-B6CE-4DBD9F905B22}
+		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59} = {A32AD4F4-8DAE-47AE-B6CE-4DBD9F905B22}
 	EndGlobalSection
 EndGlobal

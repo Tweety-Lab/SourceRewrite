@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+
+		<PackageReference Include="UltralightNet.Binaries" Version="$(UltralightVersion)" />
+		<PackageReference Include="UltralightNet.AppCore.Binaries" Version="$(UltralightVersion)" />
+
+		<ProjectReference Include="..\UltralightNet\UltralightNet.csproj" />
+		<ProjectReference Include="..\UltralightNet.AppCore\UltralightNet.AppCore.csproj" />
+	</ItemGroup>
+
+</Project>
