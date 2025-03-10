@@ -10,9 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UltralightNet;
+using UltralightNet.JavaScript;
+using UltralightNet.JavaScript.Low;
 
 namespace SourceRewrite.Components
 {
@@ -41,7 +44,7 @@ namespace SourceRewrite.Components
         GUIView view;
         MeshAsset guiMesh;
 
-        public override void Start()
+        public unsafe override void Start()
         {
             // Read HTML from panel
             string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
@@ -77,6 +80,11 @@ namespace SourceRewrite.Components
             // Update View
             if (guiMesh != null)
                 guiMesh.Material.Texture = view.Output;
+        }
+
+        public unsafe void RegisterJSCallback(string name, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
+        {
+            view.RegisterJSCallback("PrintMessage", csharpFunc);
         }
 
         // Render a GUIView in worldspace

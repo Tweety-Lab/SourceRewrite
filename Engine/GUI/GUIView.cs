@@ -37,6 +37,7 @@ namespace SourceRewrite.GUI
         private byte[] pixelBuffer;
 
         private bool hasLoaded = false;
+
         public unsafe GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
@@ -62,12 +63,10 @@ namespace SourceRewrite.GUI
             // Set HTML Contents
             view.HTML = HTML;
 
-            RegisterJSFunction("printMessage", &JavascriptFunction);
-
             RenderToTexture();
         }
 
-        public unsafe void RegisterJSFunction(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
+        public unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
         {
             JSContextRef contextRef = view.LockJSContext();
 
@@ -182,14 +181,6 @@ namespace SourceRewrite.GUI
             Output = new Rendering.Texture(pixelBuffer, bitmap.Height, bitmap.Width);
 
             bitmap.Dispose();
-        }
-
-        // Define the unmanaged function that will be called from JavaScript
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        private unsafe static JSValueRef JavascriptFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, nuint argumentCount, JSValueRef* arguments, JSValueRef* exception)
-        {
-            Console.WriteLine("GUI Button Was Pressed!");
-            return JavaScriptMethods.JSValueMakeNull(ctx);
         }
     }
 }
