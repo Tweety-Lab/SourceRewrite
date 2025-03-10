@@ -27,6 +27,11 @@ namespace SourceRewrite.Windowing
             {
                 return _window.Title;
             }
+
+            set
+            {
+                _window.Title = value;
+            }
         }
 
         // Property to dynamically fetch the current window size
@@ -36,6 +41,12 @@ namespace SourceRewrite.Windowing
             {
                 Vector2D<int> currentSize = _window.Size;
                 return new Vector2(currentSize.X, currentSize.Y);
+            }
+
+            set
+            {
+                Vector2D<int> newSize = new Vector2D<int>((int)value.X, (int)value.Y);
+                _window.Size = newSize;
             }
         }
 
