@@ -40,9 +40,8 @@ namespace SourceRewrite.Components
                                    // 0 = Worldspace
                                    // 1 = Screenspace
 
-
-        GUIView view;
-        MeshAsset guiMesh;
+        private GUIView view;
+        private MeshAsset guiMesh;
 
         public unsafe override void Start()
         {
@@ -59,7 +58,7 @@ namespace SourceRewrite.Components
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
             // Set up GUI Events
-            view.RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
+            RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
 
             RenderViewToObject();
         }
@@ -83,6 +82,16 @@ namespace SourceRewrite.Components
             // Update View
             if (guiMesh != null)
                 guiMesh.Material.Texture = view.Output;
+        }
+
+        /// <summary>
+        /// Registers a C# Action that can be called from JavaScript.
+        /// </summary>
+        /// <param name="name">Javascript function name</param>
+        /// <param name="action">C# Action</param>
+        public void RegisterEvent(string name, Action action)
+        {
+            view.RegisterEvent(name, action);
         }
 
         // Render a GUIView in worldspace
