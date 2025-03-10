@@ -58,7 +58,7 @@ namespace SourceRewrite.Components
             view = new GUIView(htmlContent, config, 12, height, width);
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
-            // Set up C# Callbacks
+            // Set up GUI Events
             view.RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
 
             RenderViewToObject();

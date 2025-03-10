@@ -72,13 +72,28 @@ namespace SourceRewrite.GUI
             RenderToTexture();
         }
 
+        // GUI Update
+        public void Update()
+        {
+            renderer.Update();
+
+            if (view.NeedsPaint)
+                RenderToTexture();
+        }
+
+        /// <summary>
+        /// Registers a C# Action that can be called from JavaScript.
+        /// </summary>
+        /// <param name="name">Javascript function name</param>
+        /// <param name="action">C# Action</param>
         public unsafe void RegisterEvent(string name, Action action)
         {
             JSCallbacks.Add(name, action);
             RegisterJSCallback(name, &InvokeCSharpCallback);
         }
 
-        public unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
+        // Registers a C# function that can be called from JavaScript
+        private unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
         {
             JSContextRef contextRef = view.LockJSContext();
 
@@ -163,14 +178,10 @@ namespace SourceRewrite.GUI
             return JavaScriptMethods.JSValueMakeUndefined(ctx);
         }
 
-        public void Update()
-        {
-            renderer.Update();
-
-            if (view.NeedsPaint)
-                RenderToTexture();
-        }
-
+        /// <summary>
+        /// Sends a mouse button down event to the GUI.
+        /// </summary>
+        /// <param name="mouseButton"></param>
         public void SendMouseButtonDown(MouseButton mouseButton)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
@@ -189,6 +200,10 @@ namespace SourceRewrite.GUI
             view.FireMouseEvent(mouseEvent);
         }
 
+        /// <summary>
+        /// Sends a mouse button up event to the GUI.
+        /// </summary>
+        /// <param name="mouseButton"></param>
         public void SendMouseButtonUp(MouseButton mouseButton)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
@@ -207,6 +222,11 @@ namespace SourceRewrite.GUI
             view.FireMouseEvent(mouseEvent);
         }
 
+
+        /// <summary>
+        /// Sends a mouse position event to the GUI.
+        /// </summary>
+        /// <param name="position"></param>
         public void SendMousePosition(Vector2 position)
         {
             ULMouseEvent mouseEvent = new ULMouseEvent();
@@ -219,7 +239,7 @@ namespace SourceRewrite.GUI
         }
 
         
-
+        /// Renders the GUI to a texture
         private unsafe void RenderToTexture()
         {
             while (!hasLoaded)
