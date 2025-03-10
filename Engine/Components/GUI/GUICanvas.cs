@@ -15,9 +15,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UltralightNet;
-using UltralightNet.JavaScript;
-using UltralightNet.JavaScript.Low;
-
 
 namespace SourceRewrite.Components
 {
@@ -67,8 +64,10 @@ namespace SourceRewrite.Components
 
         public override void Update(float deltaTime)
         {
-            // Send the transformed mouse pos to view
-            view.SendMousePosition(Input.GetMousePosition());
+            // Get current mouse position
+            var mousePosition = Input.GetMousePosition();
+
+            view.SendMousePosition(mousePosition);
 
             // Send Mouse Inputs
             if (Input.GetMouseButtonDown(0))
@@ -108,7 +107,7 @@ namespace SourceRewrite.Components
 
             // Create a holder object
             GameObject holder = new GameObject();
-            holder.Transform.Scale = new Vector3(height / 32, 1f, width / 32);
+            holder.Transform.Scale = new Vector3(width / 32, 1f, height / 32);
 
             // Add Transform
             holder.Transform.Position = GameObject.Transform.Position;
@@ -121,19 +120,5 @@ namespace SourceRewrite.Components
             // Render the gui mesh
             cubeRenderer.Mesh = guiMesh;
         }
-
-        // A method to get the GUI's world transform (position, scale, and rotation)
-        private Matrix4x4 GetGUIPanelWorldTransform()
-        {
-            // Get the GUI's transform (you should adapt this according to how the transform is stored in your game object)
-            Matrix4x4 translation = Matrix4x4.CreateTranslation(GameObject.Transform.Position);
-            Matrix4x4 rotation = Matrix4x4.CreateFromQuaternion(GameObject.Transform.Rotation);
-            Matrix4x4 scale = Matrix4x4.CreateScale(GameObject.Transform.Scale);
-
-            // Combine the transforms: Scale * Rotation * Translation (note: order matters)
-            return scale * rotation * translation;
-        }
     }
-
-
 }

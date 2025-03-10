@@ -20,8 +20,24 @@ namespace SourceRewrite.Windowing
         public GUIContext GUI { get; private set; } // Active GUI Manager
         public GameInfoContext GameInfo { get; private set; } // Active GameInfo.txt
 
-        public string WindowTitle { get; private set; }
-        public Vector2 WindowSize { get; private set; }
+        // Property to dynamically fetch the current window title
+        public string WindowTitle
+        {
+            get
+            {
+                return _window.Title;
+            }
+        }
+
+        // Property to dynamically fetch the current window size
+        public Vector2 WindowSize
+        {
+            get
+            {
+                Vector2D<int> currentSize = _window.Size;
+                return new Vector2(currentSize.X, currentSize.Y);
+            }
+        }
 
         private IWindow _window;
 
@@ -42,9 +58,6 @@ namespace SourceRewrite.Windowing
 
             // Create the window
             _window = Window.Create(options);
-
-            WindowTitle = windowTitle;
-            WindowSize = windowSize;
             
             // Subscribe to window events
             _window.Load += OnLoad;
