@@ -11,11 +11,14 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.JavaScript;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using UltralightNet;
-using UltralightNet.JavaScript;
 using UltralightNet.AppCore;
+using UltralightNet.JavaScript;
+using UltralightNet.JavaScript.Low;
 
 namespace SourceRewrite.GUI
 {
@@ -34,7 +37,7 @@ namespace SourceRewrite.GUI
         private byte[] pixelBuffer;
 
         private bool hasLoaded = false;
-        public GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
+        public unsafe GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -59,7 +62,38 @@ namespace SourceRewrite.GUI
             // Set HTML Contents
             view.HTML = HTML;
 
+            RegisterJSFunction("printMessage", &JavascriptFunction);
+
             RenderToTexture();
+        }
+
+        public unsafe void RegisterJSFunction(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
+        {
+            JSContextRef contextRef = view.LockJSContext();
+
+            // Convert the string to a byte array using UTF-8 encoding
+            byte[] byteArray = Encoding.UTF8.GetBytes(functionName);
+
+            JSStringRef name;
+
+            // Pin the byte array in memory to get a pointer
+            fixed (byte* ptr = byteArray)
+            {
+                name = JavaScriptMethods.JSStringCreateWithUTF8CString(ptr);
+            }
+
+            // Create the JavaScript function that calls the C# method
+            JSObjectRef func = JavaScriptMethods.JSObjectMakeFunctionWithCallback(
+                contextRef,
+                name,
+                csharpFunc
+            );
+
+            JSObjectRef globalObj = JavaScriptMethods.JSContextGetGlobalObject(contextRef);
+
+            JavaScriptMethods.JSObjectSetProperty(contextRef, globalObj, name, func, JSPropertyAttributes.None, null);
+
+            JavaScriptMethods.JSStringRelease(name);
         }
 
         public void Update()
@@ -117,6 +151,8 @@ namespace SourceRewrite.GUI
             view.FireMouseEvent(mouseEvent);
         }
 
+        
+
         private unsafe void RenderToTexture()
         {
             while (!hasLoaded)
@@ -146,6 +182,14 @@ namespace SourceRewrite.GUI
             Output = new Rendering.Texture(pixelBuffer, bitmap.Height, bitmap.Width);
 
             bitmap.Dispose();
+        }
+
+        // Define the unmanaged function that will be called from JavaScript
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        private unsafe static JSValueRef JavascriptFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, nuint argumentCount, JSValueRef* arguments, JSValueRef* exception)
+        {
+            Console.WriteLine("GUI Button Was Pressed!");
+            return JavaScriptMethods.JSValueMakeNull(ctx);
         }
     }
 }
