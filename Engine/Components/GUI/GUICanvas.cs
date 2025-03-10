@@ -35,10 +35,6 @@ namespace SourceRewrite.Components
         [MapProperty("IsTransparent")]
         private bool isTransparent; // Is the panel background transparent
 
-        private int panelType = 0; // Type of panel
-                                   // 0 = Worldspace
-                                   // 1 = Screenspace
-
         private GUIView view;
         private MeshAsset guiMesh;
 
