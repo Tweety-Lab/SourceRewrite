@@ -13,6 +13,7 @@
             justify-content: center; /* Horizontally center the content */
             align-items: center; /* Vertically center the content */
             font-family: Arial, sans-serif; /* Set a clean font */
+            position: relative; /* Needed to position the dot relative to the body */
         }
 
         p, button, img {
@@ -46,11 +47,35 @@
             background-color: #000000;
         }
 
+        /* Style for the dot that follows the cursor */
+        .cursor-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            pointer-events: none; /* Prevent it from interfering with other interactions */
+            transform: translate(-50%, -50%); /* Center the dot at the cursor */
+        }
     </style>
 </head>
 <body>
     <p>GUI DEMO</p>
     <button onclick="PrintMessage()">Click Me</button>
     <p id="output">Output</p>
+
+    <!-- Dot element that will follow the cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <script>
+        // Get the dot element
+        const cursorDot = document.getElementById('cursorDot');
+
+        // Update the position of the dot as the mouse moves
+        document.addEventListener('mousemove', function(event) {
+            cursorDot.style.left = `${event.clientX}px`;
+            cursorDot.style.top = `${event.clientY}px`;
+        });
+    </script>
 </body>
 </html>

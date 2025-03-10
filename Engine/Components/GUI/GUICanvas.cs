@@ -1,4 +1,5 @@
 ﻿using Silk.NET.Input;
+using Silk.NET.Maths;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
+
 
 namespace SourceRewrite.Components
 {
@@ -43,10 +45,10 @@ namespace SourceRewrite.Components
         private GUIView view;
         private MeshAsset guiMesh;
 
-        public unsafe override void Start()
+        public override void Start()
         {
             // Read HTML from panel
-            string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
+            string htmlContent = System.IO.File.ReadAllText(FileSystem.GetGUIPath(panelName));
 
             // Create view config
             ULViewConfig config = new ULViewConfig();
@@ -65,7 +67,7 @@ namespace SourceRewrite.Components
 
         public override void Update(float deltaTime)
         {
-            // Send Mouse Position
+            // Send the transformed mouse pos to view
             view.SendMousePosition(Input.GetMousePosition());
 
             // Send Mouse Inputs
@@ -119,5 +121,19 @@ namespace SourceRewrite.Components
             // Render the gui mesh
             cubeRenderer.Mesh = guiMesh;
         }
+
+        // A method to get the GUI's world transform (position, scale, and rotation)
+        private Matrix4x4 GetGUIPanelWorldTransform()
+        {
+            // Get the GUI's transform (you should adapt this according to how the transform is stored in your game object)
+            Matrix4x4 translation = Matrix4x4.CreateTranslation(GameObject.Transform.Position);
+            Matrix4x4 rotation = Matrix4x4.CreateFromQuaternion(GameObject.Transform.Rotation);
+            Matrix4x4 scale = Matrix4x4.CreateScale(GameObject.Transform.Scale);
+
+            // Combine the transforms: Scale * Rotation * Translation (note: order matters)
+            return scale * rotation * translation;
+        }
     }
+
+
 }

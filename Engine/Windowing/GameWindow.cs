@@ -7,6 +7,7 @@ using SourceRewrite.InputSystem;
 using SourceRewrite.Files;
 using SourceRewrite.Maps;
 using SourceRewrite.GUI;
+using System.Numerics;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -20,20 +21,22 @@ namespace SourceRewrite.Windowing
         public GameInfoContext GameInfo { get; private set; } // Active GameInfo.txt
 
         public string WindowTitle { get; private set; }
-        public Vector2D<int> WindowSize { get; private set; }
+        public Vector2 WindowSize { get; private set; }
 
         private IWindow _window;
 
         // Init a Game Window
-        public GameWindow(Vector2D<int> windowSize, string windowTitle)
+        public GameWindow(Vector2 windowSize, string windowTitle)
         {
             // Update the Current Window
             CurrentWindow = this;
 
+            Vector2D<int> trueWindowSize = new Vector2D<int>((int)windowSize.X, (int)windowSize.Y);
+
             // Set the options to match the constructor input
             WindowOptions options = WindowOptions.Default with
             {
-                Size = windowSize,
+                Size = trueWindowSize,
                 Title = windowTitle
             };
 

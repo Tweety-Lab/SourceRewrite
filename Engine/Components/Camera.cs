@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Rendering;
+﻿using Silk.NET.Assimp;
+using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Components
@@ -8,6 +9,13 @@ namespace SourceRewrite.Components
     /// </summary>
     public class Camera : GameComponent
     {
+
+        // Camera properties like field of view, aspect ratio, near and far clipping planes
+        public float FieldOfView { get; set; } = MathF.PI / 4f; // Default FOV 45 degrees
+        public float AspectRatio { get; set; } = 16f / 9f; // Default 16:9 aspect ratio
+        public float NearPlane { get; set; } = 0.1f; // Default near plane
+        public float FarPlane { get; set; } = 99999f; // Default far plane
+
         /// <summary>
         /// Currently active Camera Component.
         /// </summary>
@@ -21,6 +29,8 @@ namespace SourceRewrite.Components
             ActiveCamera = camera;
         }
 
+
+
         public Matrix4x4 GetViewMatrix()
         {
             Vector3 position = GameObject.Transform.Position;
@@ -28,6 +38,21 @@ namespace SourceRewrite.Components
                 position,                    // Camera position
                 position + GameObject.Transform.Forward,      // Look target (position + direction)
                 GameObject.Transform.Up                     // Up vector
+            );
+        }
+
+        /// <summary>
+        /// Get the projection matrix (Perspective or Orthographic).
+        /// </summary>
+        /// <returns>Projection matrix.</returns>
+        public Matrix4x4 GetPerspectiveProjectionMatrix()
+        {
+            // Perspective Projection Matrix
+            return Matrix4x4.CreatePerspectiveFieldOfView(
+                FieldOfView,   // Field of View
+                AspectRatio,   // Aspect ratio (width/height)
+                NearPlane,     // Near clipping plane
+                FarPlane       // Far clipping plane
             );
         }
 

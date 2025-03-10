@@ -72,11 +72,7 @@ namespace SourceRewrite.Rendering.OpenGL
             if (aspectRatio <= 0)
                 aspectRatio = 1.0f; // Fallback to avoid division by zero
 
-            var projection = Matrix4x4.CreatePerspectiveFieldOfView(
-                MathF.PI / 4, // FOV
-                aspectRatio, // Aspect ratio
-                0.1f, 99999.0f // Near and far planes
-            );
+            var projection = Camera.ActiveCamera?.GetPerspectiveProjectionMatrix();
 
             // View matrix from active camera
             var view = Camera.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
