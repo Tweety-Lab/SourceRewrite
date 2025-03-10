@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Assimp;
 using Silk.NET.Input;
+using Silk.NET.Vulkan;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Components;
 using SourceRewrite.Files;
@@ -15,6 +16,7 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UltralightNet;
 using UltralightNet.AppCore;
 using UltralightNet.JavaScript;
@@ -38,8 +40,12 @@ namespace SourceRewrite.GUI
 
         private bool hasLoaded = false;
 
+        // Dictionary of function names and their associated action callback
+        private static Dictionary<string, Action> JSCallbacks = new Dictionary<string, Action>();
+
         public unsafe GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
         {
+
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
 
@@ -64,6 +70,12 @@ namespace SourceRewrite.GUI
             view.HTML = HTML;
 
             RenderToTexture();
+        }
+
+        public unsafe void RegisterEvent(string name, Action action)
+        {
+            JSCallbacks.Add(name, action);
+            RegisterJSCallback(name, &InvokeCSharpCallback);
         }
 
         public unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
@@ -93,6 +105,62 @@ namespace SourceRewrite.GUI
             JavaScriptMethods.JSObjectSetProperty(contextRef, globalObj, name, func, JSPropertyAttributes.None, null);
 
             JavaScriptMethods.JSStringRelease(name);
+            view.UnlockJSContext();
+        }
+
+        // Unmanaged callback that bridges JavaScript to C#
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        private unsafe static JSValueRef InvokeCSharpCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, nuint argumentCount, JSValueRef* arguments, JSValueRef* exception)
+        {
+            // Convert the managed string "name" to a UTF-8 byte*
+            byte[] nameBytes = System.Text.Encoding.UTF8.GetBytes("name");
+            fixed (byte* namePtr = nameBytes)
+            {
+                // Create a JSStringRef from the UTF-8 byte*
+                JSStringRef nameProperty = JavaScriptMethods.JSStringCreateWithUTF8CString(namePtr);
+
+                // Get the "name" property of the JavaScript function
+                JSValueRef functionNameValue = JavaScriptMethods.JSObjectGetProperty(ctx, function, nameProperty, exception);
+                JavaScriptMethods.JSStringRelease(nameProperty);
+
+                // Check if the "name" property is a string
+                if (JavaScriptMethods.JSValueIsString(ctx, functionNameValue))
+                {
+                    // Convert the JS value to a JSStringRef
+                    JSStringRef functionNameJS = JavaScriptMethods.JSValueToStringCopy(ctx, functionNameValue, exception);
+
+                    // Get the maximum size required for the UTF-8 buffer
+                    nuint bufferSize = JavaScriptMethods.JSStringGetMaximumUTF8CStringSize(functionNameJS);
+
+                    // Allocate a byte buffer to hold the UTF-8 string
+                    byte* buffer = (byte*)NativeMemory.Alloc(bufferSize);
+
+                    // Copy the JS string into the byte buffer as a UTF-8 string
+                    nuint actualLength = JavaScriptMethods.JSStringGetUTF8CString(functionNameJS, buffer, bufferSize);
+
+                    // Convert the byte buffer to a managed string
+                    string functionName = System.Text.Encoding.UTF8.GetString(buffer, (int)actualLength - 1); // Subtract 1 to exclude the null terminator
+
+                    // Try get associated action
+                    if (JSCallbacks.TryGetValue(functionName, out Action action))
+                    {
+                        action();
+                    }
+
+                    // Free the allocated buffer
+                    NativeMemory.Free(buffer);
+
+                    // Release the JSStringRef
+                    JavaScriptMethods.JSStringRelease(functionNameJS);
+                }
+                else
+                {
+                    Console.WriteLine("The function does not have a name property or it is not a string.");
+                }
+            }
+
+            // Return undefined (no return value)
+            return JavaScriptMethods.JSValueMakeUndefined(ctx);
         }
 
         public void Update()

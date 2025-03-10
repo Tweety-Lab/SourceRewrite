@@ -58,6 +58,9 @@ namespace SourceRewrite.Components
             view = new GUIView(htmlContent, config, 12, height, width);
             GameWindow.CurrentWindow.GUI.Views.Add(view);
 
+            // Set up C# Callbacks
+            view.RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
+
             RenderViewToObject();
         }
 
@@ -80,11 +83,6 @@ namespace SourceRewrite.Components
             // Update View
             if (guiMesh != null)
                 guiMesh.Material.Texture = view.Output;
-        }
-
-        public unsafe void RegisterJSCallback(string name, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
-        {
-            view.RegisterJSCallback("PrintMessage", csharpFunc);
         }
 
         // Render a GUIView in worldspace
