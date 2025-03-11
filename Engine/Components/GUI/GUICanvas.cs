@@ -41,7 +41,7 @@ namespace SourceRewrite.Components
         public override void Start()
         {
             // Read HTML from panel
-            string htmlContent = System.IO.File.ReadAllText(FileSystem.GetGUIPath(panelName));
+            string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
 
             // Create view config
             ULViewConfig config = new ULViewConfig();
