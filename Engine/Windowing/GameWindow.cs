@@ -8,6 +8,7 @@ using SourceRewrite.Files;
 using SourceRewrite.Maps;
 using System.Numerics;
 using VistaGUI;
+using FileFormats.KeyValues.GameInfo;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -17,7 +18,7 @@ namespace SourceRewrite.Windowing
         public static GameWindow? CurrentWindow { get; private set; } // Active Game Window currently running
         public RendererContext Renderer { get; private set; } // Active Renderer 
         public InputContext Input { get; private set; } // Active Input Manager
-        public GameInfoContext GameInfo { get; private set; } // Active GameInfo.txt
+        public GameInfoFormat GameInfo { get; private set; } // Active GameInfo.txt
 
         // Property to dynamically fetch the current window title
         public string WindowTitle
@@ -92,7 +93,11 @@ namespace SourceRewrite.Windowing
         private unsafe async void OnLoad() {
 
             // Load GameInfo
-            GameInfo = new GameInfoContext("../../gameinfo.txt");
+            string gameInfoContent = File.ReadAllText("../../gameinfo.txt");
+            GameInfo = new GameInfoFormat(gameInfoContent);
+
+            // Set window title to game name as defined in GameInfo
+            _window.Title = Files.GameInfo.GetGameName();
 
             // Load Renderer (OpenGL)
             Renderer = new RendererContext(RendererAPI.OpenGL, this);

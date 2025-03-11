@@ -5,30 +5,6 @@ using FileFormats.KeyValues;
 namespace SourceRewrite.Files
 {
     /// <summary>
-    /// Holds KeyValue data from gameinfo.txt.
-    /// </summary>
-    public class GameInfoContext
-    {
-        public KeyValuesFormat KeyValues;
-        public GameInfoContext(string filePath)
-        {
-            try
-            {
-                string content = File.ReadAllText(filePath);
-
-                KeyValues = new KeyValuesFormat(content);
-
-                // Set the Title of the Game Window to as defined in Game Info
-                GameWindow.CurrentWindow.GetSilkWindow().Title = KeyValues.GetKeyValue("game").Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"A GameInfo error occurred: {ex.Message}");
-            }
-        }
-    }
-
-    /// <summary>
     /// GameInfo Abstraction.
     /// </summary>
     public static class GameInfo
