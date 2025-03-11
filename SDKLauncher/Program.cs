@@ -7,8 +7,7 @@ namespace SDKLauncher
     {
         static void Main(string[] args)
         {
-            // Create the Dialog
-            SDKDialog mainDialog = new SDKDialog();
+
         }
     }
 }
