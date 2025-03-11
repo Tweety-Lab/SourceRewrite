@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UltralightNet;
 using UltralightNet.AppCore;
 
 namespace VistaGUI
@@ -34,7 +35,7 @@ namespace VistaGUI
             window.OnResize += (uint newWidth, uint newHeight) => overlay.Resize(newWidth, newHeight);
             window.OnClose += () => app.Quit();
 
-            var view = overlay.View;
+            View view = overlay.View;
 
             view.HTML = HTML;
 

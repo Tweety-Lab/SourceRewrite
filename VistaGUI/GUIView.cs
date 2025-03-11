@@ -45,6 +45,7 @@ namespace VistaGUI
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
+            ULPlatform.FileSystem = ULPlatform.DefaultFileSystem;
 
             // Create Renderer
             var cfg = new ULConfig();

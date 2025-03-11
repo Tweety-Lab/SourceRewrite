@@ -12,4 +12,10 @@
     <ProjectReference Include="..\VistaGUI\VistaGUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="sdklauncher_dialog.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
