@@ -1,5 +1,4 @@
 ﻿using Silk.NET.Input;
-using Silk.NET.Maths;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
@@ -7,14 +6,7 @@ using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using VistaGUI;
 
 namespace SourceRewrite.Components

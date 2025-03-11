@@ -1,9 +1,7 @@
 ﻿using FileFormats.BSP;
 using FileFormats.KeyValues;
 using FileFormats.VMF;
-using System.Linq;
 using System.Numerics;
-using System.Security.Cryptography;
 
 namespace VBSP.Conversion
 {

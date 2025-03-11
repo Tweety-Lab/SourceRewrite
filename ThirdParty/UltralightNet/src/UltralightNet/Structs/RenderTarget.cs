@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace UltralightNet;
 
 /// <summary>Rendering details for a View, to be used with your own GPUDriver</summary>

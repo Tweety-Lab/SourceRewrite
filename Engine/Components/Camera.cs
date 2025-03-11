@@ -1,5 +1,4 @@
-﻿using Silk.NET.Assimp;
-using SourceRewrite.Rendering;
+﻿using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Components

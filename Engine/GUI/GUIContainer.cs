@@ -1,18 +1,4 @@
-﻿using Silk.NET.Assimp;
-using Silk.NET.Input;
-using Silk.NET.Vulkan;
-using SourceRewrite.AssetTypes;
-using SourceRewrite.Components;
-using SourceRewrite.Files;
-using SourceRewrite.Objects;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using VistaGUI;
+﻿using VistaGUI;
 
 namespace SourceRewrite.GUI
 {

@@ -1,5 +1,4 @@
 ﻿using Silk.NET.OpenGL;
-using FileFormats.VTF;
 
 namespace SourceRewrite.Rendering.OpenGL
 {

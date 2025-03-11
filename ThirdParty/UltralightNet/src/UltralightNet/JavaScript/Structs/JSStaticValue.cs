@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using UltralightNet.JavaScript.Low;
-
 namespace UltralightNet.JavaScript;
 
 public unsafe struct JSStaticValue

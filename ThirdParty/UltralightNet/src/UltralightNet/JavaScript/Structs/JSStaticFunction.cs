@@ -1,5 +1,3 @@
-using UltralightNet.JavaScript.Low;
-
 namespace UltralightNet.JavaScript;
 
 public unsafe struct JSStaticFunction

@@ -4,7 +4,6 @@ using SourceRewrite.AssetTypes;
 using SourceRewrite.Components;
 using SourceRewrite.Objects;
 using FileFormats.KeyValues;
-using System.Reflection;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
 

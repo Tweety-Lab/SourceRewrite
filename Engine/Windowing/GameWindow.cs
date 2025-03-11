@@ -6,7 +6,6 @@ using SourceRewrite.Rendering;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Files;
 using SourceRewrite.Maps;
-using SourceRewrite.GUI;
 using System.Numerics;
 using VistaGUI;
 

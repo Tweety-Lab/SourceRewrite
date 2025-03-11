@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace FileFormats.BSP
+﻿namespace FileFormats.BSP
 {
     public static class LumpDefinitions
     {

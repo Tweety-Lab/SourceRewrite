@@ -1,5 +1,4 @@
-﻿using Sledge.Formats.Texture.Wad;
-using System.Text;
+﻿using System.Text;
 
 namespace FileFormats.BSP
 {

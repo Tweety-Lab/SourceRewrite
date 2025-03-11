@@ -1,5 +1,3 @@
-using System;
-
 namespace UltralightNet;
 
 /// <summary>An enumeration of the different keyboard modifiers.</summary>
