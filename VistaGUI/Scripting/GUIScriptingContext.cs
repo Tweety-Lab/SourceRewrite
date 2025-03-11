@@ -8,7 +8,7 @@ using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
 
-namespace SourceRewrite.GUI.Scripting
+namespace VistaGUI.Scripting
 {
     // A GUIView's JavaScript scripting context
     public class GUIScriptingContext

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>vgui</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThirdParty\UltralightNet\src\UltralightNet.AppCore\UltralightNet.AppCore.csproj" />
+    <ProjectReference Include="..\ThirdParty\UltralightNet\src\UltralightNet\UltralightNet.csproj" />
+  </ItemGroup>
+
+</Project>

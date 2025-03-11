@@ -6,6 +6,7 @@ using SourceRewrite.GUI;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Objects;
+using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UltralightNet;
+using VistaGUI;
 
 namespace SourceRewrite.Components
 {
@@ -35,7 +37,7 @@ namespace SourceRewrite.Components
         [MapProperty("IsTransparent")]
         private bool isTransparent; // Is the panel background transparent
 
-        private GUIView view;
+        private GUIContainer container;
         private MeshAsset guiMesh;
 
         public override void Start()
@@ -44,13 +46,16 @@ namespace SourceRewrite.Components
             string htmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
 
             // Create view config
-            ULViewConfig config = new ULViewConfig();
+            GUIConfig config = new GUIConfig();
             config.IsTransparent = isTransparent;
             config.EnableJavaScript = true;
 
+            GUIView vistaView = new GUIView(htmlContent, config, 12, height, width);
+
+            container = new GUIContainer();
+
             // Create a GUI View
-            view = new GUIView(htmlContent, config, 12, height, width);
-            GameWindow.CurrentWindow.GUI.Views.Add(view);
+            container.VistaView = vistaView;
 
             // Set up GUI Events
             RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
@@ -64,34 +69,37 @@ namespace SourceRewrite.Components
             // Get current mouse position
             var mousePosition = Input.GetMousePosition();
 
-            view.SendMousePosition(mousePosition);
+            container.VistaView.SendMousePosition(mousePosition);
 
             // Send Mouse Inputs
             if (Input.GetMouseButtonDown(0))
             {
-                view.SendMouseButtonDown(MouseButton.Left);
+                container.VistaView.SendMouseButtonDown(0);
             }
 
             if (Input.GetMouseButtonUp(0))
             {
-                view.SendMouseButtonUp(MouseButton.Left);
+                container.VistaView.SendMouseButtonUp(0);
             }
 
             // Toggle GUI Visibility
             if (Input.GetKeyDown(Key.Escape) && isVisible)
             {
-                view.Visible = false;
+                container.VistaView.Visible = false;
                 isVisible = false;
             } 
             else if (Input.GetKeyDown(Key.Escape) && !isVisible)
             {
-                view.Visible = true;
+                container.VistaView.Visible = true;
                 isVisible = true;
             }
 
+            // Render view
+            Texture texture = container.RenderToTexture();
+
             // Update View
             if (guiMesh != null)
-                guiMesh.Material.Texture = view.Output;
+                guiMesh.Material.Texture = texture;
         }
 
         /// <summary>
@@ -101,7 +109,7 @@ namespace SourceRewrite.Components
         /// <param name="action">C# Action</param>
         public void RegisterEvent(string name, Action action)
         {
-            view.RegisterEvent(name, action);
+            container.VistaView.RegisterEvent(name, action);
         }
 
         // Render a GUIView in worldspace
@@ -109,7 +117,7 @@ namespace SourceRewrite.Components
         {
             // Create a Material from the view output
             Material guiMaterial = new Material("dev/missing");
-            guiMaterial.Texture = view.Output;
+            guiMaterial.Texture = container.Output;
 
             // Create a plane mesh to house the gui
             guiMesh = new Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);

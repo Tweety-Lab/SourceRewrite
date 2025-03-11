@@ -8,6 +8,7 @@ using SourceRewrite.Files;
 using SourceRewrite.Maps;
 using SourceRewrite.GUI;
 using System.Numerics;
+using VistaGUI;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -17,7 +18,6 @@ namespace SourceRewrite.Windowing
         public static GameWindow? CurrentWindow { get; private set; } // Active Game Window currently running
         public RendererContext Renderer { get; private set; } // Active Renderer 
         public InputContext Input { get; private set; } // Active Input Manager
-        public GUIContext GUI { get; private set; } // Active GUI Manager
         public GameInfoContext GameInfo { get; private set; } // Active GameInfo.txt
 
         // Property to dynamically fetch the current window title
@@ -104,9 +104,6 @@ namespace SourceRewrite.Windowing
             // Load Input
             Input = new InputContext(_window.CreateInput());
 
-            // Load GUI
-            GUI = new GUIContext();
-
             // Load a bsp
             MapSystem.LoadMap(FileSystem.GetMapPath("bsp_test.bsp"));
         }
@@ -116,8 +113,8 @@ namespace SourceRewrite.Windowing
             // Update Input
             Input.InputUpdate();
 
-            // Update GUI
-            GUI.Update();
+            // Update VistaGUI
+            GUIContext.Update();
 
             // Update GameObjects with float deltaTime
             GameObject.GameObjectUpdate((float)deltaTime);

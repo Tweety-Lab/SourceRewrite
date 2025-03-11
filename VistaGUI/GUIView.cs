@@ -1,13 +1,4 @@
-﻿using Silk.NET.Assimp;
-using Silk.NET.Input;
-using Silk.NET.Vulkan;
-using SourceRewrite.AssetTypes;
-using SourceRewrite.Components;
-using SourceRewrite.Files;
-using SourceRewrite.GUI.Scripting;
-using SourceRewrite.Objects;
-using SourceRewrite.Windowing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,18 +6,35 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using UltralightNet;
 using UltralightNet.AppCore;
+using VistaGUI.Scripting;
 
-namespace SourceRewrite.GUI
+namespace VistaGUI
 {
     /// <summary>
-    /// Renders GUI to a texture.
+    /// Renders GUI to a bgra32 byte array
     /// </summary>
     public class GUIView
     {
         /// <summary>
-        /// Texture the GUI renders to.
+        /// BGRA32 byte array.
         /// </summary>
-        public Rendering.Texture Output;
+        public byte[] Output;
+
+        /// <summary>
+        /// Height of the view.
+        /// </summary>
+        public uint Height;
+
+        /// <summary>
+        /// Width of the view.
+        /// </summary>
+        public uint Width;
+
+        /// <summary>
+        /// Returns true if the view needs to be updated.
+        /// </summary>
+        public bool NeedsPaint => UltralightView.NeedsPaint;
+
         public bool Visible = true;
         public View UltralightView;
 
@@ -35,10 +43,10 @@ namespace SourceRewrite.GUI
         private GUIScriptingContext scriptingContext;
 
         private bool hasLoaded = false;
+        private Vector2 mousePosition = Vector2.Zero;
 
-        public unsafe GUIView(string HTML, ULViewConfig viewConfig, int ResolutionScale, int height, int width)
+        public unsafe GUIView(string HTML, GUIConfig viewConfig, int ResolutionScale, int height, int width)
         {
-
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
 
@@ -49,7 +57,12 @@ namespace SourceRewrite.GUI
             uint actualWidth = (uint)width * (uint)ResolutionScale;
             uint actualHeight = (uint)height * (uint)ResolutionScale;
 
-            UltralightView = renderer.CreateView(actualWidth, actualHeight, viewConfig);
+            // Create an Ultralight View config from GUIConfig
+            ULViewConfig config = new ULViewConfig();
+            config.IsTransparent = viewConfig.IsTransparent;
+            config.EnableJavaScript = viewConfig.EnableJavaScript;
+
+            UltralightView = renderer.CreateView(actualWidth, actualHeight, config);
 
             // Pre-allocate the pixel buffer
             pixelBuffer = new byte[actualWidth * actualHeight * 4];
@@ -66,7 +79,10 @@ namespace SourceRewrite.GUI
             scriptingContext = new GUIScriptingContext();
             scriptingContext.GUIView = this;
 
-            RenderToTexture();
+            RenderOutput();
+
+            // Register this view with the GUIContext
+            GUIContext.Views.Add(this);
         }
 
         // GUI Update
@@ -78,7 +94,7 @@ namespace SourceRewrite.GUI
                 renderer.Update();
 
                 if (UltralightView.NeedsPaint)
-                    RenderToTexture();
+                    RenderOutput();
             }
         }
 
@@ -93,54 +109,6 @@ namespace SourceRewrite.GUI
                 scriptingContext.RegisterEvent(name, action);
         }
 
-        /// <summary>
-        /// Sends a mouse button down event to the GUI.
-        /// </summary>
-        /// <param name="mouseButton"></param>
-        public void SendMouseButtonDown(MouseButton mouseButton)
-        {
-            if (!Visible) return; // Don't process input if the GUI is not visible
-
-            ULMouseEvent mouseEvent = new ULMouseEvent();
-            mouseEvent.Type = ULMouseEventType.MouseDown;
-
-            mouseEvent.X = (int)InputSystem.Input.GetMouseX();
-            mouseEvent.Y = (int)InputSystem.Input.GetMouseY();
-
-            if (mouseButton == MouseButton.Left)
-                mouseEvent.Button = ULMouseEventButton.Left;
-            
-
-            if (mouseButton == MouseButton.Right)
-                mouseEvent.Button = ULMouseEventButton.Right;
-
-            UltralightView.FireMouseEvent(mouseEvent);
-        }
-
-        /// <summary>
-        /// Sends a mouse button up event to the GUI.
-        /// </summary>
-        /// <param name="mouseButton"></param>
-        public void SendMouseButtonUp(MouseButton mouseButton)
-        {
-            if (!Visible) return; // Don't process input if the GUI is not visible
-
-            ULMouseEvent mouseEvent = new ULMouseEvent();
-            mouseEvent.Type = ULMouseEventType.MouseUp;
-
-            mouseEvent.X = (int)InputSystem.Input.GetMouseX();
-            mouseEvent.Y = (int)InputSystem.Input.GetMouseY();
-
-            if (mouseButton == MouseButton.Left)
-                mouseEvent.Button = ULMouseEventButton.Left;
-
-
-            if (mouseButton == MouseButton.Right)
-                mouseEvent.Button = ULMouseEventButton.Right;
-
-            UltralightView.FireMouseEvent(mouseEvent);
-        }
-
 
         /// <summary>
         /// Sends a mouse position event to the GUI.
@@ -153,15 +121,64 @@ namespace SourceRewrite.GUI
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseMoved;
 
-            mouseEvent.X = (int)position.X;
-            mouseEvent.Y = (int)position.Y;
+            mousePosition = position;
+
+            mouseEvent.X = (int)mousePosition.X;
+            mouseEvent.Y = (int)mousePosition.Y;
 
             UltralightView.FireMouseEvent(mouseEvent);
         }
 
-        
+        /// <summary>
+        /// Sends a mouse button down event to the GUI.
+        /// </summary>
+        /// <param name="mouseButton"></param>
+        public void SendMouseButtonDown(int mouseButton)
+        {
+            if (!Visible) return; // Don't process input if the GUI is not visible
+
+            ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.Type = ULMouseEventType.MouseDown;
+
+            mouseEvent.X =  (int)mousePosition.X;
+            mouseEvent.Y = (int)mousePosition.Y;
+
+            if (mouseButton == 0)
+                mouseEvent.Button = ULMouseEventButton.Left;
+            
+
+            if (mouseButton == 1)
+                mouseEvent.Button = ULMouseEventButton.Right;
+
+            UltralightView.FireMouseEvent(mouseEvent);
+        }
+
+        /// <summary>
+        /// Sends a mouse button up event to the GUI.
+        /// </summary>
+        /// <param name="mouseButton"></param>
+        public void SendMouseButtonUp(int mouseButton)
+        {
+            if (!Visible) return; // Don't process input if the GUI is not visible
+
+            ULMouseEvent mouseEvent = new ULMouseEvent();
+            mouseEvent.Type = ULMouseEventType.MouseUp;
+
+            mouseEvent.X = (int)mousePosition.X;
+            mouseEvent.Y = (int)mousePosition.Y;
+
+            if (mouseButton == 0)
+                mouseEvent.Button = ULMouseEventButton.Left;
+
+
+            if (mouseButton == 1)
+                mouseEvent.Button = ULMouseEventButton.Right;
+
+            UltralightView.FireMouseEvent(mouseEvent);
+        }
+
         /// Renders the GUI to a texture
-        private unsafe void RenderToTexture()
+        private unsafe void RenderOutput()
         {
             while (!hasLoaded)
             {
@@ -182,14 +199,19 @@ namespace SourceRewrite.GUI
             byte* rawData = bitmap.RawPixels;
             Marshal.Copy((IntPtr)rawData, pixelBuffer, 0, (int)dataSize);
 
-            // Dispose of old texture
-            if (Output != null)
-                Output.Dispose();
-
-            // Create new texture
-            Output = new Rendering.Texture(pixelBuffer, bitmap.Height, bitmap.Width);
+            // Create output
+            Output = pixelBuffer;
+            Height = bitmap.Height;
+            Width = bitmap.Width;
 
             bitmap.Dispose();
         }
+    }
+
+    // Abstraction for Ultralight ULViewConfig
+    public struct GUIConfig
+    {
+        public bool IsTransparent { get; set; }
+        public bool EnableJavaScript { get; set; }
     }
 }
