@@ -19,8 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileFormats\FileFormats.csproj" />
-    <ProjectReference Include="..\ThirdParty\UltralightNet\src\UltralightNet.AppCore\UltralightNet.AppCore.csproj" />
-    <ProjectReference Include="..\ThirdParty\UltralightNet\src\UltralightNet\UltralightNet.csproj" />
     <ProjectReference Include="..\VistaGUI\VistaGUI.csproj" />
   </ItemGroup>
 

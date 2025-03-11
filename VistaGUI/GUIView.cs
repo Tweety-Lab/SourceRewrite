@@ -121,6 +121,7 @@ namespace VistaGUI
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseMoved;
 
+            // Update mouse position
             mousePosition = position;
 
             mouseEvent.X = (int)mousePosition.X;
@@ -145,7 +146,6 @@ namespace VistaGUI
 
             if (mouseButton == 0)
                 mouseEvent.Button = ULMouseEventButton.Left;
-            
 
             if (mouseButton == 1)
                 mouseEvent.Button = ULMouseEventButton.Right;

@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceRewrite", "Engine\SourceRewrite.csproj", "{DE5FF3C0-1CAF-4CDB-8101-E9D578B43245}"
-	ProjectSection(ProjectDependencies) = postProject
-		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD} = {AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{C15B48FC-0D71-43D3-AB78-779787993B3F}"
 EndProject

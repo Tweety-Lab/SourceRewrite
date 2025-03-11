@@ -12,8 +12,6 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using UltralightNet;
-using UltralightNet.AppCore;
 using VistaGUI;
 
 namespace SourceRewrite.GUI

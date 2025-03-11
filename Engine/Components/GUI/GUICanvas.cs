@@ -15,7 +15,6 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using UltralightNet;
 using VistaGUI;
 
 namespace SourceRewrite.Components
