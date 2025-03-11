@@ -97,7 +97,7 @@ namespace SourceRewrite.Windowing
             GameInfo = new GameInfoFormat(gameInfoContent);
 
             // Set window title to game name as defined in GameInfo
-            _window.Title = Files.GameInfo.GetGameName();
+            _window.Title = GameInfo.GameName;
 
             // Load Renderer (OpenGL)
             Renderer = new RendererContext(RendererAPI.OpenGL, this);

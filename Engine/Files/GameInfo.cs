@@ -30,7 +30,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetGameName()
         {
-            return GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("game").Value.ToString();
+            return GameWindow.CurrentWindow.GameInfo.GameName;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static int GetSteamAppID()
         {
-            return (int) GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("SteamAppId").Value;
+            return GameWindow.CurrentWindow.GameInfo.SteamAppID;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetMountedPaths()
         {
-            return $"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue("Game").Value.ToString()}";
+            return $"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)GetKeyValue("Game").Value}";
         }
     }
 }
