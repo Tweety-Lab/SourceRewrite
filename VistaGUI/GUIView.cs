@@ -74,7 +74,7 @@ namespace VistaGUI
 
             // Load JS Scripting Context
             scriptingContext = new GUIScriptingContext();
-            scriptingContext.GUIView = this;
+            scriptingContext.UltralightView = UltralightView;
 
             RenderOutput();
 

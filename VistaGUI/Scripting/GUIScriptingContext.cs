@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
 
@@ -11,8 +12,8 @@ namespace VistaGUI.Scripting
         // Dictionary of function names and their associated action callback
         private static Dictionary<string, Action> JSCallbacks = new Dictionary<string, Action>();
 
-        // Associated GUI View
-        public GUIView GUIView;
+        // Associated Ultralight View
+        public View UltralightView;
 
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
@@ -28,7 +29,7 @@ namespace VistaGUI.Scripting
         // Registers a C# function that can be called from JavaScript
         private unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
         {
-            JSContextRef contextRef = GUIView.UltralightView.LockJSContext();
+            JSContextRef contextRef = UltralightView.LockJSContext();
 
             // Convert the string to a byte array using UTF-8 encoding
             byte[] byteArray = Encoding.UTF8.GetBytes(functionName);
@@ -53,7 +54,7 @@ namespace VistaGUI.Scripting
             JavaScriptMethods.JSObjectSetProperty(contextRef, globalObj, name, func, JSPropertyAttributes.None, null);
 
             JavaScriptMethods.JSStringRelease(name);
-            GUIView.UltralightView.UnlockJSContext();
+            UltralightView.UnlockJSContext();
         }
 
         // Unmanaged callback that bridges JavaScript to C#
