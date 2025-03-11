@@ -32,7 +32,7 @@ namespace SourceRewrite.GUI
 
         private Renderer renderer;
         private byte[] pixelBuffer;
-        private ScriptingContext scriptingContext;
+        private GUIScriptingContext scriptingContext;
 
         private bool hasLoaded = false;
 
@@ -63,7 +63,7 @@ namespace SourceRewrite.GUI
             UltralightView.HTML = HTML;
 
             // Load JS Scripting Context
-            scriptingContext = new ScriptingContext();
+            scriptingContext = new GUIScriptingContext();
             scriptingContext.GUIView = this;
 
             RenderToTexture();

@@ -11,7 +11,7 @@ using UltralightNet.JavaScript.Low;
 namespace SourceRewrite.GUI.Scripting
 {
     // A GUIView's JavaScript scripting context
-    public class ScriptingContext
+    public class GUIScriptingContext
     {
         // Dictionary of function names and their associated action callback
         private static Dictionary<string, Action> JSCallbacks = new Dictionary<string, Action>();
