@@ -203,11 +203,4 @@ namespace VistaGUI
             bitmap.Dispose();
         }
     }
-
-    // Abstraction for Ultralight ULViewConfig
-    public struct GUIConfig
-    {
-        public bool IsTransparent { get; set; }
-        public bool EnableJavaScript { get; set; }
-    }
 }
