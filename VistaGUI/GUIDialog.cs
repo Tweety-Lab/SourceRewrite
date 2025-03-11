@@ -23,12 +23,12 @@ namespace VistaGUI
             set => window.Title = value;
         }
 
-        public GUIDialog(string HTML, GUIConfig viewConfig, int ResolutionScale, int height, int width) : base(HTML, viewConfig, ResolutionScale, height, width)
+        public GUIDialog(string HTML, GUIConfig viewConfig, int ResolutionScale, int height, int width, string title) : base(HTML, viewConfig, ResolutionScale, height, width)
         {
             app = ULApp.Create(new(), new());
             window = app.MainMonitor.CreateWindow((uint)height, (uint)width);
 
-            window.Title = "Dialog";
+            window.Title = title;
 
             using var overlay = window.CreateOverlay(window.ScreenWidth, window.ScreenHeight);
             window.OnResize += (uint newWidth, uint newHeight) => overlay.Resize(newWidth, newHeight);
@@ -37,6 +37,8 @@ namespace VistaGUI
             var view = overlay.View;
 
             view.HTML = HTML;
+
+            app.Run();
         }
 
         // Show the window

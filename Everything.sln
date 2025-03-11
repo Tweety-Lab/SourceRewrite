@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VistaGUI", "VistaGUI\VistaGUI.csproj", "{3F378826-CAD3-400E-AC8A-98A9C0EF9C4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDKLauncher", "SDKLauncher\SDKLauncher.csproj", "{9816B976-6DB9-48DE-BA45-272D4CBE5E52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{3F378826-CAD3-400E-AC8A-98A9C0EF9C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F378826-CAD3-400E-AC8A-98A9C0EF9C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F378826-CAD3-400E-AC8A-98A9C0EF9C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9816B976-6DB9-48DE-BA45-272D4CBE5E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9816B976-6DB9-48DE-BA45-272D4CBE5E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9816B976-6DB9-48DE-BA45-272D4CBE5E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9816B976-6DB9-48DE-BA45-272D4CBE5E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
