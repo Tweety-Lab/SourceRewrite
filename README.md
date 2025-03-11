@@ -1,5 +1,8 @@
+# Requirements
+GitBash
+
 # Getting Started
-Run ThirdParty\UltralightNet\regenerate.sh
+Run prebuild.bat
 
 Open Everything.sln
 
