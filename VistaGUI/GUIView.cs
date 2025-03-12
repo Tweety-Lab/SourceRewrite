@@ -31,12 +31,17 @@ namespace VistaGUI
         /// </summary>
         public bool NeedsPaint => UltralightView.NeedsPaint;
 
+        /// <summary>
+        /// JavaScript context.
+        /// </summary>
+        public GUIScriptingContext ScriptingContext;
+
         public bool Visible = true;
         public View UltralightView;
 
         private Renderer renderer;
         private byte[] pixelBuffer;
-        private GUIScriptingContext scriptingContext;
+        
 
         private bool hasLoaded = false;
         private Vector2 mousePosition = Vector2.Zero;
@@ -73,8 +78,8 @@ namespace VistaGUI
             UltralightView.HTML = HTML;
 
             // Load JS Scripting Context
-            scriptingContext = new GUIScriptingContext();
-            scriptingContext.UltralightView = UltralightView;
+            ScriptingContext = new GUIScriptingContext();
+            ScriptingContext.UltralightView = UltralightView;
 
             RenderOutput();
 
@@ -93,17 +98,6 @@ namespace VistaGUI
                 if (UltralightView.NeedsPaint)
                     RenderOutput();
             }
-        }
-
-        /// <summary>
-        /// Registers a C# Action that can be called from JavaScript.
-        /// </summary>
-        /// <param name="name">Javascript function name</param>
-        /// <param name="action">C# Action</param>
-        public unsafe void RegisterEvent(string name, Action action)
-        {
-            if (scriptingContext != null)
-                scriptingContext.RegisterEvent(name, action);
         }
 
 

@@ -53,7 +53,7 @@ namespace SourceRewrite.Components
             container.VistaView = vistaView;
 
             // Set up GUI Events
-            RegisterEvent("PrintMessage", () => Console.WriteLine("Test Print defined in C# called from JS."));
+            RegisterEvent("PrintMessage", () => SetElementInnerHTML("output-text", "Button Was Pressed!"));
 
             RenderViewToObject();
         }
@@ -104,7 +104,17 @@ namespace SourceRewrite.Components
         /// <param name="action">C# Action</param>
         public void RegisterEvent(string name, Action action)
         {
-            container.VistaView.RegisterEvent(name, action);
+            container.VistaView.ScriptingContext.RegisterEvent(name, action);
+        }
+
+        /// <summary>
+        /// Sets the Inner HTML of an Element from it's ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="text"></param>
+        public void SetElementInnerHTML(string id, string text)
+        {
+            container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
         }
 
         // Render a GUIView in worldspace

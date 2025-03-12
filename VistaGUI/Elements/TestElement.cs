@@ -20,11 +20,10 @@ namespace VistaGUI.Elements
             Node = node;
         }
 
+        // Return the HTML for this element
         public string GenerateHTML()
         {
-            string html = string.Empty;
-
-            html = $"<p>{Node.InnerText}</p>";
+            string html = $"<p>{Node.InnerText}</p>";
 
             return html;
         }

@@ -15,6 +15,12 @@ namespace VistaGUI.Scripting
         // Associated Ultralight View
         public View UltralightView;
 
+        // Sets the InnerHTML of an element
+        public void SetElementInnerHTML(string elementId, string text)
+        {
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{text}';", out _);
+        }
+
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
         /// </summary>
