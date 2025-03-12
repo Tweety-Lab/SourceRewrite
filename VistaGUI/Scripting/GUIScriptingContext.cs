@@ -27,6 +27,13 @@ namespace VistaGUI.Scripting
             UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{text}';", out _);
         }
 
+        // Get the InnerHTML of an element
+        public string GetElementInnerHTML(string elementId)
+        {
+            return UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML;", out _);
+        }
+
+        // Sets a property of an element
         public void SetElementProperty(string elementId, string property, string value)
         {
             UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{value}';", out _);

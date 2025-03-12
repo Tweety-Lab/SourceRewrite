@@ -22,6 +22,8 @@ namespace VistaGUI.Scripting
 
         public void SetInnerHTML(string text) => Context.SetElementInnerHTML(ID, text);
 
+        public string GetInnerHTML() => Context.GetElementInnerHTML(ID);
+
         public void SetProperty(string property, string value) => Context.SetElementProperty(ID, property, value);
     }
 }
