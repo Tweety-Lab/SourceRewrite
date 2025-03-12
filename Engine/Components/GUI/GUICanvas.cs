@@ -42,7 +42,7 @@ namespace SourceRewrite.Components
             config.IsTransparent = isTransparent;
             config.EnableJavaScript = true;
 
-            GUIView vistaView = new GUIView(panelName, config, 12, height, width);
+            VistaView vistaView = new VistaView(panelName, config, 12, height, width);
 
             container = new GUIContainer();
 

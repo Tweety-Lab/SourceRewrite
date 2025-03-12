@@ -118,7 +118,7 @@ namespace SourceRewrite.Windowing
             Input.InputUpdate();
 
             // Update VistaGUI
-            GUIContext.Update();
+            VistaContext.Update();
 
             // Update GameObjects with float deltaTime
             GameObject.GameObjectUpdate((float)deltaTime);

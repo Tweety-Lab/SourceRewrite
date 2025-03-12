@@ -11,7 +11,7 @@ namespace SourceRewrite.GUI
         /// Texture the GUI renders to.
         /// </summary>
         public Rendering.Texture Output;
-        public GUIView VistaView;
+        public VistaView VistaView;
         
         /// Renders the GUI Output to a texture
         public unsafe Rendering.Texture RenderToTexture()

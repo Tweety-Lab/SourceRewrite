@@ -9,7 +9,7 @@ namespace VistaGUI
     /// <summary>
     /// Renders HTML to a bgra32 byte array
     /// </summary>
-    public class GUIView
+    public class VistaView
     {
         /// <summary>
         /// BGRA32 byte array.
@@ -46,7 +46,7 @@ namespace VistaGUI
         private bool hasLoaded = false;
         private Vector2 mousePosition = Vector2.Zero;
 
-        public unsafe GUIView(string HTMLPath, GUIConfig viewConfig, int ResolutionScale, int height, int width)
+        public unsafe VistaView(string HTMLPath, GUIConfig viewConfig, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
@@ -90,7 +90,7 @@ namespace VistaGUI
             RenderOutput();
 
             // Register this view with the GUIContext
-            GUIContext.Views.Add(this);
+            VistaContext.Views.Add(this);
         }
 
         // GUI Update
