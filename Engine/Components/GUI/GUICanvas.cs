@@ -8,7 +8,6 @@ using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using System.Numerics;
 using VistaGUI;
-using VistaGUI.Processor;
 using VistaGUI.Scripting;
 
 namespace SourceRewrite.Components
@@ -35,18 +34,15 @@ namespace SourceRewrite.Components
 
         public override void Start()
         {
-            // Read VistaXML from panel
-            string xmlContent = File.ReadAllText(FileSystem.GetGUIPath(panelName));
-
-            // Convert it to WebHTML
-            string HTMLContent = VistaProcessor.ProcessXML(xmlContent);
-
             // Create view config
             GUIConfig config = new GUIConfig();
+
+            config.ResourcesPath = Path.GetFullPath(FileSystem.GamePath.GUIPath);
+
             config.IsTransparent = isTransparent;
             config.EnableJavaScript = true;
 
-            GUIView vistaView = new GUIView(HTMLContent, config, 12, height, width);
+            GUIView vistaView = new GUIView(panelName, config, 12, height, width);
 
             container = new GUIContainer();
 

@@ -11,5 +11,7 @@ namespace VistaGUI
     {
         public bool IsTransparent { get; set; }
         public bool EnableJavaScript { get; set; }
+
+        public string ResourcesPath { get; set; }
     }
 }

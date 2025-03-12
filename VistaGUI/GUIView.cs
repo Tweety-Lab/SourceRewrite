@@ -46,15 +46,19 @@ namespace VistaGUI
         private bool hasLoaded = false;
         private Vector2 mousePosition = Vector2.Zero;
 
-        public unsafe GUIView(string HTML, GUIConfig viewConfig, int ResolutionScale, int height, int width)
+        public unsafe GUIView(string HTMLPath, GUIConfig viewConfig, int ResolutionScale, int height, int width)
         {
             // Set Font Loader
             AppCoreMethods.SetPlatformFontLoader();
-            ULPlatform.FileSystem = ULPlatform.DefaultFileSystem;
+
+            // Set resources path
+            AppCoreMethods.ulEnablePlatformFileSystem(viewConfig.ResourcesPath);
+
 
             // Create Renderer
             var cfg = new ULConfig();
             renderer = ULPlatform.CreateRenderer(cfg);
+            
 
             uint actualWidth = (uint)width * (uint)ResolutionScale;
             uint actualHeight = (uint)height * (uint)ResolutionScale;
@@ -63,8 +67,10 @@ namespace VistaGUI
             ULViewConfig config = new ULViewConfig();
             config.IsTransparent = viewConfig.IsTransparent;
             config.EnableJavaScript = viewConfig.EnableJavaScript;
+            config.EnableImages = true;
 
             UltralightView = renderer.CreateView(actualWidth, actualHeight, config);
+
 
             // Pre-allocate the pixel buffer
             pixelBuffer = new byte[actualWidth * actualHeight * 4];
@@ -74,8 +80,8 @@ namespace VistaGUI
                 hasLoaded = true;
             };
 
-            // Set HTML Contents
-            UltralightView.HTML = HTML;
+            // Set View Contents
+            UltralightView.URL = $"file:///{HTMLPath}";
 
             // Load JS Scripting Context
             ScriptingContext = new GUIScriptingContext();

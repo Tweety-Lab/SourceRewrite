@@ -67,7 +67,7 @@ public static unsafe class ULPlatform
 		{
 			Logger = DefaultLogger;
 		}
-		if (SetDefaultFileSystem && filesystemWrapper is null) FileSystem = config.ResourcePathPrefix is "resources/" ? DefaultFileSystem : throw new ArgumentException("Default file system supports only \"resources\" ResourcePathPrefix", nameof(config));
+		if (SetDefaultFileSystem && filesystemWrapper is null) FileSystem = config.ResourcePathPrefix is "resources/" ? DefaultResourceFileSystem : throw new ArgumentException("Default file system supports only \"resources\" ResourcePathPrefix", nameof(config));
 		else if (ErrorMissingResources && filesystemWrapper is not null)
 		{
 #if !NETSTANDARD
@@ -95,7 +95,7 @@ public static unsafe class ULPlatform
 	}
 
 	public static ILogger DefaultLogger => new DefaultConsoleLogger();
-	public static IFileSystem DefaultFileSystem => new DefaultResourceOnlyFileSystem();
+	public static IFileSystem DefaultResourceFileSystem => new DefaultResourceOnlyFileSystem();
 
 	private sealed class DefaultConsoleLogger : ILogger
 	{
