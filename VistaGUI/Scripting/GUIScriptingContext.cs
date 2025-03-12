@@ -15,10 +15,21 @@ namespace VistaGUI.Scripting
         // Associated Ultralight View
         public View UltralightView;
 
+        // Get a ElementReference from ID
+        public ElementReference GetElement(string elementId)
+        {
+            return new ElementReference(elementId, this);
+        }
+
         // Sets the InnerHTML of an element
         public void SetElementInnerHTML(string elementId, string text)
         {
             UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{text}';", out _);
+        }
+
+        public void SetElementProperty(string elementId, string property, string value)
+        {
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{value}';", out _);
         }
 
         /// <summary>

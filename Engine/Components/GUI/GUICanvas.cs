@@ -9,6 +9,7 @@ using SourceRewrite.Rendering;
 using System.Numerics;
 using VistaGUI;
 using VistaGUI.Processor;
+using VistaGUI.Scripting;
 
 namespace SourceRewrite.Components
 {
@@ -53,7 +54,14 @@ namespace SourceRewrite.Components
             container.VistaView = vistaView;
 
             // Set up GUI Events
-            RegisterEvent("PrintMessage", () => SetElementInnerHTML("output-text", "Button Was Pressed!"));
+            RegisterEvent("ButtonPressed", () => ButtonPressed());
+
+            void ButtonPressed()
+            {
+                var outputText = GetElement("output-text");
+
+                outputText.SetInnerHTML("Button Was Pressed!");
+            }
 
             RenderViewToObject();
         }
@@ -98,24 +106,25 @@ namespace SourceRewrite.Components
         }
 
         /// <summary>
+        /// Gets an Element from it's ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ElementReference GetElement(string id) => container.VistaView.ScriptingContext.GetElement(id);
+
+        /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
         /// </summary>
         /// <param name="name">Javascript function name</param>
         /// <param name="action">C# Action</param>
-        public void RegisterEvent(string name, Action action)
-        {
-            container.VistaView.ScriptingContext.RegisterEvent(name, action);
-        }
+        public void RegisterEvent(string name, Action action) => container.VistaView.ScriptingContext.RegisterEvent(name, action);
 
         /// <summary>
         /// Sets the Inner HTML of an Element from it's ID.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="text"></param>
-        public void SetElementInnerHTML(string id, string text)
-        {
-            container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
-        }
+        public void SetElementInnerHTML(string id, string text) => container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
 
         // Render a GUIView in worldspace
         private void RenderViewToObject()
