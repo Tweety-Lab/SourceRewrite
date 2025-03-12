@@ -12,4 +12,18 @@ namespace VistaGUI.Elements
     {
         string GenerateHTML();
     }
+
+    // Base GUI Element attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public class VistaElementAttribute : Attribute
+    {
+        public string Name { get; set; }
+        public Type ElementType { get; set; }
+
+        public VistaElementAttribute(string name, Type elementType)
+        {
+            Name = name;
+            ElementType = elementType;
+        }
+    }
 }

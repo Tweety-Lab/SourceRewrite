@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace VistaGUI.Elements
 {
     /// <summary>
-    /// Embedded Vista Page.
+    /// Test Vista Element.
     /// </summary>
+    [VistaElement("test-element", typeof(TestElement))]
     public class TestElement : IVistaElement
     {
         private HtmlNode Node;
@@ -23,9 +24,7 @@ namespace VistaGUI.Elements
         {
             string html = string.Empty;
 
-            html = $"""
-                <p>{Node.InnerText}</p>
-                """;
+            html = $"<p>{Node.InnerText}</p>";
 
             return html;
         }
