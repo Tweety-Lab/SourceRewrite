@@ -7,7 +7,7 @@ using VistaGUI.Scripting;
 namespace VistaGUI
 {
     /// <summary>
-    /// Renders GUI to a bgra32 byte array
+    /// Renders HTML to a bgra32 byte array
     /// </summary>
     public class GUIView
     {

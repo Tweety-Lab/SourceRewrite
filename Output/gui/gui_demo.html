@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missing GUI</title>
     <style>
         body {
             height: 100vh; /* Make sure the background covers the entire viewport height */
@@ -16,34 +11,8 @@
             position: relative; /* Needed to position the dot relative to the body */
         }
 
-        p, button, img {
-            margin: 20px; /* Remove spacing between elements */
-            font-size: 50px;
-        }
-
         p {
             color: white;
-        }
-
-        img {
-            width: 50px;
-            height: 50px;
-        }
-
-        button {
-            background-color: #2580db;
-            border-radius: 50px;
-            color: white;
-            padding: 25px;
-            border: none;
-        }
-
-        button:hover {
-            background-color: #12315f;
-        }
-
-        button:active {
-            background-color: #000000;
         }
 
         /* Style for the dot that follows the cursor */
@@ -63,6 +32,8 @@
     <button onclick="PrintMessage()">Click Me</button>
     <p id="output">Output</p>
 
+    <test-element>Custom Vista Element</test-element>
+
     <!-- Dot element that will follow the cursor -->
     <div class="cursor-dot" id="cursorDot"></div>
 
@@ -77,4 +48,3 @@
         });
     </script>
 </body>
-</html>
