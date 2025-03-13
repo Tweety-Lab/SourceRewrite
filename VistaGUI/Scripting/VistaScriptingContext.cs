@@ -3,6 +3,7 @@ using System.Text;
 using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
+using VistaGUI.Scripting.References;
 
 namespace VistaGUI.Scripting
 {
@@ -15,10 +16,27 @@ namespace VistaGUI.Scripting
         // Associated Ultralight View
         public View UltralightView;
 
-        // Get a ElementReference from ID
+        // Retrieves an element by its ID
         public ElementReference GetElement(string elementId)
         {
             return new ElementReference(elementId, this);
+        }
+
+        // Retrieves an element by its ID, returns a reference as a specific type (T).
+        public T GetElementAsType<T>(string elementId) where T : ElementReference
+        {
+            // Get the element type based on its ID.
+            string elementType = GetElementType(elementId);
+            Type type = TypeDictionary.Types.TryGetValue(elementType, out var resolvedType) ? resolvedType : typeof(ElementReference);
+
+            // Ensure the requested type matches the resolved type.
+            if (typeof(T) != type && !typeof(T).IsAssignableFrom(type))
+            {
+                throw new InvalidCastException($"Cannot cast element of type {type} to {typeof(T)}.");
+            }
+
+            // Return the instance of the requested type (T).
+            return (T)Activator.CreateInstance(type, elementId, this);
         }
 
         // Sets the InnerHTML of an element
@@ -45,7 +63,11 @@ namespace VistaGUI.Scripting
             return UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property};", out _);
         }
 
-
+        // Gets the type of an element
+        public string GetElementType(string elementId)
+        {
+            return UltralightView.EvaluateScript($"document.getElementById('{elementId}').tagName;", out _).ToLower();
+        }
 
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.

@@ -8,7 +8,7 @@ using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using System.Numerics;
 using VistaGUI;
-using VistaGUI.Scripting;
+using VistaGUI.Scripting.References;
 
 namespace SourceRewrite.Components
 {
@@ -54,11 +54,11 @@ namespace SourceRewrite.Components
 
             void ButtonPressed()
             {
-                var outputText = GetElement("output-text");
+                TextReference outputText = GetElementAsType<TextReference>("output-text");
 
-                outputText.InnerHTML = "Button Pressed";
+                outputText.TextContent = "Button Pressed";
 
-                Console.WriteLine(outputText.GetProperty("textContent"));
+                Console.WriteLine(outputText.TextContent);
             }
 
             RenderViewToObject();
@@ -109,6 +109,17 @@ namespace SourceRewrite.Components
         /// <param name="id"></param>
         /// <returns></returns>
         public ElementReference GetElement(string id) => container.VistaView.ScriptingContext.GetElement(id);
+
+        /// <summary>
+        /// Gets an Element from it's ID as a specific type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public T GetElementAsType<T>(string id) where T : ElementReference
+        {
+            return container.VistaView.ScriptingContext.GetElementAsType<T>(id);
+        }
 
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.

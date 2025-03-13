@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace VistaGUI.Scripting
+namespace VistaGUI.Scripting.References
 {
     // Reference to a Generic HTML element.
     public class ElementReference
@@ -15,8 +15,8 @@ namespace VistaGUI.Scripting
 
         public string InnerHTML
         {
-            get { return GetInnerHTML(); }
-            set { SetInnerHTML(value); }
+            get => GetInnerHTML();
+            set => SetInnerHTML(value);
         }
 
         public ElementReference(string id, VistaScriptingContext context)
