@@ -39,6 +39,14 @@ namespace VistaGUI.Scripting
             UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{value}';", out _);
         }
 
+        // Gets a property of an element
+        public string GetElementProperty(string elementId, string property)
+        {
+            return UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property};", out _);
+        }
+
+
+
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
         /// </summary>

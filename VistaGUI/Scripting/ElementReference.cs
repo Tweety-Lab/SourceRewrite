@@ -25,10 +25,12 @@ namespace VistaGUI.Scripting
             Context = context;
         }
 
+        // Inner HTML
         private void SetInnerHTML(string text) => Context.SetElementInnerHTML(ID, text);
         private string GetInnerHTML() => Context.GetElementInnerHTML(ID);
 
-
+        // Element Properties
         public void SetProperty(string property, string value) => Context.SetElementProperty(ID, property, value);
+        public string GetProperty(string property) => Context.GetElementProperty(ID, property);
     }
 }
