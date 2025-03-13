@@ -63,6 +63,18 @@ namespace VistaGUI.Scripting
             return UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property};", out _);
         }
 
+        // Sets the style of an element
+        public void SetElementStyle(string elementId, string style)
+        {
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText = '{style}';", out _);
+        }
+
+        // Gets the syle of an element
+        public string GetElementStyle(string elementId)
+        {
+            return UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText;", out _);
+        }
+
         // Gets the type of an element
         public string GetElementType(string elementId)
         {

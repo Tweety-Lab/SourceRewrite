@@ -55,14 +55,12 @@ namespace SourceRewrite.Components
             void ButtonPressed()
             {
                 TextReference outputText = GetElementAsType<TextReference>("output-text");
-
                 outputText.TextContent = "Button Pressed";
 
                 ImageReference hammerImage = GetElementAsType<ImageReference>("hammer-image");
-
                 hammerImage.ImageSource = "file:///images/hammer_old.png";
 
-                Console.WriteLine(outputText.TextContent);
+                outputText.SetStyle("background-color: red;");
             }
 
             RenderViewToObject();

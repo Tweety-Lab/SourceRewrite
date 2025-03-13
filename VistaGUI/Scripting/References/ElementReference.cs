@@ -32,5 +32,9 @@ namespace VistaGUI.Scripting.References
         // Element Properties
         public void SetProperty(string property, string value) => Context.SetElementProperty(ID, property, value);
         public string GetProperty(string property) => Context.GetElementProperty(ID, property);
+
+        // Element Style
+        public void SetStyle(string style) => Context.SetElementStyle(ID, style);
+        public string GetStyle() => Context.GetElementStyle(ID);
     }
 }
