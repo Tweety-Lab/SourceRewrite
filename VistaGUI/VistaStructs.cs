@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VistaGUI
 {
-    // Abstraction for Ultralight ULViewConfig
+    // Vista Config
     public struct GUIConfig
     {
         public bool IsTransparent { get; set; }

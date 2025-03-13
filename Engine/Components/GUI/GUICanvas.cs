@@ -56,11 +56,9 @@ namespace SourceRewrite.Components
             {
                 var outputText = GetElement("output-text");
 
-                Console.WriteLine($"Current Output Text before change: {outputText.GetInnerHTML()}");
+                Console.WriteLine(outputText.InnerHTML);
 
-                outputText.SetProperty("textContent", "Button Was Pressed!");
-
-                Console.WriteLine($"Current Output Text after change: {outputText.GetInnerHTML()}");
+                outputText.InnerHTML = "Button Pressed";
             }
 
             RenderViewToObject();

@@ -7,7 +7,7 @@ using UltralightNet.JavaScript.Low;
 namespace VistaGUI.Scripting
 {
     // A GUIView's JavaScript scripting context
-    public class GUIScriptingContext
+    public class VistaScriptingContext
     {
         // Dictionary of function names and their associated action callback
         private static Dictionary<string, Action> JSCallbacks = new Dictionary<string, Action>();

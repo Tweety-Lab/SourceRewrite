@@ -3,26 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace VistaGUI.Scripting
 {
-    // Represents a reference to an HTML element
+    // Reference to a Generic HTML element.
     public class ElementReference
     {
         public string ID { get; private set; }
-        private GUIScriptingContext Context { get; set; }
+        private VistaScriptingContext Context { get; set; }
 
-        public ElementReference(string id, GUIScriptingContext context)
+        public string InnerHTML
+        {
+            get { return GetInnerHTML(); }
+            set { SetInnerHTML(value); }
+        }
+
+        public ElementReference(string id, VistaScriptingContext context)
         {
             ID = id;
             Context = context;
         }
 
-        // Functions
+        private void SetInnerHTML(string text) => Context.SetElementInnerHTML(ID, text);
+        private string GetInnerHTML() => Context.GetElementInnerHTML(ID);
 
-        public void SetInnerHTML(string text) => Context.SetElementInnerHTML(ID, text);
-
-        public string GetInnerHTML() => Context.GetElementInnerHTML(ID);
 
         public void SetProperty(string property, string value) => Context.SetElementProperty(ID, property, value);
     }

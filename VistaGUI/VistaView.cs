@@ -34,7 +34,7 @@ namespace VistaGUI
         /// <summary>
         /// JavaScript context.
         /// </summary>
-        public GUIScriptingContext ScriptingContext;
+        public VistaScriptingContext ScriptingContext;
 
         public bool Visible = true;
         public View UltralightView;
@@ -84,7 +84,7 @@ namespace VistaGUI
             UltralightView.URL = $"file:///{HTMLPath}";
 
             // Load JS Scripting Context
-            ScriptingContext = new GUIScriptingContext();
+            ScriptingContext = new VistaScriptingContext();
             ScriptingContext.UltralightView = UltralightView;
 
             RenderOutput();
