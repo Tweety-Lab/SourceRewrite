@@ -58,16 +58,16 @@ namespace SourceRewrite.Components
                 VistaText outputText = GetElementAsType<VistaText>("output-text");
                 outputText.TextContent = "Button Pressed";
 
-                // Set Text Style
+                // Set Text to red color
                 outputText.SetStyle("color: red;");
 
-                // Set Image
+                // Change Image
                 VistaImage hammerImage = GetElementAsType<VistaImage>("hammer-image");
                 hammerImage.ImageSource = "file:///images/hammer_old.png";
 
-                // Disable Button on press
+                // Disable the Button
                 VistaButton button = GetElementAsType<VistaButton>("click-me");
-                button.TextContent = "Clicked";
+                button.TextContent = "Disabled";
                 button.Disabled = true;
             }
 
