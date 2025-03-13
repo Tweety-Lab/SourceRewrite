@@ -17,17 +17,17 @@ namespace VistaGUI.Scripting
         public View UltralightView;
 
         // Retrieves an element by its ID
-        public ElementReference GetElement(string elementId)
+        public VistaElement GetElement(string elementId)
         {
-            return new ElementReference(elementId, this);
+            return new VistaElement(elementId, this);
         }
 
         // Retrieves an element by its ID, returns a reference as a specific type (T).
-        public T GetElementAsType<T>(string elementId) where T : ElementReference
+        public T GetElementAsType<T>(string elementId) where T : VistaElement
         {
             // Get the element type based on its ID.
             string elementType = GetElementType(elementId);
-            Type type = TypeDictionary.Types.TryGetValue(elementType, out var resolvedType) ? resolvedType : typeof(ElementReference);
+            Type type = TypeDictionary.Types.TryGetValue(elementType, out var resolvedType) ? resolvedType : typeof(VistaElement);
 
             // Ensure the requested type matches the resolved type.
             if (typeof(T) != type && !typeof(T).IsAssignableFrom(type))

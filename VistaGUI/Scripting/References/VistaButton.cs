@@ -9,7 +9,7 @@ namespace VistaGUI.Scripting.References
     /// <summary>
     /// Generic reference to Button Elements.
     /// </summary>
-    public class ButtonReference : ElementReference
+    public class VistaButton : VistaElement
     {
         public string TextContent
         {
@@ -17,6 +17,6 @@ namespace VistaGUI.Scripting.References
             set => SetProperty("textContent", value);
         }
 
-        public ButtonReference(string ID, VistaScriptingContext context) : base(ID, context) { }
+        public VistaButton(string ID, VistaScriptingContext context) : base(ID, context) { }
     }
 }

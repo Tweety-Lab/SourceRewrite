@@ -57,18 +57,18 @@ namespace SourceRewrite.Components
             void ButtonPressed()
             {
                 // Set Text
-                TextReference outputText = GetElementAsType<TextReference>("output-text");
+                VistaText outputText = GetElementAsType<VistaText>("output-text");
                 outputText.TextContent = "Button Pressed";
 
                 // Set Text Style
                 outputText.SetStyle("background-color: black; color: white;");
 
                 // Set Image
-                ImageReference hammerImage = GetElementAsType<ImageReference>("hammer-image");
+                VistaImage hammerImage = GetElementAsType<VistaImage>("hammer-image");
                 hammerImage.ImageSource = "file:///images/hammer_old.png";
 
                 // Get Button
-                ButtonReference button = GetElementAsType<ButtonReference>("click-me");
+                VistaButton button = GetElementAsType<VistaButton>("click-me");
                 button.TextContent = "Clicked";
                 button.SetStyle("border: none; background-color: black; color: white;");
             }
@@ -120,7 +120,7 @@ namespace SourceRewrite.Components
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ElementReference GetElement(string id) => container.VistaView.ScriptingContext.GetElement(id);
+        public VistaElement GetElement(string id) => container.VistaView.ScriptingContext.GetElement(id);
 
         /// <summary>
         /// Gets an Element from it's ID as a specific type.
@@ -128,7 +128,7 @@ namespace SourceRewrite.Components
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public T GetElementAsType<T>(string id) where T : ElementReference
+        public T GetElementAsType<T>(string id) where T : VistaElement
         {
             return container.VistaView.ScriptingContext.GetElementAsType<T>(id);
         }

@@ -9,7 +9,7 @@ namespace VistaGUI.Scripting.References
     /// <summary>
     /// Generic reference to Image Elements.
     /// </summary>
-    public class ImageReference : ElementReference
+    public class VistaImage : VistaElement
     {
         public string ImageSource
         {
@@ -17,6 +17,6 @@ namespace VistaGUI.Scripting.References
             set => SetProperty("src", value);
         }
 
-        public ImageReference(string ID, VistaScriptingContext context) : base(ID, context) { }
+        public VistaImage(string ID, VistaScriptingContext context) : base(ID, context) { }
     }
 }

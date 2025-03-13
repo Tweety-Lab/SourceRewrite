@@ -9,7 +9,7 @@ namespace VistaGUI.Scripting.References
     /// <summary>
     /// Generic reference to Text Elements.
     /// </summary>
-    public class TextReference : ElementReference
+    public class VistaText : VistaElement
     {
         public string TextContent
         {
@@ -17,6 +17,6 @@ namespace VistaGUI.Scripting.References
             set => SetProperty("textContent", value);
         }
 
-        public TextReference(string ID, VistaScriptingContext context) : base(ID, context) { }
+        public VistaText(string ID, VistaScriptingContext context) : base(ID, context) { }
     }
 }

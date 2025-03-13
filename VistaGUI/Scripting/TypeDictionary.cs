@@ -9,19 +9,19 @@ namespace VistaGUI.Scripting
         public static readonly Dictionary<string, Type> Types = new()
         {
             // Text elements
-            ["p"] = typeof(TextReference),
-            ["b"] = typeof(TextReference),
-            ["i"] = typeof(TextReference),
-            ["span"] = typeof(TextReference),
-            ["h1"] = typeof(TextReference),
-            ["h2"] = typeof(TextReference),
-            ["h3"] = typeof(TextReference),
+            ["p"] = typeof(VistaText),
+            ["b"] = typeof(VistaText),
+            ["i"] = typeof(VistaText),
+            ["span"] = typeof(VistaText),
+            ["h1"] = typeof(VistaText),
+            ["h2"] = typeof(VistaText),
+            ["h3"] = typeof(VistaText),
 
             // Image Elements
-            ["img"] = typeof(ImageReference),
+            ["img"] = typeof(VistaImage),
 
             // Button Elements
-            ["button"] = typeof(ButtonReference)
+            ["button"] = typeof(VistaButton)
 
         };
     }

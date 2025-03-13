@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace VistaGUI.Scripting.References
 {
     // Reference to a Generic HTML element.
-    public class ElementReference
+    public class VistaElement
     {
         public string ID { get; private set; }
         private VistaScriptingContext Context { get; set; }
@@ -19,7 +19,7 @@ namespace VistaGUI.Scripting.References
             set => SetInnerHTML(value);
         }
 
-        public ElementReference(string id, VistaScriptingContext context)
+        public VistaElement(string id, VistaScriptingContext context)
         {
             ID = id;
             Context = context;
