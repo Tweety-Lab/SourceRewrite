@@ -18,7 +18,11 @@ namespace VistaGUI.Scripting
             ["h3"] = typeof(TextReference),
 
             // Image Elements
-            ["img"] = typeof(ImageReference)
+            ["img"] = typeof(ImageReference),
+
+            // Button Elements
+            ["button"] = typeof(ButtonReference)
+
         };
     }
 }

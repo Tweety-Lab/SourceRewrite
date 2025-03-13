@@ -32,7 +32,8 @@ namespace VistaGUI.Scripting
             // Ensure the requested type matches the resolved type.
             if (typeof(T) != type && !typeof(T).IsAssignableFrom(type))
             {
-                throw new InvalidCastException($"Cannot cast element {elementId} of type {type} to {typeof(T)}.");
+                Console.WriteLine($"Cannot cast element {elementId} of type {elementType} to {typeof(T)}.");
+                return null;
             }
 
             // Return the instance of the requested type (T).
