@@ -58,6 +58,10 @@ namespace SourceRewrite.Components
 
                 outputText.TextContent = "Button Pressed";
 
+                ImageReference hammerImage = GetElementAsType<ImageReference>("hammer-image");
+
+                hammerImage.ImageSource = "file:///images/hammer_old.png";
+
                 Console.WriteLine(outputText.TextContent);
             }
 
