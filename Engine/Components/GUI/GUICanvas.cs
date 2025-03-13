@@ -6,8 +6,6 @@ using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
-using System.ComponentModel;
-using System.Drawing;
 using System.Numerics;
 using VistaGUI;
 using VistaGUI.Scripting.References;
@@ -61,16 +59,16 @@ namespace SourceRewrite.Components
                 outputText.TextContent = "Button Pressed";
 
                 // Set Text Style
-                outputText.SetStyle("background-color: black; color: white;");
+                outputText.SetStyle("color: red;");
 
                 // Set Image
                 VistaImage hammerImage = GetElementAsType<VistaImage>("hammer-image");
                 hammerImage.ImageSource = "file:///images/hammer_old.png";
 
-                // Get Button
+                // Disable Button on press
                 VistaButton button = GetElementAsType<VistaButton>("click-me");
                 button.TextContent = "Clicked";
-                button.SetStyle("border: none; background-color: black; color: white;");
+                button.Disabled = true;
             }
 
             RenderViewToObject();

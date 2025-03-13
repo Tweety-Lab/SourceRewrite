@@ -11,6 +11,9 @@ namespace VistaGUI.Scripting.References
     /// </summary>
     public class VistaImage : VistaElement
     {
+        /// <summary>
+        /// The Source path of the Image.
+        /// </summary>
         public string ImageSource
         {
             get => GetProperty("src");
