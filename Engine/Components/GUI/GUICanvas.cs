@@ -126,8 +126,8 @@ namespace SourceRewrite.Components
             }
         }
 
-        bool isVisible = true;
         bool hasClicked = false;
+        bool hasPressed = false;
         public override void Update(float deltaTime)
         {
             // Get current mouse position
@@ -149,15 +149,15 @@ namespace SourceRewrite.Components
             }
 
             // Toggle GUI Visibility
-            if (Input.GetKeyDown(Key.Escape) && isVisible)
+            if (Input.GetKeyDown(Key.Escape) && !hasPressed)
             {
-                Container.VistaView.Visible = false;
-                isVisible = false;
-            } 
-            else if (Input.GetKeyDown(Key.Escape) && !isVisible)
+                Container.VistaView.Visible = !Container.VistaView.Visible;
+                hasPressed = true;
+            }
+
+            if (Input.GetKeyUp(Key.Escape))
             {
-                Container.VistaView.Visible = true;
-                isVisible = true;
+                hasPressed = false;
             }
 
             // Render view
