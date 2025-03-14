@@ -49,6 +49,14 @@ namespace SourceRewrite.InputSystem
         }
 
         /// <summary>
+        /// Returns True if the chosen key is up.
+        /// </summary>
+        public static bool GetKeyUp(Key key)
+        {
+            return !GameWindow.CurrentWindow.Input.PrimaryKeyboard.IsKeyPressed(key);
+        }
+
+        /// <summary>
         /// Returns True if chosen Mouse Button is down.
         /// </summary>
         public static bool GetMouseButtonDown(int mouseButton)
