@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "99"
+	"mapversion" "101"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "99"
+	"mapversion" "101"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -111,9 +111,9 @@ entity
 	"angles" "0 0 0"
 	"height" "36"
 	"IsTransparent" "1"
-	"panelname" "scene_editor.html"
+	"panelname" "light_editor.html"
 	"width" "64"
-	"origin" "0 -16 248"
+	"origin" "16 -16 32"
 	editor
 	{
 		"color" "220 30 220"
