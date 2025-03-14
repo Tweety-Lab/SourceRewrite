@@ -2,27 +2,130 @@
     <style>
         body {
             height: 100vh; /* Make sure the background covers the entire viewport height */
-            margin: 0; /* Remove default margin */
-            display: flex; /* Use flexbox to layout the content */
-            flex-direction: column; /* Stack items left to right */
-            justify-content: center; /* Horizontally center the content */
-            align-items: center; /* Vertically center the content */
             font-family: Arial, sans-serif; /* Set a clean font */
-            position: relative; /* Needed to position the dot relative to the body */
+        }
+
+        p, button, div {
+            margin: 0; /* Remove default margin from elements */
         }
 
         p {
             color: rgb(255, 255, 255);
         }
+
+        #disclaimer {
+            color: #6d6d6d;
+            padding-bottom: 20px;
+        }
+        
+        .editor-panel {
+            background: linear-gradient(to bottom, #fc5454 0px, #fc5454 22px, #262626 22px);
+            padding: 5px;
+            border-radius: 5px;
+            display: flex; /* Use flexbox to arrange the content */
+            flex-direction: column; /* Stack items vertically */
+            gap: 40px; /* Space between items */
+            width: fit-content;
+        }
+
+        .editor-panel p {
+            font-size: small;
+        }
+
+        .editor-panel button {
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px;
+            margin-top: 5px;
+            min-width: 200px;
+            background-color: #fc5454;
+        }
+
+        .editor-panel #panel-title {
+            align-self: center;
+            margin-bottom: 10px;
+        }
+
+        .editor-panel .editor-section {
+            display: flex; /* Use flexbox to arrange the content */
+            flex-direction: column; /* Stack items vertically */
+            margin-bottom: 20px;
+        }
+
+        /* Custom Radio Button Styles */
+        .custom-radio {
+            display: flex; /* Use flexbox to align items horizontally */
+            align-items: center; /* Vertically center the radio button and text */
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .custom-radio input {
+            display: none; /* Hide the default radio button */
+        }
+
+        .custom-radio .radio-button {
+            width: 16px;
+            height: 16px;
+            background-color: #444; /* Dark grey background */
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            margin-right: 8px; /* Add space between the radio button and text */
+        }
+
+        .custom-radio input:checked + .radio-button::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #fc5454; /* Colored circle */
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-radio .radio-text {
+            color: white;
+            font-size: 12px;
+        }
+
     </style>
 </head>
 <body>
-    <p>GUI DEMO</p>
-    <button id="click-me" onclick="ButtonPressed()">Click Me</button>
-    <p id="output-text">Output</p>
+    <p id="disclaimer">DEMO CONTENT - TO BE CHANGED</p>
 
-    <img id="hammer-image" src="file:///images/hammer.jpg" alt="Local Photo">
+    <div class="editor-panel">
+        <p id="panel-title">Light Editor</p>
 
-    <!-- Dot element that will follow the cursor -->
-    <div class="cursor-dot" id="cursorDot"></div>
+        <div class ="editor-section">
+            <p>Translation</p>
+            <label class="custom-radio">
+                <input type="radio">
+                <span class="radio-button"></span>
+                <span class="radio-text">Position</span>
+            </label>
+            <label class="custom-radio">
+                <input type="radio">
+                <span class="radio-button"></span>
+                <span class="radio-text">None</span>
+            </label>
+        </div>
+
+        <div class="editor-section">
+            <p>Light Actions</p>
+            <button>Toggle Lights</button>
+            <button>Delete Lights</button>
+        </div>
+
+        <div class="editor-section">
+            <p>Map Actions</p>
+            <button>Load BSP</button>
+            <button>Save To BSP</button>
+        </div>
+
+        <p>Current Map: </p>
+    </div>
 </body>
