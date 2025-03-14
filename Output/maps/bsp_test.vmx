@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "96"
+	"mapversion" "98"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "96"
+	"mapversion" "98"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -110,7 +110,7 @@ entity
 	"classname" "vgui_screen"
 	"angles" "0 0 0"
 	"height" "36"
-	"IsTransparent" "0"
+	"IsTransparent" "1"
 	"panelname" "gui_demo.html"
 	"width" "64"
 	"origin" "0 -16 248"
@@ -120,22 +120,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
-	}
-}
-entity
-{
-	"id" "116"
-	"classname" "func_instance"
-	"angles" "-0 -30 0"
-	"file" "prefabs/prefab_test_1.vmf"
-	"fixup_style" "0"
-	"origin" "224 -64 0"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1000]"
 	}
 }
 entity

@@ -30,7 +30,7 @@ namespace SourceRewrite.Components
         [MapProperty("IsTransparent")]
         private bool isTransparent; // Is the panel background transparent
 
-        private int panelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
+        public int PanelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
 
         public GUIContainer Container;
 
@@ -48,7 +48,7 @@ namespace SourceRewrite.Components
             config.EnableJavaScript = true;
 
             int resolutionDensity = 12;
-            if (panelType != 0)
+            if (PanelType != 0)
             {
                 resolutionDensity = 1;
                 width = (int)GameWindow.CurrentWindow.WindowSize.X;
@@ -85,7 +85,7 @@ namespace SourceRewrite.Components
             }
 
             // Render view depending on if it's worldspace or screenspace
-            if (panelType == 0)
+            if (PanelType == 0)
             {
                 RenderViewToObject();
             } else
@@ -129,7 +129,7 @@ namespace SourceRewrite.Components
             Texture texture = Container.RenderToTexture();
 
             // Update view depending on if it's worldspace or screenspace
-            if (panelType == 0)
+            if (PanelType == 0)
             {
                 if (guiMesh != null)
                     guiMesh.Material.Texture = texture;

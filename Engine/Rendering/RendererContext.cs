@@ -73,8 +73,9 @@ namespace SourceRewrite.Rendering
                     _apiInterface.RenderMesh(meshRenderer);
                 }
 
+                // Render all visible Screenspace GUIs
                 GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
-                if (guiCanvas != null)
+                if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
                 {
                     _apiInterface.RenderScreenspaceGUI(guiCanvas);
                 }
