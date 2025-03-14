@@ -25,6 +25,7 @@
             display: flex; /* Use flexbox to arrange the content */
             flex-direction: column; /* Stack items vertically */
             gap: 40px; /* Space between items */
+            position: absolute; /* Allow panel to be placed anywhere */
             width: fit-content;
         }
 
@@ -101,7 +102,7 @@
 <body>
     <p id="disclaimer">DEMO CONTENT - TO BE CHANGED</p>
 
-    <div class="editor-panel">
+    <div class="editor-panel" id="light-editor-panel">
         <p id="panel-title">Light Editor</p>
 
         <div class ="editor-section">
@@ -132,4 +133,35 @@
 
         <p id="current-map">Current Map: </p>
     </div>
+
+    
+    <script>
+        // Variables for dragging functionality
+        let isDragging = false;
+        let offsetX = 0, offsetY = 0;
+        const editorPanel = document.getElementById("light-editor-panel");
+        const panelTitle = document.getElementById("panel-title");
+
+        // Mouse down event on the panel title to start dragging
+        panelTitle.addEventListener("mousedown", function(e) {
+            isDragging = true;
+            offsetX = e.clientX - editorPanel.getBoundingClientRect().left;
+            offsetY = e.clientY - editorPanel.getBoundingClientRect().top;
+            editorPanel.style.transition = 'none'; // Disable smooth transition during dragging
+        });
+
+        // Mouse move event to move the panel
+        document.addEventListener("mousemove", function(e) {
+            if (isDragging) {
+                editorPanel.style.left = `${e.clientX - offsetX}px`;
+                editorPanel.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        // Mouse up event to stop dragging
+        document.addEventListener("mouseup", function() {
+            isDragging = false;
+            editorPanel.style.transition = 'top 0.2s ease, left 0.2s ease'; // Re-enable smooth transition
+        });
+    </script>
 </body>
