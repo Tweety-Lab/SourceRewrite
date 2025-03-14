@@ -12,18 +12,7 @@
         }
 
         p {
-            color: rgb(0, 0, 0);
-        }
-
-        /* Style for the dot that follows the cursor */
-        .cursor-dot {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: black;
-            border-radius: 50%;
-            pointer-events: none; /* Prevent it from interfering with other interactions */
-            transform: translate(-50%, -50%); /* Center the dot at the cursor */
+            color: rgb(255, 255, 255);
         }
     </style>
 </head>
@@ -36,15 +25,4 @@
 
     <!-- Dot element that will follow the cursor -->
     <div class="cursor-dot" id="cursorDot"></div>
-
-    <script>
-        // Get the dot element
-        const cursorDot = document.getElementById('cursorDot');
-
-        // Update the position of the dot as the mouse moves
-        document.addEventListener('mousemove', function(event) {
-            cursorDot.style.left = `${event.clientX}px`;
-            cursorDot.style.top = `${event.clientY}px`;
-        });
-    </script>
 </body>
