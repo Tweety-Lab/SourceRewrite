@@ -64,9 +64,9 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.OnRender(this);
 
-            // Render every Mesh Renderer
             foreach (GameObject gameobject in GameObject.ActiveObjects)
             {
+                // Render all Meshes
                 MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
                 if (meshRenderer != null)
                 {
@@ -89,9 +89,18 @@ namespace SourceRewrite.Rendering
             _apiInterface.OnClose();
         }
 
-        // Run any special logic that needs to be ran per frame
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
+            // Resize all visible Screenspace GUIs
+            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            {
+                GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
+                if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
+                {
+                    guiCanvas.Container.VistaView.Resize((uint)newSize.X, (uint)newSize.Y);
+                }
+            }
+
             _apiInterface.OnFramebufferResize(newSize);
         }
 

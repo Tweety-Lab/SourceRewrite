@@ -88,9 +88,6 @@ namespace SourceRewrite.Components
             if (PanelType == 0)
             {
                 RenderViewToObject();
-            } else
-            {
-                RenderViewToScreen();
             }
         }
 
@@ -133,10 +130,6 @@ namespace SourceRewrite.Components
             {
                 if (guiMesh != null)
                     guiMesh.Material.Texture = texture;
-            }
-            else
-            {
-
             }
         }
 
@@ -196,12 +189,6 @@ namespace SourceRewrite.Components
 
             // Render the gui mesh
             cubeRenderer.Mesh = guiMesh;
-        }
-
-        // Render a GUIView in screenspace
-        private void RenderViewToScreen()
-        {
-            var windowSize = GameWindow.CurrentWindow.WindowSize;
         }
     }
 }

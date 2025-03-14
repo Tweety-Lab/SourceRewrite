@@ -106,6 +106,20 @@ namespace VistaGUI
             }
         }
 
+        /// <summary>
+        /// Resizes the GUI.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public void Resize(uint width, uint height)
+        {
+            // Resize the Ultralight view
+            UltralightView.Resize(width, height);
+
+            // Resize the pixel buffer to match the new dimensions
+            pixelBuffer = new byte[width * height * 4];
+        }
+
 
         /// <summary>
         /// Sends a mouse position event to the GUI.
