@@ -7,6 +7,9 @@ namespace SourceRewrite.Objects
         // Every object that exists
         public static List<GameObject> ActiveObjects { get; private set; } = new List<GameObject>();
 
+        // Queue for deferred destruction of GameObjects
+        private static Queue<GameObject> _objectsToDestroy = new Queue<GameObject>();
+
         // Every attached Component
         public List<GameComponent> Components { get; private set; } = new List<GameComponent>();
 
@@ -32,6 +35,24 @@ namespace SourceRewrite.Objects
                 {
                     comp.Update(deltaTime);
                 }
+            }
+
+            // Process deferred destruction
+            ProcessDestructionQueue();
+        }
+
+        /// <summary>
+        /// Processes the queue of GameObjects to destroy.
+        /// </summary>
+        private static void ProcessDestructionQueue()
+        {
+            while (_objectsToDestroy.Count > 0)
+            {
+                GameObject obj = _objectsToDestroy.Dequeue();
+                ActiveObjects.Remove(obj);
+                obj.Components.Clear();
+
+                Console.WriteLine("Destroyed GameObject: " + obj);
             }
         }
 
@@ -72,6 +93,15 @@ namespace SourceRewrite.Objects
         {
             Components.Add(component);
             component.GameObject = this;
+        }
+
+        /// <summary>
+        /// Destroys the GameObject, removing it from the ActiveObjects list and cleaning up its components.
+        /// </summary>
+        public void DestroyDeferred()
+        {
+            // Add the GameObject to the destruction queue
+            _objectsToDestroy.Enqueue(this);
         }
     }
 }

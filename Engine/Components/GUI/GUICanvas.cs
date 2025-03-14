@@ -69,7 +69,20 @@ namespace SourceRewrite.Components
             {
                 // Set Text
                 VistaText currentMapText = GetElementAsType<VistaText>("current-map");
-                currentMapText.TextContent = "Current Map: 'bsp_test.bsp'";
+                currentMapText.TextContent = "Current Map: 'maps/bsp_test.bsp'";
+            }
+
+            RegisterEvent("DeleteLights", () => DeleteLights());
+
+            void DeleteLights()
+            {
+                foreach(GameObject gameObject in GameObject.ActiveObjects)
+                {
+                    if (gameObject.GetComponentFromType<PointLight>() != null)
+                    {
+                        gameObject.DestroyDeferred();
+                    }
+                }
             }
 
             // Render view depending on if it's worldspace or screenspace
