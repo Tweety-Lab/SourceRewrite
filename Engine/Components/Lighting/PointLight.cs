@@ -35,5 +35,14 @@ namespace SourceRewrite.Components
                 shader.SetParameter("light_attenuation", new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
             }
         }
+
+        public override void OnDestroy()
+        {
+            // Update Uniforms
+            foreach (Shader shader in Shader.Shaders)
+            {
+                shader.SetParameter("light_color", new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+            }
+        }
     }
 }

@@ -25,6 +25,11 @@ namespace SourceRewrite.Components
         public virtual void Start() { }
 
         /// <summary>
+        /// Runs once on destroy.
+        /// </summary>
+        public virtual void OnDestroy() { }
+
+        /// <summary>
         /// Sets a property of the component.
         /// </summary>
         public void SetProperty(string name, object value)

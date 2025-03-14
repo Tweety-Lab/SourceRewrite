@@ -50,6 +50,13 @@ namespace SourceRewrite.Objects
             {
                 GameObject obj = _objectsToDestroy.Dequeue();
                 ActiveObjects.Remove(obj);
+
+                // Run destruction logic for all components
+                foreach (GameComponent comp in obj.Components)
+                {
+                    comp.OnDestroy();
+                }
+
                 obj.Components.Clear();
 
                 Console.WriteLine("Destroyed GameObject: " + obj);
