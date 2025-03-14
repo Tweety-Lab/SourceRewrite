@@ -48,13 +48,21 @@
         }
 
         .editor-panel #panel-title {
-            align-self: center;
+            display: flex;
+            justify-content: center; /* Center the content */
             margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .editor-panel #panel-title img {
+            position: absolute;
+            left: 4px; /* Position on the left side */
+            top: 0px;
         }
 
         .editor-panel .editor-section {
-            display: flex; /* Use flexbox to arrange the content */
-            flex-direction: column; /* Stack items vertically */
+            display: flex;
+            flex-direction: column;
             margin-bottom: 20px;
         }
 
@@ -103,7 +111,10 @@
     <p id="disclaimer">DEMO CONTENT - TO BE CHANGED</p>
 
     <div class="editor-panel" id="light-editor-panel">
-        <p id="panel-title">Light Editor</p>
+        <div id="panel-title">
+            <img src="file:///images/drop_down_arrow.svg" id="toggle-panel">
+            <p>Light Editor</p>
+        </div>
 
         <div class ="editor-section">
             <p>Translation</p>
@@ -141,7 +152,8 @@
         let offsetX = 0, offsetY = 0;
         const editorPanel = document.getElementById("light-editor-panel");
         const panelTitle = document.getElementById("panel-title");
-
+        const toggleButton = document.getElementById("toggle-panel");
+    
         // Mouse down event on the panel title to start dragging
         panelTitle.addEventListener("mousedown", function(e) {
             isDragging = true;
@@ -149,7 +161,7 @@
             offsetY = e.clientY - editorPanel.getBoundingClientRect().top;
             editorPanel.style.transition = 'none'; // Disable smooth transition during dragging
         });
-
+    
         // Mouse move event to move the panel
         document.addEventListener("mousemove", function(e) {
             if (isDragging) {
@@ -157,11 +169,24 @@
                 editorPanel.style.top = `${e.clientY - offsetY}px`;
             }
         });
-
+    
         // Mouse up event to stop dragging
         document.addEventListener("mouseup", function() {
             isDragging = false;
             editorPanel.style.transition = 'top 0.2s ease, left 0.2s ease'; // Re-enable smooth transition
+        });
+    
+        // Get all elements with the class 'editor-section'
+        const editorSections = document.querySelectorAll('.editor-section');
+    
+        // Toggle panel sections visibility when clicking the drop-down image
+        toggleButton.addEventListener("click", function() {
+            // Iterate over all the sections and toggle their visibility
+            editorSections.forEach(section => {
+                // Toggle the display of each section
+                const isCollapsed = section.style.display === "none";
+                section.style.display = isCollapsed ? "flex" : "none";
+            });
         });
     </script>
 </body>
