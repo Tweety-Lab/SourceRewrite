@@ -127,6 +127,7 @@ namespace SourceRewrite.Components
         }
 
         bool isVisible = true;
+        bool hasClicked = false;
         public override void Update(float deltaTime)
         {
             // Get current mouse position
@@ -135,14 +136,16 @@ namespace SourceRewrite.Components
             Container.VistaView.SendMousePosition(mousePosition);
 
             // Send Mouse Inputs
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !hasClicked)
             {
                 Container.VistaView.SendMouseButtonDown(0);
+                hasClicked = true;
             }
 
             if (Input.GetMouseButtonUp(0))
             {
                 Container.VistaView.SendMouseButtonUp(0);
+                hasClicked = false;
             }
 
             // Toggle GUI Visibility
