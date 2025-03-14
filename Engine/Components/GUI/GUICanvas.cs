@@ -37,6 +37,15 @@ namespace SourceRewrite.Components
         // Worldspace rendering
         private MeshAsset guiMesh;
 
+        // LIGHT EDITOR STUFF
+        enum TranslationMode
+        {
+            None,
+            Position
+        }
+
+        private TranslationMode translationMode = TranslationMode.None;
+
         public override void Start()
         {
             // Create view config
@@ -63,8 +72,33 @@ namespace SourceRewrite.Components
             Container.VistaView = vistaView;
 
             // Set up GUI Events
-            RegisterEvent("LoadBSP", () => LoadBSP());
 
+            // Transforms
+            RegisterEvent("PositionMode", () => translationMode = TranslationMode.Position);
+            RegisterEvent("NoneMode", () => translationMode = TranslationMode.None);
+
+            // Toggle Light Mesh Visualisation
+            RegisterEvent("ToggleLights", () => ToggleLights());
+            void ToggleLights()
+            {
+                foreach (GameObject gameObject in GameObject.ActiveObjects)
+                {
+                    if (gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() == null)
+                    {
+                        Mesh mesh = new Mesh(FileSystem.GetModelPath("primitives/cube.model"), FileSystem.GetMaterial("dev/error"));
+                        MeshRenderer meshRenderer = new MeshRenderer();
+                        meshRenderer.Mesh = mesh;
+
+                        gameObject.AddComponent(meshRenderer);
+                    } else if(gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() != null)
+                    {
+                        gameObject.RemoveComponentOfType<MeshRenderer>();
+                    }
+                }
+            }
+
+            // Load a BSP (right now just sets current map text)
+            RegisterEvent("LoadBSP", () => LoadBSP());
             void LoadBSP()
             {
                 // Set Text
@@ -72,8 +106,8 @@ namespace SourceRewrite.Components
                 currentMapText.TextContent = "Current Map: 'maps/bsp_test.bsp'";
             }
 
+            // Delete all lights in the scene
             RegisterEvent("DeleteLights", () => DeleteLights());
-
             void DeleteLights()
             {
                 foreach(GameObject gameObject in GameObject.ActiveObjects)
@@ -131,6 +165,22 @@ namespace SourceRewrite.Components
             {
                 if (guiMesh != null)
                     guiMesh.Material.Texture = texture;
+            }
+
+            // LIGHT EDITOR STUFF
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (translationMode == TranslationMode.Position)
+                {
+                    foreach (GameObject gameObject in GameObject.ActiveObjects)
+                    {
+                        if (gameObject.GetComponentFromType<PointLight>() != null)
+                        {
+                            Vector3 movement = new Vector3(Input.GetMouseMovement().X, 0, Input.GetMouseMovement().Y);
+                            gameObject.Transform.Position += movement;
+                        }
+                    }
+                }
             }
         }
 

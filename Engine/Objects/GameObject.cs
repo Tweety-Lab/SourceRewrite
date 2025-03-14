@@ -103,6 +103,21 @@ namespace SourceRewrite.Objects
         }
 
         /// <summary>
+        /// Removes a Component of the specified type from the GameObject.
+        /// </summary>
+        public void RemoveComponentOfType<ComponentType>() where ComponentType : GameComponent
+        {
+            // Find and remove the component of the specified type
+            var componentToRemove = Components.FirstOrDefault(comp => comp is ComponentType);
+            if (componentToRemove != null)
+            {
+                componentToRemove.OnDestroy(); // Call OnDestroy before removal
+                Components.Remove(componentToRemove);
+            }
+        }
+
+
+        /// <summary>
         /// Destroys the GameObject, removing it from the ActiveObjects list and cleaning up its components.
         /// </summary>
         public void DestroyDeferred()
