@@ -90,7 +90,7 @@ namespace SourceRewrite.Components
                         meshRenderer.Mesh = mesh;
 
                         gameObject.AddComponent(meshRenderer);
-                    } else if(gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() != null)
+                    } else if (gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() != null)
                     {
                         gameObject.RemoveComponentOfType<MeshRenderer>();
                     }
@@ -110,7 +110,7 @@ namespace SourceRewrite.Components
             RegisterEvent("DeleteLights", () => DeleteLights());
             void DeleteLights()
             {
-                foreach(GameObject gameObject in GameObject.ActiveObjects)
+                foreach (GameObject gameObject in GameObject.ActiveObjects)
                 {
                     if (gameObject.GetComponentFromType<PointLight>() != null)
                     {
