@@ -72,6 +72,12 @@ namespace SourceRewrite.Rendering
                 {
                     _apiInterface.RenderMesh(meshRenderer);
                 }
+
+                GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
+                if (guiCanvas != null)
+                {
+                    _apiInterface.RenderScreenspaceGUI(guiCanvas);
+                }
             }
         }
 
@@ -92,6 +98,11 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.InitMesh(meshObject);
         }
+
+        public void DrawScreenspaceQuad(GUICanvas canvas)
+        {
+            _apiInterface.RenderScreenspaceGUI(canvas);
+        }
     }
 
     /// <summary>
@@ -106,6 +117,7 @@ namespace SourceRewrite.Rendering
         void OnFramebufferResize(Vector2D<int> newSize);
         void RenderMesh(MeshRenderer meshObject);
         void InitMesh(MeshAsset meshObject);
+        void RenderScreenspaceGUI(GUICanvas canvas);
     }
 
     /// <summary>

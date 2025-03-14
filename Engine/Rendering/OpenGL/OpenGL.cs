@@ -5,6 +5,7 @@ using Silk.NET.Maths;
 using System.Numerics;
 using SourceRewrite.Components;
 using SourceRewrite.AssetTypes;
+using SourceRewrite.Files;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -18,6 +19,13 @@ namespace SourceRewrite.Rendering.OpenGL
         private List<OpenGLBufferObject<uint>> eboList = new List<OpenGLBufferObject<uint>>();
         private List<OpenGLBufferObject<float>> vboList = new List<OpenGLBufferObject<float>>();
         private List<OpenGLVertexArrayObject<float, uint>> vaoList = new List<OpenGLVertexArrayObject<float, uint>>();
+
+        private OpenGLBufferObject<float> _quadVbo;
+        private OpenGLBufferObject<uint> _quadEbo;
+        private OpenGLVertexArrayObject<float, uint> _quadVao;
+
+        // GUI Screenspace Shader
+        private Shader _guiShader;
 
         public GL OpenGL;
         public OpenGLContext(GameWindow targetWindow)
@@ -36,6 +44,39 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void OnLoad(RendererContext renderer)
         {
+            // Define the vertices for a full-screen quad in NDC (Normalized Device Coordinates)
+            float[] quadVertices = {
+    // Positions   // UVs (flipped vertically)
+    -1.0f,  1.0f,  0.0f, 0.0f, // Top-left (flipped from 0,1 to 0,0)
+    -1.0f, -1.0f,  0.0f, 1.0f, // Bottom-left (flipped from 0,0 to 0,1)
+     1.0f, -1.0f,  1.0f, 1.0f, // Bottom-right (flipped from 1,0 to 1,1)
+     1.0f,  1.0f,  1.0f, 0.0f  // Top-right (flipped from 1,1 to 1,0)
+};
+
+            // Define the indices for the quad (two triangles)
+            uint[] quadIndices = {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+            // Create and bind the VBO
+            _quadVbo = new OpenGLBufferObject<float>(OpenGL, quadVertices, BufferTargetARB.ArrayBuffer);
+
+            // Create and bind the EBO
+            _quadEbo = new OpenGLBufferObject<uint>(OpenGL, quadIndices, BufferTargetARB.ElementArrayBuffer);
+
+            // Create and bind the VAO
+            _quadVao = new OpenGLVertexArrayObject<float, uint>(OpenGL, _quadVbo, _quadEbo);
+
+            // Set up the vertex attribute pointers
+            _quadVao.VertexAttributePointer(0, 2, VertexAttribPointerType.Float, 4, 0); // Position
+            _quadVao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 4, 2); // UVs
+
+            // Load UI shader if it hasn't been loaded yet
+            if (_guiShader == null)
+            {
+                _guiShader = new Shader(FileSystem.GetShaderPath("ScreenspaceGUI"));
+            }
         }
 
         public unsafe void OnRender(RendererContext renderer)
@@ -112,8 +153,39 @@ namespace SourceRewrite.Rendering.OpenGL
             vao.VertexAttributePointer(2, 2, VertexAttribPointerType.Float, 8, 6); // UVs
         }
 
+        public unsafe void RenderScreenspaceGUI(GUICanvas canvas)
+        {
+            // Disable depth testing for UI
+            OpenGL.Disable(EnableCap.DepthTest);
+
+            // Use the UI-specific shader
+            OpenGLShader guiOpenGLShader = (OpenGLShader)_guiShader.GetShaderInterface();
+            guiOpenGLShader.Use();
+
+            // Set tint color uniform if needed (assuming a white tint by default)
+            guiOpenGLShader.SetParameter("tint", new Vector4(255, 255, 255, 255));
+
+            // Bind the texture
+            OpenGLTexture openglTexture = (OpenGLTexture)canvas.Container.RenderToTexture().GetTextureInterface();
+            openglTexture.Bind(TextureUnit.Texture0);
+
+            // Set texture uniform
+            guiOpenGLShader.SetParameter("uTexture0", 0); // Texture unit 0
+
+            // Bind the VAO and draw the quad
+            _quadVao.Bind();
+            OpenGL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, null);
+            _quadVao.Unbind();
+
+            // Re-enable depth testing for 3D objects
+            OpenGL.Enable(EnableCap.DepthTest);
+        }
+
         public void OnClose()
         {
+            _quadVbo?.Dispose();
+            _quadEbo?.Dispose();
+            _quadVao?.Dispose();
 
             foreach (OpenGLBufferObject<uint> ebo in eboList)
             {

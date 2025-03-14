@@ -6,6 +6,7 @@ using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
+using SourceRewrite.Windowing;
 using System.Numerics;
 using VistaGUI;
 using VistaGUI.Scripting.References;
@@ -29,7 +30,11 @@ namespace SourceRewrite.Components
         [MapProperty("IsTransparent")]
         private bool isTransparent; // Is the panel background transparent
 
-        private GUIContainer container;
+        private int panelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
+
+        public GUIContainer Container;
+
+        // Worldspace rendering
         private MeshAsset guiMesh;
 
         public override void Start()
@@ -42,12 +47,20 @@ namespace SourceRewrite.Components
             config.IsTransparent = isTransparent;
             config.EnableJavaScript = true;
 
-            VistaView vistaView = new VistaView(panelName, config, 12, height, width);
+            int resolutionDensity = 12;
+            if (panelType != 0)
+            {
+                resolutionDensity = 1;
+                width = (int)GameWindow.CurrentWindow.WindowSize.X;
+                height = (int)GameWindow.CurrentWindow.WindowSize.Y;
+            }
 
-            container = new GUIContainer();
+            VistaView vistaView = new VistaView(panelName, config, resolutionDensity, height, width);
+
+            Container = new GUIContainer();
 
             // Create a GUI View
-            container.VistaView = vistaView;
+            Container.VistaView = vistaView;
 
             // Set up GUI Events
             RegisterEvent("ButtonPressed", () => ButtonPressed());
@@ -71,7 +84,14 @@ namespace SourceRewrite.Components
                 button.Disabled = true;
             }
 
-            RenderViewToObject();
+            // Render view depending on if it's worldspace or screenspace
+            if (panelType == 0)
+            {
+                RenderViewToObject();
+            } else
+            {
+                RenderViewToScreen();
+            }
         }
 
         bool isVisible = true;
@@ -80,37 +100,44 @@ namespace SourceRewrite.Components
             // Get current mouse position
             var mousePosition = Input.GetMousePosition();
 
-            container.VistaView.SendMousePosition(mousePosition);
+            Container.VistaView.SendMousePosition(mousePosition);
 
             // Send Mouse Inputs
             if (Input.GetMouseButtonDown(0))
             {
-                container.VistaView.SendMouseButtonDown(0);
+                Container.VistaView.SendMouseButtonDown(0);
             }
 
             if (Input.GetMouseButtonUp(0))
             {
-                container.VistaView.SendMouseButtonUp(0);
+                Container.VistaView.SendMouseButtonUp(0);
             }
 
             // Toggle GUI Visibility
             if (Input.GetKeyDown(Key.Escape) && isVisible)
             {
-                container.VistaView.Visible = false;
+                Container.VistaView.Visible = false;
                 isVisible = false;
             } 
             else if (Input.GetKeyDown(Key.Escape) && !isVisible)
             {
-                container.VistaView.Visible = true;
+                Container.VistaView.Visible = true;
                 isVisible = true;
             }
 
             // Render view
-            Texture texture = container.RenderToTexture();
+            Texture texture = Container.RenderToTexture();
 
-            // Update View
-            if (guiMesh != null)
-                guiMesh.Material.Texture = texture;
+            // Update view depending on if it's worldspace or screenspace
+            if (panelType == 0)
+            {
+                if (guiMesh != null)
+                    guiMesh.Material.Texture = texture;
+            }
+            else
+            {
+
+            }
         }
 
         /// <summary>
@@ -118,7 +145,7 @@ namespace SourceRewrite.Components
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public VistaElement GetElement(string id) => container.VistaView.ScriptingContext.GetElement(id);
+        public VistaElement GetElement(string id) => Container.VistaView.ScriptingContext.GetElement(id);
 
         /// <summary>
         /// Gets an Element from it's ID as a specific type.
@@ -128,7 +155,7 @@ namespace SourceRewrite.Components
         /// <returns></returns>
         public T GetElementAsType<T>(string id) where T : VistaElement
         {
-            return container.VistaView.ScriptingContext.GetElementAsType<T>(id);
+            return Container.VistaView.ScriptingContext.GetElementAsType<T>(id);
         }
 
         /// <summary>
@@ -136,21 +163,21 @@ namespace SourceRewrite.Components
         /// </summary>
         /// <param name="name">Javascript function name</param>
         /// <param name="action">C# Action</param>
-        public void RegisterEvent(string name, Action action) => container.VistaView.ScriptingContext.RegisterEvent(name, action);
+        public void RegisterEvent(string name, Action action) => Container.VistaView.ScriptingContext.RegisterEvent(name, action);
 
         /// <summary>
         /// Sets the Inner HTML of an Element from it's ID.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="text"></param>
-        public void SetElementInnerHTML(string id, string text) => container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
+        public void SetElementInnerHTML(string id, string text) => Container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
 
         // Render a GUIView in worldspace
         private void RenderViewToObject()
         {
             // Create a Material from the view output
             Material guiMaterial = new Material("dev/missing");
-            guiMaterial.Texture = container.Output;
+            guiMaterial.Texture = Container.Output;
 
             // Create a plane mesh to house the gui
             guiMesh = new Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
@@ -169,6 +196,12 @@ namespace SourceRewrite.Components
 
             // Render the gui mesh
             cubeRenderer.Mesh = guiMesh;
+        }
+
+        // Render a GUIView in screenspace
+        private void RenderViewToScreen()
+        {
+            var windowSize = GameWindow.CurrentWindow.WindowSize;
         }
     }
 }
