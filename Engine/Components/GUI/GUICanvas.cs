@@ -63,25 +63,13 @@ namespace SourceRewrite.Components
             Container.VistaView = vistaView;
 
             // Set up GUI Events
-            RegisterEvent("ButtonPressed", () => ButtonPressed());
+            RegisterEvent("LoadBSP", () => LoadBSP());
 
-            void ButtonPressed()
+            void LoadBSP()
             {
                 // Set Text
-                VistaText outputText = GetElementAsType<VistaText>("output-text");
-                outputText.TextContent = "Button Pressed";
-
-                // Set Text to red color
-                outputText.SetStyle("color: red;");
-
-                // Change Image
-                VistaImage hammerImage = GetElementAsType<VistaImage>("hammer-image");
-                hammerImage.ImageSource = "file:///images/hammer_old.png";
-
-                // Disable the Button
-                VistaButton button = GetElementAsType<VistaButton>("click-me");
-                button.TextContent = "Disabled";
-                button.Disabled = true;
+                VistaText currentMapText = GetElementAsType<VistaText>("current-map");
+                currentMapText.TextContent = "Current Map: 'bsp_test.bsp'";
             }
 
             // Render view depending on if it's worldspace or screenspace

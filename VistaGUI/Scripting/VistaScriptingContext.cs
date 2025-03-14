@@ -43,7 +43,8 @@ namespace VistaGUI.Scripting
         // Sets the InnerHTML of an element
         public void SetElementInnerHTML(string elementId, string text)
         {
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{text}';", out _);
+            string escapedText = text.Replace("'", "\\'").Replace("\"", "\\\"");
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{escapedText}';", out _);
         }
 
         // Get the InnerHTML of an element
@@ -55,8 +56,10 @@ namespace VistaGUI.Scripting
         // Sets a property of an element
         public void SetElementProperty(string elementId, string property, string value)
         {
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{value}';", out _);
+            string escapedValue = value.Replace("'", "\\'").Replace("\"", "\\\"");
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{escapedValue}';", out _);
         }
+
 
         // Gets a property of an element
         public string GetElementProperty(string elementId, string property)
@@ -67,8 +70,10 @@ namespace VistaGUI.Scripting
         // Sets the style of an element
         public void SetElementStyle(string elementId, string style)
         {
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText = '{style}';", out _);
+            string escapedStyle = style.Replace("'", "\\'").Replace("\"", "\\\"");
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText = '{escapedStyle}';", out _);
         }
+
 
         // Gets the syle of an element
         public string GetElementStyle(string elementId)
