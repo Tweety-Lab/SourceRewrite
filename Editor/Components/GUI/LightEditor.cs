@@ -11,9 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VistaGUI.Scripting.References;
 
-namespace Editor.Components
+namespace Editor.Components.GUI
 {
-    public class LightEditorGUI : GameComponent
+    public class LightEditor : GameComponent
     {
         private GUICanvas canvas;
 
