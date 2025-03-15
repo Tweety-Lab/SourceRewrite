@@ -8,7 +8,7 @@ namespace SourceRewrite.Modding
         public static List<Assembly> LoadedModAssemblies = new List<Assembly>();
 
         // Method to load external modules
-        public static void LoadModModules(string modsDirectory)
+        public static void LoadModAssemblies(string modsDirectory)
         {
             if (!Directory.Exists(modsDirectory))
                 return;
@@ -20,28 +20,28 @@ namespace SourceRewrite.Modding
                 {
                     Assembly assembly = Assembly.LoadFrom(dllPath);
                     LoadedModAssemblies.Add(assembly);
-                    Console.WriteLine($"Loaded Mod Module: {assembly.GetName().Name}");
+                    Console.WriteLine($"Loaded Mod Assembly: {assembly.GetName().Name}.dll");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to load module {dllPath}: {ex.Message}");
+                    Console.WriteLine($"Failed to load Mod Assembly {dllPath}: {ex.Message}");
                 }
             }
         }
 
         // Load individual Mod Module
-        public static void LoadModModule(string name)
+        public static void LoadModAssembly(string name)
         {
             // Load DLL
             try
             {
                 Assembly assembly = Assembly.LoadFrom(name);
                 LoadedModAssemblies.Add(assembly);
-                Console.WriteLine($"Loaded module: {assembly.GetName().Name}");
+                Console.WriteLine($"Loaded Mod Assembly: {assembly.GetName().Name}.dll");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to load Game Module: {ex.Message}");
+                Console.WriteLine($"Failed to load Mod Assembly: {ex.Message}");
             }
         }
 

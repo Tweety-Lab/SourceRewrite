@@ -11,7 +11,7 @@ namespace Editor
         static void Main(string[] args)
         {
             // Load Editor Code
-            ModSystem.LoadModModule("Editor.dll");
+            ModSystem.LoadModAssembly("Editor.dll");
 
             // Load the Light Editor GUI as a Global Component
             LightEditor globalComponent = new LightEditor();
