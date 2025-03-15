@@ -44,8 +44,8 @@ button:hover {
 
 .menu-content hr {
     border: none;
-    height: 2px;
+    height: 1px;
     background-color: #313136;
-    width: 75%;
+    width: calc(100% - 10px);
 }
 
