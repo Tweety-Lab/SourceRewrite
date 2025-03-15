@@ -9,6 +9,7 @@ using SourceRewrite.Maps;
 using System.Numerics;
 using VistaGUI;
 using FileFormats.KeyValues.GameInfo;
+using SourceRewrite.Modding;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -107,6 +108,9 @@ namespace SourceRewrite.Windowing
 
             // Load Input
             Input = new InputContext(_window.CreateInput());
+
+            // Load Game.dll
+            ModSystem.LoadGameModule();
 
             // Load a bsp
             MapSystem.LoadMap(FileSystem.GetMapPath("bsp_test.bsp"));

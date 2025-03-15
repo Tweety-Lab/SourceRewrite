@@ -6,6 +6,8 @@ using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
+using System.Reflection;
+using SourceRewrite.Modding;
 
 namespace SourceRewrite.Maps
 {
@@ -147,9 +149,25 @@ namespace SourceRewrite.Maps
                 // Convert stored component name to namespace
                 string componentNamespace = component.Name.Replace('_', '.');
 
+
+                // Find component type using enhanced resolution
+                Type componentType = ModSystem.FindTypeInLoadedAssemblies(componentNamespace);
+
+                if (componentType == null)
+                {
+                    Console.WriteLine($"Warning: Could not find component type: {componentNamespace}");
+                    continue;
+                }
+
+                // Validate the component type inherits from GameComponent
+                if (!typeof(GameComponent).IsAssignableFrom(componentType))
+                {
+                    Console.WriteLine($"Warning: Type {componentNamespace} is not a GameComponent");
+                    continue;
+                }
+
                 // Create component
-                Type componentType = Type.GetType(componentNamespace);
-                GameComponent gameComponent = (GameComponent) Activator.CreateInstance(componentType);
+                GameComponent gameComponent = (GameComponent)Activator.CreateInstance(componentType);
 
                 // Process component properties
                 foreach (KeyValue componentKeyValue in component.ChildKeyValues)
