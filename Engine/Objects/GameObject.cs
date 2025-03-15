@@ -131,15 +131,6 @@ namespace SourceRewrite.Objects
         /// </summary>
         public void DestroyDeferred()
         {
-            // Create a copy of the Components list to avoid modification issues during iteration
-            List<GameComponent> componentsToStart = new List<GameComponent>(Components);
-
-            // Loop through the copy of components
-            foreach (GameComponent comp in componentsToStart)
-            {
-                comp.OnDestroy();
-            }
-
             // Add the GameObject to the destruction queue
             _objectsToDestroy.Enqueue(this);
         }
