@@ -15,6 +15,7 @@
 
         public GameInfoFormat(string content)
         {
+            // Load KeyValues
             KeyValues = new KeyValuesFormat(content);
 
             // Populate Data
