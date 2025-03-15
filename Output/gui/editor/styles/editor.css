@@ -40,12 +40,16 @@ button:hover {
 .menu-content button {
     background-color: transparent;
     text-align: left;
+    padding-right: 45px;
 }
 
 .menu-content hr {
+    box-sizing: border-box;
     border: none;
     height: 1px;
     background-color: #313136;
-    width: calc(100% - 10px);
+    width: 80%;
+    margin-left: 6px;
+    margin-right: auto;
 }
 
