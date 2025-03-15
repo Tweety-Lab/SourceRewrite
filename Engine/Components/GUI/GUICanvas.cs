@@ -37,15 +37,6 @@ namespace SourceRewrite.Components
         // Worldspace rendering
         private MeshAsset guiMesh;
 
-        // LIGHT EDITOR STUFF
-        enum TranslationMode
-        {
-            None,
-            Position
-        }
-
-        private TranslationMode translationMode = TranslationMode.None;
-
         public override void Start()
         {
             // Create view config
@@ -71,54 +62,6 @@ namespace SourceRewrite.Components
             // Create a GUI View
             Container.VistaView = vistaView;
 
-            // Set up GUI Events
-
-            // Transforms
-            RegisterEvent("PositionMode", () => translationMode = TranslationMode.Position);
-            RegisterEvent("NoneMode", () => translationMode = TranslationMode.None);
-
-            // Toggle Light Mesh Visualisation
-            RegisterEvent("ToggleLights", () => ToggleLights());
-            void ToggleLights()
-            {
-                foreach (GameObject gameObject in GameObject.ActiveObjects)
-                {
-                    if (gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() == null)
-                    {
-                        Mesh mesh = new Mesh(FileSystem.GetModelPath("primitives/cube.model"), FileSystem.GetMaterial("dev/error"));
-                        MeshRenderer meshRenderer = new MeshRenderer();
-                        meshRenderer.Mesh = mesh;
-
-                        gameObject.AddComponent(meshRenderer);
-                    } else if (gameObject.GetComponentFromType<PointLight>() != null && gameObject.GetComponentFromType<MeshRenderer>() != null)
-                    {
-                        gameObject.RemoveComponentOfType<MeshRenderer>();
-                    }
-                }
-            }
-
-            // Load a BSP (right now just sets current map text)
-            RegisterEvent("LoadBSP", () => LoadBSP());
-            void LoadBSP()
-            {
-                // Set Text
-                VistaText currentMapText = GetElementAsType<VistaText>("current-map");
-                currentMapText.TextContent = "Current Map: 'maps/bsp_test.bsp'";
-            }
-
-            // Delete all lights in the scene
-            RegisterEvent("DeleteLights", () => DeleteLights());
-            void DeleteLights()
-            {
-                foreach (GameObject gameObject in GameObject.ActiveObjects)
-                {
-                    if (gameObject.GetComponentFromType<PointLight>() != null)
-                    {
-                        gameObject.DestroyDeferred();
-                    }
-                }
-            }
-
             // Render view depending on if it's worldspace or screenspace
             if (PanelType == 0)
             {
@@ -127,7 +70,6 @@ namespace SourceRewrite.Components
         }
 
         bool hasClicked = false;
-        bool hasPressed = false;
         public override void Update(float deltaTime)
         {
             // Get current mouse position
@@ -148,18 +90,6 @@ namespace SourceRewrite.Components
                 hasClicked = false;
             }
 
-            // Toggle GUI Visibility
-            if (Input.GetKeyDown(Key.Escape) && !hasPressed)
-            {
-                Container.VistaView.Visible = !Container.VistaView.Visible;
-                hasPressed = true;
-            }
-
-            if (Input.GetKeyUp(Key.Escape))
-            {
-                hasPressed = false;
-            }
-
             // Render view
             Texture texture = Container.RenderToTexture();
 
@@ -168,22 +98,6 @@ namespace SourceRewrite.Components
             {
                 if (guiMesh != null)
                     guiMesh.Material.Texture = texture;
-            }
-
-            // LIGHT EDITOR STUFF
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (translationMode == TranslationMode.Position)
-                {
-                    foreach (GameObject gameObject in GameObject.ActiveObjects)
-                    {
-                        if (gameObject.GetComponentFromType<PointLight>() != null)
-                        {
-                            Vector3 movement = new Vector3(Input.GetMouseMovement().X, 0, Input.GetMouseMovement().Y);
-                            gameObject.Transform.Position += movement;
-                        }
-                    }
-                }
             }
         }
 

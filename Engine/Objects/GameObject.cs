@@ -68,8 +68,11 @@ namespace SourceRewrite.Objects
         /// </summary>
         public void GameObjectStart()
         {
-            // Loop through every GameComponent in GameObject
-            foreach (GameComponent comp in Components)
+            // Create a copy of the Components list to avoid modification issues during iteration
+            List<GameComponent> componentsToStart = new List<GameComponent>(Components);
+
+            // Loop through the copy of components
+            foreach (GameComponent comp in componentsToStart)
             {
                 comp.Start();
             }

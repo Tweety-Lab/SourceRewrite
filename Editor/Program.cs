@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Components;
+﻿using Editor.Components;
+using SourceRewrite.Components;
 using SourceRewrite.Maps;
 using SourceRewrite.Modding;
 using SourceRewrite.Windowing;
@@ -13,10 +14,8 @@ namespace Editor
             // Load Editor Code
             ModSystem.LoadModModule("Editor.dll");
 
-            GUICanvas globalComponent = new GUICanvas();
-            globalComponent.isTransparent = true;
-            globalComponent.panelName = "editor/light_editor.html";
-
+            // Load the Light Editor GUI as a Global Component
+            LightEditorGUI globalComponent = new LightEditorGUI();
             Map.GlobalComponents.Add(globalComponent);
 
             // Create our main Game Window
