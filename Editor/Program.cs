@@ -13,8 +13,8 @@ namespace Editor
             // Load Editor Code
             ModSystem.LoadModAssembly("Editor.dll");
 
-            // Load the Light Editor GUI as a Global Component
-            LightEditor globalComponent = new LightEditor();
+            // Load the Editor GUI as a Global Component
+            EditorCanvas globalComponent = new EditorCanvas();
             Map.GlobalComponents.Add(globalComponent);
 
             // Create our main Game Window

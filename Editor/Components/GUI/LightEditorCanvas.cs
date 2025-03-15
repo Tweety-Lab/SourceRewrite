@@ -8,7 +8,7 @@ using VistaGUI.Scripting.References;
 
 namespace Editor.Components.GUI
 {
-    public class LightEditor : GameComponent
+    public class LightEditorCanvas : GameComponent
     {
         private GUICanvas canvas;
 
