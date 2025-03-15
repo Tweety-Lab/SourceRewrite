@@ -33,9 +33,10 @@ namespace Editor.Components.GUI
             canvas.RegisterEvent("OpenLightEditor", OpenLightEditor);
             void OpenLightEditor()
             {
+                GameObject holder = new GameObject();
                 LightEditorCanvas lightEditorCanvas = new LightEditorCanvas();
 
-                GameObject.AddComponent(lightEditorCanvas);
+                holder.AddComponent(lightEditorCanvas);
 
                 lightEditorCanvas.Start();
             }

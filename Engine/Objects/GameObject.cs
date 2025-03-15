@@ -27,8 +27,11 @@ namespace SourceRewrite.Objects
         /// </summary>
         public static void GameObjectUpdate(float deltaTime)
         {
+            // Create a copy of ActiveObjects to avoid modifying the collection during iteration
+            List<GameObject> objectsToUpdate = new List<GameObject>(ActiveObjects);
+
             // Loop through every GameObject
-            foreach(GameObject obj in ActiveObjects)
+            foreach (GameObject obj in objectsToUpdate)
             {
                 // Create a copy of the Components list to avoid modification issues during iteration
                 List<GameComponent> componentsToUpdate = new List<GameComponent>(obj.Components);
