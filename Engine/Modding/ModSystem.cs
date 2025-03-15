@@ -34,13 +34,13 @@ namespace SourceRewrite.Modding
             }
         }
 
-        // We load "Game.dll" as a Mod
-        public static void LoadGameModule()
+        // Load individual Mod Module
+        public static void LoadModModule(string name)
         {
-            // Load Game DLL
+            // Load DLL
             try
             {
-                Assembly assembly = Assembly.LoadFrom("Game.dll");
+                Assembly assembly = Assembly.LoadFrom(name);
                 LoadedModAssemblies.Add(assembly);
                 Console.WriteLine($"Loaded module: {assembly.GetName().Name}");
             }

@@ -109,8 +109,8 @@ namespace SourceRewrite.Windowing
             // Load Input
             Input = new InputContext(_window.CreateInput());
 
-            // Load Game.dll
-            ModSystem.LoadGameModule();
+            // Load Game.dll as a Mod
+            ModSystem.LoadModModule("Game.dll");
 
             // Load a bsp
             MapSystem.LoadMap(FileSystem.GetMapPath("bsp_test.bsp"));
