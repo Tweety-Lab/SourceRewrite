@@ -30,8 +30,8 @@ namespace Editor.Components.GUI
             Console.WriteLine("Started Light Editor GUI");
 
             canvas = new GUICanvas();
-            canvas.isTransparent = true;
-            canvas.panelName = "editor/light_editor.html";
+            canvas.IsTransparent = true;
+            canvas.PanelName = "editor/light_editor.html";
 
             GameObject.AddComponent(canvas);
 

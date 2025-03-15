@@ -25,10 +25,10 @@ namespace SourceRewrite.Components
         private int width; // Panel Width
 
         [MapProperty("panelname")]
-        public string panelName; // Name of HTML Panel to render
+        public string PanelName; // Name of HTML Panel to render
 
         [MapProperty("IsTransparent")]
-        public bool isTransparent; // Is the panel background transparent
+        public bool IsTransparent; // Is the panel background transparent
 
         public int PanelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
 
@@ -44,7 +44,7 @@ namespace SourceRewrite.Components
 
             config.ResourcesPath = Path.GetFullPath(FileSystem.GamePath.GUIPath);
 
-            config.IsTransparent = isTransparent;
+            config.IsTransparent = IsTransparent;
             config.EnableJavaScript = true;
 
             int resolutionDensity = 12;
@@ -55,7 +55,7 @@ namespace SourceRewrite.Components
                 height = (int)GameWindow.CurrentWindow.WindowSize.Y;
             }
 
-            VistaView vistaView = new VistaView(panelName, config, resolutionDensity, height, width);
+            VistaView vistaView = new VistaView(PanelName, config, resolutionDensity, height, width);
 
             Container = new GUIContainer();
 
