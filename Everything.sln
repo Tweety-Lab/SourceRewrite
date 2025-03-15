@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VistaGUI", "VistaGUI\VistaGUI.csproj", "{3F378826-CAD3-400E-AC8A-98A9C0EF9C4C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mods", "Mods", "{9688C0C5-F9C2-46B7-B4CC-96471E370421}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{C15B48FC-0D71-43D3-AB78-779787993B3F} = {9688C0C5-F9C2-46B7-B4CC-96471E370421}
 		{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD} = {A32AD4F4-8DAE-47AE-B6CE-4DBD9F905B22}
 		{3D8F4A13-A6AB-45E3-8E46-D66AC0331E59} = {A32AD4F4-8DAE-47AE-B6CE-4DBD9F905B22}
 	EndGlobalSection
