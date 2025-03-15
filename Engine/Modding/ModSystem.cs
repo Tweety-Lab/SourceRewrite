@@ -13,7 +13,7 @@ namespace SourceRewrite.Modding
         public static List<Assembly> LoadedModAssemblies = new List<Assembly>();
 
         // Method to load external modules
-        public static void LoadModules(string modsDirectory)
+        public static void LoadModModules(string modsDirectory)
         {
             if (!Directory.Exists(modsDirectory))
                 return;
