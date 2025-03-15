@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System;
 using System.Numerics;
 using VistaGUI.Scripting.References;
+using SourceRewrite.Maps;
 
 namespace Editor.Components.GUI
 {
@@ -64,11 +65,24 @@ namespace Editor.Components.GUI
                     lightEditorOpen = false;
                 }
             }
+
+            // Unload Map
+            canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
+
         }
 
         public override void Update(float deltaTime)
         {
         
+        }
+
+        public override void OnDestroy()
+        {
+            // Unregister all events
+            canvas.UnregisterEvent("OpenVDC");
+            canvas.UnregisterEvent("OpenLightEditor");
+            canvas.UnregisterEvent("CloseLightEditor");
+            canvas.UnregisterEvent("CloseMap");
         }
     }
 }

@@ -18,6 +18,9 @@ namespace SourceRewrite.Maps
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
+        // List to track GameObjects containing global components
+        private List<GameObject> GlobalGameObjects = new List<GameObject>();
+
         public Transform WorldTransform = new Transform(); // Prefab Transform
 
         private string bspPath = "";
@@ -25,6 +28,29 @@ namespace SourceRewrite.Maps
         public Map(string inputBspPath)
         {
             bspPath = inputBspPath;
+        }
+
+        // Unload the map from the world
+        public void UnloadMap()
+        {
+            // First, clear any game objects and their components
+            foreach (GameObject gameObject in GameObjects)
+            {
+                if (!GlobalGameObjects.Contains(gameObject))
+                {
+                    gameObject.DestroyDeferred();
+                }
+            }
+
+            GameObjects.Clear();
+
+            // Re-add global GameObjects back to the list
+            foreach (GameObject globalObject in GlobalGameObjects)
+            {
+                GameObjects.Add(globalObject);
+            }
+
+            SpawnPlayerController();
         }
 
         // Load The map to the world
@@ -46,7 +72,7 @@ namespace SourceRewrite.Maps
 
             SpawnPlayerController();
 
-            // Creeate Global Components
+            // Create Global Components if they don't already exist
             CreateGlobalComponents();
 
             // Run start logic on all gameobjects
@@ -191,17 +217,30 @@ namespace SourceRewrite.Maps
             return gameComponents;
         }
 
-        public void CreateGlobalComponents()
+        public void CreateGlobalComponents(bool shouldStart = false)
         {
-            foreach (GameComponent globalComponent in GlobalComponents)
+            // Only create global components if they don't already exist
+            if (GlobalGameObjects.Count == 0)
             {
-                GameObject holder = new GameObject();
-                holder.AddComponent(globalComponent);
+                foreach (GameComponent globalComponent in GlobalComponents)
+                {
+                    GameObject holder = new GameObject();
+                    holder.AddComponent(globalComponent);
 
-                // Add GameObject to maps GameObject list
-                GameObjects.Add(holder);
+                    // Add to global tracking list
+                    GlobalGameObjects.Add(holder);
+
+                    // Add GameObject to maps GameObject list
+                    GameObjects.Add(holder);
+
+                    if (shouldStart)
+                    {
+                        holder.GameObjectStart();
+                    }
+                }
             }
         }
+
 
         // Placeholder for spawning a player controller in the map on load
         public void SpawnPlayerController()
@@ -224,10 +263,17 @@ namespace SourceRewrite.Maps
 
     public static class MapSystem
     {
+        private static Map currentMap;
         public static void LoadMap(string path)
         {
-            Map map = new Map(path);
-            map.LoadMap();
+            currentMap = new Map(path);
+            currentMap.LoadMap();
+        }
+
+        public static void UnloadMap()
+        {
+            currentMap.UnloadMap();
+            currentMap = null;
         }
     }
 }
