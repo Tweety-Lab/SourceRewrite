@@ -3,6 +3,8 @@ using SourceRewrite.Components;
 using SourceRewrite.Files;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Objects;
+using System.Diagnostics;
+using System;
 using System.Numerics;
 using VistaGUI.Scripting.References;
 
@@ -24,6 +26,9 @@ namespace Editor.Components.GUI
 
             // HACK: Manually start the canvas component
             canvas.Start();
+
+            // Register GUI Evenets
+            canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
         }
 
         public override void Update(float deltaTime)
