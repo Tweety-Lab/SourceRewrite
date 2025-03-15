@@ -1,4 +1,6 @@
-﻿using SourceRewrite.Modding;
+﻿using SourceRewrite.Components;
+using SourceRewrite.Maps;
+using SourceRewrite.Modding;
 using SourceRewrite.Windowing;
 using System.Numerics;
 
@@ -10,6 +12,12 @@ namespace Editor
         {
             // Load Editor Code
             ModSystem.LoadModModule("Editor.dll");
+
+            GUICanvas globalComponent = new GUICanvas();
+            globalComponent.isTransparent = true;
+            globalComponent.panelName = "editor/light_editor.html";
+
+            Map.GlobalComponents.Add(globalComponent);
 
             // Create our main Game Window
             new GameWindow(new Vector2(800, 500), "Game Window");

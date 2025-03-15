@@ -13,6 +13,9 @@ namespace SourceRewrite.Maps
 {
     public class Map
     {
+        // List of Components that exist across every map
+        public static List<GameComponent> GlobalComponents = new List<GameComponent>();
+
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
@@ -43,6 +46,9 @@ namespace SourceRewrite.Maps
             CreateGameObjects(GameObjectsLump);
 
             SpawnPlayerController();
+
+            // Creeate Global Components
+            CreateGlobalComponents();
 
             // Run start logic on all gameobjects
             foreach (GameObject gameObject in GameObjects)
@@ -98,6 +104,9 @@ namespace SourceRewrite.Maps
         {
             // Convert Lump data to array
             string[] gameObjectData = (string[]) gameObjects.Data;
+
+            if (gameObjectData == null)
+                return;
 
             // We store GameObjects in a KeyValues format
             foreach (string gameObjectString in gameObjectData)
@@ -181,6 +190,18 @@ namespace SourceRewrite.Maps
             }
 
             return gameComponents;
+        }
+
+        public void CreateGlobalComponents()
+        {
+            foreach (GameComponent globalComponent in GlobalComponents)
+            {
+                GameObject holder = new GameObject();
+                holder.AddComponent(globalComponent);
+
+                // Add GameObject to maps GameObject list
+                GameObjects.Add(holder);
+            }
         }
 
         // Placeholder for spawning a player controller in the map on load

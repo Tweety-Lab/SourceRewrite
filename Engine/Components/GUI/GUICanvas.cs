@@ -25,10 +25,10 @@ namespace SourceRewrite.Components
         private int width; // Panel Width
 
         [MapProperty("panelname")]
-        private string panelName; // Name of HTML Panel to render
+        public string panelName; // Name of HTML Panel to render
 
         [MapProperty("IsTransparent")]
-        private bool isTransparent; // Is the panel background transparent
+        public bool isTransparent; // Is the panel background transparent
 
         public int PanelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
 
