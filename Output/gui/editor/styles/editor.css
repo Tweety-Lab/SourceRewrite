@@ -1,3 +1,51 @@
 body {
-    background-color: aquamarine;
+    margin: 0;
 }
+
+button {
+    border: none;
+    background-color: #242424;
+    color: white;
+    padding: 5px;
+}
+
+button:hover {
+    color: #c0c0c0;
+}
+
+.menu-bar {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    background-color: #1d1d20;
+    align-items: center;
+
+    height: 25px;
+}
+
+.menu-bar button {
+    font-size: small;
+    background-color: transparent;
+}
+
+.menu-content {
+    display: none;  /* Hide the content by default */
+    width: fit-content;
+    background-color: #1d1d20;
+    color: #ffffff;
+    position: absolute;
+    flex-direction: column;
+}
+
+.menu-content button {
+    background-color: transparent;
+    text-align: left;
+}
+
+.menu-content hr {
+    border: none;
+    height: 2px;
+    background-color: #313136;
+    width: 75%;
+}
+
