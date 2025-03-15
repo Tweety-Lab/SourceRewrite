@@ -27,18 +27,25 @@ namespace Editor.Components.GUI
             // HACK: Manually start the canvas component
             canvas.Start();
 
+            GameObject lightEditorObject = new GameObject();
+
             // Register GUI Evenets
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
 
             canvas.RegisterEvent("OpenLightEditor", OpenLightEditor);
             void OpenLightEditor()
             {
-                GameObject holder = new GameObject();
                 LightEditorCanvas lightEditorCanvas = new LightEditorCanvas();
 
-                holder.AddComponent(lightEditorCanvas);
+                lightEditorObject.AddComponent(lightEditorCanvas);
 
                 lightEditorCanvas.Start();
+            }
+
+            canvas.RegisterEvent("CloseLightEditor", CloseLightEditor);
+            void CloseLightEditor()
+            {
+                lightEditorObject.DestroyDeferred();
             }
         }
 
