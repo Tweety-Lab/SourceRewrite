@@ -29,6 +29,16 @@ namespace Editor.Components.GUI
 
             // Register GUI Evenets
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
+
+            canvas.RegisterEvent("OpenLightEditor", OpenLightEditor);
+            void OpenLightEditor()
+            {
+                LightEditorCanvas lightEditorCanvas = new LightEditorCanvas();
+
+                GameObject.AddComponent(lightEditorCanvas);
+
+                lightEditorCanvas.Start();
+            }
         }
 
         public override void Update(float deltaTime)

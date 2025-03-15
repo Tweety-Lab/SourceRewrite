@@ -30,8 +30,11 @@ namespace SourceRewrite.Objects
             // Loop through every GameObject
             foreach(GameObject obj in ActiveObjects)
             {
+                // Create a copy of the Components list to avoid modification issues during iteration
+                List<GameComponent> componentsToUpdate = new List<GameComponent>(obj.Components);
+
                 // Loop through every GameComponent in GameObject
-                foreach(GameComponent comp in obj.Components)
+                foreach (GameComponent comp in componentsToUpdate)
                 {
                     comp.Update(deltaTime);
                 }
