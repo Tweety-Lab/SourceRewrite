@@ -6,7 +6,6 @@ using SourceRewrite.Objects;
 using FileFormats.KeyValues;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
-using System.Reflection;
 using SourceRewrite.Modding;
 
 namespace SourceRewrite.Maps

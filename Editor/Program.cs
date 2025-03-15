@@ -1,5 +1,4 @@
 ﻿using Editor.Components.GUI;
-using SourceRewrite.Components;
 using SourceRewrite.Maps;
 using SourceRewrite.Modding;
 using SourceRewrite.Windowing;

@@ -1,5 +1,4 @@
-﻿using Silk.NET.Input;
-using SourceRewrite.AssetTypes;
+﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
 using SourceRewrite.InputSystem;

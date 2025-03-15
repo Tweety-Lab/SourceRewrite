@@ -3,12 +3,7 @@ using SourceRewrite.Components;
 using SourceRewrite.Files;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using VistaGUI.Scripting.References;
 
 namespace Editor.Components.GUI

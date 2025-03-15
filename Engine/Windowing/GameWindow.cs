@@ -9,7 +9,6 @@ using SourceRewrite.Maps;
 using System.Numerics;
 using VistaGUI;
 using FileFormats.KeyValues.GameInfo;
-using SourceRewrite.Modding;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
