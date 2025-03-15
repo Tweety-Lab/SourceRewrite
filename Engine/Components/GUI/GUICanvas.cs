@@ -126,6 +126,12 @@ namespace SourceRewrite.Components
         public void RegisterEvent(string name, Action action) => Container.VistaView.ScriptingContext.RegisterEvent(name, action);
 
         /// <summary>
+        /// Unregisters a C# Action that can be called from JavaScript.
+        /// </summary>
+        /// <param name="name">Javascript function name</param>
+        public void UnregisterEvent(string name) => Container.VistaView.ScriptingContext.UnregisterEvent(name);
+
+        /// <summary>
         /// Sets the Inner HTML of an Element from it's ID.
         /// </summary>
         /// <param name="id"></param>

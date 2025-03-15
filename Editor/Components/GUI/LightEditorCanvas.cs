@@ -98,5 +98,15 @@ namespace Editor.Components.GUI
                 }
             }
         }
+
+        public override void OnDestroy()
+        {
+            // Unregister all events
+            canvas.UnregisterEvent("PositionMode");
+            canvas.UnregisterEvent("NoneMode");
+            canvas.UnregisterEvent("ToggleLights");
+            canvas.UnregisterEvent("LoadBSP");
+            canvas.UnregisterEvent("DeleteLights");
+        }
     }
 }

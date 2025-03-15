@@ -98,6 +98,38 @@ namespace VistaGUI.Scripting
             RegisterJSCallback(name, &InvokeCSharpCallback);
         }
 
+        /// <summary>
+        /// Unregisters a C# Action that can be called from JavaScript.
+        /// </summary>
+        /// <param name="name">Javascript function name</param>
+        public unsafe void UnregisterEvent(string name)
+        {
+            if (JSCallbacks.Remove(name))
+            {
+                JSContextRef contextRef = UltralightView.LockJSContext();
+
+                // Convert the string to a byte array using UTF-8 encoding
+                byte[] byteArray = Encoding.UTF8.GetBytes(name);
+
+                JSStringRef nameRef;
+
+                // Pin the byte array in memory to get a pointer
+                fixed (byte* ptr = byteArray)
+                {
+                    nameRef = JavaScriptMethods.JSStringCreateWithUTF8CString(ptr);
+                }
+
+                // Get and remove the global object
+                JSObjectRef globalObj = JavaScriptMethods.JSContextGetGlobalObject(contextRef);
+                JavaScriptMethods.JSObjectDeleteProperty(contextRef, globalObj, nameRef);
+
+                // Release the JSStringRef
+                JavaScriptMethods.JSStringRelease(nameRef);
+
+                UltralightView.UnlockJSContext();
+            }
+        }
+
         // Registers a C# function that can be called from JavaScript
         private unsafe void RegisterJSCallback(string functionName, delegate* unmanaged[Cdecl]<JSContextRef, JSObjectRef, JSObjectRef, nuint, JSValueRef*, JSValueRef*, JSValueRef> csharpFunc)
         {
