@@ -20,7 +20,7 @@ namespace SourceRewrite.Modding
                 {
                     Assembly assembly = Assembly.LoadFrom(dllPath);
                     LoadedModAssemblies.Add(assembly);
-                    Console.WriteLine($"Loaded module: {assembly.GetName().Name}");
+                    Console.WriteLine($"Loaded Mod Module: {assembly.GetName().Name}");
                 }
                 catch (Exception ex)
                 {
