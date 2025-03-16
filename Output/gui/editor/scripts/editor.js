@@ -37,3 +37,23 @@ document.addEventListener('click', function (event) {
 		hideAllMenus();
 	}
 });
+
+// Function to handle the selection of a toolbar button
+function selectToolbarButton(event) {
+	// Get all toolbar buttons
+	const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
+	
+	// Remove the 'selected-button' class from all buttons
+	toolbarButtons.forEach(button => {
+		button.classList.remove('selected-button');
+	});
+	
+	// Add the 'selected-button' class to the clicked button
+	event.target.classList.add('selected-button');
+}
+
+// Add click event listeners to each button in the vertical toolbar
+const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
+toolbarButtons.forEach(button => {
+	button.addEventListener('click', selectToolbarButton);
+});
