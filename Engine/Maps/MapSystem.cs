@@ -18,6 +18,9 @@ namespace SourceRewrite.Maps
         // Track if global game objects have already been started
         private static bool globalGameObjectsStarted = false;
 
+        // Start GameObjects on map load
+        public static bool StartGameObjectsOnMapLoad = true;
+
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
@@ -74,13 +77,16 @@ namespace SourceRewrite.Maps
             SpawnPlayerController();
 
             // Add Global Game Objects
-            CreateGlobalGameObjects();
+            CreateGlobalGameObjects(!StartGameObjectsOnMapLoad);
 
             // Run start logic on all gameobjects
-            foreach (GameObject gameObject in GameObjects)
+            if (StartGameObjectsOnMapLoad)
             {
-                gameObject.GameObjectStart();
-            };
+                foreach (GameObject gameObject in GameObjects)
+                {
+                    gameObject.GameObjectStart();
+                };
+            }
 
             // Free the BSP
             reader.Dispose();

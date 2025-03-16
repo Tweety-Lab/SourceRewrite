@@ -16,6 +16,9 @@ namespace Editor
             // Load Editor as Mod
             ModSystem.LoadModAssembly("Editor.dll");
 
+            // Dont run GameObject start logic in our maps
+            Map.StartGameObjectsOnMapLoad = false;
+
             // Load the Editor GUI
             GameObject editorGUIObject = new GameObject();
             EditorCanvas editorGUIComponent = new EditorCanvas();

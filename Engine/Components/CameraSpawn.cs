@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Maps;
 using SourceRewrite.Maths;
 using System.Numerics;
+using SourceRewrite.Objects;
 
 namespace SourceRewrite.Components
 {
@@ -11,6 +12,11 @@ namespace SourceRewrite.Components
 
         public override void Start()
         {
+            GameObject gameObject = new GameObject();
+            Camera cameraObject = new Camera();
+            gameObject.AddComponent(cameraObject);
+            gameObject.GameObjectStart();
+
             // Set the active cameras position and rotation
             Camera.ActiveCamera.GameObject.Transform.Position = GameObject.Transform.Position;
             Camera.ActiveCamera.GameObject.Transform.Rotation = MathsHelper.EulerToQuaternion(Angles);
