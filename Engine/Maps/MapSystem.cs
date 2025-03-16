@@ -272,6 +272,11 @@ namespace SourceRewrite.Maps
 
         public static void UnloadMap()
         {
+            // Only unload if there is an open map
+            if (currentMap == null) 
+                return;
+
+            // Unload Map
             currentMap.UnloadMap();
             currentMap = null;
         }
