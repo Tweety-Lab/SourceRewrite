@@ -194,13 +194,13 @@ namespace VistaGUI
         /// <summary>
         /// Sends a character input event to the GUI.
         /// </summary>
-        public void SendChar(string text)
+        public void SendText(string text, bool isPaste)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
-            if (text.Length > 1)
-                return; // Prevent sending text for keys like "shiftlock"
+            if (isPaste && text.Length > 1)
+                return; // Prevent sending text for keys like "shiftlock" unless pasting content
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.Char,
@@ -245,7 +245,7 @@ namespace VistaGUI
             );
 
             UltralightView.FireKeyEvent(keyEvent);
-            SendChar(text); // Send text Character
+            SendText(text, false); // Send single text character
         }
 
         /// <summary>
