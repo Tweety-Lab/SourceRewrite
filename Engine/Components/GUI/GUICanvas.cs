@@ -64,12 +64,12 @@ namespace SourceRewrite.Components
             // Send Key inputs
             Input.KeyDownEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyDown(i, UltralightNet.ULKeyEventModifiers.ShiftKey, key.ToString(), key.ToString());
+                Container.VistaView.SendKeyDown(i, VistaKeyModifiers.None, key.ToString(), key.ToString());
             };
 
             Input.KeyUpEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyUp(i, UltralightNet.ULKeyEventModifiers.ShiftKey, key.ToString(), key.ToString());
+                Container.VistaView.SendKeyUp(i, VistaKeyModifiers.None, key.ToString(), key.ToString());
             };
 
             // Render view depending on if it's worldspace or screenspace

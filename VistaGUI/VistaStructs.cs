@@ -8,4 +8,14 @@
 
         public string ResourcesPath { get; set; }
     }
+
+    // Vista Key Modifiers
+    public enum VistaKeyModifiers
+    {
+        None = -1,
+        AltKey,
+        CtrlKey,
+        OSKey,
+        ShiftKey
+    }
 }

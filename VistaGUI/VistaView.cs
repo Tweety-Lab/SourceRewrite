@@ -217,7 +217,7 @@ namespace VistaGUI
         /// <summary>
         /// Sends a key down event to the GUI.
         /// </summary>
-        public void SendKeyDown(int keyCode, ULKeyEventModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        public void SendKeyDown(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
@@ -225,9 +225,10 @@ namespace VistaGUI
             // Use the virtual key code as the same as the key code for simplicity
             int virtualKeyCode = keyCode;
 
+
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.RawKeyDown,
-                modifiers,
+                (ULKeyEventModifiers)modifiers,
                 virtualKeyCode,
                 virtualKeyCode,
                 text,
@@ -246,7 +247,7 @@ namespace VistaGUI
         /// <summary>
         /// Sends a key up event to the GUI.
         /// </summary>
-        public void SendKeyUp(int keyCode, ULKeyEventModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        public void SendKeyUp(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
@@ -256,7 +257,7 @@ namespace VistaGUI
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.KeyUp,
-                modifiers,
+                (ULKeyEventModifiers)modifiers,
                 virtualKeyCode,
                 virtualKeyCode,
                 text,
