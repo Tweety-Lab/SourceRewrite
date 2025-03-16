@@ -231,7 +231,6 @@ namespace VistaGUI
             // Use the text as the unmodified text for now
             unmodifiedText = text;
 
-
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.RawKeyDown,
                 (ULKeyEventModifiers)modifiers,

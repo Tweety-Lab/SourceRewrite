@@ -97,7 +97,11 @@ namespace Editor.Components.GUI
                 fileExplorerCanvas.Canvas.RegisterEvent("Submit", () =>
                 {
                     string selectedFile = fileExplorerCanvas.Canvas.GetElement("file-path").GetProperty("value");
-                    Console.WriteLine(selectedFile);
+                    if (File.Exists(FileSystem.GetMapPath(selectedFile)))
+                    {
+                        MapSystem.UnloadMap();
+                        MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
+                    }
                 });
             });
         }
