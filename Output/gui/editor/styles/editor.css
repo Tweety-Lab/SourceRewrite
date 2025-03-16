@@ -100,6 +100,11 @@ button:hover {
     background-color: #313136;
 }
 
+.toolbar-vertical .selected-button {
+    border: 1px solid #7878b6;
+}
+
+
 /* Seperator */
 .toolbar-vertical hr {
     box-sizing: border-box;
