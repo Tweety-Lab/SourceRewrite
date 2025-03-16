@@ -3,14 +3,21 @@ body {
 }
 
 button {
-    border: none;
-    background-color: #232529;
+    background-color: #1d1d20;
+    border: 1px solid #313136;
     color: white;
-    padding: 5px;
+    font-size: 14px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+p {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: white;
 }
 
 button:hover {
-    color: #c0c0c0;
+    background-color: #313136;
 }
 
 .menu-bar {
@@ -55,6 +62,13 @@ button:hover {
     position: fixed;
     top: 10px;
     right: 30px;
+    border: 1px solid #313136;
+}
+
+
+.play-buttons button {
+    background-color: transparent;
+    border: none;
 }
 
 .menu-content hr {
@@ -114,6 +128,34 @@ button:hover {
     width: 95%;
     margin-right: auto;
 }
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    flex-direction: column;
+    background-color: #232529;
+    padding: 5px;
+    align-items: center;
+    justify-content: flex-start;
+    border-left: 2px solid #313136;
+    height: 100vh; /* Full height of the viewport */
+    width: fit-content;
+    position: fixed;
+    top: 25px; /* Place just below the menu bar */
+    right: 0;
+}
+
+.action-bar #selection-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.action-bar #selection-content .selected-button {
+    border: 1px solid #7878b6;
+}
+
+
 
 
 

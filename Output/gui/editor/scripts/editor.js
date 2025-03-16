@@ -38,7 +38,22 @@ document.addEventListener('click', function (event) {
 	}
 });
 
-// Function to handle the selection of a toolbar button
+
+// Function to handle the selection of a button in the action bar
+function selectActionBarButton(event) {
+	// Get all action bar buttons
+	const actionBarButtons = document.querySelectorAll('.action-bar button');
+	
+	// Remove the 'selected-button' class from all buttons
+	actionBarButtons.forEach(button => {
+		button.classList.remove('selected-button');
+	});
+	
+	// Add the 'selected-button' class to the clicked button
+	event.target.classList.add('selected-button');
+}
+
+// Function to handle the selection of a button in the toolbar
 function selectToolbarButton(event) {
 	// Get all toolbar buttons
 	const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
@@ -52,7 +67,13 @@ function selectToolbarButton(event) {
 	event.target.classList.add('selected-button');
 }
 
-// Add click event listeners to each button in the vertical toolbar
+// Add click event listeners to each button in the action bar
+const actionBarButtons = document.querySelectorAll('.action-bar button');
+actionBarButtons.forEach(button => {
+	button.addEventListener('click', selectActionBarButton);
+});
+
+// Add click event listeners to each button in the toolbar-vertical
 const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
 toolbarButtons.forEach(button => {
 	button.addEventListener('click', selectToolbarButton);
