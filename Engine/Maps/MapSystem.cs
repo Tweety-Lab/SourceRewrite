@@ -12,14 +12,15 @@ namespace SourceRewrite.Maps
 {
     public class Map
     {
-        // List of Components that exist across every map
-        public static List<GameComponent> GlobalComponents = new List<GameComponent>();
+        // List of GameObjects that exist globally across every map
+        public static List<GameObject> GlobalGameObjects = new List<GameObject>();
+
+        // Track if global game objects have already been started
+        private static bool globalGameObjectsStarted = false;
 
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
-        // List to track GameObjects containing global components
-        private List<GameObject> GlobalGameObjects = new List<GameObject>();
 
         public Transform WorldTransform = new Transform(); // Prefab Transform
 
@@ -33,7 +34,7 @@ namespace SourceRewrite.Maps
         // Unload the map from the world
         public void UnloadMap()
         {
-            // First, clear any game objects and their components
+            // Clear map-specific game objects (but preserve global ones)
             foreach (GameObject gameObject in GameObjects)
             {
                 if (!GlobalGameObjects.Contains(gameObject))
@@ -72,14 +73,14 @@ namespace SourceRewrite.Maps
 
             SpawnPlayerController();
 
-            // Create Global Components if they don't already exist
-            CreateGlobalComponents();
+            // Add Global Game Objects
+            CreateGlobalGameObjects();
 
             // Run start logic on all gameobjects
             foreach (GameObject gameObject in GameObjects)
             {
                 gameObject.GameObjectStart();
-            }
+            };
 
             // Free the BSP
             reader.Dispose();
@@ -220,27 +221,22 @@ namespace SourceRewrite.Maps
             return gameComponents;
         }
 
-        public void CreateGlobalComponents(bool shouldStart = false)
+        // Create and add global game objects
+        public void CreateGlobalGameObjects(bool shouldStart = false)
         {
-            // Only create global components if they don't already exist
-            if (GlobalGameObjects.Count == 0)
+            // Ensure global GameObjects are only created once
+            if (GlobalGameObjects.Count > 0 && !globalGameObjectsStarted)
             {
-                foreach (GameComponent globalComponent in GlobalComponents)
+                foreach (GameObject globalObject in GlobalGameObjects)
                 {
-                    GameObject holder = new GameObject();
-                    holder.AddComponent(globalComponent);
-
-                    // Add to global tracking list
-                    GlobalGameObjects.Add(holder);
-
-                    // Add GameObject to maps GameObject list
-                    GameObjects.Add(holder);
-
                     if (shouldStart)
                     {
-                        holder.GameObjectStart();
+                        globalObject.GameObjectStart();
                     }
+
+                    GameObjects.Add(globalObject);
                 }
+                globalGameObjectsStarted = true; // Mark as started
             }
         }
 

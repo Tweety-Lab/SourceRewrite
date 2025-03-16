@@ -120,6 +120,8 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("CloseMap");
             canvas.UnregisterEvent("PlayGame");
             canvas.UnregisterEvent("PlayCurrentMap");
+            canvas.UnregisterEvent("OpenMap");
+            canvas.UnregisterEvent("Submit");
         }
     }
 }
