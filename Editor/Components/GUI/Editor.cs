@@ -69,6 +69,9 @@ namespace Editor.Components.GUI
             // Unload Map
             canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
 
+            // Play Buttons
+            canvas.RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
+
         }
 
         public override void Update()
@@ -83,6 +86,7 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("OpenLightEditor");
             canvas.UnregisterEvent("CloseLightEditor");
             canvas.UnregisterEvent("CloseMap");
+            canvas.UnregisterEvent("PlayGame");
         }
     }
 }
