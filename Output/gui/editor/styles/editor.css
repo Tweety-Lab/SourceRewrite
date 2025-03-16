@@ -4,7 +4,7 @@ body {
 
 button {
     border: none;
-    background-color: #242424;
+    background-color: #232529;
     color: white;
     padding: 5px;
 }
@@ -46,7 +46,7 @@ button:hover {
 .play-buttons {
     padding-left: 2px;
     padding-right: 2px;
-    background-color: #242424;
+    background-color: #232529;
     border-radius: 5px;
     width: fit-content;
     display: block;
