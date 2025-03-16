@@ -199,7 +199,7 @@ namespace VistaGUI
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
-            if (allowMultiple && text.Length > 1)
+            if (!allowMultiple && text.Length > 1)
                 return; // Prevent sending text for keys like "shiftlock" unless allowed
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(

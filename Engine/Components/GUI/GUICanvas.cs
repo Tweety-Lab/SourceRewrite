@@ -72,7 +72,16 @@ namespace SourceRewrite.Components
             Input.KeyDownEvent += (sender, key, i) =>
             {
                 bool isShiftPressed = Input.GetKeyDown(Key.ShiftLeft) || Input.GetKeyDown(Key.ShiftRight);
+                bool isCtrlPressed = Input.GetKeyDown(Key.ControlLeft) || Input.GetKeyDown(Key.ControlRight);
                 string keyText = key.ToString();
+
+                // Support pasting from Keyboard
+                if (isCtrlPressed && key == Key.V)
+                {
+                    keyText = Input.GetClipboardText(); // Get copied text
+                    Container.VistaView.SendText(keyText, true); // Send copied text to GUI
+                    return;
+                }
 
                 Container.VistaView.SendKeyDown(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
