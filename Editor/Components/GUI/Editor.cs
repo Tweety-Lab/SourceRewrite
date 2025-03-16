@@ -36,8 +36,7 @@ namespace Editor.Components.GUI
             bool lightEditorOpen = false;
 
             // Open Light Editor if it isn't already opened
-            canvas.RegisterEvent("OpenLightEditor", OpenLightEditor);
-            void OpenLightEditor()
+            canvas.RegisterEvent("OpenLightEditor", () =>
             {
                 if (!lightEditorOpen)
                 {
@@ -53,24 +52,17 @@ namespace Editor.Components.GUI
 
                     lightEditorOpen = true;
                 }
-            }
+            });
 
             // Close Light Editor if it isn't already closed
-            canvas.RegisterEvent("CloseLightEditor", CloseLightEditor);
-            void CloseLightEditor()
+            canvas.RegisterEvent("CloseLightEditor", () =>
             {
                 if (lightEditorOpen)
                 {
                     lightEditorObject.DestroyDeferred();
                     lightEditorOpen = false;
                 }
-            }
-
-            // Unload Map
-            canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
-
-            // Play Buttons
-            canvas.RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
+            });
 
             canvas.RegisterEvent("PlayCurrentMap", () =>
             {
@@ -78,6 +70,11 @@ namespace Editor.Components.GUI
                 Process.Start("Engine.exe", $"-map {mapFileName}"); // Start the process with the map argument
             });
 
+            // Unload Map
+            canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
+
+            // Play Buttons
+            canvas.RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
         }
 
         public override void Update()

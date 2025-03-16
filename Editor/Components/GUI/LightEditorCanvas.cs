@@ -38,8 +38,7 @@ namespace Editor.Components.GUI
             canvas.RegisterEvent("NoneMode", () => translationMode = TranslationMode.None);
 
             // Toggle Light Mesh Visualisation
-            canvas.RegisterEvent("ToggleLights", () => ToggleLights());
-            void ToggleLights()
+            canvas.RegisterEvent("ToggleLights", () =>
             {
                 foreach (GameObject gameObject in GameObject.ActiveObjects)
                 {
@@ -56,20 +55,18 @@ namespace Editor.Components.GUI
                         gameObject.RemoveComponentOfType<MeshRenderer>();
                     }
                 }
-            }
+            });
 
             // Load a BSP (right now just sets current map text)
-            canvas.RegisterEvent("LoadBSP", () => LoadBSP());
-            void LoadBSP()
+            canvas.RegisterEvent("LoadBSP", () =>
             {
                 // Set Text
                 VistaText currentMapText = canvas.GetElementAsType<VistaText>("current-map");
                 currentMapText.TextContent = "Current Map: 'maps/bsp_test.bsp'";
-            }
+            });
 
             // Delete all lights in the scene
-            canvas.RegisterEvent("DeleteLights", () => DeleteLights());
-            void DeleteLights()
+            canvas.RegisterEvent("DeleteLights", () =>
             {
                 foreach (GameObject gameObject in GameObject.ActiveObjects)
                 {
@@ -78,7 +75,8 @@ namespace Editor.Components.GUI
                         gameObject.DestroyDeferred();
                     }
                 }
-            }
+            });
+
         }
 
         public override void Update()
