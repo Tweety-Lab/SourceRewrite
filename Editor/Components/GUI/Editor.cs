@@ -90,21 +90,6 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
-
-                // HACK: MANAGE THE FILE EXPLORER STUFF IN HERE, THIS IS BAD!
-
-                // On submit pressed
-                fileExplorerCanvas.Canvas.RegisterEvent("Submit", () =>
-                {
-                    string selectedFile = fileExplorerCanvas.Canvas.GetElement("file-path").GetProperty("value");
-                    if (File.Exists(FileSystem.GetMapPath(selectedFile)))
-                    {
-                        fileExplorerObject.DestroyDeferred();
-
-                        MapSystem.UnloadMap();
-                        MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
-                    }
-                });
             });
         }
 
@@ -123,7 +108,6 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("PlayGame");
             canvas.UnregisterEvent("PlayCurrentMap");
             canvas.UnregisterEvent("OpenMap");
-            canvas.UnregisterEvent("Submit");
         }
     }
 }

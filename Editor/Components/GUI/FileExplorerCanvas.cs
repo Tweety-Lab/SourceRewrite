@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SourceRewrite.Files;
+using SourceRewrite.Maps;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,19 @@ namespace SourceRewrite.Components.GUI
 
             // HACK: Manually start the canvas component
             Canvas.Start();
+
+            // On submit pressed
+            Canvas.RegisterEvent("Submit", () =>
+            {
+                string selectedFile = Canvas.GetElement("file-path").GetProperty("value");
+                if (File.Exists(FileSystem.GetMapPath(selectedFile)))
+                {
+                    GameObject.DestroyDeferred();
+
+                    MapSystem.UnloadMap();
+                    MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
+                }
+            });
         }
 
         public override void OnDestroy()
