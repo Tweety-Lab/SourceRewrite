@@ -17,7 +17,7 @@ namespace Game.Components
         [MapProperty("angles")]
         public Vector3 Angles;
 
-        private float rotationAmount = 10f; // Degrees per update
+        private float rotationAmount = 4f; // Degrees per update
 
         public override void Start()
         {
