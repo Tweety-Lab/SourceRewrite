@@ -246,17 +246,6 @@ namespace SourceRewrite.Maps
         {
             // Create GameObject for player
             GameObject player = new GameObject();
-
-            // Create it's Camera Controller
-            Camera playerCamera = new Camera();
-            CameraController cameraController = new CameraController();
-
-            // Attach to Player
-            player.AddComponent(playerCamera);
-            player.AddComponent(cameraController);
-
-            // Add player GameObject to the GameObjects list
-            GameObjects.Add(player);
         }
     }
 

@@ -3,11 +3,12 @@ using Silk.NET.Input;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
+using SourceRewrite.Components;
 
-namespace SourceRewrite.Components
+namespace Editor.Components
 {
     // FPS Camera Controller
-    public class CameraController : GameComponent
+    public class EditorCameraController : GameComponent
     {
         // Move at 1512 units per second
         public float MovementSpeed = 1512f;
