@@ -43,6 +43,18 @@ button:hover {
     padding-right: 45px;
 }
 
+.play-buttons {
+    padding-left: 2px;
+    padding-right: 2px;
+    background-color: #242424;
+    border-radius: 5px;
+    width: fit-content;
+    display: block;
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: -15px;
+}
+
 .menu-content hr {
     box-sizing: border-box;
     border: none;
@@ -52,4 +64,5 @@ button:hover {
     margin-left: 6px;
     margin-right: auto;
 }
+
 
