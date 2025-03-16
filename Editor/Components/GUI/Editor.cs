@@ -71,7 +71,12 @@ namespace Editor.Components.GUI
 
             // Play Buttons
             canvas.RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
-            canvas.RegisterEvent("PlayCurrentMap", () => Process.Start("Engine.exe", $"-map {MapSystem.CurrentMap.BSPFilePath}"));
+
+            canvas.RegisterEvent("PlayCurrentMap", () =>
+            {
+                string mapFileName = MapSystem.CurrentMap.BSPFilePath.Split('/').Last(); // Get the file name of the map
+                Process.Start("Engine.exe", $"-map {mapFileName}"); // Start the process with the map argument
+            });
 
         }
 
