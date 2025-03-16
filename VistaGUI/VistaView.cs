@@ -217,13 +217,16 @@ namespace VistaGUI
         /// <summary>
         /// Sends a key down event to the GUI.
         /// </summary>
-        public void SendKeyDown(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        public void SendKeyDown(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText = "", bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
             // Use the virtual key code as the same as the key code for simplicity
             int virtualKeyCode = keyCode;
+
+            // Use the text as the unmodified text for now
+            unmodifiedText = text;
 
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(
@@ -238,8 +241,6 @@ namespace VistaGUI
                 isSystemKey
             );
 
-            Console.WriteLine($"{virtualKeyCode} + {keyCode} + {text} + {unmodifiedText}");
-
             UltralightView.FireKeyEvent(keyEvent);
             SendChar(text); // Send Character
         }
@@ -247,13 +248,16 @@ namespace VistaGUI
         /// <summary>
         /// Sends a key up event to the GUI.
         /// </summary>
-        public void SendKeyUp(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        public void SendKeyUp(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText = "", bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
             // Use the virtual key code as the same as the key code for simplicity
             int virtualKeyCode = keyCode;
+
+            // Use the text as the unmodified text for now
+            unmodifiedText = text;
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.KeyUp,
@@ -266,8 +270,6 @@ namespace VistaGUI
                 isAutoRepeat,
                 isSystemKey
             );
-
-            Console.WriteLine(virtualKeyCode);
 
             UltralightView.FireKeyEvent(keyEvent);
         }

@@ -61,15 +61,16 @@ namespace SourceRewrite.Components
             // Create a GUI View
             Container.VistaView = vistaView;
 
-            // Send Key inputs
+            // Send Key Downs
             Input.KeyDownEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyDown(i, VistaKeyModifiers.None, key.ToString(), key.ToString());
+                Container.VistaView.SendKeyDown(i, VistaKeyModifiers.None, key.ToString().ToLower());
             };
 
+            // Send Key Ups
             Input.KeyUpEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyUp(i, VistaKeyModifiers.None, key.ToString(), key.ToString());
+                Container.VistaView.SendKeyUp(i, VistaKeyModifiers.None, key.ToString().ToLower());
             };
 
             // Render view depending on if it's worldspace or screenspace
