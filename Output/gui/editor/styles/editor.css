@@ -145,7 +145,7 @@ button:hover {
     flex-direction: column;
     background-color: #232529;
     padding: 5px;
-    align-items: center;
+    align-items: stretch; /* Make children stretch to full width */
     justify-content: flex-start;
     border-left: 2px solid #313136;
     height: 100vh; /* Full height of the viewport */
@@ -153,6 +153,15 @@ button:hover {
     position: fixed;
     top: 25px; /* Place just below the menu bar */
     right: 0;
+}
+
+/* Action Bar section titles */
+.action-bar p {
+    text-align: left;
+    align-self: flex-start;
+    margin-left: 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .action-bar #selection-content {
@@ -165,7 +174,59 @@ button:hover {
     border: 1px solid #7878b6;
 }
 
+.action-bar #gameobject-tree {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+/* Tree View */
 
+#tree-container {
+    background-color: #1b1d20;
+    border: 1px solid #313136;
+    padding: 10px;
+    width: 100%;
+    margin: 5px;
+    box-sizing: border-box;
+    height: 200px;
+    overflow-y: auto;
+}
 
+ul, #gameobjects-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#gameobjects-list li {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: white;
+}
+
+.caret {
+    cursor: pointer;
+    user-select: none;
+}
+
+.caret::before {
+    content: "\25B6";
+    color: rgb(45, 46, 54);
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.caret-down::before {
+    transform: rotate(90deg);
+}
+
+.nested {
+    display: none;
+    margin-left: 25px;
+}
+
+.active {
+    display: block;
+}
 

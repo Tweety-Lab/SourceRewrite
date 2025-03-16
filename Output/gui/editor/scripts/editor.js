@@ -78,3 +78,11 @@ const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
 toolbarButtons.forEach(button => {
 	button.addEventListener('click', selectToolbarButton);
 });
+
+// Tree View
+document.querySelectorAll('.caret').forEach(toggler => {
+    toggler.addEventListener('click', function() {
+        this.parentElement.querySelector('.nested').classList.toggle('active');
+        this.classList.toggle('caret-down');
+    });
+});
