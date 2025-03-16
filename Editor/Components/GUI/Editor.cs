@@ -99,6 +99,8 @@ namespace Editor.Components.GUI
                     string selectedFile = fileExplorerCanvas.Canvas.GetElement("file-path").GetProperty("value");
                     if (File.Exists(FileSystem.GetMapPath(selectedFile)))
                     {
+                        fileExplorerObject.DestroyDeferred();
+
                         MapSystem.UnloadMap();
                         MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
                     }
