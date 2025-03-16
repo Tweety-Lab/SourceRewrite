@@ -24,5 +24,10 @@ namespace SourceRewrite.Components.GUI
             // HACK: Manually start the canvas component
             Canvas.Start();
         }
+
+        public override void OnDestroy()
+        {
+            Canvas.UnregisterEvent("Submit");
+        }
     }
 }
