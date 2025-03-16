@@ -1,4 +1,5 @@
-﻿using SourceRewrite.AssetTypes;
+﻿using Silk.NET.Input;
+using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
 using SourceRewrite.InputSystem;
@@ -64,13 +65,39 @@ namespace SourceRewrite.Components
             // Send Key Downs
             Input.KeyDownEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyDown(i, VistaKeyModifiers.None, key.ToString().ToLower());
+                bool isShiftPressed = Input.GetKeyDown(Key.ShiftLeft) || Input.GetKeyDown(Key.ShiftRight);
+                string keyText = key.ToString();
+
+                // Handle capital letters
+                if (isShiftPressed && keyText.Length == 1 && char.IsLetter(keyText[0]))
+                {
+                    keyText = keyText.ToUpper();
+                }
+                else
+                {
+                    keyText = keyText.ToLower();
+                }
+
+                Container.VistaView.SendKeyDown(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
 
             // Send Key Ups
             Input.KeyUpEvent += (sender, key, i) =>
             {
-                Container.VistaView.SendKeyUp(i, VistaKeyModifiers.None, key.ToString().ToLower());
+                bool isShiftPressed = Input.GetKeyDown(Key.ShiftLeft) || Input.GetKeyDown(Key.ShiftRight);
+                string keyText = key.ToString();
+
+                // Handle capital letters
+                if (isShiftPressed && keyText.Length == 1 && char.IsLetter(keyText[0]))
+                {
+                    keyText = keyText.ToUpper();
+                }
+                else
+                {
+                    keyText = keyText.ToLower();
+                }
+
+                Container.VistaView.SendKeyUp(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
 
             // Render view depending on if it's worldspace or screenspace

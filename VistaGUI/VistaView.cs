@@ -199,6 +199,9 @@ namespace VistaGUI
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
+            if (text.Length > 1)
+                return; // Prevent sending text for keys like "shiftlock"
+
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.Char,
                 0,
@@ -242,7 +245,7 @@ namespace VistaGUI
             );
 
             UltralightView.FireKeyEvent(keyEvent);
-            SendChar(text); // Send Character
+            SendChar(text); // Send text Character
         }
 
         /// <summary>
