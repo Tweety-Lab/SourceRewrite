@@ -11,7 +11,10 @@ namespace SourceRewrite.Modding
         public static void LoadModAssemblies(string modsDirectory)
         {
             if (!Directory.Exists(modsDirectory))
+            {
+                Console.WriteLine($"Mods directory '{modsDirectory}' does not exist.");
                 return;
+            }
 
             // Load all DLL files in the mods directory
             foreach (string dllPath in Directory.GetFiles(modsDirectory, "*.dll"))

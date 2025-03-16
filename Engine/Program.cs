@@ -10,6 +10,9 @@ class Program
         // Load Game.dll as a Mod
         ModSystem.LoadModAssembly("Game.dll");
 
+        // Load Mods from bin/mods
+        ModSystem.LoadModAssemblies("../mods/");
+
         // Create our main Game Window
         new GameWindow(new Vector2(800, 500), "Game Window");
     }
