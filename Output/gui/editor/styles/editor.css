@@ -71,7 +71,7 @@ button:hover {
 .toolbar-vertical {
     display: flex;
     flex-direction: column;
-    background-color: #242424;
+    background-color: #232529;
     padding: 5px;
     align-items: center;
     justify-content: flex-start;
@@ -87,7 +87,6 @@ button:hover {
     background-color: #1d1d20;
     border: 1px solid #313136;
     color: white;
-    padding: 5px 10px;
     font-size: 14px;
     margin: 5px 0;
     cursor: pointer;
@@ -99,6 +98,16 @@ button:hover {
 
 .toolbar-vertical button:hover {
     background-color: #313136;
+}
+
+/* Seperator */
+.toolbar-vertical hr {
+    box-sizing: border-box;
+    border: none;
+    height: 1px;
+    background-color: #7878b6;
+    width: 95%;
+    margin-right: auto;
 }
 
 
