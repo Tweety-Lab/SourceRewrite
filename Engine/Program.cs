@@ -5,7 +5,7 @@ using System.Numerics;
 // Entry Point
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
         // Load Game.dll as a Mod
         ModSystem.LoadModAssembly("Game.dll");
@@ -14,6 +14,6 @@ class Program
         ModSystem.LoadModsFromDir("../mods/");
 
         // Create our main Game Window
-        new GameWindow(new Vector2(800, 500), "Game Window");
+        new GameWindow(new Vector2(800, 500), "Game Window", args);
     }
 }

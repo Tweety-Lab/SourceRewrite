@@ -54,10 +54,14 @@ namespace SourceRewrite.Windowing
         private IWindow _window;
 
         // Init a Game Window
-        public GameWindow(Vector2 windowSize, string windowTitle)
+        public GameWindow(Vector2 windowSize, string windowTitle, string[] arguments = null)
         {
             // Update the Current Window
             CurrentWindow = this;
+
+            // Process arguments only if there are any provided
+            if (arguments != null)
+                WindowArguments.SetArguments(arguments);
 
             Vector2D<int> trueWindowSize = new Vector2D<int>((int)windowSize.X, (int)windowSize.Y);
 
@@ -109,8 +113,15 @@ namespace SourceRewrite.Windowing
             // Load Input
             Input = new InputContext(_window.CreateInput());
 
-            // Load a bsp
-            MapSystem.LoadMap(FileSystem.GetMapPath("default.bsp"));
+            // Get -map window argument
+            WindowArguments.Arguments.TryGetValue("-map", out string mapPath);
+            if (mapPath != null)
+            {
+                MapSystem.LoadMap(FileSystem.GetMapPath(mapPath)); // Load Map from argument
+            } else
+            {
+                MapSystem.LoadMap(FileSystem.GetMapPath("default.bsp")); // Load default map
+            }
         }
 
         private void OnUpdate(double deltaTime) 
