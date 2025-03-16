@@ -34,13 +34,13 @@ namespace Game.Components
             Camera.ActiveCamera.GameObject.Transform.Rotation = MathsHelper.EulerToQuaternion(Angles);
         }
 
-        // Spin the camera 10 degrees per frame
+        // Spin the camera around
         public override void Update()
         {
-            // Rotate the camera by 10 degrees around the Y-axis (the up axis)
+            // Rotate the camera by 10 degrees around the Y-axis
             Angles.Y += rotationAmount;
 
-            // Ensure the angles stay within the 0-360 degree range (optional)
+            // Ensure the angles stay within the 0-360 degree range
             if (Angles.Y >= 360f)
             {
                 Angles.Y -= 360f;
