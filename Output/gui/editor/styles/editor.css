@@ -52,7 +52,9 @@ button:hover {
     display: block;
     margin-left: auto;
     margin-right: 30px;
-    margin-top: -15px;
+    position: fixed;
+    top: 10px;
+    right: 30px;
 }
 
 .menu-content hr {
@@ -64,5 +66,40 @@ button:hover {
     margin-left: 6px;
     margin-right: auto;
 }
+
+/* Toolbars */
+.toolbar-vertical {
+    display: flex;
+    flex-direction: column;
+    background-color: #242424;
+    padding: 5px;
+    align-items: center;
+    justify-content: flex-start;
+    border-right: 2px solid #313136;
+    height: 100vh; /* Full height of the viewport */
+    width: 50px;
+    position: fixed;
+    top: 25px; /* Place the toolbar just below the menu bar */
+    left: 0;
+}
+
+.toolbar-vertical button {
+    background-color: #1d1d20;
+    border: 1px solid #313136;
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.toolbar-vertical button:hover {
+    background-color: #313136;
+}
+
 
 
