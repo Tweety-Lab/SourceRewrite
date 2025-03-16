@@ -32,7 +32,12 @@ button:hover {
 
 .menu-bar button {
     font-size: small;
+    border: none;
     background-color: transparent;
+}
+
+.menu-bar button:hover {
+    color:rgb(223, 223, 223);
 }
 
 .menu-content {
@@ -46,8 +51,13 @@ button:hover {
 
 .menu-content button {
     background-color: transparent;
+    border: none;
     text-align: left;
     padding-right: 45px;
+}
+
+.menu-content button:hover {
+    color:rgb(223, 223, 223);
 }
 
 .play-buttons {
