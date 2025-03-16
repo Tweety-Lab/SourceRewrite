@@ -80,6 +80,9 @@ namespace SourceRewrite.Maps
             {
                 gameObject.GameObjectStart();
             }
+
+            // Free the BSP
+            reader.Dispose();
         }
 
         // Create Geometry from Lump data
