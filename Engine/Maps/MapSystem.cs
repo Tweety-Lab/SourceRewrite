@@ -23,11 +23,11 @@ namespace SourceRewrite.Maps
 
         public Transform WorldTransform = new Transform(); // Prefab Transform
 
-        private string bspPath = "";
+        public string BSPFilePath = "";
 
         public Map(string inputBspPath)
         {
-            bspPath = inputBspPath;
+            BSPFilePath = inputBspPath;
         }
 
         // Unload the map from the world
@@ -57,7 +57,7 @@ namespace SourceRewrite.Maps
         public void LoadMap()
         {
             // Read map data
-            BSPReader reader = new BSPReader(bspPath);
+            BSPReader reader = new BSPReader(BSPFilePath);
 
             // Get map data (Lumps)
             Lump GameObjectsLump = reader.GetLump(LumpType.LUMP_GAME_OBJECTS);
@@ -266,22 +266,26 @@ namespace SourceRewrite.Maps
 
     public static class MapSystem
     {
-        private static Map currentMap;
+        /// <summary>
+        /// Currently Loaded Map.
+        /// </summary>
+        public static Map CurrentMap { get; private set; }
+
         public static void LoadMap(string path)
         {
-            currentMap = new Map(path);
-            currentMap.LoadMap();
+            CurrentMap = new Map(path);
+            CurrentMap.LoadMap();
         }
 
         public static void UnloadMap()
         {
             // Only unload if there is an open map
-            if (currentMap == null) 
+            if (CurrentMap == null) 
                 return;
 
             // Unload Map
-            currentMap.UnloadMap();
-            currentMap = null;
+            CurrentMap.UnloadMap();
+            CurrentMap = null;
         }
     }
 }
