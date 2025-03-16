@@ -95,6 +95,32 @@ namespace SourceRewrite.Components
                 Container.VistaView.SendKeyUp(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
 
+            // Send Mouse Down Events
+            Input.MouseButtonDownEvent += (sender, button) =>
+            {
+                if (button == MouseButton.Left)
+                {
+                    Container.VistaView.SendMouseButtonDown(0);
+                } else
+                {
+                    Container.VistaView.SendMouseButtonDown(1);
+                }
+            };
+
+            // Send Mouse Up events
+            Input.MouseButtonUpEvent += (sender, button) =>
+            {
+                if (button == MouseButton.Left)
+                {
+                    Container.VistaView.SendMouseButtonUp(0);
+                }
+                else
+                {
+                    Container.VistaView.SendMouseButtonUp(1);
+                }
+            };
+
+
             // Render view depending on if it's worldspace or screenspace
             if (PanelType == 0)
             {
@@ -102,26 +128,12 @@ namespace SourceRewrite.Components
             }
         }
 
-        bool hasClicked = false;
         public override void Update()
         {
             // Get current mouse position
             var mousePosition = Input.GetMousePosition();
 
             Container.VistaView.SendMousePosition(mousePosition);
-
-            // Send Mouse Inputs
-            if (Input.GetMouseButtonDown(0) && !hasClicked)
-            {
-                Container.VistaView.SendMouseButtonDown(0);
-                hasClicked = true;
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                Container.VistaView.SendMouseButtonUp(0);
-                hasClicked = false;
-            }
 
             // Render view
             Texture texture = Container.RenderToTexture();

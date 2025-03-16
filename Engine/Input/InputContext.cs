@@ -48,6 +48,12 @@ namespace SourceRewrite.InputSystem
         // Char Event
         public static event Action<IKeyboard, char> KeyCharEvent;
 
+        // MouseButtonDown Event
+        public static event Action<IMouse, MouseButton> MouseButtonDownEvent;
+
+        // MouseButtonUp Event
+        public static event Action<IMouse, MouseButton> MouseButtonUpEvent;
+
         static Input()
         {
             // Subscribe to the KeyDown event of the PrimaryKeyboard
@@ -56,6 +62,9 @@ namespace SourceRewrite.InputSystem
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyDown += OnKeyDown;
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyUp += OnKeyUp;
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyChar += OnKeyChar;
+
+                GameWindow.CurrentWindow.Input.PrimaryMouse.MouseDown += OnMouseButtonDown;
+                GameWindow.CurrentWindow.Input.PrimaryMouse.MouseUp += OnMouseButtonUp;
             }
         }
 
@@ -75,6 +84,18 @@ namespace SourceRewrite.InputSystem
         private static void OnKeyChar(IKeyboard sender, char character)
         {
             KeyCharEvent?.Invoke(sender, character);
+        }
+
+        // Handler for the MouseButtonDown event
+        private static void OnMouseButtonDown(IMouse sender, MouseButton button)
+        {
+            MouseButtonDownEvent?.Invoke(sender, button);
+        }
+
+        // Handler for the MouseButtonUp event
+        private static void OnMouseButtonUp(IMouse sender, MouseButton button)
+        {
+            MouseButtonUpEvent?.Invoke(sender, button);
         }
 
         /// <summary>
