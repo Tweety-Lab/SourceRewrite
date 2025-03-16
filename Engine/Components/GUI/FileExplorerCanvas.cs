@@ -11,18 +11,18 @@ namespace SourceRewrite.Components.GUI
     /// </summary>
     public class FileExplorerCanvas : GameComponent
     {
-        private GUICanvas canvas;
+        public GUICanvas Canvas;
 
         public override void Start()
         {
-            canvas = new GUICanvas();
-            canvas.IsTransparent = true;
-            canvas.PanelName = "elements/file_explorer/file_explorer.html";
+            Canvas = new GUICanvas();
+            Canvas.IsTransparent = true;
+            Canvas.PanelName = "elements/file_explorer/file_explorer.html";
 
-            GameObject.AddComponent(canvas);
+            GameObject.AddComponent(Canvas);
 
             // HACK: Manually start the canvas component
-            canvas.Start();
+            Canvas.Start();
         }
     }
 }

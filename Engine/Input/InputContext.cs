@@ -39,6 +39,33 @@ namespace SourceRewrite.InputSystem
     /// </summary>
     public static class Input
     {
+        // KeyDown Event
+        public static event Action<IKeyboard, Key, int> KeyDownEvent;
+
+        // KeyUp Event
+        public static event Action<IKeyboard, Key, int> KeyUpEvent;
+
+        static Input()
+        {
+            // Subscribe to the KeyDown event of the PrimaryKeyboard
+            if (GameWindow.CurrentWindow.Input.PrimaryKeyboard != null)
+            {
+                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyDown += OnKeyDown;
+                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyUp += OnKeyUp;
+            }
+        }
+
+        // Handler for the KeyDown event
+        private static void OnKeyDown(IKeyboard sender, Key key, int i)
+        {
+            KeyDownEvent?.Invoke(sender, key, i);
+        }
+
+        // Handler for the KeyUp event
+        private static void OnKeyUp(IKeyboard sender, Key key, int i)
+        {
+            KeyUpEvent?.Invoke(sender, key, i);
+        }
 
         /// <summary>
         /// Returns True if the chosen key is pressed down.
@@ -47,6 +74,8 @@ namespace SourceRewrite.InputSystem
         {
             return GameWindow.CurrentWindow.Input.PrimaryKeyboard.IsKeyPressed(key);
         }
+
+        
 
         /// <summary>
         /// Returns True if the chosen key is up.

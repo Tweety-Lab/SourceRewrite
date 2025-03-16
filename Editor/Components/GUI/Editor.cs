@@ -78,7 +78,7 @@ namespace Editor.Components.GUI
                 Process.Start("Engine.exe", $"-map {mapFileName}"); // Start the process with the map argument
             });
 
-            // Open a map in the editor
+            // Allow user to select map file then open it
             canvas.RegisterEvent("OpenMap", () =>
             {
                 // Create gameobject to house fileExplorer GUICanvas
@@ -90,6 +90,15 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
+
+                // HACK: MANAGE THE FILE EXPLORER STUFF IN HERE, THIS IS BAD!
+
+                // On submit pressed
+                fileExplorerCanvas.Canvas.RegisterEvent("Submit", () =>
+                {
+                    string selectedFile = fileExplorerCanvas.Canvas.GetElement("file-path").GetProperty("value");
+                    Console.WriteLine(selectedFile);
+                });
             });
         }
 

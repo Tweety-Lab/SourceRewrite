@@ -61,6 +61,17 @@ namespace SourceRewrite.Components
             // Create a GUI View
             Container.VistaView = vistaView;
 
+            // Send Key inputs
+            Input.KeyDownEvent += (sender, key, i) =>
+            {
+                Container.VistaView.SendKeyDown(i, UltralightNet.ULKeyEventModifiers.ShiftKey, key.ToString(), key.ToString());
+            };
+
+            Input.KeyUpEvent += (sender, key, i) =>
+            {
+                Container.VistaView.SendKeyUp(i, UltralightNet.ULKeyEventModifiers.ShiftKey, key.ToString(), key.ToString());
+            };
+
             // Render view depending on if it's worldspace or screenspace
             if (PanelType == 0)
             {
@@ -99,6 +110,8 @@ namespace SourceRewrite.Components
                     guiMesh.Material.Texture = texture;
             }
         }
+
+
 
         /// <summary>
         /// Gets an Element from it's ID.

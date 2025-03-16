@@ -127,7 +127,8 @@ namespace VistaGUI
         /// <param name="position"></param>
         public void SendMousePosition(Vector2 position)
         {
-            if (!Visible) return; // Don't process input if the GUI is not visible
+            if (!Visible) 
+                return; // Don't process input if the GUI is not visible
 
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseMoved;
@@ -147,7 +148,8 @@ namespace VistaGUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonDown(int mouseButton)
         {
-            if (!Visible) return; // Don't process input if the GUI is not visible
+            if (!Visible) 
+                return; // Don't process input if the GUI is not visible
 
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseDown;
@@ -170,7 +172,8 @@ namespace VistaGUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonUp(int mouseButton)
         {
-            if (!Visible) return; // Don't process input if the GUI is not visible
+            if (!Visible) 
+                return; // Don't process input if the GUI is not visible
 
             ULMouseEvent mouseEvent = new ULMouseEvent();
             mouseEvent.Type = ULMouseEventType.MouseUp;
@@ -186,6 +189,86 @@ namespace VistaGUI
                 mouseEvent.Button = ULMouseEventButton.Right;
 
             UltralightView.FireMouseEvent(mouseEvent);
+        }
+
+        /// <summary>
+        /// Sends a character input event to the GUI.
+        /// </summary>
+        public void SendChar(string text)
+        {
+            if (!Visible)
+                return; // Don't process input if the GUI is not visible
+
+            ULKeyEvent keyEvent = ULKeyEvent.Create(
+                ULKeyEventType.Char,
+                0,
+                0,
+                0,
+                text,
+                text,
+                false,
+                false,
+                false
+            );
+
+            UltralightView.FireKeyEvent(keyEvent);
+        }
+
+        /// <summary>
+        /// Sends a key down event to the GUI.
+        /// </summary>
+        public void SendKeyDown(int keyCode, ULKeyEventModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        {
+            if (!Visible)
+                return; // Don't process input if the GUI is not visible
+
+            // Use the virtual key code as the same as the key code for simplicity
+            int virtualKeyCode = keyCode;
+
+            ULKeyEvent keyEvent = ULKeyEvent.Create(
+                ULKeyEventType.RawKeyDown,
+                modifiers,
+                virtualKeyCode,
+                virtualKeyCode,
+                text,
+                unmodifiedText,
+                isKeypad,
+                isAutoRepeat,
+                isSystemKey
+            );
+
+            Console.WriteLine($"{virtualKeyCode} + {keyCode} + {text} + {unmodifiedText}");
+
+            UltralightView.FireKeyEvent(keyEvent);
+            SendChar(text); // Send Character
+        }
+
+        /// <summary>
+        /// Sends a key up event to the GUI.
+        /// </summary>
+        public void SendKeyUp(int keyCode, ULKeyEventModifiers modifiers, string text, string unmodifiedText, bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
+        {
+            if (!Visible)
+                return; // Don't process input if the GUI is not visible
+
+            // Use the virtual key code as the same as the key code for simplicity
+            int virtualKeyCode = keyCode;
+
+            ULKeyEvent keyEvent = ULKeyEvent.Create(
+                ULKeyEventType.KeyUp,
+                modifiers,
+                virtualKeyCode,
+                virtualKeyCode,
+                text,
+                unmodifiedText,
+                isKeypad,
+                isAutoRepeat,
+                isSystemKey
+            );
+
+            Console.WriteLine(virtualKeyCode);
+
+            UltralightView.FireKeyEvent(keyEvent);
         }
 
         /// Renders the GUI to a texture
