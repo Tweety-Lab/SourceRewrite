@@ -192,15 +192,15 @@ namespace VistaGUI
         }
 
         /// <summary>
-        /// Sends a character input event to the GUI.
+        /// Sends text input to the GUI.
         /// </summary>
-        public void SendText(string text, bool isPaste)
+        public void SendText(string text, bool allowMultiple)
         {
             if (!Visible)
                 return; // Don't process input if the GUI is not visible
 
-            if (isPaste && text.Length > 1)
-                return; // Prevent sending text for keys like "shiftlock" unless pasting content
+            if (allowMultiple && text.Length > 1)
+                return; // Prevent sending text for keys like "shiftlock" unless allowed
 
             ULKeyEvent keyEvent = ULKeyEvent.Create(
                 ULKeyEventType.Char,
