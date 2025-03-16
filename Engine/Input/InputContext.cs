@@ -91,7 +91,7 @@ namespace SourceRewrite.InputSystem
         public static bool GetMouseButtonDown(int mouseButton)
         {
             // Convert the int to a Silk.NET MouseButton
-            Silk.NET.Input.MouseButton button = (Silk.NET.Input.MouseButton)mouseButton;
+            MouseButton button = (Silk.NET.Input.MouseButton)mouseButton;
 
             // Check if the specific mouse button is pressed
             return GameWindow.CurrentWindow.Input.PrimaryMouse.IsButtonPressed(button);
@@ -152,6 +152,14 @@ namespace SourceRewrite.InputSystem
         public static float GetMouseYMovement()
         {
             return GameWindow.CurrentWindow.Input.MouseDelta.Y;
+        }
+
+        /// <summary>
+        /// Returns the current Clipboard Text.
+        /// </summary>
+        public static string GetClipboardText()
+        {
+            return GameWindow.CurrentWindow.Input.PrimaryKeyboard.ClipboardText;
         }
 
         /// <summary>
