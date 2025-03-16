@@ -71,7 +71,7 @@ namespace Editor.Components.GUI
 
         }
 
-        public override void Update(float deltaTime)
+        public override void Update()
         {
         
         }

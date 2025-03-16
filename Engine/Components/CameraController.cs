@@ -2,6 +2,7 @@
 using Silk.NET.Input;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
+using SourceRewrite.TimeSystem;
 
 namespace SourceRewrite.Components
 {
@@ -23,13 +24,13 @@ namespace SourceRewrite.Components
             yaw = currentEuler.Y;
         }
 
-        public override void Update(float deltaTime)
+        public override void Update()
         {
             // Handle camera movement input (W, A, S, D keys)
-            HandleMovementInput(deltaTime);
+            HandleMovementInput(Time.DeltaTime);
 
             // Handle mouse input for camera rotation
-            HandleMouseInput(deltaTime);
+            HandleMouseInput(Time.DeltaTime);
         }
 
         // Movement input (W, A, S, D)

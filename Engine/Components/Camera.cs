@@ -57,7 +57,7 @@ namespace SourceRewrite.Components
 
         // Update Shader uniforms with Camera data
         private Vector3 lastCameraPos;
-        public override void Update(float deltaTime)
+        public override void Update()
         {
             // Check if the camera's position has changed
             Vector3 currentCameraPos = GameObject.Transform.Position;

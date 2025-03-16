@@ -25,7 +25,7 @@ namespace SourceRewrite.Objects
         /// <summary>
         /// Runs GameObject update logic.
         /// </summary>
-        public static void GameObjectUpdate(float deltaTime)
+        public static void GameObjectUpdate()
         {
             // Create a copy of ActiveObjects to avoid modifying the collection during iteration
             List<GameObject> objectsToUpdate = new List<GameObject>(ActiveObjects);
@@ -39,7 +39,7 @@ namespace SourceRewrite.Objects
                 // Loop through every GameComponent in GameObject
                 foreach (GameComponent comp in componentsToUpdate)
                 {
-                    comp.Update(deltaTime);
+                    comp.Update();
                 }
             }
 

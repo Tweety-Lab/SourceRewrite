@@ -21,7 +21,7 @@ namespace SourceRewrite.Components
         public float QuadraticAttenuation = 0.032f;
 
         // Update Shader Uniforms
-        public override void Update(float deltaTime)
+        public override void Update()
         {
             // Multiply the intensity (4th component of Color) by arbitrary adjustment factor for our unit system
             Vector4 modifiedColor = Color;

@@ -17,7 +17,7 @@ namespace SourceRewrite.Components
         /// <summary>
         /// Runs once per frame.
         /// </summary>
-        public virtual void Update(float deltaTime) { }
+        public virtual void Update() { }
 
         /// <summary>
         /// Runs once on start.

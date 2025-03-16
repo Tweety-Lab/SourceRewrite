@@ -69,7 +69,7 @@ namespace SourceRewrite.Components
         }
 
         bool hasClicked = false;
-        public override void Update(float deltaTime)
+        public override void Update()
         {
             // Get current mouse position
             var mousePosition = Input.GetMousePosition();

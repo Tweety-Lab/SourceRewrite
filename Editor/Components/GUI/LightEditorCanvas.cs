@@ -81,7 +81,7 @@ namespace Editor.Components.GUI
             }
         }
 
-        public override void Update(float deltaTime)
+        public override void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {

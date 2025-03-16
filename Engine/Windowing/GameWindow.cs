@@ -9,6 +9,7 @@ using SourceRewrite.Maps;
 using System.Numerics;
 using VistaGUI;
 using FileFormats.KeyValues.GameInfo;
+using SourceRewrite.TimeSystem;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -120,8 +121,11 @@ namespace SourceRewrite.Windowing
             // Update VistaGUI
             VistaContext.Update();
 
-            // Update GameObjects with float deltaTime
-            GameObject.GameObjectUpdate((float)deltaTime);
+            // Update Time DeltaTime
+            Time.DeltaTime = (float)deltaTime;
+
+            // Update GameObjects
+            GameObject.GameObjectUpdate();
         }
 
         private unsafe void OnRender(double deltaTime) {
