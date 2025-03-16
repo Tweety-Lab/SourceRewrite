@@ -45,6 +45,9 @@ namespace SourceRewrite.InputSystem
         // KeyUp Event
         public static event Action<IKeyboard, Key, int> KeyUpEvent;
 
+        // Char Event
+        public static event Action<IKeyboard, char> KeyCharEvent;
+
         static Input()
         {
             // Subscribe to the KeyDown event of the PrimaryKeyboard
@@ -52,6 +55,7 @@ namespace SourceRewrite.InputSystem
             {
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyDown += OnKeyDown;
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyUp += OnKeyUp;
+                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyChar += OnKeyChar;
             }
         }
 
@@ -65,6 +69,12 @@ namespace SourceRewrite.InputSystem
         private static void OnKeyUp(IKeyboard sender, Key key, int i)
         {
             KeyUpEvent?.Invoke(sender, key, i);
+        }
+
+        // Handler for the KeyChar event
+        private static void OnKeyChar(IKeyboard sender, char character)
+        {
+            KeyCharEvent?.Invoke(sender, character);
         }
 
         /// <summary>

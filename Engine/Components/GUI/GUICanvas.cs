@@ -62,40 +62,26 @@ namespace SourceRewrite.Components
             // Create a GUI View
             Container.VistaView = vistaView;
 
-            // Send Key Downs
+            // Send Character Typed Events
+            Input.KeyCharEvent += (sender, character) =>
+            {
+                Container.VistaView.SendText(character.ToString(), false);
+            };
+
+            // Send Key Down Events
             Input.KeyDownEvent += (sender, key, i) =>
             {
                 bool isShiftPressed = Input.GetKeyDown(Key.ShiftLeft) || Input.GetKeyDown(Key.ShiftRight);
                 string keyText = key.ToString();
 
-                // Handle capital letters
-                if (isShiftPressed && keyText.Length == 1 && char.IsLetter(keyText[0]))
-                {
-                    keyText = keyText.ToUpper();
-                }
-                else
-                {
-                    keyText = keyText.ToLower();
-                }
-
                 Container.VistaView.SendKeyDown(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
 
-            // Send Key Ups
+            // Send Key Ups Events
             Input.KeyUpEvent += (sender, key, i) =>
             {
                 bool isShiftPressed = Input.GetKeyDown(Key.ShiftLeft) || Input.GetKeyDown(Key.ShiftRight);
                 string keyText = key.ToString();
-
-                // Handle capital letters
-                if (isShiftPressed && keyText.Length == 1 && char.IsLetter(keyText[0]))
-                {
-                    keyText = keyText.ToUpper();
-                }
-                else
-                {
-                    keyText = keyText.ToLower();
-                }
 
                 Container.VistaView.SendKeyUp(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };

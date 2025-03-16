@@ -245,7 +245,6 @@ namespace VistaGUI
             );
 
             UltralightView.FireKeyEvent(keyEvent);
-            SendText(text, false); // Send single text character
         }
 
         /// <summary>
