@@ -9,7 +9,7 @@ namespace SourceRewrite.Windowing
     /// <summary>
     /// Abstraction for .exe argument handling
     /// </summary>
-    public static class WindowArguments
+    public static class ApplicationArguments
     {
         /// <summary>
         /// The arguments passed to the application on launch. Key is argument name, value is argument value.

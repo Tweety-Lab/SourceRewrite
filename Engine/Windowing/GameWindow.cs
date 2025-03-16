@@ -61,7 +61,7 @@ namespace SourceRewrite.Windowing
 
             // Process arguments only if there are any provided
             if (arguments != null)
-                WindowArguments.SetArguments(arguments);
+                ApplicationArguments.SetArguments(arguments);
 
             Vector2D<int> trueWindowSize = new Vector2D<int>((int)windowSize.X, (int)windowSize.Y);
 
@@ -114,7 +114,7 @@ namespace SourceRewrite.Windowing
             Input = new InputContext(_window.CreateInput());
 
             // Get -map window argument
-            WindowArguments.Arguments.TryGetValue("-map", out string mapPath);
+            ApplicationArguments.Arguments.TryGetValue("-map", out string mapPath);
             if (mapPath != null)
             {
                 MapSystem.LoadMap(FileSystem.GetMapPath(mapPath)); // Load Map from argument
