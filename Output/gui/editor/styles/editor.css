@@ -71,8 +71,10 @@ button:hover {
     margin-right: 30px;
     position: fixed;
     top: 10px;
-    right: 30px;
-    border: 1px solid #313136;
+    right: 9px;
+    border-left: 1px solid #313136;
+    border-top: 1px solid #313136;
+    border-right: 1px solid #313136;
 }
 
 
