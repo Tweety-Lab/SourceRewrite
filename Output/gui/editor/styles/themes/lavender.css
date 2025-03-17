@@ -5,9 +5,10 @@
     --bg-dark: #1d1d20;
     --bg-medium: #232529;
     --bg-light: #313136;
+    --accent: #7878b6;
+    --separator: #7878b6;
     --text-white: #ffffff;
     --text-hover: rgb(223, 223, 223);
-    --highlight-accent: #7878b6;
     --highlight-hover: rgb(199, 199, 199);
     --tree-bg: #1b1d20;
     --tree-border: #313136;

@@ -15,7 +15,7 @@ button {
 }
 
 .selected-button {
-    border: 1px solid var(--highlight-accent);
+    border: 1px solid var(--accent);
 }
 
 p {
@@ -145,14 +145,14 @@ button:hover {
 }
 
 .toolbar-vertical .selected-button {
-    border: 1px solid var(--highlight-accent);
+    border: 1px solid var(--accent);
 }
 
 .toolbar-vertical hr {
     box-sizing: border-box;
     border: none;
     height: 1px;
-    background-color: var(--highlight-accent);
+    background-color: var(--separator);
     width: 90%;
     margin-right: auto;
 }
