@@ -2,16 +2,16 @@
 
 :root {
     /* Color Variables */
-    --bg-dark: #1d1d20;
-    --bg-medium: #232529;
-    --bg-light: #313136;
-    --accent: #7878b6;
-    --separator: #7878b6;
-    --text-white: #ffffff;
-    --text-hover: rgb(223, 223, 223);
+    --bg-dark: #181818;
+    --bg-medium: #222222;
+    --bg-light: #222222;
+    --accent: #0091ff;
+    --separator: #234568;
+    --text-white: #aaaaaa;
+    --text-hover: rgb(201, 201, 201);
     --highlight-hover: rgb(199, 199, 199);
-    --button-border: #313136;
-    --button-bg: #1d1d20;
+    --button-border: #343434;
+    --button-bg: #1f1f1f;
 
     /* Button Visuals */
     --button-border-thickness: 1px;
