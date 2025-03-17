@@ -12,8 +12,8 @@
         public void AddListItem(string listItemText)
         {
             // Adds a list item (LI) with the specified text content to the UL.
-            string currentContent = GetProperty("textContent");
-            SetProperty("textContent", currentContent + "<li>" + listItemText + "</li>");
+            string currentContent = GetProperty("innerHTML");
+            SetProperty("innerHTML", currentContent + "<li>" + listItemText + "</li>");
         }
 
         /// <summary>
@@ -21,11 +21,11 @@
         /// </summary>
         public void RemoveListItem(string listItemText)
         {
-            string currentContent = GetProperty("textContent");
+            string currentContent = GetProperty("innerHTML");
             string itemToRemove = "<li>" + listItemText + "</li>";
             if (currentContent.Contains(itemToRemove))
             {
-                SetProperty("textContent", currentContent.Replace(itemToRemove, string.Empty));
+                SetProperty("innerHTML", currentContent.Replace(itemToRemove, string.Empty));
             }
         }
 

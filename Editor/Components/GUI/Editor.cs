@@ -30,17 +30,8 @@ namespace Editor.Components.GUI
             // HACK: Manually start the canvas component
             canvas.Start();
 
-            // Load GameObjects into gui gameobjects list
-            VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
-
-            foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
-            {
-                gameobjectsList.AddListItem("Test");
-            }
-
-            Console.WriteLine(gameobjectsList.OuterHTML);
-
-            
+            // Load GameObjects into GUI gameobjects tree
+            UpdateGameObjectsTree();
 
             // Register GUI Events
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
@@ -88,6 +79,19 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("PlayGame");
             canvas.UnregisterEvent("PlayCurrentMap");
             canvas.UnregisterEvent("OpenMap");
+        }
+
+        // Load GameObjects into GUI gameobjects tree
+        private void UpdateGameObjectsTree()
+        {
+            // Load GameObjects into gui gameobjects list
+            VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
+
+            foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
+            {
+                // Set the name to the first non-transform component name
+                gameobjectsList.AddListItem(gameobject.Components[1].GetType().Name ?? "GameObject");
+            }
         }
     }
 }
