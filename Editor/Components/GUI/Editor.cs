@@ -71,12 +71,17 @@ namespace Editor.Components.GUI
                     return;
 
                 // Set the name to the first non-transform component name
-                gameobjectsList.AddListItem(gameobject.Name ?? "GameObject");
+                gameobjectsList.AddListItem(gameobject.Name ?? "NameNotFound");
             }
         }
 
         // Register GUI Events
         private void RegisterGUIEvents()
+        {
+            RegisterMenuEvents();
+        }
+
+        private void RegisterMenuEvents()
         {
             // Open VDC Website
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
