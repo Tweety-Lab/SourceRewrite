@@ -40,9 +40,9 @@ document.addEventListener('click', function (event) {
 
 
 // Function to handle the selection of a button in the action bar
-function selectActionBarButton(event) {
+function selectSelectionContentButton(event) {
 	// Get all action bar buttons
-	const actionBarButtons = document.querySelectorAll('.action-bar button');
+	const actionBarButtons = document.querySelectorAll('#selection-content button');
 	
 	// Remove the 'selected-button' class from all buttons
 	actionBarButtons.forEach(button => {
@@ -68,9 +68,9 @@ function selectToolbarButton(event) {
 }
 
 // Add click event listeners to each button in the action bar
-const actionBarButtons = document.querySelectorAll('.action-bar button');
-actionBarButtons.forEach(button => {
-	button.addEventListener('click', selectActionBarButton);
+const selectionContentButtons = document.querySelectorAll('#selection-content button');
+selectionContentButtons.forEach(button => {
+	button.addEventListener('click', selectSelectionContentButton);
 });
 
 // Add click event listeners to each button in the toolbar-vertical
