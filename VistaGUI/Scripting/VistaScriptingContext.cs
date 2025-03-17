@@ -1,8 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
+using VistaGUI.Scripting.Elements;
 using VistaGUI.Scripting.References;
 
 namespace VistaGUI.Scripting
@@ -25,19 +27,44 @@ namespace VistaGUI.Scripting
         // Retrieves an element by its ID, returns a reference as a specific type (T).
         public T GetElementAsType<T>(string elementId) where T : VistaElement
         {
-            // Get the element type based on its ID.
-            string elementType = GetElementType(elementId);
-            Type type = TypeDictionary.Types.TryGetValue(elementType, out var resolvedType) ? resolvedType : typeof(VistaElement);
+            // Get the tag name of the element
+            string tagName = GetElementType(elementId);
 
-            // Ensure the requested type matches the resolved type.
-            if (typeof(T) != type && !typeof(T).IsAssignableFrom(type))
+            // Get all types in the current assembly that inherit from VistaElement
+            var elementTypes = Assembly.GetAssembly(typeof(VistaElement))
+                .GetTypes()
+                .Where(type => typeof(VistaElement).IsAssignableFrom(type) && type.IsClass)
+                .ToList();
+
+            Type matchedType = null;
+
+            // Search for a matching type based on tag names in the attribute
+            foreach (var type in elementTypes)
             {
-                Console.WriteLine($"Cannot cast element {elementId} of type {elementType} to {typeof(T)}.");
+                var attribute = type.GetCustomAttribute<VistaElementAttribute>();
+                if (attribute != null && attribute.TagNames.Contains(tagName.ToLower()))  // Match tag names
+                {
+                    matchedType = type;
+                    break;
+                }
+            }
+
+            // If no match is found handle the case
+            if (matchedType == null)
+            {
+                Console.WriteLine($"No matching VistaElement found for tag name: {tagName}");
                 return null;
             }
 
-            // Return the instance of the requested type (T).
-            return (T)Activator.CreateInstance(type, elementId, this);
+            // Ensure the requested type matches the resolved type
+            if (typeof(T) != matchedType && !typeof(T).IsAssignableFrom(matchedType))
+            {
+                Console.WriteLine($"Cannot cast element {elementId} of tag name {tagName} to {typeof(T)}.");
+                return null;
+            }
+
+            // Return the instance of the requested type, passing elementId to the constructor
+            return (T)Activator.CreateInstance(matchedType, elementId, this);
         }
 
         // Sets the InnerHTML of an element

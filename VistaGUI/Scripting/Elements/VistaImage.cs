@@ -1,8 +1,11 @@
-﻿namespace VistaGUI.Scripting.References
+﻿using VistaGUI.Scripting.Elements;
+
+namespace VistaGUI.Scripting.References
 {
     /// <summary>
     /// Generic reference to Image Elements.
     /// </summary>
+    [VistaElement("img")]
     public class VistaImage : VistaElement
     {
         /// <summary>

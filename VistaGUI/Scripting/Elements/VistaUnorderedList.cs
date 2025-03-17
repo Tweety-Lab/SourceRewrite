@@ -1,8 +1,11 @@
-﻿namespace VistaGUI.Scripting.References
+﻿using VistaGUI.Scripting.Elements;
+
+namespace VistaGUI.Scripting.References
 {
     /// <summary>
     /// Generic reference to Unordered List (UL) Elements.
     /// </summary>
+    [VistaElement("ul")]
     public class VistaUnorderedList : VistaElement
     {
 

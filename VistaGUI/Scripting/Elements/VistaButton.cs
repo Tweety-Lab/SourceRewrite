@@ -1,8 +1,11 @@
-﻿namespace VistaGUI.Scripting.References
+﻿using VistaGUI.Scripting.Elements;
+
+namespace VistaGUI.Scripting.References
 {
     /// <summary>
     /// Generic reference to Button Elements.
     /// </summary>
+    [VistaElement("button")]
     public class VistaButton : VistaElement
     {
         /// <summary>
