@@ -41,6 +41,9 @@ namespace VistaGUI.Scripting.References
             Context = context;
         }
 
+        // Events
+        public void AddEvent(string eventName, string functionName) => Context.AddEvent(ID, eventName, functionName);
+
         // Inner HTML
         private void SetInnerHTML(string text) => Context.SetElementInnerHTML(ID, text);
         private string GetInnerHTML() => Context.GetElementInnerHTML(ID);

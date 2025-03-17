@@ -73,13 +73,16 @@ namespace Editor.Components.GUI
                 if (MapSystem.GlobalGameObjects.Contains(gameobject))
                     continue;
 
+                GameObject currentGameObject = gameobject;
+
                 // Create a list item
-                VistaListItem listItem = new VistaListItem($"{gameobject.Name}-{i}", canvas.Container.VistaView.ScriptingContext);
+                VistaListItem listItem = new VistaListItem($"{currentGameObject.Name}-{i}", canvas.Container.VistaView.ScriptingContext);
 
                 // Add the list item
                 gameobjectsList.AddListItem(listItem);
 
-                listItem.TextContent = gameobject.Name;
+                listItem.TextContent = currentGameObject.Name;
+
                 i++;
             }
         }

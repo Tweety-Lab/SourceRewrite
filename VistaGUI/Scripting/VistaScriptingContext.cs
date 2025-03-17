@@ -67,6 +67,18 @@ namespace VistaGUI.Scripting
             return (T)Activator.CreateInstance(matchedType, elementId, this);
         }
 
+        // Adds an event to an element using HTML attribute style (e.g., onclick="")
+        public void AddEvent(string elementID, string eventName, string functionName)
+        {
+            // Set the event handler directly as an attribute
+            string jsCode = $"document.getElementById('{elementID}')['{eventName}'] = function() {{ {functionName}(); }};";
+            UltralightView.EvaluateScript(jsCode, out string output);
+
+            // Print output
+            if (output != string.Empty)
+                Console.WriteLine($"Vista Script: {output}");
+        }
+
         // Sets the InnerHTML of an element
         public void SetElementInnerHTML(string elementId, string text)
         {
