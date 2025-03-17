@@ -34,7 +34,7 @@ button:hover {
     display: flex;
     flex-direction: row;
     margin: 0;
-    background-color: var(--bg-dark);
+    background-color: var(--menu-bar-bg);
     align-items: center;
     height: 25px;
 }
@@ -43,7 +43,7 @@ button:hover {
     font-size: small;
     border: none;
     background-color: transparent;
-    color: var(--text-white);
+    color: var(--menu-bar-text);
 }
 
 .menu-bar button:hover {

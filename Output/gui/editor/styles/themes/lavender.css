@@ -2,6 +2,9 @@
 
 :root {
     /* Color Variables */
+    --menu-bar-bg: rgb(31, 33, 36);
+    --menu-bar-text: rgb(255, 255, 255);
+
     --bg-dark: #1d1d20;
     --bg-medium: #232529;
     --bg-light: #313136;
