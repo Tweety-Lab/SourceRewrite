@@ -34,37 +34,6 @@ namespace Editor.Components.GUI
             // Register GUI Evenets
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
 
-            bool lightEditorOpen = false;
-
-            // Open Light Editor if it isn't already opened
-            canvas.RegisterEvent("OpenLightEditor", () =>
-            {
-                if (!lightEditorOpen)
-                {
-                    // Create gameobject to house Light Editor GUICanvas
-                    lightEditorObject = new GameObject();
-
-                    // Add Light Edtior GUICanvas to gameobject
-                    LightEditorCanvas lightEditorCanvas = new LightEditorCanvas();
-                    lightEditorObject.AddComponent(lightEditorCanvas);
-
-                    // Start GUI
-                    lightEditorCanvas.Start();
-
-                    lightEditorOpen = true;
-                }
-            });
-
-            // Close Light Editor if it isn't already closed
-            canvas.RegisterEvent("CloseLightEditor", () =>
-            {
-                if (lightEditorOpen)
-                {
-                    lightEditorObject.DestroyDeferred();
-                    lightEditorOpen = false;
-                }
-            });
-
             // Unload Map
             canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
 
