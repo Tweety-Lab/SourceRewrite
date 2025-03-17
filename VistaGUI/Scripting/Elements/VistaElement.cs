@@ -1,10 +1,27 @@
-﻿namespace VistaGUI.Scripting.References
+﻿using VistaGUI.Scripting.Elements;
+
+namespace VistaGUI.Scripting.References
 {
     // Reference to a Generic HTML element.
     public class VistaElement
     {
         public string ID { get; private set; }
         private VistaScriptingContext Context { get; set; }
+
+        // Generate HTML for this element
+        public string GenerateHTML()
+        {
+            var attribute = (VistaElementAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(VistaElementAttribute));
+
+            // Check if the attribute is found and has at least one tag name
+            if (attribute?.TagNames?.Length > 0)
+            {
+                var tagName = attribute.TagNames[0]; // Use the first tag name
+                return $"<{tagName} id=\"{ID}\"></{tagName}>";
+            }
+
+            return string.Empty;
+        }
 
         public string InnerHTML
         {

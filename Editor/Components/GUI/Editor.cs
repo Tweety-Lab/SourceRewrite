@@ -65,6 +65,8 @@ namespace Editor.Components.GUI
             // Load GameObjects into gui gameobjects list
             VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
 
+            
+
             gameobjectsList.Clear();
             foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
             {
