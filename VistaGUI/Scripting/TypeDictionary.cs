@@ -21,7 +21,10 @@ namespace VistaGUI.Scripting
             ["img"] = typeof(VistaImage),
 
             // Button Elements
-            ["button"] = typeof(VistaButton)
+            ["button"] = typeof(VistaButton),
+
+            // Lists
+            ["ul"] = typeof(VistaUnorderedList)
 
         };
     }

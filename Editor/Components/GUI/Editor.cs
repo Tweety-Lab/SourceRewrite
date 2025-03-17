@@ -31,28 +31,14 @@ namespace Editor.Components.GUI
             canvas.Start();
 
             // Load GameObjects into gui gameobjects list
-            VistaElement gameobjectsList = canvas.GetElement("gameobjects-list");
-
-            // Use StringBuilder to construct inner HTML
-            StringBuilder innerHTMLBuilder = new StringBuilder();
+            VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
 
             foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
             {
-                // Constructing the list item with correct HTML structure
-                string listObject = $@"
-<li><span class=""caret"">name</span>
-    <ul class=""nested"">
-        <li>Child1</li>
-    </ul>
-</li>";
-
-                innerHTMLBuilder.AppendLine(listObject);
+                gameobjectsList.AddListItem("Test");
             }
 
-            // Update the gameobjects list
-            gameobjectsList.InnerHTML = innerHTMLBuilder.ToString();
-
-            Console.WriteLine(gameobjectsList.InnerHTML);
+            
 
             // Register GUI Events
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
