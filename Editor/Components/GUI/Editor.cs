@@ -79,6 +79,7 @@ namespace Editor.Components.GUI
         private void RegisterGUIEvents()
         {
             RegisterMenuEvents();
+            RegisterGameObjectEvents();
         }
 
         private void RegisterMenuEvents()
@@ -111,6 +112,15 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
+            });
+        }
+
+        private void RegisterGameObjectEvents()
+        {
+            // Create a new game object
+            canvas.RegisterEvent("NewGameObject", () =>
+            {
+                Console.WriteLine("Test");
             });
         }
     }

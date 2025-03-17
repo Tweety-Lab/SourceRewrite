@@ -167,6 +167,10 @@ button:hover {
     box-sizing: border-box;
 }
 
+.action-bar button {
+    width: 100%;
+}
+
 .action-bar #selection-content {
     display: flex;
     flex-direction: column;
@@ -231,5 +235,11 @@ ul, #gameobjects-list {
 
 .active {
     display: block;
+}
+
+#gameobject-manipulation {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 }
 
