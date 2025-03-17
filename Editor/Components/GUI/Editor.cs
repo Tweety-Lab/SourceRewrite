@@ -9,6 +9,7 @@ using System.Numerics;
 using VistaGUI.Scripting.References;
 using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
+using System.Text;
 
 namespace Editor.Components.GUI
 {
@@ -29,9 +30,31 @@ namespace Editor.Components.GUI
             // HACK: Manually start the canvas component
             canvas.Start();
 
-            GameObject lightEditorObject = null;
+            // Load GameObjects into gui gameobjects list
+            VistaElement gameobjectsList = canvas.GetElement("gameobjects-list");
 
-            // Register GUI Evenets
+            // Use StringBuilder to construct inner HTML
+            StringBuilder innerHTMLBuilder = new StringBuilder();
+
+            foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
+            {
+                // Constructing the list item with correct HTML structure
+                string listObject = $@"
+<li><span class=""caret"">name</span>
+    <ul class=""nested"">
+        <li>Child1</li>
+    </ul>
+</li>";
+
+                innerHTMLBuilder.AppendLine(listObject);
+            }
+
+            // Update the gameobjects list
+            gameobjectsList.InnerHTML = innerHTMLBuilder.ToString();
+
+            Console.WriteLine(gameobjectsList.InnerHTML);
+
+            // Register GUI Events
             canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
 
             // Unload Map

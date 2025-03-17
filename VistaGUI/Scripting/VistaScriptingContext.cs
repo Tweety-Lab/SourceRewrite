@@ -44,7 +44,11 @@ namespace VistaGUI.Scripting
         public void SetElementInnerHTML(string elementId, string text)
         {
             string escapedText = text.Replace("'", "\\'").Replace("\"", "\\\"");
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{escapedText}';", out _);
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{escapedText}';", out string output);
+
+            // Print output
+            if (output != string.Empty)
+                Console.WriteLine($"Vista Script: {output}");
         }
 
         // Get the InnerHTML of an element
