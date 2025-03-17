@@ -15,7 +15,7 @@ namespace Editor
     /// <summary>
     /// Entry Point for Editor Mod.
     /// </summary>
-    public class Mod : IMod
+    public class EditorMod : IMod
     {
         // Runs once on Mod Load
         public void OnLoad()

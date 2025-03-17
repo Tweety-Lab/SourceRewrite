@@ -16,6 +16,9 @@ namespace Editor
             // Load Editor as Mod by default
             ModSystem.LoadModAssembly("Editor.dll");
 
+            // Load Mods from bin/plugins
+            ModSystem.LoadModsFromDir("../editor-plugins/");
+
             // Create our main Game Window
             new GameWindow(new Vector2(800, 500), "Game Window");
         }

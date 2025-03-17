@@ -96,7 +96,6 @@ namespace SourceRewrite.Modding
                 {
                     var modInstance = Activator.CreateInstance(modType) as IMod;
                     modInstance?.OnLoad(); // Invoke OnLoad if the instance is not null
-                    Console.WriteLine($"Called OnLoad for mod: {modType.Name}");
                 }
                 catch (Exception ex)
                 {
