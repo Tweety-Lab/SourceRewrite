@@ -13,7 +13,7 @@ namespace VistaGUI.Scripting
     public class VistaScriptingContext
     {
         // Dictionary of function names and their associated action callback
-        private static Dictionary<string, Action> JSCallbacks = new Dictionary<string, Action>();
+        private static Dictionary<string, Action<string[]>> JSCallbacks = new Dictionary<string, Action<string[]>>();
 
         // Associated Ultralight View
         public View UltralightView;
@@ -67,11 +67,15 @@ namespace VistaGUI.Scripting
             return (T)Activator.CreateInstance(matchedType, elementId, this);
         }
 
-        // Adds an event to an element using HTML attribute style (e.g., onclick="")
+        // Adds an event to an element
         public void AddEvent(string elementID, string eventName, string functionName)
         {
             // Set the event handler directly as an attribute
-            string jsCode = $"document.getElementById('{elementID}')['{eventName}'] = function() {{ {functionName}(); }};";
+            string jsCode = $@"
+        document.getElementById('{elementID}')['{eventName}'] = function() {{
+            var args = Array.prototype.slice.call(arguments);
+            {functionName}(args);
+        }};";
             UltralightView.EvaluateScript(jsCode, out string output);
 
             // Print output
@@ -141,9 +145,21 @@ namespace VistaGUI.Scripting
         /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
         /// </summary>
-        /// <param name="name">Javascript function name</param>
-        /// <param name="action">C# Action</param>
+        /// <param name="name">JavaScript function name</param>
+        /// <param name="action">C# Action (optional arguments)</param>
         public unsafe void RegisterEvent(string name, Action action)
+        {
+            // Wrap the user's action in a lambda that ignores arguments
+            JSCallbacks.Add(name, (args) => action());
+            RegisterJSCallback(name, &InvokeCSharpCallback);
+        }
+
+        /// <summary>
+        /// Registers a C# Action that can be called from JavaScript with arguments.
+        /// </summary>
+        /// <param name="name">JavaScript function name</param>
+        /// <param name="action">C# Action that accepts arguments</param>
+        public unsafe void RegisterEvent(string name, Action<string[]> action)
         {
             JSCallbacks.Add(name, action);
             RegisterJSCallback(name, &InvokeCSharpCallback);
@@ -246,9 +262,28 @@ namespace VistaGUI.Scripting
                     string functionName = System.Text.Encoding.UTF8.GetString(buffer, (int)actualLength - 1); // Subtract 1 to exclude the null terminator
 
                     // Try get associated action
-                    if (JSCallbacks.TryGetValue(functionName, out Action action))
+                    if (JSCallbacks.TryGetValue(functionName, out Action<string[]> action))
                     {
-                        action();
+                        // Extract arguments from JavaScript and convert them to strings
+                        string[] args = new string[argumentCount];
+                        for (nuint i = 0; i < argumentCount; i++)
+                        {
+                            JSValueRef argValue = arguments[i];
+
+                            // Convert the argument to a string
+                            JSStringRef argJS = JavaScriptMethods.JSValueToStringCopy(ctx, argValue, exception);
+                            nuint argBufferSize = JavaScriptMethods.JSStringGetMaximumUTF8CStringSize(argJS);
+                            byte* argBuffer = (byte*)NativeMemory.Alloc(argBufferSize);
+                            nuint argActualLength = JavaScriptMethods.JSStringGetUTF8CString(argJS, argBuffer, argBufferSize);
+                            args[i] = System.Text.Encoding.UTF8.GetString(argBuffer, (int)argActualLength - 1); // Subtract 1 to exclude the null terminator
+
+                            // Free the allocated buffer and release the JSStringRef
+                            NativeMemory.Free(argBuffer);
+                            JavaScriptMethods.JSStringRelease(argJS);
+                        }
+
+                        // Invoke the action with the arguments
+                        action(args);
                     }
 
                     // Free the allocated buffer

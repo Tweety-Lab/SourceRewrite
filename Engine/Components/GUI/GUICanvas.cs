@@ -167,10 +167,16 @@ namespace SourceRewrite.Components
         }
 
         /// <summary>
+        /// Registers a C# Action that can be called from JavaScript with arguments.
+        /// </summary>
+        /// <param name="name">JavaScript function name</param>
+        /// <param name="action">C# Action that accepts arguments (optional)</param>
+        public void RegisterEvent(string name, Action<string[]> action) => Container.VistaView.ScriptingContext.RegisterEvent(name, action);
+
+        /// <summary>
         /// Registers a C# Action that can be called from JavaScript.
         /// </summary>
-        /// <param name="name">Javascript function name</param>
-        /// <param name="action">C# Action</param>
+        /// <param name="name">JavaScript function name</param>
         public void RegisterEvent(string name, Action action) => Container.VistaView.ScriptingContext.RegisterEvent(name, action);
 
         /// <summary>

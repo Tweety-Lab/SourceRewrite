@@ -38,6 +38,8 @@ namespace Editor.Components.GUI
 
             // Register GUI Events
             RegisterGUIEvents();
+
+            canvas.RegisterEvent("TestFunc", (args) => Console.WriteLine(args[0]));
         }
 
         public override void Update()
