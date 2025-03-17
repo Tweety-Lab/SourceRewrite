@@ -1,5 +1,7 @@
 // Function to toggle the menu content when a button is clicked
 function toggleContent(event, contentId) {
+	event.preventDefault();
+
 	// Get the button that was clicked
 	const button = event.target;
 
@@ -31,11 +33,22 @@ function hideAllMenus() {
 	allContents.forEach(content => content.style.display = 'none');
 }
 
-// Add a click event listener to the document to close all menus if clicked outside
-document.addEventListener('click', function (event) {
-	if (!event.target.closest('.menu-bar')) {
-		hideAllMenus();
-	}
+document.addEventListener('mousedown', function(event) {
+    // If clicking in UI elements, prevent default
+    if (event.target.closest('.menu-bar') || event.target.closest('.toolbar-vertical') ||
+        event.target.closest('.action-bar') || event.target.closest('.play-buttons')) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('click', function(event) {
+    // Check if the click is outside menu-related elements before hiding
+    const isMenuOrContent = event.target.closest('.menu-bar') || 
+                            event.target.closest('.menu-content');
+    
+    if (!isMenuOrContent) {
+        hideAllMenus();
+    }
 });
 
 
