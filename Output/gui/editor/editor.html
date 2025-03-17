@@ -4,6 +4,8 @@
 <body>
     <div class="menu-bar">
         <button onclick="toggleContent(event, 'file-functions-content')">File</button>
+        <button onclick="toggleContent(event, 'tools-content')">Tools</button>
+        <button onclick="toggleContent(event, 'map-content')">Map</button>
         <button onclick="toggleContent(event, 'help-content')">Help</button>
     </div>
 
@@ -48,6 +50,14 @@
 
     <div id="help-content" class="menu-content">
         <button onclick="OpenVDC()">Valve Developer Community</button>
+    </div>
+
+    <div id="tools-content" class="menu-content">
+        <button>Options</button>
+    </div>
+
+    <div id="map-content" class="menu-content">
+        <button>Toggle GameObject Visualization</button>
     </div>
 
     <script src="file:///editor/scripts/editor.js"></script>
