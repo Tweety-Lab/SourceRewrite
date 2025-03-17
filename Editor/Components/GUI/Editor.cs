@@ -68,7 +68,7 @@ namespace Editor.Components.GUI
             {
                 // Dont list global game objects
                 if (MapSystem.GlobalGameObjects.Contains(gameobject))
-                    return;
+                    continue;
 
                 // Set the name to the first non-transform component name
                 gameobjectsList.AddListItem(gameobject.Name ?? "NameNotFound");
@@ -120,7 +120,13 @@ namespace Editor.Components.GUI
             // Create a new game object
             canvas.RegisterEvent("NewGameObject", () =>
             {
-                Console.WriteLine("Test");
+                GameObject gameObject = new GameObject();
+                gameObject.Name = "NewGameObject";
+
+                MapSystem.CurrentMap.GameObjects.Add(gameObject);
+
+                // Refresh GameObject tree
+                UpdateGameObjectsTree();
             });
         }
     }
