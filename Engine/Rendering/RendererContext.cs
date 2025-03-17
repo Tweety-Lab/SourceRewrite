@@ -4,6 +4,7 @@ using SourceRewrite.Objects;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
+using SourceRewrite.Maps;
 
 
 namespace SourceRewrite.Rendering
@@ -64,7 +65,7 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.OnRender(this);
 
-            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            foreach (GameObject gameobject in MapSystem.AllGameObjects)
             {
                 // Render all Meshes
                 MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
@@ -92,7 +93,7 @@ namespace SourceRewrite.Rendering
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
             // Resize all visible Screenspace GUIs
-            foreach (GameObject gameobject in GameObject.ActiveObjects)
+            foreach (GameObject gameobject in MapSystem.AllGameObjects)
             {
                 GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
                 if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)

@@ -5,9 +5,6 @@ namespace SourceRewrite.Objects
 {
     public class GameObject
     {
-        // Every object that exists
-        public static List<GameObject> ActiveObjects { get; private set; } = new List<GameObject>();
-
         // Queue for deferred destruction of GameObjects
         private static Queue<GameObject> _objectsToDestroy = new Queue<GameObject>();
 
@@ -22,7 +19,6 @@ namespace SourceRewrite.Objects
 
         public GameObject()
         {
-            ActiveObjects.Add(this); // Add Object to list of Objects for later rendering (placeholder)
             AddComponent(Transform); // Add Transform component to the components list
         }
 
@@ -31,8 +27,8 @@ namespace SourceRewrite.Objects
         /// </summary>
         public static void GameObjectUpdate()
         {
-            // Create a copy of ActiveObjects to avoid modifying the collection during iteration
-            List<GameObject> objectsToUpdate = new List<GameObject>(ActiveObjects);
+            // Create a copy of AllGameObjects to avoid modifying the collection during iteration
+            List<GameObject> objectsToUpdate = new List<GameObject>(MapSystem.AllGameObjects);
 
             // Loop through every GameObject
             foreach (GameObject obj in objectsToUpdate)
@@ -59,7 +55,7 @@ namespace SourceRewrite.Objects
             while (_objectsToDestroy.Count > 0)
             {
                 GameObject obj = _objectsToDestroy.Dequeue();
-                ActiveObjects.Remove(obj);
+                MapSystem.AllGameObjects.Remove(obj);
                 MapSystem.CurrentMap.GameObjects.Remove(obj);
 
                 // Run destruction logic for all components
@@ -132,7 +128,7 @@ namespace SourceRewrite.Objects
 
 
         /// <summary>
-        /// Destroys the GameObject, removing it from the ActiveObjects list and cleaning up its components.
+        /// Destroys the GameObject, removing it from the AllObjects list and cleaning up its components.
         /// </summary>
         public void DestroyDeferred()
         {

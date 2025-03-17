@@ -270,11 +270,29 @@ namespace SourceRewrite.Maps
         /// </summary>
         public static List<GameObject> GlobalGameObjects = new List<GameObject>();
 
+        /// <summary>
+        /// List of global and local GameObjects.
+        /// </summary>
+        public static List<GameObject> AllGameObjects
+        {
+            get
+            {
+                // If CurrentMap is null, return GlobalGameObjects, otherwise combine both lists
+                var combinedList = CurrentMap == null
+                    ? GlobalGameObjects
+                    : GlobalGameObjects.Concat(CurrentMap.GameObjects).ToList();
+
+                // Remove duplicates using Distinct (assuming GameObject properly overrides Equals and GetHashCode)
+                return combinedList.Distinct().ToList();
+            }
+        }
+
         // Event triggered when a map is loaded
         public static event Action<Map> OnMapLoaded;
 
         // Event triggered when a map is unloaded
         public static event Action OnMapUnloaded;
+
 
         public static void LoadMap(string path)
         {
