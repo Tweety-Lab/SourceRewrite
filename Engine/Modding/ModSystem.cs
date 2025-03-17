@@ -24,6 +24,9 @@ namespace SourceRewrite.Modding
                     Assembly assembly = Assembly.LoadFrom(dllPath);
                     LoadedModAssemblies.Add(assembly);
                     Console.WriteLine($"Loaded Mod Assembly: {assembly.GetName().Name}.dll");
+
+                    // Call OnLoad for all IMod implementations in the loaded assembly
+                    CallOnLoadForMods(assembly);
                 }
                 catch (Exception ex)
                 {
@@ -41,6 +44,9 @@ namespace SourceRewrite.Modding
                 Assembly assembly = Assembly.LoadFrom(name);
                 LoadedModAssemblies.Add(assembly);
                 Console.WriteLine($"Loaded Mod Assembly: {assembly.GetName().Name}.dll");
+
+                // Call OnLoad for all IMod implementations in the loaded assembly
+                CallOnLoadForMods(assembly);
             }
             catch (Exception ex)
             {
@@ -74,5 +80,36 @@ namespace SourceRewrite.Modding
 
             return null;
         }
+
+        // Calls the OnLoad method for all types in the assembly that implement IMod
+        private static void CallOnLoadForMods(Assembly assembly)
+        {
+            // Get all types in the assembly that implement IMod
+            var modTypes = assembly.GetTypes()
+                                   .Where(t => typeof(IMod).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                                   .ToList();
+
+            // Instantiate and call OnLoad on each mod type
+            foreach (var modType in modTypes)
+            {
+                try
+                {
+                    var modInstance = Activator.CreateInstance(modType) as IMod;
+                    modInstance?.OnLoad(); // Invoke OnLoad if the instance is not null
+                    Console.WriteLine($"Called OnLoad for mod: {modType.Name}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to invoke OnLoad for mod {modType.Name}: {ex.Message}");
+                }
+            }
+        }
+    }
+
+    // Mod Entry Point
+    public interface IMod
+    {
+        void OnLoad();
+        void OnUnload();
     }
 }
