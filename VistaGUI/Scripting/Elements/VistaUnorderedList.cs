@@ -29,6 +29,15 @@
             }
         }
 
+        /// <summary>
+        /// Clear all List Items (LI) from the Unordered List (UL).
+        /// </summary>
+        public void Clear()
+        {
+            // Clears all items by setting the innerHTML to an empty string.
+            SetProperty("innerHTML", string.Empty);
+        }
+
         public VistaUnorderedList(string ID, VistaScriptingContext context) : base(ID, context) { }
     }
 }
