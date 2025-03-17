@@ -12,6 +12,17 @@ namespace VistaGUI.Scripting.References
         /// <summary>
         /// Add a List Item (LI) to the Unordered List (UL).
         /// </summary>
+        public void AddListItem(VistaListItem listItem)
+        {
+            // Adds a list item (LI) to the UL by using the list item instance (VistaListItem)
+            string currentContent = GetProperty("innerHTML");
+            string listItemHTML = listItem.GenerateHTML();  // Generate the HTML for the ListItem
+            SetProperty("innerHTML", currentContent + listItemHTML);
+        }
+
+        /// <summary>
+        /// Add a List Item (LI) to the Unordered List (UL).
+        /// </summary>
         public void AddListItem(string listItemText)
         {
             // Adds a list item (LI) with the specified text content to the UL.

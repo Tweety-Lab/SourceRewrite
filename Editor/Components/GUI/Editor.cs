@@ -66,14 +66,21 @@ namespace Editor.Components.GUI
             VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
 
             gameobjectsList.Clear();
+            int i = 0;
             foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
             {
                 // Dont list global game objects
                 if (MapSystem.GlobalGameObjects.Contains(gameobject))
                     continue;
 
-                // Set the name to the first non-transform component name
-                gameobjectsList.AddListItem(gameobject.Name ?? "NameNotFound");
+                // Create a list item
+                VistaListItem listItem = new VistaListItem($"{gameobject.Name}-{i}", canvas.Container.VistaView.ScriptingContext);
+
+                // Add the list item
+                gameobjectsList.AddListItem(listItem);
+
+                listItem.TextContent = gameobject.Name;
+                i++;
             }
         }
 
