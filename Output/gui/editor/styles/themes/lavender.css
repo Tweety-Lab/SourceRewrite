@@ -1,0 +1,25 @@
+/* HTML Independent Theme */
+
+/* General Button Styling */
+button {
+    background-color: #1d1d20;
+    border: 1px solid #313136;
+    color: white;
+    font-size: 14px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.selected-button {
+    border: 1px solid #7878b6;
+}
+
+p {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: white;
+}
+
+/* Hover Effects */
+button:hover {
+    background-color: #313136;
+}

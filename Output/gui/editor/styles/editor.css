@@ -3,24 +3,6 @@ body {
     user-select: none;
 }
 
-button {
-    background-color: #1d1d20;
-    border: 1px solid #313136;
-    color: white;
-    font-size: 14px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-}
-
-p {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    color: white;
-}
-
-button:hover {
-    background-color: #313136;
-}
-
 
 .menu-bar {
     display: flex;
@@ -187,73 +169,10 @@ button:hover {
     min-width: 150px;
 }
 
-.action-bar #selection-content .selected-button {
-    border: 1px solid #7878b6;
-}
-
 .action-bar #gameobject-tree {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-/* Tree View */
-
-#tree-container {
-    background-color: #1b1d20;
-    border: 1px solid #313136;
-    padding: 10px;
-    width: 100%;
-    margin: 5px;
-    box-sizing: border-box;
-    height: 200px;
-    overflow-y: auto;
-}
-
-ul, #gameobjects-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-#gameobjects-list li {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    color: white;
-}
-
-#gameobjects-list li:hover {
-    color: rgb(199, 199, 199);
-}
-
-.caret {
-    cursor: pointer;
-    user-select: none;
-}
-
-.caret::before {
-    content: "\25B6";
-    color: rgb(45, 46, 54);
-    display: inline-block;
-    margin-right: 6px;
-}
-
-.caret-down::before {
-    transform: rotate(90deg);
-}
-
-.nested {
-    display: none;
-    margin-left: 25px;
-}
-
-.active {
-    display: block;
-}
-
-#gameobject-manipulation {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
 }
 
