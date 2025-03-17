@@ -12,6 +12,12 @@
             set => SetInnerHTML(value);
         }
 
+        public string OuterHTML
+        {
+            get => GetProperty("outerHTML");
+            set => SetProperty("outerHTML", value);
+        }
+
         public VistaElement(string id, VistaScriptingContext context)
         {
             ID = id;

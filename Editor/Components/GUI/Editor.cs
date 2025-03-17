@@ -38,6 +38,8 @@ namespace Editor.Components.GUI
                 gameobjectsList.AddListItem("Test");
             }
 
+            Console.WriteLine(gameobjectsList.OuterHTML);
+
             
 
             // Register GUI Events
