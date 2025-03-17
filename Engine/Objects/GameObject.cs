@@ -13,6 +13,9 @@ namespace SourceRewrite.Objects
         // Every attached Component
         public List<GameComponent> Components { get; private set; } = new List<GameComponent>();
 
+        // Name of GameObject
+        public string Name { get; set; }
+
         // Every Object needs a Transform
         public Transform Transform { get; set; } = new Transform();
 

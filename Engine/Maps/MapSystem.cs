@@ -103,6 +103,9 @@ namespace SourceRewrite.Maps
             // Create a GameObject to house the meshrenderer
             GameObject mapGeometry = new GameObject();
 
+            // Assign GameObject Name
+            mapGeometry.Name = "MapGeometry";
+
             // For now, we just use the first material defined in the lump
             Material placeHolderMaterial = FileSystem.GetMaterial(materialsData[0]);
 
@@ -159,6 +162,9 @@ namespace SourceRewrite.Maps
 
                 // Create GameObject
                 GameObject gameObject = new GameObject();
+
+                // Assign GameObject Name
+                gameObject.Name = gameObjectKeyValues.ParentKeys[0].Name;
 
                 // Adjust position relative to the WorldTransform's Position
                 Vector3 adjustedPosition = (Vector3)positionKeyValue.Value - WorldTransform.Position;

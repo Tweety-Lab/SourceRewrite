@@ -90,7 +90,7 @@ namespace Editor.Components.GUI
             foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
             {
                 // Set the name to the first non-transform component name
-                gameobjectsList.AddListItem(gameobject.Components[1].GetType().Name ?? "GameObject");
+                gameobjectsList.AddListItem(gameobject.Name ?? "GameObject");
             }
         }
     }
