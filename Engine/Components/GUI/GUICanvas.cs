@@ -179,13 +179,6 @@ namespace SourceRewrite.Components
         /// <param name="name">Javascript function name</param>
         public void UnregisterEvent(string name) => Container.VistaView.ScriptingContext.UnregisterEvent(name);
 
-        /// <summary>
-        /// Sets the Inner HTML of an Element from it's ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="text"></param>
-        public void SetElementInnerHTML(string id, string text) => Container.VistaView.ScriptingContext.SetElementInnerHTML(id, text);
-
         // Render a GUIView in worldspace
         private void RenderViewToObject()
         {
