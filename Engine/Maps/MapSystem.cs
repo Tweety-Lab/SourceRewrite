@@ -268,10 +268,19 @@ namespace SourceRewrite.Maps
         /// </summary>
         public static Map CurrentMap { get; private set; }
 
+        // Event triggered when a map is loaded
+        public static event Action<Map> OnMapLoaded;
+
+        // Event triggered when a map is unloaded
+        public static event Action OnMapUnloaded;
+
         public static void LoadMap(string path)
         {
             CurrentMap = new Map(path);
             CurrentMap.LoadMap();
+
+            // Trigger event after the map is loaded
+            OnMapLoaded?.Invoke(CurrentMap);
         }
 
         public static void UnloadMap()
@@ -283,6 +292,9 @@ namespace SourceRewrite.Maps
             // Unload Map
             CurrentMap.UnloadMap();
             CurrentMap = null;
+
+            // Trigger the event after the map is loaded
+            OnMapUnloaded?.Invoke();
         }
     }
 }
