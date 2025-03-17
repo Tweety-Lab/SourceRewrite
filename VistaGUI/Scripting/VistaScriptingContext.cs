@@ -61,7 +61,11 @@ namespace VistaGUI.Scripting
         public void SetElementProperty(string elementId, string property, string value)
         {
             string escapedValue = value.Replace("'", "\\'").Replace("\"", "\\\"");
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{escapedValue}';", out _);
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{escapedValue}';", out string output);
+
+            // Print output
+            if (output != string.Empty)
+                Console.WriteLine($"Vista Script: {output}");
         }
 
 
@@ -75,7 +79,11 @@ namespace VistaGUI.Scripting
         public void SetElementStyle(string elementId, string style)
         {
             string escapedStyle = style.Replace("'", "\\'").Replace("\"", "\\\"");
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText = '{escapedStyle}';", out _);
+            UltralightView.EvaluateScript($"document.getElementById('{elementId}').style.cssText = '{escapedStyle}';", out string output);
+
+            // Print output
+            if (output != string.Empty)
+                Console.WriteLine($"Vista Script: {output}");
         }
 
 
