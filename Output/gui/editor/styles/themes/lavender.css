@@ -1,25 +1,16 @@
 /* HTML Independent Theme */
 
-/* General Button Styling */
-button {
-    background-color: #1d1d20;
-    border: 1px solid #313136;
-    color: white;
-    font-size: 14px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-}
-
-.selected-button {
-    border: 1px solid #7878b6;
-}
-
-p {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    color: white;
-}
-
-/* Hover Effects */
-button:hover {
-    background-color: #313136;
+/* Color Variables */
+:root {
+    --bg-dark: #1d1d20;
+    --bg-medium: #232529;
+    --bg-light: #313136;
+    --text-white: #ffffff;
+    --text-hover: rgb(223, 223, 223);
+    --highlight-accent: #7878b6;
+    --highlight-hover: rgb(199, 199, 199);
+    --tree-bg: #1b1d20;
+    --tree-border: #313136;
+    --button-border: #313136;
+    --button-bg: #1d1d20;
 }

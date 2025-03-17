@@ -4,13 +4,37 @@ body {
 }
 
 
+/* General Button Styling */
+button {
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
+    color: var(--text-white);
+    font-size: 14px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.selected-button {
+    border: 1px solid var(--highlight-accent);
+}
+
+p {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: var(--text-white);
+}
+
+/* Hover Effects */
+button:hover {
+    background-color: var(--bg-light);
+}
+
+/* Menu Bar Styling */
 .menu-bar {
     display: flex;
     flex-direction: row;
     margin: 0;
-    background-color: #1d1d20;
+    background-color: var(--bg-dark);
     align-items: center;
-
     height: 25px;
 }
 
@@ -18,17 +42,19 @@ body {
     font-size: small;
     border: none;
     background-color: transparent;
+    color: var(--text-white);
 }
 
 .menu-bar button:hover {
-    color:rgb(223, 223, 223);
+    color: var(--text-hover);
 }
 
+/* Menu Content */
 .menu-content {
-    display: none;  /* Hide the content by default */
+    display: none; /* Hide the content by default */
     width: fit-content;
-    background-color: #1d1d20;
-    color: #ffffff;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
     position: absolute;
     flex-direction: column;
 }
@@ -41,13 +67,24 @@ body {
 }
 
 .menu-content button:hover {
-    color:rgb(223, 223, 223);
+    color: var(--text-hover);
 }
 
+.menu-content hr {
+    box-sizing: border-box;
+    border: none;
+    height: 1px;
+    background-color: var(--bg-light);
+    width: 80%;
+    margin-left: 6px;
+    margin-right: auto;
+}
+
+/* Play Buttons */
 .play-buttons {
     padding-left: 2px;
     padding-right: 2px;
-    background-color: #232529;
+    background-color: var(--bg-medium);
     border-radius: 5px;
     width: fit-content;
     display: block;
@@ -56,46 +93,35 @@ body {
     position: fixed;
     top: 10px;
     right: 9px;
-    border-left: 1px solid #313136;
-    border-top: 1px solid #313136;
-    border-right: 1px solid #313136;
+    border-left: 1px solid var(--bg-light);
+    border-top: 1px solid var(--bg-light);
+    border-right: 1px solid var(--bg-light);
 }
-
 
 .play-buttons button {
     background-color: transparent;
     border: none;
 }
 
-.menu-content hr {
-    box-sizing: border-box;
-    border: none;
-    height: 1px;
-    background-color: #313136;
-    width: 80%;
-    margin-left: 6px;
-    margin-right: auto;
-}
-
 /* Toolbars */
 .toolbar-vertical {
     display: flex;
     flex-direction: column;
-    background-color: #232529;
+    background-color: var(--bg-medium);
     align-items: center;
     justify-content: flex-start;
-    border-right: 2px solid #313136;
-    height: 100vh; /* Full height of the viewport */
+    border-right: 2px solid var(--bg-light);
+    height: 100vh;
     width: 54px;
     position: fixed;
-    top: 25px; /* Place the toolbar just below the menu bar */
+    top: 25px;
     left: 0;
 }
 
 .toolbar-vertical button {
-    background-color: #1d1d20;
-    border: 1px solid #313136;
-    color: white;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--bg-light);
+    color: var(--text-white);
     font-size: 14px;
     margin: 2px 0;
     cursor: pointer;
@@ -103,33 +129,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 46px;
     height: 40px;
 }
 
 .toolbar-vertical button:hover {
-    background-color: #313136;
+    background-color: var(--bg-light);
 }
 
 .toolbar-vertical button img {
-    object-fit: contain; /* Ensures the icon maintains its aspect ratio */
-    width: 100%; /* Ensures the image fills the button */
-    height: 100%; /* Ensures the image fills the button */
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
     border: none;
 }
 
 .toolbar-vertical .selected-button {
-    border: 1px solid #7878b6;
+    border: 1px solid var(--highlight-accent);
 }
 
-
-/* Seperator */
 .toolbar-vertical hr {
     box-sizing: border-box;
     border: none;
     height: 1px;
-    background-color: #7878b6;
+    background-color: var(--highlight-accent);
     width: 90%;
     margin-right: auto;
 }
@@ -138,19 +161,18 @@ body {
 .action-bar {
     display: flex;
     flex-direction: column;
-    background-color: #232529;
+    background-color: var(--bg-medium);
     padding: 5px;
-    align-items: stretch; /* Make children stretch to full width */
+    align-items: stretch;
     justify-content: flex-start;
-    border-left: 2px solid #313136;
-    height: 100vh; /* Full height of the viewport */
+    border-left: 2px solid var(--bg-light);
+    height: 100vh;
     width: fit-content;
     position: fixed;
-    top: 25px; /* Place just below the menu bar */
+    top: 25px;
     right: 0;
 }
 
-/* Action Bar section titles */
 .action-bar p {
     text-align: left;
     align-self: flex-start;
@@ -168,11 +190,3 @@ body {
     flex-direction: column;
     min-width: 150px;
 }
-
-.action-bar #gameobject-tree {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
