@@ -29,7 +29,7 @@ namespace Editor
             editorGUIObject.AddComponent(editorGUIComponent);
 
             // Add Editor GUI as global component
-            Map.GlobalGameObjects.Add(editorGUIObject);
+            MapSystem.GlobalGameObjects.Add(editorGUIObject);
 
             // Load Editor Camera
             GameObject editorCameraObject = new GameObject();
@@ -39,7 +39,7 @@ namespace Editor
             editorCameraObject.AddComponent(editorCamera);
 
             // Add Editor Camera as global component
-            Map.GlobalGameObjects.Add(editorCameraObject);
+            MapSystem.GlobalGameObjects.Add(editorCameraObject);
         }
 
         // Runs once on Mod Unload

@@ -42,7 +42,7 @@ namespace Editor.Components.GUI
 
         public override void Update()
         {
-        
+
         }
 
         public override void OnDestroy()
@@ -67,7 +67,7 @@ namespace Editor.Components.GUI
             foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
             {
                 // Dont list global game objects
-                if (Map.GlobalGameObjects.Contains(gameobject))
+                if (MapSystem.GlobalGameObjects.Contains(gameobject))
                     return;
 
                 // Set the name to the first non-transform component name

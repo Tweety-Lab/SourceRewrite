@@ -12,9 +12,6 @@ namespace SourceRewrite.Maps
 {
     public class Map
     {
-        // List of GameObjects that exist globally across every map
-        public static List<GameObject> GlobalGameObjects = new List<GameObject>();
-
         // Track if global game objects have already been started
         private static bool globalGameObjectsStarted = false;
 
@@ -40,7 +37,7 @@ namespace SourceRewrite.Maps
             // Clear map-specific game objects (but preserve global ones)
             foreach (GameObject gameObject in GameObjects)
             {
-                if (!GlobalGameObjects.Contains(gameObject))
+                if (!MapSystem.GlobalGameObjects.Contains(gameObject))
                 {
                     gameObject.DestroyDeferred();
                 }
@@ -49,7 +46,7 @@ namespace SourceRewrite.Maps
             GameObjects.Clear();
 
             // Re-add global GameObjects back to the list
-            foreach (GameObject globalObject in GlobalGameObjects)
+            foreach (GameObject globalObject in MapSystem.GlobalGameObjects)
             {
                 GameObjects.Add(globalObject);
             }
@@ -237,9 +234,9 @@ namespace SourceRewrite.Maps
         public void CreateGlobalGameObjects(bool shouldStart = false)
         {
             // Ensure global GameObjects are only created once
-            if (GlobalGameObjects.Count > 0 && !globalGameObjectsStarted)
+            if (MapSystem.GlobalGameObjects.Count > 0 && !globalGameObjectsStarted)
             {
-                foreach (GameObject globalObject in GlobalGameObjects)
+                foreach (GameObject globalObject in MapSystem.GlobalGameObjects)
                 {
                     if (shouldStart)
                     {
@@ -267,6 +264,11 @@ namespace SourceRewrite.Maps
         /// Currently Loaded Map.
         /// </summary>
         public static Map CurrentMap { get; private set; }
+
+        /// <summary>
+        /// List of GameObjects that persist across maps.
+        /// </summary>
+        public static List<GameObject> GlobalGameObjects = new List<GameObject>();
 
         // Event triggered when a map is loaded
         public static event Action<Map> OnMapLoaded;
