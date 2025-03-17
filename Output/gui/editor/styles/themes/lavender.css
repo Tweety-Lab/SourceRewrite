@@ -1,7 +1,8 @@
 /* HTML Independent Theme */
 
-/* Color Variables */
+
 :root {
+    /* Color Variables */
     --bg-dark: #1d1d20;
     --bg-medium: #232529;
     --bg-light: #313136;
@@ -12,4 +13,11 @@
     --highlight-hover: rgb(199, 199, 199);
     --button-border: #313136;
     --button-bg: #1d1d20;
+
+    /* Button Visuals */
+    --button-border-thickness: 1px;
+    --button-border-radius: 0px;
+
+    /* Text Visuals */
+    --font-primary: 'Segoe UI', Tahoma, Arial, sans-serif;
 }

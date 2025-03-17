@@ -7,19 +7,20 @@ body {
 /* General Button Styling */
 button {
     background-color: var(--button-bg);
-    border: 1px solid var(--button-border);
+    border: var(--button-border-thickness) solid var(--button-border);
     color: var(--text-white);
+    border-radius: var(--button-border-radius);
     font-size: 14px;
     padding-top: 1px;
     padding-bottom: 1px;
 }
 
 .selected-button {
-    border: 1px solid var(--accent);
+    border: var(--button-border-thickness) solid var(--accent);
 }
 
 p {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    font-family: var(--font-primary);
     color: var(--text-white);
 }
 
@@ -120,7 +121,7 @@ button:hover {
 
 .toolbar-vertical button {
     background-color: var(--bg-dark);
-    border: 1px solid var(--bg-light);
+    border: var(--button-border-thickness) solid var(--bg-light);
     color: var(--text-white);
     font-size: 14px;
     margin: 2px 0;
