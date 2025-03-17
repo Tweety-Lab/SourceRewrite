@@ -17,8 +17,6 @@ namespace Editor.Components.GUI
     {
         private GUICanvas canvas;
 
-        private GameObject selectedObject;
-
         public override void Start()
         {
             Console.WriteLine("Started Editor GUI");
