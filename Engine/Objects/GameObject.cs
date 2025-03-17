@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Components;
+using SourceRewrite.Maps;
 
 namespace SourceRewrite.Objects
 {
@@ -59,6 +60,7 @@ namespace SourceRewrite.Objects
             {
                 GameObject obj = _objectsToDestroy.Dequeue();
                 ActiveObjects.Remove(obj);
+                MapSystem.CurrentMap.GameObjects.Remove(obj);
 
                 // Run destruction logic for all components
                 foreach (GameComponent comp in obj.Components)

@@ -212,6 +212,10 @@ ul, #gameobjects-list {
     color: white;
 }
 
+#gameobjects-list li:hover {
+    color: rgb(199, 199, 199);
+}
+
 .caret {
     cursor: pointer;
     user-select: none;

@@ -55,6 +55,8 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("PlayGame");
             canvas.UnregisterEvent("PlayCurrentMap");
             canvas.UnregisterEvent("OpenMap");
+            canvas.UnregisterEvent("NewGameObject");
+
         }
 
         // Load GameObjects from a Map into GUI gameobjects tree
@@ -125,7 +127,28 @@ namespace Editor.Components.GUI
 
                 MapSystem.CurrentMap.GameObjects.Add(gameObject);
 
-                // Refresh GameObject tree
+                // Update gameobjects tree
+                VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
+                gameobjectsList.AddListItem(gameObject.Name ?? "NameNotFound");
+            });
+
+            // Delete most recent game object
+            canvas.RegisterEvent("DeleteGameObject", () =>
+            {
+                // Loop through every game object in reverse order (back to front)
+                for (int i = MapSystem.CurrentMap.GameObjects.Count - 1; i >= 0; i--)
+                {
+                    GameObject gameObject = MapSystem.CurrentMap.GameObjects[i];
+
+                    if (!MapSystem.GlobalGameObjects.Contains(gameObject))
+                    {
+                        // Destroy and remove the first non-global game object found
+                        MapSystem.CurrentMap.GameObjects.RemoveAt(i);
+                        gameObject.DestroyDeferred();
+                        break;
+                    }
+                }
+
                 UpdateGameObjectsTree();
             });
         }
