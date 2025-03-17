@@ -17,6 +17,8 @@ namespace Editor.Components.GUI
     {
         private GUICanvas canvas;
 
+        private GameObject selectedObject;
+
         public override void Start()
         {
             Console.WriteLine("Started Editor GUI");
@@ -30,16 +32,8 @@ namespace Editor.Components.GUI
             // HACK: Manually start the canvas component
             canvas.Start();
 
-            // Run Code on Map Load
-            MapSystem.OnMapLoaded += (Map map) =>
-            {
-                UpdateGameObjectsTree(); // Update GUI GameObjects Tree
-            };
-
             // Register GUI Events
             RegisterGUIEvents();
-
-            canvas.RegisterEvent("TestFunc", (args) => Console.WriteLine(args[0]));
         }
 
         public override void Update()
@@ -51,49 +45,17 @@ namespace Editor.Components.GUI
         {
             // Unregister all events
             canvas.UnregisterEvent("OpenVDC");
-            canvas.UnregisterEvent("OpenLightEditor");
-            canvas.UnregisterEvent("CloseLightEditor");
             canvas.UnregisterEvent("CloseMap");
             canvas.UnregisterEvent("PlayGame");
             canvas.UnregisterEvent("PlayCurrentMap");
             canvas.UnregisterEvent("OpenMap");
-            canvas.UnregisterEvent("NewGameObject");
 
-        }
-
-        // Load GameObjects from a Map into GUI gameobjects tree
-        private void UpdateGameObjectsTree()
-        {
-            // Load GameObjects into gui gameobjects list
-            VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
-
-            gameobjectsList.Clear();
-            int i = 0;
-            foreach (GameObject gameobject in MapSystem.CurrentMap.GameObjects)
-            {
-                // Dont list global game objects
-                if (MapSystem.GlobalGameObjects.Contains(gameobject))
-                    continue;
-
-                GameObject currentGameObject = gameobject;
-
-                // Create a list item
-                VistaListItem listItem = new VistaListItem($"{currentGameObject.Name}-{i}", canvas.Container.VistaView.ScriptingContext);
-
-                // Add the list item
-                gameobjectsList.AddListItem(listItem);
-
-                listItem.TextContent = currentGameObject.Name;
-
-                i++;
-            }
         }
 
         // Register GUI Events
         private void RegisterGUIEvents()
         {
             RegisterMenuEvents();
-            RegisterGameObjectEvents();
         }
 
         private void RegisterMenuEvents()
@@ -126,42 +88,6 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
-            });
-        }
-
-        private void RegisterGameObjectEvents()
-        {
-            // Create a new game object
-            canvas.RegisterEvent("NewGameObject", () =>
-            {
-                GameObject gameObject = new GameObject();
-                gameObject.Name = "NewGameObject";
-
-                MapSystem.CurrentMap.GameObjects.Add(gameObject);
-
-                // Update gameobjects tree
-                VistaUnorderedList gameobjectsList = canvas.GetElementAsType<VistaUnorderedList>("gameobjects-list");
-                gameobjectsList.AddListItem(gameObject.Name ?? "NameNotFound");
-            });
-
-            // Delete most recent game object
-            canvas.RegisterEvent("DeleteGameObject", () =>
-            {
-                // Loop through every game object in reverse order (back to front)
-                for (int i = MapSystem.CurrentMap.GameObjects.Count - 1; i >= 0; i--)
-                {
-                    GameObject gameObject = MapSystem.CurrentMap.GameObjects[i];
-
-                    if (!MapSystem.GlobalGameObjects.Contains(gameObject))
-                    {
-                        // Destroy and remove the first non-global game object found
-                        MapSystem.CurrentMap.GameObjects.RemoveAt(i);
-                        gameObject.DestroyDeferred();
-                        break;
-                    }
-                }
-
-                UpdateGameObjectsTree();
             });
         }
     }
