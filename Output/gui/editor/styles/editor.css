@@ -21,6 +21,7 @@ button:hover {
     background-color: #313136;
 }
 
+
 .menu-bar {
     display: flex;
     flex-direction: row;
@@ -99,7 +100,6 @@ button:hover {
     display: flex;
     flex-direction: column;
     background-color: #232529;
-    padding: 5px;
     align-items: center;
     justify-content: flex-start;
     border-right: 2px solid #313136;
@@ -120,11 +120,21 @@ button:hover {
     border-radius: 2px;
     display: flex;
     align-items: center;
-    width: 100%;
+    justify-content: center;
+
+    width: 40px;
+    height: 32px;
 }
 
 .toolbar-vertical button:hover {
     background-color: #313136;
+}
+
+.toolbar-vertical button img {
+    object-fit: contain; /* Ensures the icon maintains its aspect ratio */
+    width: 100%; /* Ensures the image fills the button */
+    height: 100%; /* Ensures the image fills the button */
+    border: none;
 }
 
 .toolbar-vertical .selected-button {

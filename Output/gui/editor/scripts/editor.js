@@ -68,16 +68,20 @@ function selectSelectionContentButton(event) {
 
 // Function to handle the selection of a button in the toolbar
 function selectToolbarButton(event) {
-	// Get all toolbar buttons
-	const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
-	
-	// Remove the 'selected-button' class from all buttons
-	toolbarButtons.forEach(button => {
-		button.classList.remove('selected-button');
-	});
-	
-	// Add the 'selected-button' class to the clicked button
-	event.target.classList.add('selected-button');
+    // Get all toolbar buttons
+    const toolbarButtons = document.querySelectorAll('.toolbar-vertical button');
+
+    // Remove the 'selected-button' class from all buttons
+    toolbarButtons.forEach(button => {
+        button.classList.remove('selected-button');
+    });
+
+    // Check if the clicked target is a button, not an image
+    const button = event.target.closest('button');
+    if (button) {
+        // Add the 'selected-button' class to the clicked button
+        button.classList.add('selected-button');
+    }
 }
 
 // Add click event listeners to each button in the action bar
