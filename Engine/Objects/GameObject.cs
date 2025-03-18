@@ -62,13 +62,16 @@ namespace SourceRewrite.Objects
             // Loop through the copy of components and start them
             foreach (GameComponent comp in componentsToStart)
             {
-                comp.Start();
+                comp.Start(); // Call Start on each component to initialize them
             }
 
+            // Recursively loop through the copy of children and start them
+            List<GameObject> childrenCopy = new List<GameObject>(Children);
+
             // Recursively start all child objects
-            foreach (var child in Children)
+            foreach (GameObject child in childrenCopy)
             {
-                child.GameObjectStart();
+                child.GameObjectStart();  // Call Start on each child to initialize them
             }
         }
 
@@ -125,7 +128,7 @@ namespace SourceRewrite.Objects
             // Recursively destroy all child objects
             foreach (var child in Children)
             {
-                child.GameObjectStart();
+                child.DestroyDeferred();
             }
         }
 

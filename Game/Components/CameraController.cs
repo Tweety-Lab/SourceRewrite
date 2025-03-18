@@ -21,13 +21,10 @@ namespace Game.Components
 
         public override void Start()
         {
-            // Create a new Camera 
-            GameObject gameObject = new GameObject();
-            Camera cameraObject = new Camera();
-            gameObject.AddComponent(cameraObject);
+            Camera cameraComponent = new Camera();
+            GameObject.AddComponent(cameraComponent);
 
-            // Start the gameobject
-            gameObject.GameObjectStart();  
+            cameraComponent.Start();
 
             // Set the active cameras position and rotation
             Camera.ActiveCamera.GameObject.Transform.Position = GameObject.Transform.Position;

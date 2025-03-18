@@ -63,16 +63,10 @@ namespace SourceRewrite.Maps
             GameObjectManager.ProcessGlobalGameObjects(!StartGameObjectsOnMapLoad);
 
             // Run start logic on all map gameobjects
-            if (Map.StartGameObjectsOnMapLoad)
+            if (StartGameObjectsOnMapLoad)
             {
                 MapRootObject.GameObjectStart();
             }
-
-            foreach (GameObject go in GameObjects)
-                MapRootObject.Children.Add(go);
-
-
-            GameObjectManager.PrintGameObjectHierarchy(GameObjectManager.Root);
 
             // Free the BSP
             reader.Dispose();
@@ -115,6 +109,7 @@ namespace SourceRewrite.Maps
 
             // Add the GameObject to the map's GameObjects list
             GameObjects.Add(mapGeometry);
+            mapGeometry.Parent = MapRootObject; // Ensure parent is set correctly
         }
 
         // Create GameObjects from Lump data
@@ -160,8 +155,10 @@ namespace SourceRewrite.Maps
                     gameObject.AddComponent(component);
                 }
 
-                // Add GameObject to maps GameObject list
                 GameObjects.Add(gameObject);
+                gameObject.Parent = MapRootObject; // Ensure parent is set correctly
+
+                GameObjectManager.PrintGameObjectHierarchy(GameObjectManager.Root);
             }
         }
 
