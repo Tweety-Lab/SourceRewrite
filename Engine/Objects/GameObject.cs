@@ -17,13 +17,33 @@ namespace SourceRewrite.Objects
         // Every Object needs a Transform
         public Transform Transform { get; set; } = new Transform();
 
+        private GameObject _parent; // backing field to store the parent
+
+        /// <summary>
+        /// Parent GameObject.
+        /// </summary>
+        public GameObject Parent
+        {
+            get => _parent;
+            set
+            {
+                _parent = value;
+                _parent.Children.Add(this); // Auto update Children list
+            }
+        }
+
+        /// <summary>
+        /// Children GameObjects.
+        /// </summary>
+        public List<GameObject> Children { get; private set; }
+
         public GameObject()
         {
             AddComponent(Transform); // Add Transform component to the components list
         }
 
         /// <summary>
-        /// Runs GameObject update logic.
+        /// Runs GameObject update logic for every GameObject.
         /// </summary>
         public static void GameObjectUpdate()
         {
