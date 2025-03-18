@@ -60,6 +60,27 @@ namespace SourceRewrite.Objects
             }
         }
 
+        // Track if global game objects have already been started
+        public static bool GlobalGameObjectsStarted = false;
+
+        /// <summary>
+        /// Process global GameObjects that persist across maps
+        /// </summary>
+        public static void ProcessGlobalGameObjects(bool shouldStart)
+        {
+            if (GlobalGameObjects.Count > 0 && !GlobalGameObjectsStarted)
+            {
+                foreach (GameObject globalObject in GlobalGameObjects)
+                {
+                    if (shouldStart)
+                    {
+                        globalObject.GameObjectStart();
+                    }
+                }
+                GlobalGameObjectsStarted = true; // Mark as started
+            }
+        }
+
         /// <summary>
         /// Runs GameObject update logic for every GameObject.
         /// </summary>
@@ -144,28 +165,6 @@ namespace SourceRewrite.Objects
             global.Name = name;
             GameObjectManager.AddGlobalObject(global);
             return global;
-        }
-
-        // Track if global game objects have already been started
-        public static bool GlobalGameObjectsStarted = false;
-
-        /// <summary>
-        /// Create global GameObjects that persist across maps
-        /// </summary>
-        public static void CreateGlobalGameObjects(bool shouldStart)
-        {
-            // Ensure global GameObjects are only created once
-            if (GlobalGameObjects.Count > 0 && !GlobalGameObjectsStarted)
-            {
-                foreach (GameObject globalObject in GlobalGameObjects)
-                {
-                    if (shouldStart)
-                    {
-                        globalObject.GameObjectStart();
-                    }
-                }
-                GlobalGameObjectsStarted = true; // Mark as started
-            }
         }
 
         /// <summary>

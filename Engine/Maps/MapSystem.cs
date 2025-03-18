@@ -59,8 +59,8 @@ namespace SourceRewrite.Maps
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
             CreateGameObjects(GameObjectsLump);
 
-            // Add Global Game Objects
-            GameObjectManager.CreateGlobalGameObjects(!StartGameObjectsOnMapLoad);
+            // Start Global Game Objects
+            GameObjectManager.ProcessGlobalGameObjects(!StartGameObjectsOnMapLoad);
 
             // Run start logic on all map gameobjects
             if (Map.StartGameObjectsOnMapLoad)
