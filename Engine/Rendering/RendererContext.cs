@@ -65,24 +65,38 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.OnRender(this);
 
-            foreach (GameObject gameobject in MapSystem.AllGameObjects)
-            {
-                // Render all Meshes
-                MeshRenderer meshRenderer = gameobject.GetComponentFromType<MeshRenderer>();
-                if (meshRenderer != null)
-                {
-                    _apiInterface.RenderMesh(meshRenderer);
-                }
+            // Recursively render all GameObjects starting from Root
+            RenderGameObjects(GameObjectManager.Root);
+        }
 
-                // Render all visible Screenspace GUIs
-                GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
-                if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
-                {
-                    _apiInterface.RenderScreenspaceGUI(guiCanvas);
-                }
+        private void RenderGameObjects(GameObject root)
+        {
+            // Render the current GameObject and its components
+            RenderComponents(root);
+
+            // Recursively render all children
+            foreach (var child in root.Children)
+            {
+                RenderGameObjects(child);
             }
         }
 
+        private void RenderComponents(GameObject gameObject)
+        {
+            // Render all Meshes
+            MeshRenderer meshRenderer = gameObject.GetComponentFromType<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                _apiInterface.RenderMesh(meshRenderer);
+            }
+
+            // Render all visible Screenspace GUIs
+            GUICanvas guiCanvas = gameObject.GetComponentFromType<GUICanvas>();
+            if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
+            {
+                _apiInterface.RenderScreenspaceGUI(guiCanvas);
+            }
+        }
 
         // Run any special cleanup logic that needs to be when the app is closed
         public void OnClose()
@@ -92,17 +106,31 @@ namespace SourceRewrite.Rendering
 
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
-            // Resize all visible Screenspace GUIs
-            foreach (GameObject gameobject in MapSystem.AllGameObjects)
-            {
-                GUICanvas guiCanvas = gameobject.GetComponentFromType<GUICanvas>();
-                if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
-                {
-                    guiCanvas.Container.VistaView.Resize((uint)newSize.X, (uint)newSize.Y);
-                }
-            }
+            // Resize all visible Screenspace GUIs recursively starting from the root
+            ResizeGUIs(GameObjectManager.Root, newSize);
 
             _apiInterface.OnFramebufferResize(newSize);
+        }
+
+        private void ResizeGUIs(GameObject root, Vector2D<int> newSize)
+        {
+            // Resize the current GameObject's GUI if applicable
+            ResizeGUIComponent(root, newSize);
+
+            // Recursively resize all children's GUIs
+            foreach (var child in root.Children)
+            {
+                ResizeGUIs(child, newSize);
+            }
+        }
+
+        private void ResizeGUIComponent(GameObject gameObject, Vector2D<int> newSize)
+        {
+            GUICanvas guiCanvas = gameObject.GetComponentFromType<GUICanvas>();
+            if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
+            {
+                guiCanvas.Container.VistaView.Resize((uint)newSize.X, (uint)newSize.Y);
+            }
         }
 
         public void InitMesh(MeshAsset meshObject)

@@ -253,7 +253,6 @@ namespace SourceRewrite.Maps
 
         public void AddGameObject(GameObject gameObject)
         {
-            GameObjects.Add(gameObject);
             MapRootObject.Children.Add(gameObject);
         }
     }
