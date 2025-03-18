@@ -252,13 +252,6 @@ namespace SourceRewrite.Maps
             CurrentMap = new Map(path);
             CurrentMap.LoadMap();
 
-            // Start global objects if they haven't been started yet
-            if (!GameObjectManager.GlobalGameObjectsStarted && Map.StartGameObjectsOnMapLoad)
-            {
-                GameObjectManager.GlobalContainer.GameObjectStart();
-                GameObjectManager.GlobalGameObjectsStarted = true;
-            }
-
             // Trigger event after the map is loaded
             OnMapLoaded?.Invoke(CurrentMap);
         }
