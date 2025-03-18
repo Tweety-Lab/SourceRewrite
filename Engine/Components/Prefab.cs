@@ -15,8 +15,6 @@ namespace SourceRewrite.Components
 
             Map prefab = new Map(FileSystem.GetMapPath(truePath));
 
-            prefab.WorldTransform = GameObject.Transform;
-
             prefab.LoadMap();
         }
     }

@@ -24,22 +24,21 @@ namespace Editor
             Map.StartGameObjectsOnMapLoad = false;
 
             // Load the Editor GUI
-            GameObject editorGUIObject = new GameObject();
+            GameObject editorGUIObject = new GameObject("EditorGUI");
             EditorCanvas editorGUIComponent = new EditorCanvas();
             editorGUIObject.AddComponent(editorGUIComponent);
 
-            // Add Editor GUI as global component
-            MapSystem.GlobalGameObjects.Add(editorGUIObject);
-
             // Load Editor Camera
-            GameObject editorCameraObject = new GameObject();
+            GameObject editorCameraObject = new GameObject("EditorCamera");
             Camera editorCamera = new Camera();
             EditorCameraController editorCameraController = new EditorCameraController();
             editorCameraObject.AddComponent(editorCameraController);
             editorCameraObject.AddComponent(editorCamera);
 
-            // Add Editor Camera as global component
-            MapSystem.GlobalGameObjects.Add(editorCameraObject);
+            GameObjectManager.AddGlobalObject(editorGUIObject);
+            GameObjectManager.AddGlobalObject(editorCameraObject);
+
+
         }
 
         // Runs once on Mod Unload

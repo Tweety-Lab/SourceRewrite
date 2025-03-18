@@ -12,46 +12,52 @@ namespace SourceRewrite.Maps
 {
     public class Map
     {
-        // Track if global game objects have already been started
-        private static bool globalGameObjectsStarted = false;
-
-        // Start GameObjects on map load
-        public static bool StartGameObjectsOnMapLoad = true;
-
         // List of GameObjects in the map
         public List<GameObject> GameObjects = new List<GameObject>();
 
-
-        public Transform WorldTransform = new Transform(); // Prefab Transform
+        // Map GameObject that contains all map objects
+        public GameObject MapRootObject { get; private set; }
 
         public string BSPFilePath = "";
 
         public Map(string inputBspPath)
         {
             BSPFilePath = inputBspPath;
+
+            // Create map root object
+            MapRootObject = new GameObject();
+            MapRootObject.Name = "Map_" + System.IO.Path.GetFileNameWithoutExtension(inputBspPath);
+            MapRootObject.Parent = GameObjectManager.MapContainer;
         }
 
         // Unload the map from the world
         public void UnloadMap()
         {
-            // Clear map-specific game objects (but preserve global ones)
-            foreach (GameObject gameObject in GameObjects)
-            {
-                if (!MapSystem.GlobalGameObjects.Contains(gameObject))
-                {
-                    gameObject.DestroyDeferred();
-                }
-            }
+            // Destroy the map root which and cascade to all children
+            MapRootObject.DestroyDeferred();
 
             GameObjects.Clear();
 
-            // Re-add global GameObjects back to the list
-            foreach (GameObject globalObject in MapSystem.GlobalGameObjects)
+            // Process destruction queue immediately to ensure cleanup
+            while (GameObjectManager.ObjectsToDestroy.Count > 0)
             {
-                GameObjects.Add(globalObject);
-            }
+                var obj = GameObjectManager.ObjectsToDestroy.Dequeue();
 
-            SpawnPlayerController();
+                // Remove from parent
+                if (obj.Parent != null)
+                {
+                    obj.Parent.Children.Remove(obj);
+                    obj.Parent = null;
+                }
+
+                // Run destruction logic for all components
+                foreach (GameComponent comp in obj.Components)
+                {
+                    comp.OnDestroy();
+                }
+
+                obj.Components.Clear();
+            }
         }
 
         // Load The map to the world
@@ -71,23 +77,30 @@ namespace SourceRewrite.Maps
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
             CreateGameObjects(GameObjectsLump);
 
-            SpawnPlayerController();
-
             // Add Global Game Objects
             CreateGlobalGameObjects(!StartGameObjectsOnMapLoad);
 
-            // Run start logic on all gameobjects
-            if (StartGameObjectsOnMapLoad)
+            // Run start logic on all map gameobjects
+            if (Map.StartGameObjectsOnMapLoad)
             {
-                foreach (GameObject gameObject in GameObjects)
-                {
-                    gameObject.GameObjectStart();
-                };
+                MapRootObject.GameObjectStart();
             }
+
+            foreach (GameObject go in GameObjects)
+                MapRootObject.Children.Add(go);
+
+
+            GameObjectManager.PrintGameObjectHierarchy(GameObjectManager.Root);
 
             // Free the BSP
             reader.Dispose();
         }
+
+        // Track if global game objects have already been started
+        public static bool GlobalGameObjectsStarted = false;
+
+        // Start GameObjects on map load
+        public static bool StartGameObjectsOnMapLoad = true;
 
         // Create Geometry from Lump data
         public void CreateGeometry(Lump vertices, Lump indices, Lump materials)
@@ -120,15 +133,6 @@ namespace SourceRewrite.Maps
 
             // Add MeshRenderer to GameObject
             mapGeometry.AddComponent(mapGeometryRenderer);
-
-            // Adjust position relative to the WorldTransform's Position
-            mapGeometry.Transform.Position = WorldTransform.Position;
-
-            // Adjust rotation relative to WorldTransform's Rotation
-            mapGeometry.Transform.Rotation = WorldTransform.Rotation;
-
-            // Adjust scale relative to WorldTransform's Scale
-            mapGeometry.Transform.Scale = WorldTransform.Scale;
 
             // Add the GameObject to the map's GameObjects list
             GameObjects.Add(mapGeometry);
@@ -164,11 +168,11 @@ namespace SourceRewrite.Maps
                 gameObject.Name = gameObjectKeyValues.ParentKeys[0].Name;
 
                 // Adjust position relative to the WorldTransform's Position
-                Vector3 adjustedPosition = (Vector3)positionKeyValue.Value - WorldTransform.Position;
+                Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;
                 gameObject.Transform.Position = adjustedPosition;
 
                 // Adjust rotation relative to WorldTransform's Rotation
-                Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value) * Quaternion.Inverse(WorldTransform.Rotation);
+                Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
                 gameObject.Transform.Rotation = adjustedRotation;
 
                 // Populate GameObject with gameObjectComponents
@@ -234,7 +238,7 @@ namespace SourceRewrite.Maps
         public void CreateGlobalGameObjects(bool shouldStart = false)
         {
             // Ensure global GameObjects are only created once
-            if (MapSystem.GlobalGameObjects.Count > 0 && !globalGameObjectsStarted)
+            if (MapSystem.GlobalGameObjects.Count > 0 && !GlobalGameObjectsStarted)
             {
                 foreach (GameObject globalObject in MapSystem.GlobalGameObjects)
                 {
@@ -242,19 +246,15 @@ namespace SourceRewrite.Maps
                     {
                         globalObject.GameObjectStart();
                     }
-
-                    GameObjects.Add(globalObject);
                 }
-                globalGameObjectsStarted = true; // Mark as started
+                GlobalGameObjectsStarted = true; // Mark as started
             }
         }
 
-
-        // Placeholder for spawning a player controller in the map on load
-        public void SpawnPlayerController()
+        public void AddGameObject(GameObject gameObject)
         {
-            // Create GameObject for player
-            GameObject player = new GameObject();
+            GameObjects.Add(gameObject);
+            MapRootObject.Children.Add(gameObject);
         }
     }
 
@@ -277,14 +277,22 @@ namespace SourceRewrite.Maps
         {
             get
             {
-                // If CurrentMap is null, return GlobalGameObjects, otherwise combine both lists
-                var combinedList = CurrentMap == null
-                    ? GlobalGameObjects
-                    : GlobalGameObjects.Concat(CurrentMap.GameObjects).ToList();
-
-                // Remove duplicates using Distinct (assuming GameObject properly overrides Equals and GetHashCode)
-                return combinedList.Distinct().ToList();
+                if (CurrentMap == null)
+                {
+                    return GlobalGameObjects;
+                }
+                else
+                {
+                    // Objects are now hierarchically
+                    return GlobalGameObjects.Concat(CurrentMap.GameObjects).ToList();
+                }
             }
+        }
+
+        static MapSystem()
+        {
+            // Ensure GameObjectManager is initialized
+            var root = GameObjectManager.Root;
         }
 
         // Event triggered when a map is loaded
@@ -296,8 +304,22 @@ namespace SourceRewrite.Maps
 
         public static void LoadMap(string path)
         {
+            // Unload current map if one exists
+            if (CurrentMap != null)
+            {
+                UnloadMap();
+            }
+
+            // Create and load new map
             CurrentMap = new Map(path);
             CurrentMap.LoadMap();
+
+            // Start global objects if they haven't been started yet
+            if (!Map.GlobalGameObjectsStarted && Map.StartGameObjectsOnMapLoad)
+            {
+                GameObjectManager.GlobalContainer.GameObjectStart();
+                Map.GlobalGameObjectsStarted = true;
+            }
 
             // Trigger event after the map is loaded
             OnMapLoaded?.Invoke(CurrentMap);
@@ -306,15 +328,15 @@ namespace SourceRewrite.Maps
         public static void UnloadMap()
         {
             // Only unload if there is an open map
-            if (CurrentMap == null) 
+            if (CurrentMap == null)
                 return;
+
+            // Trigger the event before the map is unloaded
+            OnMapUnloaded?.Invoke();
 
             // Unload Map
             CurrentMap.UnloadMap();
             CurrentMap = null;
-
-            // Trigger the event after the map is loaded
-            OnMapUnloaded?.Invoke();
         }
     }
 }
