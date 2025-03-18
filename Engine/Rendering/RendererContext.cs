@@ -5,6 +5,8 @@ using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Maps;
+using System.Reflection;
+using Silk.NET.OpenGL;
 
 
 namespace SourceRewrite.Rendering
@@ -42,6 +44,7 @@ namespace SourceRewrite.Rendering
         /// </summary>
         public IRendererAPI GetRendererAPI() => _apiInterface;
 
+
         /// <summary>
         /// Sets the clear (skybox) color.
         /// </summary>
@@ -65,37 +68,12 @@ namespace SourceRewrite.Rendering
         {
             _apiInterface.OnRender(this);
 
-            // Recursively render all GameObjects starting from Root
-            RenderGameObjects(GameObjectManager.Root);
-        }
+            // Get all Passes
+            List<IRenderPass> passes = RenderPassManager.GetRenderPasses();
 
-        private void RenderGameObjects(GameObject root)
-        {
-            // Render the current GameObject and its components
-            RenderComponents(root);
-
-            // Recursively render all children
-            foreach (var child in root.Children)
-            {
-                RenderGameObjects(child);
-            }
-        }
-
-        private void RenderComponents(GameObject gameObject)
-        {
-            // Render all Meshes
-            MeshRenderer meshRenderer = gameObject.GetComponentFromType<MeshRenderer>();
-            if (meshRenderer != null)
-            {
-                _apiInterface.RenderMesh(meshRenderer);
-            }
-
-            // Render all visible Screenspace GUIs
-            GUICanvas guiCanvas = gameObject.GetComponentFromType<GUICanvas>();
-            if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
-            {
-                _apiInterface.RenderScreenspaceGUI(guiCanvas);
-            }
+            // Render all Passes
+            foreach (IRenderPass pass in passes)
+                pass.OnRender();
         }
 
         // Run any special cleanup logic that needs to be when the app is closed
