@@ -84,7 +84,8 @@ namespace Editor.Components.GUI
                 FileExplorerCanvas fileExplorerCanvas = new FileExplorerCanvas();
                 fileExplorerObject.AddComponent(fileExplorerCanvas);
 
-                MapSystem.CurrentMap.AddGameObject(fileExplorerObject);
+                // Make it a global object
+                GameObjectManager.AddGlobalObject(fileExplorerObject);
 
                 // Start GUI
                 fileExplorerCanvas.Start();
