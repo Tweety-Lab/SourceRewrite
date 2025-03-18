@@ -32,10 +32,11 @@ namespace SourceRewrite.Components.GUI
                 string selectedFile = Canvas.GetElement("file-path").GetProperty("value");
                 if (File.Exists(FileSystem.GetMapPath(selectedFile)))
                 {
-                    GameObject.DestroyDeferred();
-
                     MapSystem.UnloadMap();
                     MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
+
+                    // We close the file explorer window on submit
+                    GameObject.DestroyDeferred();
                 }
             });
         }
