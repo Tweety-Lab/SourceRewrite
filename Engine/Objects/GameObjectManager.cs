@@ -19,6 +19,11 @@ namespace SourceRewrite.Objects
         // Global objects container
         public static GameObject GlobalContainer { get; private set; }
 
+        /// <summary>
+        /// List of GameObjects that persist across maps.
+        /// </summary>
+        public static List<GameObject> GlobalGameObjects = new List<GameObject>();
+
         // Queue for deferred destruction of GameObjects
         public static Queue<GameObject> ObjectsToDestroy = new Queue<GameObject>();
 
@@ -40,7 +45,7 @@ namespace SourceRewrite.Objects
         public static void AddGlobalObject(GameObject gameObject)
         {
             gameObject.Parent = GlobalContainer;
-            MapSystem.GlobalGameObjects.Add(gameObject);
+            GlobalGameObjects.Add(gameObject);
         }
 
         /// <summary>
@@ -91,7 +96,7 @@ namespace SourceRewrite.Objects
         /// <summary>
         /// Processes the queue of GameObjects to destroy.
         /// </summary>
-        private static void ProcessDestructionQueue()
+        public static void ProcessDestructionQueue()
         {
             while (ObjectsToDestroy.Count > 0)
             {
@@ -117,7 +122,7 @@ namespace SourceRewrite.Objects
                 }
 
                 // Remove from GlobalGameObjects if applicable
-                MapSystem.GlobalGameObjects.Remove(obj);
+                GlobalGameObjects.Remove(obj);
 
                 // Run destruction logic for all components
                 foreach (GameComponent comp in obj.Components)
@@ -139,6 +144,28 @@ namespace SourceRewrite.Objects
             global.Name = name;
             GameObjectManager.AddGlobalObject(global);
             return global;
+        }
+
+        // Track if global game objects have already been started
+        public static bool GlobalGameObjectsStarted = false;
+
+        /// <summary>
+        /// Create global GameObjects that persist across maps
+        /// </summary>
+        public static void CreateGlobalGameObjects(bool shouldStart)
+        {
+            // Ensure global GameObjects are only created once
+            if (GlobalGameObjects.Count > 0 && !GlobalGameObjectsStarted)
+            {
+                foreach (GameObject globalObject in GlobalGameObjects)
+                {
+                    if (shouldStart)
+                    {
+                        globalObject.GameObjectStart();
+                    }
+                }
+                GlobalGameObjectsStarted = true; // Mark as started
+            }
         }
 
         /// <summary>

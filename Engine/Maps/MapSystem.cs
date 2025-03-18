@@ -33,31 +33,13 @@ namespace SourceRewrite.Maps
         // Unload the map from the world
         public void UnloadMap()
         {
-            // Destroy the map root which and cascade to all children
+            // Destroy the map root which cascades to all children
             MapRootObject.DestroyDeferred();
 
             GameObjects.Clear();
 
             // Process destruction queue immediately to ensure cleanup
-            while (GameObjectManager.ObjectsToDestroy.Count > 0)
-            {
-                var obj = GameObjectManager.ObjectsToDestroy.Dequeue();
-
-                // Remove from parent
-                if (obj.Parent != null)
-                {
-                    obj.Parent.Children.Remove(obj);
-                    obj.Parent = null;
-                }
-
-                // Run destruction logic for all components
-                foreach (GameComponent comp in obj.Components)
-                {
-                    comp.OnDestroy();
-                }
-
-                obj.Components.Clear();
-            }
+            GameObjectManager.ProcessDestructionQueue();
         }
 
         // Load The map to the world
@@ -78,7 +60,7 @@ namespace SourceRewrite.Maps
             CreateGameObjects(GameObjectsLump);
 
             // Add Global Game Objects
-            CreateGlobalGameObjects(!StartGameObjectsOnMapLoad);
+            GameObjectManager.CreateGlobalGameObjects(!StartGameObjectsOnMapLoad);
 
             // Run start logic on all map gameobjects
             if (Map.StartGameObjectsOnMapLoad)
@@ -95,9 +77,6 @@ namespace SourceRewrite.Maps
             // Free the BSP
             reader.Dispose();
         }
-
-        // Track if global game objects have already been started
-        public static bool GlobalGameObjectsStarted = false;
 
         // Start GameObjects on map load
         public static bool StartGameObjectsOnMapLoad = true;
@@ -234,23 +213,7 @@ namespace SourceRewrite.Maps
             return gameComponents;
         }
 
-        // Create and add global game objects
-        public void CreateGlobalGameObjects(bool shouldStart = false)
-        {
-            // Ensure global GameObjects are only created once
-            if (MapSystem.GlobalGameObjects.Count > 0 && !GlobalGameObjectsStarted)
-            {
-                foreach (GameObject globalObject in MapSystem.GlobalGameObjects)
-                {
-                    if (shouldStart)
-                    {
-                        globalObject.GameObjectStart();
-                    }
-                }
-                GlobalGameObjectsStarted = true; // Mark as started
-            }
-        }
-
+        // Add a GameObject to the map
         public void AddGameObject(GameObject gameObject)
         {
             MapRootObject.Children.Add(gameObject);
@@ -263,30 +226,6 @@ namespace SourceRewrite.Maps
         /// Currently Loaded Map.
         /// </summary>
         public static Map CurrentMap { get; private set; }
-
-        /// <summary>
-        /// List of GameObjects that persist across maps.
-        /// </summary>
-        public static List<GameObject> GlobalGameObjects = new List<GameObject>();
-
-        /// <summary>
-        /// List of global and local GameObjects.
-        /// </summary>
-        public static List<GameObject> AllGameObjects
-        {
-            get
-            {
-                if (CurrentMap == null)
-                {
-                    return GlobalGameObjects;
-                }
-                else
-                {
-                    // Objects are now hierarchically
-                    return GlobalGameObjects.Concat(CurrentMap.GameObjects).ToList();
-                }
-            }
-        }
 
         static MapSystem()
         {
@@ -314,10 +253,10 @@ namespace SourceRewrite.Maps
             CurrentMap.LoadMap();
 
             // Start global objects if they haven't been started yet
-            if (!Map.GlobalGameObjectsStarted && Map.StartGameObjectsOnMapLoad)
+            if (!GameObjectManager.GlobalGameObjectsStarted && Map.StartGameObjectsOnMapLoad)
             {
                 GameObjectManager.GlobalContainer.GameObjectStart();
-                Map.GlobalGameObjectsStarted = true;
+                GameObjectManager.GlobalGameObjectsStarted = true;
             }
 
             // Trigger event after the map is loaded
