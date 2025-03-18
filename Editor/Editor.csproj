@@ -9,12 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Plugins\**" />
-    <EmbeddedResource Remove="Plugins\**" />
-    <None Remove="Plugins\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Engine\SourceRewrite.csproj" />
   </ItemGroup>
 
