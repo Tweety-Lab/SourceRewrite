@@ -5,9 +5,6 @@ namespace SourceRewrite.Objects
 {
     public class GameObject
     {
-        // Queue for deferred destruction of GameObjects
-        private static Queue<GameObject> _objectsToDestroy = new Queue<GameObject>();
-
         // Every attached Component
         public List<GameComponent> Components { get; private set; } = new List<GameComponent>();
 
@@ -40,54 +37,6 @@ namespace SourceRewrite.Objects
         public GameObject()
         {
             AddComponent(Transform); // Add Transform component to the components list
-        }
-
-        /// <summary>
-        /// Runs GameObject update logic for every GameObject.
-        /// </summary>
-        public static void GameObjectUpdate()
-        {
-            // Create a copy of AllGameObjects to avoid modifying the collection during iteration
-            List<GameObject> objectsToUpdate = new List<GameObject>(MapSystem.AllGameObjects);
-
-            // Loop through every GameObject
-            foreach (GameObject obj in objectsToUpdate)
-            {
-                // Create a copy of the Components list to avoid modification issues during iteration
-                List<GameComponent> componentsToUpdate = new List<GameComponent>(obj.Components);
-
-                // Loop through every GameComponent in GameObject
-                foreach (GameComponent comp in componentsToUpdate)
-                {
-                    comp.Update();
-                }
-            }
-
-            // Process deferred destruction
-            ProcessDestructionQueue();
-        }
-
-        /// <summary>
-        /// Processes the queue of GameObjects to destroy.
-        /// </summary>
-        private static void ProcessDestructionQueue()
-        {
-            while (_objectsToDestroy.Count > 0)
-            {
-                GameObject obj = _objectsToDestroy.Dequeue();
-                MapSystem.AllGameObjects.Remove(obj);
-                MapSystem.CurrentMap.GameObjects.Remove(obj);
-
-                // Run destruction logic for all components
-                foreach (GameComponent comp in obj.Components)
-                {
-                    comp.OnDestroy();
-                }
-
-                obj.Components.Clear();
-
-                Console.WriteLine("Destroyed GameObject: " + obj);
-            }
         }
 
         /// <summary>
@@ -153,7 +102,7 @@ namespace SourceRewrite.Objects
         public void DestroyDeferred()
         {
             // Add the GameObject to the destruction queue
-            _objectsToDestroy.Enqueue(this);
+            GameObjectManager.ObjectsToDestroy.Enqueue(this);
         }
     }
 }

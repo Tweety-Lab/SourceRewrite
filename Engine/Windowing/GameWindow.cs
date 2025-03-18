@@ -136,7 +136,7 @@ namespace SourceRewrite.Windowing
             Time.DeltaTime = (float)deltaTime;
 
             // Update GameObjects
-            GameObject.GameObjectUpdate();
+            GameObjectManager.GameObjectUpdate();
         }
 
         private unsafe void OnRender(double deltaTime) {
