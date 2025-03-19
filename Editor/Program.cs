@@ -11,9 +11,6 @@ namespace Editor
             // Load Editor as Mod by default
             ModSystem.LoadModAssembly("Editor.dll");
 
-            // Load Game as Mod
-            ModSystem.LoadModAssembly("Game.dll");
-
             // Load Mods from bin/plugins
             ModSystem.LoadModsFromDir("../editor-plugins/");
 

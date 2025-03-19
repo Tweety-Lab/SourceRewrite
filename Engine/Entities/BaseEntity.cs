@@ -38,14 +38,7 @@ namespace SourceRewrite.Entities
         public Vector3 Up => Vector3.Normalize(Vector3.Transform(Vector3.UnitY, Rotation));
         #endregion
 
-        /// <summary>
-        /// Children Entities.
-        /// </summary>
-        public List<BaseEntity> Children { get; private set; } = new List<BaseEntity>();
-
-        // Name of Entity
-        public string Name { get; set; }
-
+        #region Hierarchy
         private BaseEntity _parent; // backing field to store the parent
 
         /// <summary>
@@ -71,6 +64,16 @@ namespace SourceRewrite.Entities
                 }
             }
         }
+
+        /// <summary>
+        /// Children Entities.
+        /// </summary>
+        public List<BaseEntity> Children { get; private set; } = new List<BaseEntity>();
+
+        #endregion
+
+        // Name of Entity
+        public string Name { get; set; }
 
         // Named constructor
         public BaseEntity(string name)

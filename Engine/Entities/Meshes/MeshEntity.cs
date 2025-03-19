@@ -53,10 +53,6 @@ namespace SourceRewrite.Entities
 
                 GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the (empty) mesh
             }
-            else
-            {
-                GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the mesh
-            }
         }
 
         // Render Mesh when it gets changed

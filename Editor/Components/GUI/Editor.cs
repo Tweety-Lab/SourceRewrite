@@ -71,11 +71,10 @@ namespace Editor.Components.GUI
             {
                 // Add FileExplorerCanvas entity
                 FileExplorerCanvas fileExplorerCanvas = new FileExplorerCanvas();
+                fileExplorerCanvas.Parent = this;
 
                 // Start GUI
                 fileExplorerCanvas.Start();
-
-                fileExplorerCanvas.Parent = this;
             });
         }
     }

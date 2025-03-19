@@ -12,14 +12,20 @@ namespace Game.Entities
 
         public override void Start()
         {
-            Console.WriteLine("Starting Camera Controller");
+            if (CameraEntity.ActiveCamera == null)
+            {
+                CameraEntity camEntity = new CameraEntity();
+                camEntity.Start();
 
-            Console.WriteLine(Angles.ToString());
+                camEntity.Parent = this;
+
+                CameraEntity.SetActiveCamera(camEntity);
+            }
         }
 
         public override void Update()
         {
-            Console.WriteLine("Updating Camera Controller");
+            CameraEntity.ActiveCamera.Rotation = Rotation * 10f;
         }
     }
 }
