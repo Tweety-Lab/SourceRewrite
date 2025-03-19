@@ -25,7 +25,7 @@ namespace VBSP.Conversion
             {
                 string[] entities = new string[VMF.Entities.Count];
 
-                // Convert entities to GameObject strings
+                // Convert entities to Entity strings
                 int i = 0;
                 foreach (Entity vmfEntity in VMF.Entities)
                 {
@@ -36,14 +36,11 @@ namespace VBSP.Conversion
                         entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
                     }
 
-                    string entityString = @$" {i} {{
-                        position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
-                        rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
-                        GameComponents {{
-                            {ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]} {{
-                                {entityPropertiesString}
-                            }}
-                        }}
+                    string entityString = @$"{i} {{
+position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
+rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
+classname ""{ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]}""
+{entityPropertiesString}
                     }}";
 
                     entities[i] = entityString;
@@ -51,7 +48,7 @@ namespace VBSP.Conversion
                     i++;
                 }
 
-                outputBSP.SetLumpData(LumpType.LUMP_GAME_OBJECTS, entities);
+                outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, entities);
             }
 
             // Handle solids only if they exist

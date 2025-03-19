@@ -1,22 +1,22 @@
 ﻿using FileFormats.BSP;
 using System.Numerics;
 using SourceRewrite.AssetTypes;
-using SourceRewrite.Components;
-using SourceRewrite.Objects;
+using SourceRewrite.Entities;
 using FileFormats.KeyValues;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Modding;
+using System.ComponentModel;
 
 namespace SourceRewrite.Maps
 {
     public class Map
     {
-        // List of GameObjects in the map
-        public List<GameObject> GameObjects = new List<GameObject>();
+        // List of Entities in the map
+        public List<BaseEntity> Entities = new List<BaseEntity>();
 
-        // Map GameObject that contains all map objects
-        public GameObject MapRootObject { get; private set; }
+        // Map Entity that contains all map entities
+        public BaseEntity MapRootEntity { get; private set; }
 
         public string BSPFilePath = "";
 
@@ -24,22 +24,22 @@ namespace SourceRewrite.Maps
         {
             BSPFilePath = inputBspPath;
 
-            // Create map root object
-            MapRootObject = new GameObject();
-            MapRootObject.Name = "Map_" + System.IO.Path.GetFileNameWithoutExtension(inputBspPath);
-            MapRootObject.Parent = GameObjectManager.MapContainer;
+            // Create map root entity
+            MapRootEntity = new BaseEntity();
+            MapRootEntity.Name = "Map_" + System.IO.Path.GetFileNameWithoutExtension(inputBspPath);
+            MapRootEntity.Parent = EntityManager.MapContainer;
         }
 
         // Unload the map from the world
         public void UnloadMap()
         {
             // Destroy the map root which cascades to all children
-            MapRootObject.DestroyDeferred();
+            MapRootEntity.DestroyDeferred();
 
-            GameObjects.Clear();
+            Entities.Clear();
 
             // Process destruction queue immediately to ensure cleanup
-            GameObjectManager.ProcessDestructionQueue();
+            EntityManager.ProcessDestructionQueue();
         }
 
         // Load The map to the world
@@ -49,7 +49,7 @@ namespace SourceRewrite.Maps
             BSPReader reader = new BSPReader(BSPFilePath);
 
             // Get map data (Lumps)
-            Lump GameObjectsLump = reader.GetLump(LumpType.LUMP_GAME_OBJECTS);
+            Lump EntitiesLump = reader.GetLump(LumpType.LUMP_ENTITIES);
 
             Lump VerticesLump = reader.GetLump(LumpType.LUMP_VERTEXES);
             Lump IndicesLump = reader.GetLump(LumpType.LUMP_INDICES);
@@ -57,23 +57,40 @@ namespace SourceRewrite.Maps
 
             // Create the map from Lump data
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
-            CreateGameObjects(GameObjectsLump);
+            CreateEntities(EntitiesLump);
 
-            // Start Global Game Objects
-            GameObjectManager.ProcessGlobalGameObjects(!StartGameObjectsOnMapLoad);
+            // Start Global Game Entities
+            EntityManager.ProcessGlobalEntities(!StartEntitiesOnMapLoad);
 
-            // Run start logic on all map gameobjects
-            if (StartGameObjectsOnMapLoad)
+            // Run start logic on all map Entities
+            if (StartEntitiesOnMapLoad)
             {
-                MapRootObject.GameObjectStart();
+                StartEntityAndChildren(MapRootEntity);
             }
 
             // Free the BSP
             reader.Dispose();
         }
 
-        // Start GameObjects on map load
-        public static bool StartGameObjectsOnMapLoad = true;
+        /// <summary>
+        /// Recursively starts the given entity and all of its children.
+        /// </summary>
+        private void StartEntityAndChildren(BaseEntity entity)
+        {
+            // Start the current entity
+            entity.Start();
+
+            Console.WriteLine("Starting " + entity.GetType().ToString());
+
+            // Recursively start all child entities
+            foreach (var child in entity.Children)
+            {
+                StartEntityAndChildren(child);
+            }
+        }
+
+        // Start Entities on map load
+        public static bool StartEntitiesOnMapLoad = true;
 
         // Create Geometry from Lump data
         public void CreateGeometry(Lump vertices, Lump indices, Lump materials)
@@ -83,10 +100,10 @@ namespace SourceRewrite.Maps
             uint[] indicesData = (uint[]) indices.Data;
             string[] materialsData = (string[])materials.Data;
 
-            // Create a GameObject to house the meshrenderer
-            GameObject mapGeometry = new GameObject();
+            // Create a Entity to house the MeshEntity
+            MeshEntity mapGeometry = new MeshEntity();
 
-            // Assign GameObject Name
+            // Assign Entity Name
             mapGeometry.Name = "MapGeometry";
 
             // For now, we just use the first material defined in the lump
@@ -100,120 +117,79 @@ namespace SourceRewrite.Maps
             mapGeometryMesh.Indices = indicesData;
             mapGeometryMesh.Material = placeHolderMaterial;
 
-            // Create a MeshRenderer
-            MeshRenderer mapGeometryRenderer = new MeshRenderer();
-            mapGeometryRenderer.Mesh = mapGeometryMesh;
+            mapGeometry.Mesh = mapGeometryMesh;
 
-            // Add MeshRenderer to GameObject
-            mapGeometry.AddComponent(mapGeometryRenderer);
-
-            // Add the GameObject to the map's GameObjects list
-            GameObjects.Add(mapGeometry);
-            mapGeometry.Parent = MapRootObject; // Ensure parent is set correctly
+            // Add the Entity to the map's Entities list
+            Entities.Add(mapGeometry);
+            mapGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
         }
 
-        // Create GameObjects from Lump data
-        public void CreateGameObjects(Lump gameObjects)
+        // Create Entities from Lump data
+        public void CreateEntities(Lump entities)
         {
             // Convert Lump data to array
-            string[] gameObjectData = (string[]) gameObjects.Data;
+            string[] entitiesData = (string[]) entities.Data;
 
-            if (gameObjectData == null)
+            if (entitiesData == null)
                 return;
 
-            // We store GameObjects in a KeyValues format
-            foreach (string gameObjectString in gameObjectData)
+            // We store Entities in a KeyValues format
+            foreach (string entityString in entitiesData)
             {
-                // Create GameObject from KeyValues
-                KeyValuesFormat gameObjectKeyValues = new KeyValuesFormat(gameObjectString);
+                // Create Entity from KeyValues
+                KeyValuesFormat entityKeyValues = new KeyValuesFormat(entityString);
 
-                // Get GameObject's GameComponents from KeyValues
-                List<GameComponent> gameObjectComponents = GetGameComponents(gameObjectKeyValues);
+                // Get Entity data as KeyValues
+                KeyValue positionKeyValue = entityKeyValues.GetKeyValue("position");
+                KeyValue rotationKeyValue = entityKeyValues.GetKeyValue("rotation");
+                KeyValue scaleKeyValue = entityKeyValues.GetKeyValue("scale");
 
-                // Get GameObject data as KeyValues
-                KeyValue positionKeyValue = gameObjectKeyValues.GetKeyValue("position");
-                KeyValue rotationKeyValue = gameObjectKeyValues.GetKeyValue("rotation");
-                KeyValue scaleKeyValue = gameObjectKeyValues.GetKeyValue("scale");
+                // Create Entity with correct class
+                string entityNamespace = (string)entityKeyValues.GetKeyValue("classname").Value;
+                entityNamespace = entityNamespace.Replace("_", ".");
 
-                // Create GameObject
-                GameObject gameObject = new GameObject();
+                // Attempt to find type from across all loaded assemblies
+                Type entityType = ModSystem.FindTypeInLoadedAssemblies(entityNamespace);
 
-                // Assign GameObject Name
-                gameObject.Name = gameObjectKeyValues.ParentKeys[0].Name;
+                if (entityType == null)
+                {
+                    Console.WriteLine($"Could not find type: '{entityNamespace}' ");
+                    entityType = typeof(BaseEntity); // Fallback to BaseEntity if not found
+                }
+
+                Console.WriteLine($"Creating entity of type: {entityNamespace}");
+
+                // Dynamically create the correct entity type
+                BaseEntity entity = (BaseEntity)Activator.CreateInstance(entityType);
+
+                // Process Entity properties
+                foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+                {
+                    entity.SetProperty(propertyKeyValue.Key, propertyKeyValue.Value);
+                }
+
+                // Assign Entity Name
+                entity.Name = entity.GetType().ToString();
 
                 // Adjust position relative to the WorldTransform's Position
                 Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;
-                gameObject.Transform.Position = adjustedPosition;
+                entity.Position = adjustedPosition;
 
                 // Adjust rotation relative to WorldTransform's Rotation
                 Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
-                gameObject.Transform.Rotation = adjustedRotation;
+                entity.Rotation = adjustedRotation;
 
-                // Populate GameObject with gameObjectComponents
-                foreach (GameComponent component in gameObjectComponents)
-                {
-                    gameObject.AddComponent(component);
-                }
+                Entities.Add(entity);
+                entity.Parent = MapRootEntity; // Ensure parent is set correctly
 
-                GameObjects.Add(gameObject);
-                gameObject.Parent = MapRootObject; // Ensure parent is set correctly
-
-                GameObjectManager.PrintGameObjectHierarchy(GameObjectManager.Root);
+                EntityManager.PrintEntityHierarchy(EntityManager.Root);
             }
         }
 
-        // Return List of GameComponents from GameObject KeyValues
-        public List<GameComponent> GetGameComponents(KeyValuesFormat gameObjectKeyValues)
+        // Add a Entity to the map
+        public void AddEntity(BaseEntity entity)
         {
-            List<GameComponent> gameComponents = new List<GameComponent>();
-
-            // Get Components from KeyValues
-            List<ParentKey> componentParentKeys = gameObjectKeyValues.ParentKeys[0].GetChildParentKey("GameComponents").ChildParentKeys;
-
-            // Process each component
-            foreach (ParentKey component in componentParentKeys)
-            {
-                // Convert stored component name to namespace
-                string componentNamespace = component.Name.Replace('_', '.');
-
-
-                // Find component type using enhanced resolution
-                Type componentType = ModSystem.FindTypeInLoadedAssemblies(componentNamespace);
-
-                if (componentType == null)
-                {
-                    Console.WriteLine($"Warning: Could not find component type: {componentNamespace}");
-                    continue;
-                }
-
-                // Validate the component type inherits from GameComponent
-                if (!typeof(GameComponent).IsAssignableFrom(componentType))
-                {
-                    Console.WriteLine($"Warning: Type {componentNamespace} is not a GameComponent");
-                    continue;
-                }
-
-                // Create component
-                GameComponent gameComponent = (GameComponent)Activator.CreateInstance(componentType);
-
-                // Process component properties
-                foreach (KeyValue componentKeyValue in component.ChildKeyValues)
-                {
-                    // Set component properties
-                    gameComponent.SetProperty(componentKeyValue.Key, componentKeyValue.Value);
-                }
-
-                // Add component to list
-                gameComponents.Add(gameComponent);
-            }
-
-            return gameComponents;
-        }
-
-        // Add a GameObject to the map
-        public void AddGameObject(GameObject gameObject)
-        {
-            MapRootObject.Children.Add(gameObject);
+            MapRootEntity.Children.Add(entity);
         }
     }
 
@@ -226,8 +202,8 @@ namespace SourceRewrite.Maps
 
         static MapSystem()
         {
-            // Ensure GameObjectManager is initialized
-            var root = GameObjectManager.Root;
+            // Ensure EntityManager is initialized
+            var root = EntityManager.Root;
         }
 
         // Event triggered when a map is loaded

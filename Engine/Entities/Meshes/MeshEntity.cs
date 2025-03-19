@@ -1,15 +1,23 @@
-﻿using SourceRewrite.AssetTypes;
+﻿using Silk.NET.Assimp;
+using SourceRewrite.AssetTypes;
 using SourceRewrite.Windowing;
-using SourceRewrite.Files;
-using SourceRewrite.Maps;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Mesh = SourceRewrite.AssetTypes.Mesh;
 
-namespace SourceRewrite.Components
+namespace SourceRewrite.Entities
 {
     /// <summary>
     /// Takes a "Mesh" Asset Type and renders it in 3D space.
     /// </summary>
-    public class MeshRenderer : GameComponent
+    public class MeshEntity : BaseEntity
     {
+        /// <summary>
+        /// The mesh associated with the entity.
+        /// </summary>
         private MeshAsset _mesh;
         public MeshAsset Mesh
         {
@@ -25,25 +33,17 @@ namespace SourceRewrite.Components
         }
 
         /// <summary>
-        /// Optional override, if set will create Mesh from this path instead of set Mesh.
+        /// Constructor to create a MeshEntity with a name and optional mesh.
         /// </summary>
-        [MapProperty("model")]
-        public string MeshPath;
-
-        /// <summary>
-        /// Optional override, if set will create Mesh with Mateial from this path.
-        /// </summary>
-        [MapProperty("skin")]
-        public string MaterialPath;
+        public MeshEntity(string name = "MeshEntity", MeshAsset mesh = null)
+            : base(name)
+        {
+            Mesh = mesh ?? new MeshAsset();  // If no mesh is provided, create a default mesh.
+            GameWindow.CurrentWindow.Renderer.GetRendererAPI().InitMesh(Mesh);
+        }
 
         public override void Start()
         {
-            if (MeshPath != null)
-            {
-                Material material = FileSystem.GetMaterial(MaterialPath);
-                Mesh = new Mesh(FileSystem.GetModelPath(MeshPath), material);
-            }
-
             if (Mesh == null)
             {
                 // If no mesh exists, make an empty one
@@ -66,7 +66,6 @@ namespace SourceRewrite.Components
             {
                 GameWindow.CurrentWindow.Renderer.InitMesh(_mesh);
             }
-
         }
     }
 }

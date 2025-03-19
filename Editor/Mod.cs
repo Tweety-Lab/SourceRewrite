@@ -2,13 +2,7 @@
 using Editor.Components;
 using SourceRewrite.Maps;
 using SourceRewrite.Modding;
-using SourceRewrite.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SourceRewrite.Components;
+using SourceRewrite.Entities;
 
 namespace Editor
 {
@@ -20,25 +14,14 @@ namespace Editor
         // Runs once on Mod Load
         public void OnLoad()
         {
-            // Dont run GameObject start logic in our maps
-            Map.StartGameObjectsOnMapLoad = false;
+            // Run Entity start logic in our maps
+            Map.StartEntitiesOnMapLoad = false;
 
-            // Load the Editor GUI
-            GameObject editorGUIObject = new GameObject("EditorGUI");
-            EditorCanvas editorGUIComponent = new EditorCanvas();
-            editorGUIObject.AddComponent(editorGUIComponent);
-
-            // Load Editor Camera
-            GameObject editorCameraObject = new GameObject("EditorCamera");
-            Camera editorCamera = new Camera();
             EditorCameraController editorCameraController = new EditorCameraController();
-            editorCameraObject.AddComponent(editorCameraController);
-            editorCameraObject.AddComponent(editorCamera);
+            EditorCanvas editorGUI = new EditorCanvas();
 
-            GameObjectManager.AddGlobalObject(editorGUIObject);
-            GameObjectManager.AddGlobalObject(editorCameraObject);
-
-
+            EntityManager.AddGlobalEntity(editorCameraController);
+            EntityManager.AddGlobalEntity(editorGUI);
         }
 
         // Runs once on Mod Unload

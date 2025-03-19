@@ -1,10 +1,5 @@
-﻿using Editor.Components;
-using Editor.Components.GUI;
-using SourceRewrite.Maps;
-using SourceRewrite.Modding;
-using SourceRewrite.Objects;
+﻿using SourceRewrite.Modding;
 using SourceRewrite.Windowing;
-using SourceRewrite.Components;
 using System.Numerics;
 
 namespace Editor
@@ -15,6 +10,9 @@ namespace Editor
         {
             // Load Editor as Mod by default
             ModSystem.LoadModAssembly("Editor.dll");
+
+            // Load Game as Mod
+            ModSystem.LoadModAssembly("Game.dll");
 
             // Load Mods from bin/plugins
             ModSystem.LoadModsFromDir("../editor-plugins/");

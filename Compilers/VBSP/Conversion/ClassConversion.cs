@@ -6,11 +6,11 @@
         public static Dictionary<string, string> ClassMap = new Dictionary<string, string>()
         {
             // Valve Class Name | Our Class Name
-            { "light",          "SourceRewrite_Components_PointLight" },
-            { "prop_static",    "SourceRewrite_Components_MeshRenderer" },
-            { "info_player_start", "Game_Components_CameraController" },
-            { "func_instance", "SourceRewrite_Components_Prefab" },
-            { "vgui_screen", "SourceRewrite_Components_GUICanvas" }
+            { "light",          "SourceRewrite_Entities_PointLight" },
+            { "prop_static",    "SourceRewrite_Entities_PropEntity" },
+            { "info_player_start", "Game_Entities_CameraController" },
+            { "func_instance", "SourceRewrite_Entities_Prefab" },
+            { "vgui_screen", "SourceRewrite_Entities_GUICanvas" }
         };
     }
 }

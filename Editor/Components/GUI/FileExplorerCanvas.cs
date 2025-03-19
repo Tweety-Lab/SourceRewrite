@@ -1,27 +1,22 @@
-﻿using SourceRewrite.Files;
+﻿using SourceRewrite.Entities;
+using SourceRewrite.Entities.GUI;
+using SourceRewrite.Files;
 using SourceRewrite.Maps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Components.GUI
 {
     /// <summary>
     /// Placeholder FileExplorer GUI Element
     /// </summary>
-    public class FileExplorerCanvas : GameComponent
+    public class FileExplorerCanvas : BaseEntity
     {
-        public GUICanvas Canvas;
+        public GUICanvasEntity Canvas;
 
         public override void Start()
         {
-            Canvas = new GUICanvas();
+            Canvas = new GUICanvasEntity();
             Canvas.IsTransparent = true;
             Canvas.PanelName = "elements/file_explorer/file_explorer.html";
-
-            GameObject.AddComponent(Canvas);
 
             // HACK: Manually start the canvas component
             Canvas.Start();
@@ -36,7 +31,7 @@ namespace SourceRewrite.Components.GUI
                     MapSystem.LoadMap(FileSystem.GetMapPath(selectedFile));
 
                     // We close the file explorer window on submit
-                    GameObject.DestroyDeferred();
+                    DestroyDeferred();
                 }
             });
         }

@@ -1,12 +1,7 @@
-﻿using SourceRewrite.Components;
-using SourceRewrite.Objects;
+﻿using SourceRewrite.Entities;
+using SourceRewrite.Entities.GUI;
 using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Rendering
 {
@@ -45,9 +40,9 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Render Meshes from MeshRenderer components.
+    /// Render Meshes from MeshEntity components.
     /// </summary>
-    public class MeshRendererPass : IRenderPass
+    public class MeshEntityPass : IRenderPass
     {
         // Implementing the Renderer property here to access the Renderer of the game window
         public IRendererAPI Renderer => GameWindow.CurrentWindow.Renderer.GetRendererAPI();
@@ -55,28 +50,21 @@ namespace SourceRewrite.Rendering
         public void OnRender()
         {
             // Render Game Objects starting at the root
-            RenderGameObjects(GameObjectManager.Root);
+            RenderEntities(EntityManager.Root);
         }
 
-        private void RenderGameObjects(GameObject root)
+        private void RenderEntities(BaseEntity root)
         {
-            // Render the current GameObject and its components
-            RenderComponents(root);
+            // If the root is a MeshEntity, render it
+            if (root is MeshEntity meshEntity)
+            {
+                Renderer.RenderMesh(meshEntity);
+            }
 
             // Recursively render all children
             foreach (var child in root.Children)
             {
-                RenderGameObjects(child);
-            }
-        }
-
-        private void RenderComponents(GameObject gameObject)
-        {
-            // Render all Meshes
-            MeshRenderer meshRenderer = gameObject.GetComponentFromType<MeshRenderer>();
-            if (meshRenderer != null)
-            {
-                Renderer.RenderMesh(meshRenderer);
+                RenderEntities(child);
             }
         }
     }
@@ -91,28 +79,21 @@ namespace SourceRewrite.Rendering
         public void OnRender()
         {
             // Render Game Objects starting at the root
-            RenderGameObjects(GameObjectManager.Root);
+            RenderEntities(EntityManager.Root);
         }
 
-        private void RenderGameObjects(GameObject root)
+        private void RenderEntities(BaseEntity root)
         {
-            // Render the current GameObject and its components
-            RenderComponents(root);
+            // If the root is a GUICanvas, render it
+            if (root is GUICanvasEntity canvas)
+            {
+                Renderer.RenderScreenspaceGUI(canvas);
+            }
 
             // Recursively render all children
             foreach (var child in root.Children)
             {
-                RenderGameObjects(child);
-            }
-        }
-
-        private void RenderComponents(GameObject gameObject)
-        {
-            // Render all visible Screenspace GUIs
-            GUICanvas guiCanvas = gameObject.GetComponentFromType<GUICanvas>();
-            if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
-            {
-                Renderer.RenderScreenspaceGUI(guiCanvas);
+                RenderEntities(child);
             }
         }
     }

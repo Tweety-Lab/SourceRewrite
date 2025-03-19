@@ -4,19 +4,20 @@ using SourceRewrite.Files;
 using SourceRewrite.GUI;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
-using SourceRewrite.Objects;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 using VistaGUI;
 using VistaGUI.Scripting.References;
 
-namespace SourceRewrite.Components
+namespace SourceRewrite.Entities.GUI
 {
-    /// <summary>
-    /// GUI Renderer.
-    /// </summary>
-    public class GUICanvas : GameComponent
+    public class GUICanvasEntity : BaseEntity
     {
         [MapProperty("height")]
         private int height; // Panel Height
@@ -101,7 +102,8 @@ namespace SourceRewrite.Components
                 if (button == MouseButton.Left)
                 {
                     Container.VistaView.SendMouseButtonDown(0);
-                } else
+                }
+                else
                 {
                     Container.VistaView.SendMouseButtonDown(1);
                 }
@@ -146,8 +148,6 @@ namespace SourceRewrite.Components
             }
         }
 
-
-
         /// <summary>
         /// Gets an Element from it's ID.
         /// </summary>
@@ -185,30 +185,11 @@ namespace SourceRewrite.Components
         /// <param name="name">Javascript function name</param>
         public void UnregisterEvent(string name) => Container.VistaView.ScriptingContext.UnregisterEvent(name);
 
+
         // Render a GUIView in worldspace
         private void RenderViewToObject()
         {
-            // Create a Material from the view output
-            Material guiMaterial = new Material("dev/missing");
-            guiMaterial.Texture = Container.Output;
-
-            // Create a plane mesh to house the gui
-            guiMesh = new Mesh(FileSystem.GetModelPath("primitives/plane.model"), guiMaterial);
-
-            // Create a holder object
-            GameObject holder = new GameObject();
-            holder.Transform.Scale = new Vector3(width / 32, 1f, height / 32);
-
-            // Add Transform
-            holder.Transform.Position = GameObject.Transform.Position;
-            holder.Transform.Rotation = GameObject.Transform.Rotation;
-
-            // Add MeshRenderer
-            MeshRenderer cubeRenderer = new MeshRenderer();
-            holder.AddComponent(cubeRenderer);
-
-            // Render the gui mesh
-            cubeRenderer.Mesh = guiMesh;
+            // Implement later
         }
     }
 }

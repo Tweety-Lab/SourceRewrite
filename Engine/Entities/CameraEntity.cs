@@ -1,14 +1,16 @@
-﻿using SourceRewrite.Rendering;
+﻿using Silk.NET.Assimp;
+using SourceRewrite.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SourceRewrite.Components
+namespace SourceRewrite.Entities
 {
-    /// <summary>
-    /// Camera Component and Interaction class.
-    /// </summary>
-    public class Camera : GameComponent
+    public class CameraEntity : BaseEntity
     {
-
         // Camera properties like field of view, aspect ratio, near and far clipping planes
         public float FieldOfView { get; set; } = MathF.PI / 4f; // Default FOV 45 degrees
         public float AspectRatio { get; set; } = 16f / 9f; // Default 16:9 aspect ratio
@@ -18,25 +20,23 @@ namespace SourceRewrite.Components
         /// <summary>
         /// Currently active Camera Component.
         /// </summary>
-        public static Camera ActiveCamera { get; private set; }
+        public static CameraEntity ActiveCamera { get; private set; }
 
         /// <summary>
         /// Set the active Camera.
         /// </summary>
-        public static void SetActiveCamera(Camera camera)
+        public static void SetActiveCamera(CameraEntity camera)
         {
             ActiveCamera = camera;
         }
 
-
-
         public Matrix4x4 GetViewMatrix()
         {
-            Vector3 position = GameObject.Transform.Position;
+            Vector3 position = Position;
             return Matrix4x4.CreateLookAt(
                 position,                    // Camera position
-                position + GameObject.Transform.Forward,      // Look target (position + direction)
-                GameObject.Transform.Up                     // Up vector
+                position + Forward,      // Look target (position + direction)
+                Up                     // Up vector
             );
         }
 
@@ -60,7 +60,7 @@ namespace SourceRewrite.Components
         public override void Update()
         {
             // Check if the camera's position has changed
-            Vector3 currentCameraPos = GameObject.Transform.Position;
+            Vector3 currentCameraPos = Position;
             if (currentCameraPos != lastCameraPos)
             {
                 // If it has changed, update the engine uniform

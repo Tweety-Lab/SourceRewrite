@@ -1,14 +1,15 @@
 ﻿using System.Numerics;
 using Silk.NET.Input;
+using SourceRewrite.Entities;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
-using SourceRewrite.Components;
+using SourceRewrite.Windowing;
 
 namespace Editor.Components
 {
     // FPS Camera Controller
-    public class EditorCameraController : GameComponent
+    public class EditorCameraController : BaseEntity
     {
         // Move at 1512 units per second
         public float MovementSpeed = 1512f;
@@ -19,8 +20,20 @@ namespace Editor.Components
 
         public override void Start()
         {
+            Console.WriteLine("Started Editor Camera Controller");
+
+            if (CameraEntity.ActiveCamera == null)
+            {
+                CameraEntity camEntity = new CameraEntity();
+                camEntity.Start();
+
+                camEntity.Parent = this;
+
+                CameraEntity.SetActiveCamera(camEntity);
+            }
+
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = MathsHelper.QuaternionToEuler(GameObject.Transform.Rotation);
+            Vector3 currentEuler = MathsHelper.QuaternionToEuler(Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Y;
         }
@@ -42,29 +55,29 @@ namespace Editor.Components
             // Forward Movement (W)
             if (Input.GetKeyDown(Key.W))
             {
-                movement += GameObject.Transform.Forward;
+                movement += CameraEntity.ActiveCamera.Forward;
             }
 
             // Backward Movement (S)
             if (Input.GetKeyDown(Key.S))
             {
-                movement -= GameObject.Transform.Forward;
+                movement -= CameraEntity.ActiveCamera.Forward;
             }
 
             // Left Movement (A)
             if (Input.GetKeyDown(Key.A))
             {
-                movement -= GameObject.Transform.Right;
+                movement -= CameraEntity.ActiveCamera.Right;
             }
 
             // Right Movement (D)
             if (Input.GetKeyDown(Key.D))
             {
-                movement += GameObject.Transform.Right;
+                movement += CameraEntity.ActiveCamera.Right;
             }
 
             // Apply movement
-            GameObject.Transform.Position += movement * MovementSpeed * deltaTime;
+            CameraEntity.ActiveCamera.Position += movement * MovementSpeed * deltaTime;
         }
 
         // Mouse input for camera rotation
@@ -86,7 +99,7 @@ namespace Editor.Components
                 pitch = Math.Clamp(pitch, -89f, 89f);
 
                 // Update the rotation based on yaw and pitch (roll remains 0)
-                GameObject.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                CameraEntity.ActiveCamera.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
             }
             else
             {

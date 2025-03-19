@@ -1,7 +1,7 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
-using SourceRewrite.Objects;
+using SourceRewrite.Entities;
 using SourceRewrite.Rendering;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Files;
@@ -135,8 +135,8 @@ namespace SourceRewrite.Windowing
             // Update Time DeltaTime
             Time.DeltaTime = (float)deltaTime;
 
-            // Update GameObjects
-            GameObjectManager.GameObjectUpdate();
+            // Update Entities
+            EntityManager.EntityUpdate();
         }
 
         private unsafe void OnRender(double deltaTime) {

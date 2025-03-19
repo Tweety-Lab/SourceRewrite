@@ -1,12 +1,11 @@
 ﻿using Silk.NET.Maths;
-using SourceRewrite.Components;
-using SourceRewrite.Objects;
+using SourceRewrite.Entities;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
-using SourceRewrite.Maps;
-using System.Reflection;
-using Silk.NET.OpenGL;
+using SourceRewrite.Entities.GUI;
+using Silk.NET.Input;
+using System.Numerics;
 
 
 namespace SourceRewrite.Rendering
@@ -37,6 +36,20 @@ namespace SourceRewrite.Rendering
                     _apiInterface = new OpenGLContext(targetWindow);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Calculate an entities ViewMatrix
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static Matrix4x4? GetEntityViewMatrix(BaseEntity entity)
+        {
+            Matrix4x4 transformation = Matrix4x4.CreateTranslation(entity.Position) *
+                           Matrix4x4.CreateFromQuaternion(entity.Rotation) *
+                           Matrix4x4.CreateScale(entity.Scale);
+
+            return transformation;
         }
 
         /// <summary>
@@ -85,15 +98,18 @@ namespace SourceRewrite.Rendering
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
             // Resize all visible Screenspace GUIs recursively starting from the root
-            ResizeGUIs(GameObjectManager.Root, newSize);
+            ResizeGUIs(EntityManager.Root, newSize);
 
             _apiInterface.OnFramebufferResize(newSize);
         }
 
-        private void ResizeGUIs(GameObject root, Vector2D<int> newSize)
+        private void ResizeGUIs(BaseEntity root, Vector2D<int> newSize)
         {
-            // Resize the current GameObject's GUI if applicable
-            ResizeGUIComponent(root, newSize);
+            // Resize the Entities GUI if applicable
+            if (root is GUICanvasEntity)
+            {
+                ResizeGUIComponent((GUICanvasEntity)root, newSize);
+            }
 
             // Recursively resize all children's GUIs
             foreach (var child in root.Children)
@@ -102,12 +118,11 @@ namespace SourceRewrite.Rendering
             }
         }
 
-        private void ResizeGUIComponent(GameObject gameObject, Vector2D<int> newSize)
+        private void ResizeGUIComponent(GUICanvasEntity entity, Vector2D<int> newSize)
         {
-            GUICanvas guiCanvas = gameObject.GetComponentFromType<GUICanvas>();
-            if (guiCanvas != null && guiCanvas.PanelType != 0 && guiCanvas.Container.VistaView.Visible == true)
+            if (entity.PanelType != 0 && entity.Container.VistaView.Visible == true)
             {
-                guiCanvas.Container.VistaView.Resize((uint)newSize.X, (uint)newSize.Y);
+                entity.Container.VistaView.Resize((uint)newSize.X, (uint)newSize.Y);
             }
         }
 
@@ -116,7 +131,7 @@ namespace SourceRewrite.Rendering
             _apiInterface.InitMesh(meshObject);
         }
 
-        public void DrawScreenspaceQuad(GUICanvas canvas)
+        public void DrawScreenspaceQuad(GUICanvasEntity canvas)
         {
             _apiInterface.RenderScreenspaceGUI(canvas);
         }
@@ -132,9 +147,9 @@ namespace SourceRewrite.Rendering
         void OnLoad(RendererContext renderer);
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
-        void RenderMesh(MeshRenderer meshObject);
+        void RenderMesh(MeshEntity meshObject);
         void InitMesh(MeshAsset meshObject);
-        void RenderScreenspaceGUI(GUICanvas canvas);
+        void RenderScreenspaceGUI(GUICanvasEntity canvas);
     }
 
     /// <summary>

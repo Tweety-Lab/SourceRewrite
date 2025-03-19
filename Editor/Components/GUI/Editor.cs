@@ -1,31 +1,23 @@
-﻿using SourceRewrite.AssetTypes;
-using SourceRewrite.Components;
-using SourceRewrite.Files;
-using SourceRewrite.InputSystem;
-using SourceRewrite.Objects;
+﻿using SourceRewrite.Entities;
 using System.Diagnostics;
-using System;
-using System.Numerics;
-using VistaGUI.Scripting.References;
 using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
-using System.Text;
+using SourceRewrite.Entities.GUI;
 
 namespace Editor.Components.GUI
 {
-    public class EditorCanvas : GameComponent
+    public class EditorCanvas : BaseEntity
     {
-        private GUICanvas canvas;
+        private GUICanvasEntity canvas;
 
         public override void Start()
         {
             Console.WriteLine("Started Editor GUI");
 
-            canvas = new GUICanvas();
+            canvas = new GUICanvasEntity();
             canvas.IsTransparent = true;
             canvas.PanelName = "editor/editor.html";
-
-            GameObject.AddComponent(canvas);
+            canvas.Parent = this;
 
             // HACK: Manually start the canvas component
             canvas.Start();
@@ -77,18 +69,13 @@ namespace Editor.Components.GUI
             // Allow user to select map file then open it
             canvas.RegisterEvent("OpenMap", () =>
             {
-                // Create gameobject to house fileExplorer GUICanvas
-                GameObject fileExplorerObject = new GameObject();
-
-                // Add GUICanvas to gameobject
+                // Add FileExplorerCanvas entity
                 FileExplorerCanvas fileExplorerCanvas = new FileExplorerCanvas();
-                fileExplorerObject.AddComponent(fileExplorerCanvas);
-
-                // Make it a global object
-                GameObjectManager.AddGlobalObject(fileExplorerObject);
 
                 // Start GUI
                 fileExplorerCanvas.Start();
+
+                fileExplorerCanvas.Parent = this;
             });
         }
     }

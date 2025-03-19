@@ -3,9 +3,10 @@ using SourceRewrite.Windowing;
 using System.Drawing;
 using Silk.NET.Maths;
 using System.Numerics;
-using SourceRewrite.Components;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
+using SourceRewrite.Entities;
+using SourceRewrite.Entities.GUI;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -90,7 +91,7 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.Viewport(newSize);
         }
 
-        public unsafe void RenderMesh(MeshRenderer meshObject)
+        public unsafe void RenderMesh(MeshEntity meshObject)
         {
             if (meshObject == null || meshObject.Mesh == null)
                 throw new ArgumentNullException(nameof(meshObject));
@@ -113,13 +114,14 @@ namespace SourceRewrite.Rendering.OpenGL
             if (aspectRatio <= 0)
                 aspectRatio = 1.0f; // Fallback to avoid division by zero
 
-            var projection = Camera.ActiveCamera?.GetPerspectiveProjectionMatrix();
+            var projection = CameraEntity.ActiveCamera?.GetPerspectiveProjectionMatrix();
 
             // View matrix from active camera
-            var view = Camera.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
+            var view = CameraEntity.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
 
             // Model matrix from transform
-            var model = meshObject.GameObject.GetComponentFromType<Transform>()?.ViewMatrix ?? Matrix4x4.Identity;
+            Matrix4x4? model = RendererContext.GetEntityViewMatrix(meshObject) ?? Matrix4x4.Identity;
+
 
             openglShader.SetParameter("MODEL_MATRIX", model);
             openglShader.SetParameter("VIEW_MATRIX", view);
@@ -153,7 +155,7 @@ namespace SourceRewrite.Rendering.OpenGL
             vao.VertexAttributePointer(2, 2, VertexAttribPointerType.Float, 8, 6); // UVs
         }
 
-        public unsafe void RenderScreenspaceGUI(GUICanvas canvas)
+        public unsafe void RenderScreenspaceGUI(GUICanvasEntity canvas)
         {
             // Disable depth testing for UI
             OpenGL.Disable(EnableCap.DepthTest);
