@@ -20,6 +20,7 @@ namespace Editor
             EntityManager.AddGlobalEntity(editorCameraController);
             EntityManager.AddGlobalEntity(editorGUI);
 
+            // Make sure Entity Logic in maps don't run
             MapSystem.OnMapPreload += (map) => map.EntitiesEnabled = false;
         }
 

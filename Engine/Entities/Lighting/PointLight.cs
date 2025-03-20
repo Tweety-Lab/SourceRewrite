@@ -27,11 +27,6 @@ namespace SourceRewrite.Entities
         [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation = 0.032f;
 
-        public override void Start()
-        {
-            Console.WriteLine("Started Light Entity");
-        }
-
         // Update Shader Uniforms
         public override void Update()
         {
