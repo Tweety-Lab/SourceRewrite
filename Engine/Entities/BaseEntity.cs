@@ -85,6 +85,9 @@ namespace SourceRewrite.Entities
             // Add the Entity to the destruction queue
             EntityManager.EntitiesToDestroy.Enqueue(this);
 
+            // Run Entity destroy logic
+            OnDestroy();
+
             // Recursively destroy all child objects
             foreach (var child in Children)
             {

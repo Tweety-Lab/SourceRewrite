@@ -33,6 +33,10 @@ namespace SourceRewrite.Components.GUI
 
                     // We close the file explorer window on submit
                     DestroyDeferred();
+                } else
+                {
+                    // If invalid map was entered we close the window
+                    DestroyDeferred();
                 }
             });
         }
