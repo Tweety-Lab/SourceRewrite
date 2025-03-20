@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Maps;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Reflection;
 
 namespace SourceRewrite.Entities

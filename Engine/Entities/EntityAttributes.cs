@@ -1,4 +1,4 @@
-﻿namespace SourceRewrite.Maps
+﻿namespace SourceRewrite.Entities
 {
     /// <summary>
     /// Entity Properties are variables that are defined in the BSP (map) file.
