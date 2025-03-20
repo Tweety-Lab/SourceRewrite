@@ -25,20 +25,20 @@
     </div>
 
     <div class="toolbar-vertical">
-        <button class="selected-button"><img src="file:///editor/images/toolbar/select_tool.png"></button>
-        <button><img src="file:///editor/images/toolbar/magnify_tool.png"></button>
-        <button><img src="file:///editor/images/toolbar/camera_tool.png"></button>
+        <button class="selected-button" onclick="SetTool('Select')"><img src="file:///editor/images/toolbar/select_tool.png"></button>
+        <button onclick="SetTool('Magnify')""><img src="file:///editor/images/toolbar/magnify_tool.png"></button>
+        <button onclick="SetTool('Camera')"><img src="file:///editor/images/toolbar/camera_tool.png"></button>
         <hr>
-        <button><img src="file:///editor/images/toolbar/entity_tool.png"></button>
-        <button><img src="file:///editor/images/toolbar/block_tool.png"></button>
+        <button onclick="SetTool('Entity')"><img src="file:///editor/images/toolbar/entity_tool.png"></button>
+        <button onclick="SetTool('Block')"><img src="file:///editor/images/toolbar/block_tool.png"></button>
         <hr>
-        <button><img src="file:///editor/images/toolbar/texture_app.png"></button>
-        <button><img src="file:///editor/images/toolbar/texture_apply.png"></button>
-        <button><img src="file:///editor/images/toolbar/decal_apply.png"></button>
-        <button><img src="file:///editor/images/toolbar/overlay_apply.png"></button>
+        <button onclick="SetTool('TextureApplication')"><img src="file:///editor/images/toolbar/texture_app.png"></button>
+        <button onclick="SetTool('TextureApply')"><img src="file:///editor/images/toolbar/texture_apply.png"></button>
+        <button onclick="SetTool('DecalApply')"><img src="file:///editor/images/toolbar/decal_apply.png"></button>
+        <button onclick="SetTool('OverlayApply')"><img src="file:///editor/images/toolbar/overlay_apply.png"></button>
         <hr>
-        <button><img src="file:///editor/images/toolbar/clipping_tool.png"></button>
-        <button>Vertex</button>
+        <button onclick="SetTool('Clipping')"><img src="file:///editor/images/toolbar/clipping_tool.png"></button>
+        <button onclick="SetTool('Vertex')">Vertex</button>
     </div>
 
     <div id="file-functions-content" class="menu-content">
@@ -62,9 +62,5 @@
     </div>
 
     <script src="file:///editor/scripts/editor.js"></script>
-    <script>
-        window.OpenVDC = function() {
-            console.log("OpenVDC called");
-        };
-    </script>
+    
 </body>

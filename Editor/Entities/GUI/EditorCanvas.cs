@@ -6,9 +6,28 @@ using SourceRewrite.Entities.GUI;
 
 namespace Editor.Components.GUI
 {
+    /// <summary>
+    /// All Tools in the main toolbar that can be toggled
+    /// </summary>
+    public enum ToggleableTools
+    {
+        None,
+        Select,
+        Magnify,
+        Camera,
+        Entity,
+        Block,
+        DecalApply,
+        OverlayApply,
+        Clipping,
+        Vertex
+    }
+
     public class EditorCanvas : BaseEntity
     {
         private GUICanvasEntity canvas;
+
+        public ToggleableTools CurrentTool = ToggleableTools.None;
 
         public override void Start()
         {
@@ -46,6 +65,7 @@ namespace Editor.Components.GUI
         private void RegisterGUIEvents()
         {
             RegisterMenuEvents();
+            RegisterToolbarEvents();
         }
 
         private void RegisterMenuEvents()
@@ -75,6 +95,30 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
+            });
+        }
+
+        private void RegisterToolbarEvents()
+        {
+            canvas.RegisterEvent("SetTool", (args) =>
+            {
+                if (args.Length > 0)
+                {
+                    // Attempt to parse the string from args[0] into a ToggleableTools enum
+                    if (Enum.TryParse(args[0], true, out ToggleableTools tool))
+                    {
+                        CurrentTool = tool;
+                        Console.WriteLine($"Tool set to: {CurrentTool}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid tool name: {args[0]}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No tool name provided.");
+                }
             });
         }
     }
