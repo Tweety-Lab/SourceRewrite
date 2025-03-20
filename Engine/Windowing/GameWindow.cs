@@ -136,7 +136,7 @@ namespace SourceRewrite.Windowing
             Time.DeltaTime = (float)deltaTime;
 
             // Update Entities
-            EntityManager.EntityUpdate();
+            EntityManager.UpdateAllEntities();
         }
 
         private unsafe void OnRender(double deltaTime) {

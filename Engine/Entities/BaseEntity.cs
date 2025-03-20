@@ -46,6 +46,9 @@ namespace SourceRewrite.Entities
         // Name of Entity
         public string Name { get; set; }
 
+        // Controls whether Entity logic is enabled
+        public bool IsEnabled { get; set; } = true;
+
         // Named constructor
         public BaseEntity(string name)
         {

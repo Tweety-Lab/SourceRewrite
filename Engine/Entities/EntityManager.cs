@@ -60,26 +60,22 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Process global Entities that persist across maps
         /// </summary>
-        public static void ProcessGlobalEntities(bool shouldStart)
+        public static void StartGlobalEntities()
         {
             List<BaseEntity> globalEntitiesToProcess = new List<BaseEntity>(GlobalEntities);
             if (globalEntitiesToProcess.Count > 0 && !GlobaEntitiesStarted)
             {
                 foreach (BaseEntity globalEntity in globalEntitiesToProcess)
                 {
-                    if (shouldStart)
-                    {
-                        globalEntity.Start();
-                    }
+                    globalEntity.Start();
                 }
-                GlobaEntitiesStarted = true; // Mark as started
             }
         }
 
         /// <summary>
         /// Runs Entity update logic for every Entity.
         /// </summary>
-        public static void EntityUpdate()
+        public static void UpdateAllEntities()
         {
             // Update the root entity and all its children recursively
             UpdateEntityRecursive(Root);
@@ -89,16 +85,44 @@ namespace SourceRewrite.Entities
         }
 
         /// <summary>
+        /// Runs Entity start logic for every Entity.
+        /// </summary>
+        public static void StartAllEntities()
+        {
+            // Start the root entity and all its children recursively
+            StartEntityRecursive(Root);
+        }
+
+        /// <summary>
         /// Update a Entity and all its children recursively
         /// </summary>
-        private static void UpdateEntityRecursive(BaseEntity obj)
+        public static void UpdateEntityRecursive(BaseEntity obj)
         {
-            obj.Update();
+            // Update current object only if enabled
+            if (obj.IsEnabled)
+                obj.Update();
 
             // Update all children recursively
             foreach (BaseEntity child in obj.Children.ToList())
             {
                 UpdateEntityRecursive(child);
+            }
+        }
+
+
+        /// <summary>
+        /// Start a Entity and all its children recursively
+        /// </summary>
+        public static void StartEntityRecursive(BaseEntity obj)
+        {
+            // Start current object only if enabled
+            if (obj.IsEnabled)
+                obj.Start();
+
+            // Start all children recursively
+            foreach (BaseEntity child in obj.Children.ToList())
+            {
+                StartEntityRecursive(child);
             }
         }
 

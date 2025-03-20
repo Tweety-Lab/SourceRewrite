@@ -14,9 +14,6 @@ namespace Editor
         // Runs once on Mod Load
         public void OnLoad()
         {
-            // Run Entity start logic in our maps
-            Map.StartEntitiesOnMapLoad = false;
-
             EditorCameraController editorCameraController = new EditorCameraController();
             EditorCanvas editorGUI = new EditorCanvas();
 

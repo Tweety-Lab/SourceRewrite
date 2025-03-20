@@ -59,38 +59,15 @@ namespace SourceRewrite.Maps
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
             CreateEntities(EntitiesLump);
 
-            // Start Global Game Entities
-            EntityManager.ProcessGlobalEntities(!StartEntitiesOnMapLoad);
+            // Start Global Entities
+            EntityManager.StartGlobalEntities();
 
-            // Run start logic on all map Entities
-            if (StartEntitiesOnMapLoad)
-            {
-                StartEntityAndChildren(MapRootEntity);
-            }
+            // Start Map Entities
+            EntityManager.StartEntityRecursive(EntityManager.MapContainer);
 
             // Free the BSP
             reader.Dispose();
         }
-
-        /// <summary>
-        /// Recursively starts the given entity and all of its children.
-        /// </summary>
-        private void StartEntityAndChildren(BaseEntity entity)
-        {
-            // Start the current entity
-            entity.Start();
-
-            Console.WriteLine("Starting " + entity.GetType().ToString());
-
-            // Recursively start all child entities
-            foreach (var child in entity.Children)
-            {
-                StartEntityAndChildren(child);
-            }
-        }
-
-        // Start Entities on map load
-        public static bool StartEntitiesOnMapLoad = true;
 
         // Create Geometry from Lump data
         public void CreateGeometry(Lump vertices, Lump indices, Lump materials)
