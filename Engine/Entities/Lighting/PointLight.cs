@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Maps;
+﻿using SourceRewrite.Attributes;
+using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities
 {
+    [AlwaysExecute]
     public class PointLight : BaseEntity
     {
         // Light Properties

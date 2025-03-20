@@ -67,6 +67,15 @@ namespace SourceRewrite.Maps
             {
                 EntityManager.DisableEntityRecursive(MapRootEntity);
             }
+            
+            // Re-Enable Entities with AlwaysExecute attribute
+            foreach (BaseEntity entity in Entities)
+            {
+                if (Attributes.AttributeCache.AlwaysExecuteEntitiesTypes.Contains(entity.GetType()))
+                {
+                    entity.IsEnabled = true;
+                }
+            }
 
             // Start all Entities (Global and Map)
             EntityManager.StartAllEntities();

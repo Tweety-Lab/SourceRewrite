@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Entities;
+﻿using SourceRewrite.Attributes;
+using SourceRewrite.Entities;
 using SourceRewrite.Maps;
 using SourceRewrite.Maths;
 using System.Numerics;

@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.AssetTypes;
+using SourceRewrite.Attributes;
 using SourceRewrite.Files;
 using SourceRewrite.Maps;
 using SourceRewrite.Windowing;
