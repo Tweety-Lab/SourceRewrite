@@ -35,7 +35,7 @@ namespace SourceRewrite.Entities
             // Update Uniforms
             foreach (Shader shader in Shader.Shaders)
             {
-                shader.SetParameter("light_position", Position);
+                shader.SetParameter("light_position", Transform.Position);
                 shader.SetParameter("light_color", modifiedColor / 255.0f); // Convert Color from 1-255 range to 0-1 range
                 shader.SetParameter("light_attenuation", new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
             }

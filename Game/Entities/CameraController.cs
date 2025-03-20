@@ -25,7 +25,7 @@ namespace Game.Entities
 
         public override void Update()
         {
-            CameraEntity.ActiveCamera.Rotation = Rotation * 10f;
+            CameraEntity.ActiveCamera.Transform.Rotation = Transform.Rotation * 10f;
         }
     }
 }

@@ -32,11 +32,11 @@ namespace SourceRewrite.Entities
 
         public Matrix4x4 GetViewMatrix()
         {
-            Vector3 position = Position;
+            Vector3 position = Transform.Position;
             return Matrix4x4.CreateLookAt(
                 position,                    // Camera position
-                position + Forward,      // Look target (position + direction)
-                Up                     // Up vector
+                position + Transform.Forward,      // Look target (position + direction)
+                Transform.Up                     // Up vector
             );
         }
 
@@ -60,7 +60,7 @@ namespace SourceRewrite.Entities
         public override void Update()
         {
             // Check if the camera's position has changed
-            Vector3 currentCameraPos = Position;
+            Vector3 currentCameraPos = Transform.Position;
             if (currentCameraPos != lastCameraPos)
             {
                 // If it has changed, update the engine uniform

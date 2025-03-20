@@ -33,7 +33,7 @@ namespace Editor.Components
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = MathsHelper.QuaternionToEuler(Rotation);
+            Vector3 currentEuler = MathsHelper.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Y;
         }
@@ -55,29 +55,29 @@ namespace Editor.Components
             // Forward Movement (W)
             if (Input.GetKeyDown(Key.W))
             {
-                movement += CameraEntity.ActiveCamera.Forward;
+                movement += CameraEntity.ActiveCamera.Transform.Forward;
             }
 
             // Backward Movement (S)
             if (Input.GetKeyDown(Key.S))
             {
-                movement -= CameraEntity.ActiveCamera.Forward;
+                movement -= CameraEntity.ActiveCamera.Transform.Forward;
             }
 
             // Left Movement (A)
             if (Input.GetKeyDown(Key.A))
             {
-                movement -= CameraEntity.ActiveCamera.Right;
+                movement -= CameraEntity.ActiveCamera.Transform.Right;
             }
 
             // Right Movement (D)
             if (Input.GetKeyDown(Key.D))
             {
-                movement += CameraEntity.ActiveCamera.Right;
+                movement += CameraEntity.ActiveCamera.Transform.Right;
             }
 
             // Apply movement
-            CameraEntity.ActiveCamera.Position += movement * MovementSpeed * deltaTime;
+            CameraEntity.ActiveCamera.Transform.Position += movement * MovementSpeed * deltaTime;
         }
 
         // Mouse input for camera rotation
@@ -99,7 +99,7 @@ namespace Editor.Components
                 pitch = Math.Clamp(pitch, -89f, 89f);
 
                 // Update the rotation based on yaw and pitch (roll remains 0)
-                CameraEntity.ActiveCamera.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                CameraEntity.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
             }
             else
             {

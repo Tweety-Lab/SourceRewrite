@@ -45,9 +45,9 @@ namespace SourceRewrite.Rendering
         /// <returns></returns>
         public static Matrix4x4? GetEntityViewMatrix(BaseEntity entity)
         {
-            Matrix4x4 transformation = Matrix4x4.CreateTranslation(entity.Position) *
-                           Matrix4x4.CreateFromQuaternion(entity.Rotation) *
-                           Matrix4x4.CreateScale(entity.Scale);
+            Matrix4x4 transformation = Matrix4x4.CreateTranslation(entity.Transform.Position) *
+                           Matrix4x4.CreateFromQuaternion(entity.Transform.Rotation) *
+                           Matrix4x4.CreateScale(entity.Transform.Scale);
 
             return transformation;
         }

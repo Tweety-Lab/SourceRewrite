@@ -173,11 +173,11 @@ namespace SourceRewrite.Maps
 
                 // Adjust position relative to the WorldTransform's Position
                 Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;
-                entity.Position = adjustedPosition;
+                entity.Transform.Position = adjustedPosition;
 
                 // Adjust rotation relative to WorldTransform's Rotation
                 Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
-                entity.Rotation = adjustedRotation;
+                entity.Transform.Rotation = adjustedRotation;
 
                 Entities.Add(entity);
                 entity.Parent = MapRootEntity; // Ensure parent is set correctly

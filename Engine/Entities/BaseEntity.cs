@@ -6,37 +6,8 @@ namespace SourceRewrite.Entities
 {
     public class BaseEntity
     {
-        #region Transform 
-        /// <summary>
-        /// The position of the entity in 3D space.
-        /// </summary>
-        public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
-
-        /// <summary>
-        /// The scale of the entity.
-        /// </summary>
-        public Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
-
-        /// <summary>
-        /// The rotation of the entity.
-        /// </summary>
-        public Quaternion Rotation { get; set; } = Quaternion.Identity;
-
-        /// <summary>
-        /// Gets the forward vector of the entity, based on its rotation.
-        /// </summary>
-        public Vector3 Forward => Vector3.Normalize(Vector3.Transform(-Vector3.UnitZ, Rotation));
-
-        /// <summary>
-        /// Gets the right vector of the entity, based on its rotation.
-        /// </summary>
-        public Vector3 Right => Vector3.Normalize(Vector3.Transform(Vector3.UnitX, Rotation));
-
-        /// <summary>
-        /// Gets the up vector of the entity, based on its rotation.
-        /// </summary>
-        public Vector3 Up => Vector3.Normalize(Vector3.Transform(Vector3.UnitY, Rotation));
-        #endregion
+        // Entity Transform
+        public Transform Transform { get; set; } = new Transform();
 
         #region Hierarchy
         private BaseEntity _parent; // backing field to store the parent
