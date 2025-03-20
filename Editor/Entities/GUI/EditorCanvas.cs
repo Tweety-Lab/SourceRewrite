@@ -17,7 +17,7 @@ namespace Editor.Components.GUI
             canvas = new GUICanvasEntity();
             canvas.IsTransparent = true;
             canvas.PanelName = "editor/editor.html";
-            canvas.Parent = this;
+            EntityManager.AddGlobalEntity(canvas);
 
             // HACK: Manually start the canvas component
             canvas.Start();

@@ -18,6 +18,7 @@ using VistaGUI.Scripting.References;
 
 namespace SourceRewrite.Entities.GUI
 {
+    [AlwaysExecute]
     public class GUICanvasEntity : BaseEntity
     {
         [EntityProperty("height")]
