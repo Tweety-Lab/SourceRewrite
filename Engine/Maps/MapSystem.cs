@@ -59,11 +59,8 @@ namespace SourceRewrite.Maps
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
             CreateEntities(EntitiesLump);
 
-            // Start Global Entities
-            EntityManager.StartGlobalEntities();
-
-            // Start Map Entities
-            EntityManager.StartEntityRecursive(EntityManager.MapContainer);
+            // Start all Entities (Global and Map)
+            EntityManager.StartAllEntities();
 
             // Free the BSP
             reader.Dispose();
