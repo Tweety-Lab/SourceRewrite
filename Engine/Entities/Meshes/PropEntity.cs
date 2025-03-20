@@ -15,13 +15,13 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Create Mesh from this path.
         /// </summary>
-        [MapProperty("model")]
+        [EntityProperty("model")]
         public string MeshPath;
 
         /// <summary>
         /// Get Material from this path.
         /// </summary>
-        [MapProperty("skin")]
+        [EntityProperty("skin")]
         public string MaterialPath;
 
         public override void Start()

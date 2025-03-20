@@ -12,17 +12,17 @@ namespace SourceRewrite.Entities
     public class PointLight : BaseEntity
     {
         // Light Properties
-        [MapProperty("_light")]
+        [EntityProperty("_light")]
         public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
 
         // Attenuation Properties
-        [MapProperty("_constant_attn")]
+        [EntityProperty("_constant_attn")]
         public float ConstantAttenuation = 1.0f;
 
-        [MapProperty("_linear_attn")]
+        [EntityProperty("_linear_attn")]
         public float LinearAttenuation = 0.09f;
 
-        [MapProperty("_quadratic_attn")]
+        [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation = 0.032f;
 
         // Update Shader Uniforms

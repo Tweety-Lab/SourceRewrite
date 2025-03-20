@@ -6,10 +6,7 @@ namespace SourceRewrite.Entities
 {
     public class BaseEntity
     {
-        // Entity Transform
-        public Transform Transform { get; set; } = new Transform();
-
-        #region Hierarchy
+        #region HierarchyManagement
         private BaseEntity _parent; // backing field to store the parent
 
         /// <summary>
@@ -42,6 +39,9 @@ namespace SourceRewrite.Entities
         public List<BaseEntity> Children { get; private set; } = new List<BaseEntity>();
 
         #endregion
+
+        // Entity Transform
+        public Transform Transform { get; set; } = new Transform();
 
         // Name of Entity
         public string Name { get; set; }
@@ -116,16 +116,16 @@ namespace SourceRewrite.Entities
         }
 
         /// <summary>
-        /// Set a map property to a value.
+        /// Set a Entity Property to a value.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, object value)
         {
-            // Find the property or field that has the MapProperty attribute matching the name
+            // Find the property or field that has the EntityProperty attribute matching the name
             var propertyOrField = this.GetType()
                                       .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                                      .FirstOrDefault(p => p.GetCustomAttribute<MapPropertyAttribute>()?.Name == name);
+                                      .FirstOrDefault(p => p.GetCustomAttribute<EntityPropertyAttribute>()?.Name == name);
 
             if (propertyOrField != null && propertyOrField.CanWrite)
             {
@@ -135,7 +135,7 @@ namespace SourceRewrite.Entities
 
             var field = this.GetType()
                             .GetFields(BindingFlags.Public | BindingFlags.Instance)
-                            .FirstOrDefault(f => f.GetCustomAttribute<MapPropertyAttribute>()?.Name == name);
+                            .FirstOrDefault(f => f.GetCustomAttribute<EntityPropertyAttribute>()?.Name == name);
 
             if (field != null)
             {

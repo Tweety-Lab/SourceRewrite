@@ -19,16 +19,16 @@ namespace SourceRewrite.Entities.GUI
 {
     public class GUICanvasEntity : BaseEntity
     {
-        [MapProperty("height")]
+        [EntityProperty("height")]
         private int height; // Panel Height
 
-        [MapProperty("width")]
+        [EntityProperty("width")]
         private int width; // Panel Width
 
-        [MapProperty("panelname")]
+        [EntityProperty("panelname")]
         public string PanelName; // Name of HTML Panel to render
 
-        [MapProperty("IsTransparent")]
+        [EntityProperty("IsTransparent")]
         public bool IsTransparent; // Is the panel background transparent
 
         public int PanelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.

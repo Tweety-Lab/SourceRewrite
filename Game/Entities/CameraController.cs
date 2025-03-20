@@ -7,7 +7,7 @@ namespace Game.Entities
 {
     public class CameraController : BaseEntity
     {
-        [MapProperty("angles")]
+        [EntityProperty("angles")]
         public Vector3 Angles;
 
         public override void Start()
