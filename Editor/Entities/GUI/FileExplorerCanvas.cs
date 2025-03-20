@@ -17,7 +17,7 @@ namespace SourceRewrite.Components.GUI
             Canvas = new GUICanvasEntity();
             Canvas.IsTransparent = true;
             Canvas.PanelName = "elements/file_explorer/file_explorer.html";
-            EntityManager.AddGlobalEntity(Canvas);
+            Canvas.Parent = this;
 
             // HACK: Manually start the canvas component
             Canvas.Start();

@@ -21,6 +21,9 @@ namespace SourceRewrite.Entities
         // Queue for deferred destruction of Entities
         public static Queue<BaseEntity> EntitiesToDestroy = new Queue<BaseEntity>();
 
+        // Tracks if golbal entities have been started or not
+        private static bool _globalEntitiesStarted = false;
+
         static EntityManager()
         {
             // Create root entity
@@ -62,13 +65,14 @@ namespace SourceRewrite.Entities
         /// </summary>
         public static void StartGlobalEntities()
         {
-            List<BaseEntity> globalEntitiesToProcess = new List<BaseEntity>(GlobalEntities);
-            if (globalEntitiesToProcess.Count > 0 && !GlobaEntitiesStarted)
+            if (!_globalEntitiesStarted)
             {
+                List<BaseEntity> globalEntitiesToProcess = new List<BaseEntity>(GlobalEntities);
                 foreach (BaseEntity globalEntity in globalEntitiesToProcess)
                 {
                     globalEntity.Start();
                 }
+                _globalEntitiesStarted = true;
             }
         }
 
@@ -89,8 +93,27 @@ namespace SourceRewrite.Entities
         /// </summary>
         public static void StartAllEntities()
         {
-            // Start the root entity and all its children recursively
-            StartEntityRecursive(Root);
+            // Start global entities only if they haven't been started yet
+            StartGlobalEntities();
+
+            // Start the map entity and all its children recursively
+            StartEntityRecursive(MapContainer);
+        }
+
+        /// <summary>
+        /// Start an Entity and all its children recursively
+        /// </summary>
+        public static void StartEntityRecursive(BaseEntity obj)
+        {
+            // Start current object only if enabled
+            if (obj.IsEnabled)
+                obj.Start();
+
+            // Start all children recursively
+            foreach (BaseEntity child in obj.Children.ToList())
+            {
+                StartEntityRecursive(child);
+            }
         }
 
         /// <summary>
@@ -109,22 +132,6 @@ namespace SourceRewrite.Entities
             }
         }
 
-
-        /// <summary>
-        /// Start an Entity and all its children recursively
-        /// </summary>
-        public static void StartEntityRecursive(BaseEntity obj)
-        {
-            // Start current object only if enabled
-            if (obj.IsEnabled)
-                obj.Start();
-
-            // Start all children recursively
-            foreach (BaseEntity child in obj.Children.ToList())
-            {
-                StartEntityRecursive(child);
-            }
-        }
 
         /// <summary>
         /// Enable an Entity and all its children recursively
