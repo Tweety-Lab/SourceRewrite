@@ -3,6 +3,7 @@ using System.Diagnostics;
 using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
 using SourceRewrite.Entities.GUI;
+using SourceRewrite.InputSystem;
 
 namespace Editor.Components.GUI
 {
@@ -43,6 +44,21 @@ namespace Editor.Components.GUI
 
             // Register GUI Events
             RegisterGUIEvents();
+
+            // On Mouse Down
+            Input.MouseButtonDownEvent += (mouse, button) =>
+            {
+                // Handle tool usage
+                switch (CurrentTool)
+                {
+                    // Entity Tool
+                    case ToggleableTools.Entity:
+                        PointLight lightEntity = new PointLight();
+                        lightEntity.Parent = this;
+                        lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
+                        break;
+                }
+            };
         }
 
         public override void Update()
@@ -114,10 +130,6 @@ namespace Editor.Components.GUI
                     {
                         Console.WriteLine($"Invalid tool name: {args[0]}");
                     }
-                }
-                else
-                {
-                    Console.WriteLine("No tool name provided.");
                 }
             });
         }
