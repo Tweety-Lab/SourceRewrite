@@ -18,6 +18,9 @@ namespace SourceRewrite.Maps
         // Map Entity that contains all map entities
         public BaseEntity MapRootEntity { get; private set; }
 
+        // Determines if Entities should start enabled
+        public bool EntitiesEnabled { get; set; }
+
         public string BSPFilePath = "";
 
         public Map(string inputBspPath)
@@ -58,6 +61,12 @@ namespace SourceRewrite.Maps
             // Create the map from Lump data
             CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
             CreateEntities(EntitiesLump);
+
+            // Disable all Entities if EntitiesEnabled is false
+            if (EntitiesEnabled == false)
+            {
+                EntityManager.DisableEntityRecursive(MapRootEntity);
+            }
 
             // Start all Entities (Global and Map)
             EntityManager.StartAllEntities();
@@ -180,6 +189,9 @@ namespace SourceRewrite.Maps
             var root = EntityManager.Root;
         }
 
+        // Event triggered when a map is about to load
+        public static event Action<Map> OnMapPreload;
+
         // Event triggered when a map is loaded
         public static event Action<Map> OnMapLoaded;
 
@@ -197,7 +209,9 @@ namespace SourceRewrite.Maps
 
             // Create and load new map
             CurrentMap = new Map(path);
+            OnMapPreload?.Invoke(CurrentMap); // Trigger Preload Event
             CurrentMap.LoadMap();
+
 
             // Trigger event after the map is loaded
             OnMapLoaded?.Invoke(CurrentMap);

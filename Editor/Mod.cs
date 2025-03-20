@@ -19,6 +19,8 @@ namespace Editor
 
             EntityManager.AddGlobalEntity(editorCameraController);
             EntityManager.AddGlobalEntity(editorGUI);
+
+            MapSystem.OnMapPreload += (map) => map.EntitiesEnabled = false;
         }
 
         // Runs once on Mod Unload

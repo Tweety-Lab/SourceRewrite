@@ -111,7 +111,7 @@ namespace SourceRewrite.Entities
 
 
         /// <summary>
-        /// Start a Entity and all its children recursively
+        /// Start an Entity and all its children recursively
         /// </summary>
         public static void StartEntityRecursive(BaseEntity obj)
         {
@@ -123,6 +123,32 @@ namespace SourceRewrite.Entities
             foreach (BaseEntity child in obj.Children.ToList())
             {
                 StartEntityRecursive(child);
+            }
+        }
+
+        /// <summary>
+        /// Enable an Entity and all its children recursively
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void EnableEntityRecursive(BaseEntity obj)
+        {
+            obj.IsEnabled = true;
+            foreach (BaseEntity child in obj.Children.ToList())
+            {
+                EnableEntityRecursive(child);
+            }
+        }
+
+        /// <summary>
+        /// Disable an Entity and all its children recursively
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void DisableEntityRecursive(BaseEntity obj)
+        {
+            obj.IsEnabled = false;
+            foreach (BaseEntity child in obj.Children.ToList())
+            {
+                DisableEntityRecursive(child);
             }
         }
 
