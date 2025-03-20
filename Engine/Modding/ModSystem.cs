@@ -103,6 +103,12 @@ namespace SourceRewrite.Modding
                 }
             }
         }
+
+        // Checks if a Mod assembly is loaed from it's name
+        public static bool IsModLoaded(string modName)
+        {
+            return ModSystem.LoadedModAssemblies.Any(a => a.GetName().Name == modName);
+        }
     }
 
     // Mod Entry Point
