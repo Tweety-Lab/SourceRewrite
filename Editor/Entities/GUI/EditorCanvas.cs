@@ -48,15 +48,18 @@ namespace Editor.Components.GUI
             // On Mouse Down
             Input.MouseButtonDownEvent += (mouse, button) =>
             {
-                // Handle tool usage
-                switch (CurrentTool)
+                if (button == Silk.NET.Input.MouseButton.Left)
                 {
-                    // Entity Tool
-                    case ToggleableTools.Entity:
-                        PointLight lightEntity = new PointLight();
-                        lightEntity.Parent = this;
-                        lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
-                        break;
+                    // Handle tool usage
+                    switch (CurrentTool)
+                    {
+                        // Entity Tool
+                        case ToggleableTools.Entity:
+                            PointLight lightEntity = new PointLight();
+                            lightEntity.Parent = this;
+                            lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
+                            break;
+                    }
                 }
             };
         }
