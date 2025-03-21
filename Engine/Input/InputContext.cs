@@ -54,6 +54,9 @@ namespace SourceRewrite.InputSystem
         // MouseButtonUp Event
         public static event Action<IMouse, MouseButton> MouseButtonUpEvent;
 
+        // MouseDoubleClick Event
+        public static event Action<IMouse, MouseButton, Vector2> MouseDoubleClickEvent;
+
         static Input()
         {
             // Subscribe to the KeyDown event of the PrimaryKeyboard
@@ -62,9 +65,14 @@ namespace SourceRewrite.InputSystem
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyDown += OnKeyDown;
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyUp += OnKeyUp;
                 GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyChar += OnKeyChar;
-
+            }
+            
+            if (GameWindow.CurrentWindow.Input.PrimaryMouse != null)
+            {
                 GameWindow.CurrentWindow.Input.PrimaryMouse.MouseDown += OnMouseButtonDown;
                 GameWindow.CurrentWindow.Input.PrimaryMouse.MouseUp += OnMouseButtonUp;
+
+                GameWindow.CurrentWindow.Input.PrimaryMouse.DoubleClick += OnMouseDoubleClick;
             }
         }
 
@@ -96,6 +104,12 @@ namespace SourceRewrite.InputSystem
         private static void OnMouseButtonUp(IMouse sender, MouseButton button)
         {
             MouseButtonUpEvent?.Invoke(sender, button);
+        }
+
+        // Handler for the MouseDoubleClick event
+        private static void OnMouseDoubleClick(IMouse sender, MouseButton button, Vector2 position)
+        {
+            MouseDoubleClickEvent?.Invoke(sender, button, position);
         }
 
         /// <summary>

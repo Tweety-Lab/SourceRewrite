@@ -22,7 +22,7 @@ namespace Editor.Entities.GUI
         public static ToggleableTools CurrentTool = ToggleableTools.None;
 
         // Map Tools to Actions that run on left click
-        private static Dictionary<ToggleableTools, Action> toolActions = new Dictionary<ToggleableTools, Action>()
+        private static Dictionary<ToggleableTools, Action> clickToolActions = new Dictionary<ToggleableTools, Action>()
         {
             // Tool Enum    |   Action to run on Left Click
 
@@ -36,7 +36,26 @@ namespace Editor.Entities.GUI
                 PointLight lightEntity = new PointLight();
                 lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
                 lightEntity.Name = "PointLight";
-                } 
+                }
+            }
+        };
+
+        // Map Tools to Actions that run on double click
+        private static Dictionary<ToggleableTools, Action> doubleClickToolActions = new Dictionary<ToggleableTools, Action>()
+        {
+            // Tool Enum    |   Action to run on Left Click
+
+            // ENTITY TOOL
+            {ToggleableTools.Entity, () => {
+                // Only open Entity Editor if it isnt already in the world
+                if (EntityManager.MapContainer.FindInChildren("EntityEditor") != null)
+                    return;
+
+                // Open Entity Editor
+                EntityEditorCanvas entityEditorCanvas = new EntityEditorCanvas();
+                entityEditorCanvas.Name = "EntityEditor";
+                entityEditorCanvas.Start();
+                }
             }
         };
 
@@ -68,7 +87,18 @@ namespace Editor.Entities.GUI
                 if (button == Silk.NET.Input.MouseButton.Left)
                 {
                     // Handle tool usage
-                    toolActions.TryGetValue(CurrentTool, out Action action);
+                    clickToolActions.TryGetValue(CurrentTool, out Action action);
+                    action?.Invoke();
+                }
+            };
+
+            // On Mouse Double Click
+            Input.MouseDoubleClickEvent += (mouse, button, position) =>
+            {
+                if (button == Silk.NET.Input.MouseButton.Left)
+                {
+                    // Handle tool usage
+                    doubleClickToolActions.TryGetValue(CurrentTool, out Action action);
                     action?.Invoke();
                 }
             };
