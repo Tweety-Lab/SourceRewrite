@@ -73,7 +73,7 @@ namespace Editor.Entities.GUI
                     object convertedValue = KeyValuesUtility.ConvertValueToType(inputValue);
 
                     field.SetValue(Selection.SelectedEntity, convertedValue);
-                    Console.WriteLine($"Set {fieldName} to {convertedValue} of type {field.FieldType}");
+                    Console.WriteLine($"Set KeyValue {fieldName} to {convertedValue}");
                 }
             });
         }
@@ -97,7 +97,7 @@ namespace Editor.Entities.GUI
                     // Set propertiesTable innerHTML to have new row with name and value
                     if (value != null)
                     {
-                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onchange=\"KeyValueChanged('{field.Name}', this.value)\"></td></tr>";
+                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onkeyup=\"KeyValueChanged('{field.Name}', this.value)\" onkeydown=\"checkEnter(event, this)\"></td></tr>";
                     }
                 }
             }
@@ -106,6 +106,7 @@ namespace Editor.Entities.GUI
         public override void OnDestroy()
         {
             Canvas.UnregisterEvent("Quit");
+            Canvas.UnregisterEvent("KeyValueChanged");
         }
     }
 }
