@@ -3,6 +3,11 @@ body {
     user-select: none;
 }
 
+input {
+    color: white;
+    background-color: #222227;
+    border: 1px solid #2f2f35;
+}
 
 /* General Button Styling */
 button {
