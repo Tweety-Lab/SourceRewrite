@@ -56,6 +56,9 @@ namespace Editor.Entities.GUI
                 string fieldName = args[0];
                 string inputValue = args[1];
 
+                // Remove all backspace characters from the input value
+                inputValue = inputValue.Replace("\b", "");
+
                 // Try to get the field from the selected entity
                 var field = Selection.SelectedEntity.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
                 if (field != null)
@@ -63,7 +66,6 @@ namespace Editor.Entities.GUI
                     object convertedValue = KeyValuesUtility.ConvertValueToType(inputValue);
 
                     field.SetValue(Selection.SelectedEntity, convertedValue);
-                    Console.WriteLine($"Set KeyValue {fieldName} to {convertedValue}");
                 }
             });
 
