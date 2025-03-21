@@ -24,18 +24,29 @@ namespace SourceRewrite.Rendering
         /// </remarks>
         public RendererAPI API { get; private set; }
 
+        // Mapping of renderers to render contexts
+        private Dictionary<RendererAPI, Type> RenderMap = new Dictionary<RendererAPI, Type>
+        {
+            { RendererAPI.OpenGL, typeof(OpenGLContext) }
+        };
+
         private IRendererAPI _apiInterface; // Use an interface for better abstraction
         public RendererContext(RendererAPI chosenRenderer, GameWindow targetWindow)
         {
             API = chosenRenderer; // Pass chosen renderer to our API variable
 
-            // Create a renderer context based on chosen renderer
-            switch (chosenRenderer)
+            // Get the Chosen Renderer Context
+            RenderMap.TryGetValue(chosenRenderer, out Type rendererType);
+
+            // Create the Renderer Context
+            if (rendererType != null)
             {
-                case RendererAPI.OpenGL:
-                    _apiInterface = new OpenGLContext(targetWindow);
-                    break;
+                _apiInterface = (IRendererAPI)Activator.CreateInstance(rendererType, new object[] { targetWindow });
+            } else
+            {
+                Console.WriteLine("Renderer API type not found.");
             }
+                
         }
 
         /// <summary>
