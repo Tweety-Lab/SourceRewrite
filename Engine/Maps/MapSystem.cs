@@ -36,8 +36,11 @@ namespace SourceRewrite.Maps
         // Unload the map from the world
         public void UnloadMap()
         {
-            // Destroy the map root which cascades to all children
-            MapRootEntity.DestroyDeferred();
+            // Destroy Entites in Map Container
+            foreach (BaseEntity entity in MapRootEntity.Parent.Children)
+            {
+                entity.DestroyDeferred();
+            }
 
             Entities.Clear();
 

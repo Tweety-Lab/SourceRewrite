@@ -2,6 +2,7 @@
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
+using SourceRewrite.Maps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,6 @@ namespace Editor.Entities.GUI
                 PointLight lightEntity = new PointLight();
                 lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
                 lightEntity.Name = "PointLight";
-                lightEntity.Parent = EntityManager.MapContainer.Children[0]; // Add to current map
                 } 
             }
         };

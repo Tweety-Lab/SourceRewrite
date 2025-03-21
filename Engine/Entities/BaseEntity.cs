@@ -53,12 +53,14 @@ namespace SourceRewrite.Entities
         public BaseEntity(string name)
         {
             Name = name;
+            Parent = EntityManager.MapContainer; // Auto Set Parent to Map
         }
 
         // Nameless constructor
         public BaseEntity()
         {
             Name = "Entity";
+            Parent = EntityManager.MapContainer; // Auto Set Parent to Map
         }
 
 
