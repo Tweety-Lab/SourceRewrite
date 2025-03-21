@@ -120,4 +120,46 @@
             <textarea></textarea>
         </div>
     </div>
+    <script>
+        // Function to make an element draggable
+        function makeDraggable(element) {
+            let offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
+    
+            // Mouse down event to start dragging
+            element.onmousedown = function(e) {
+                e.preventDefault(); // Prevent default browser action
+                // Get the mouse position at the start of the drag
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+    
+                // Calculate the current offset
+                document.onmousemove = function(e) {
+                    e.preventDefault();
+                    // Calculate new position based on the mouse movement
+                    offsetX = mouseX - e.clientX;
+                    offsetY = mouseY - e.clientY;
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+    
+                    // Set the new position of the element
+                    const rect = element.getBoundingClientRect();
+                    element.style.left = rect.left - offsetX + "px";
+                    element.style.top = rect.top - offsetY + "px";
+                };
+    
+                // Stop dragging when the mouse is released
+                document.onmouseup = function() {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                };
+            };
+        }
+    
+        // Make the container draggable
+        window.onload = function() {
+            const container = document.querySelector('.container');
+            container.style.position = "absolute"; // Make sure the container can be moved around
+            makeDraggable(container);
+        };
+    </script>
 </body>
