@@ -124,16 +124,25 @@
         // Function to make an element draggable
         function makeDraggable(element) {
             let offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
+            let dragging = false;
     
             // Mouse down event to start dragging
             element.onmousedown = function(e) {
-                e.preventDefault(); // Prevent default browser action
+                // Check if the mouse is over an input or button element
+                if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') {
+                    return; // Don't start dragging
+                }
+    
+                e.preventDefault(); // Prevent default action
+                dragging = true;
+
                 // Get the mouse position at the start of the drag
                 mouseX = e.clientX;
                 mouseY = e.clientY;
     
                 // Calculate the current offset
                 document.onmousemove = function(e) {
+                    if (!dragging) return;
                     e.preventDefault();
                     // Calculate new position based on the mouse movement
                     offsetX = mouseX - e.clientX;
@@ -149,6 +158,7 @@
     
                 // Stop dragging when the mouse is released
                 document.onmouseup = function() {
+                    dragging = false;
                     document.onmousemove = null;
                     document.onmouseup = null;
                 };
