@@ -27,10 +27,15 @@ namespace Editor.Entities.GUI
 
             // ENTITY TOOL
             {ToggleableTools.Entity, () => {
+                // Only create new Light Entity if one of the same name doesnt already exist
+                if (EntityManager.MapContainer.FindInChildren("PointLight") != null)
+                    return;
+
+                // Create Point Light
                 PointLight lightEntity = new PointLight();
                 lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
                 lightEntity.Name = "PointLight";
-                lightEntity.Parent = EntityManager.MapContainer;
+                lightEntity.Parent = EntityManager.MapContainer.Children[0]; // Add to current map
                 } 
             }
         };
