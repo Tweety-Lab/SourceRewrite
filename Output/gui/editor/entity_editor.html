@@ -4,83 +4,79 @@
     <style>
         body {
             color: white;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-primary);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
-
+        
         p {
             margin-bottom: 2px;
             margin-top: 2px;
         }
-
-        /* Container for the two divs to align side by side */
+        
         .container {
             background-color: #1d1d20;
-            width: fit-content;
             display: flex;
-            justify-content: space-between;
-            height: 500px;
+            width: 700px;
+            height: 450px;
             padding: 10px;
         }
-
+        
         #left-align, #right-align {
-            flex: 1;
             display: flex;
             flex-direction: column;
         }
-
+        
         #left-align {
-            height: 100%;
             padding-right: 5px;
+            flex: 2;
         }
-
+        
         #left-align input {
             width: 200px;
         }
-
+        
         #right-align {
-            height: 100%;
             padding-left: 5px;
+            flex: 1;
         }
-
+        
         #right-align input {
             margin-top: 123px;
         }
-
+        
         #keyvalues-holder {
             border: 1px solid var(--button-border);
             overflow-y: auto;
-            max-height: 100%;
             flex-grow: 1;
         }
-
-        table {
-            width: 100%;
-        }
-
-        th, td {
-            text-align: left;
-            padding-right: 100px;
-            padding-left: 20px;
-            height: 5px;
-        }
-
-        th {
-            background-color: var(--bg-medium);
-            padding-bottom: 2px;
-            padding-top: 2px;
-        }
-
+        
         textarea {
             height: 120px;
         }
-
+        
         #entity-help {
             height: 150px;
+        }
+
+        #exit-button {
+            width: 50px;
+            height: 50px;
+            margin-left: auto; /* Push the button to the right */
+            margin-bottom: 10px; /* Add spacing below the button */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td {
+            height: 5px;
+            border: 1px solid var(--bg-medium);
         }
 
     </style>
@@ -95,28 +91,16 @@
             <p>Keyvalues:</p>
             <div id="keyvalues-holder">
                 <table>
-                    <!-- Table Header -->
                     <tr>
-                        <th>Property Name</th>
-                        <th>Value</th>
-                    </tr>
-                    
-                    <!-- Table Row 1 -->
-                    <tr>
-                        <td>Row 1, Column 1</td>
-                        <td>Row 1, Column 2</td>
-                    </tr>
-            
-                    <!-- Table Row 2 -->
-                    <tr>
-                        <td>Row 2, Column 1</td>
-                        <td>Row 2, Column 2</td>
+                        <td>Property Name</td>
+                        <td>Value</td>
                     </tr>
                 </table>
             </div>
         </div>
-
+        
         <div id="right-align">
+            <button id="exit-button">Quit</button>
             <input type="text">
             <br>
             <br>
@@ -124,6 +108,8 @@
             <textarea readonly id="entity-help">Entity Help Information</textarea>
             <p>Comments</p>
             <textarea></textarea>
+
+            
         </div>
     </div>
 </body>
