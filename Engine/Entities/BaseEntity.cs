@@ -153,5 +153,6 @@ namespace SourceRewrite.Entities
                 field.SetValue(this, Convert.ChangeType(value, field.FieldType));
             }
         }
+
     }
 }

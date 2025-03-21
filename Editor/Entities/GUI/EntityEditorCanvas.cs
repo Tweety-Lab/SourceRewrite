@@ -59,6 +59,11 @@ namespace Editor.Entities.GUI
         private void RegisterGUIEvents()
         {
             Canvas.RegisterEvent("Quit", () => DestroyDeferred());
+            Canvas.RegisterEvent("KeyValueChanged", (args) =>
+            {
+                Console.WriteLine($"KeyValueChanged: {args[0]} {args[1]}");
+                Selection.SelectedEntity.SetProperty(args[0], args[1]);
+            });
         }
 
         // Populates table with entity properties
@@ -80,7 +85,7 @@ namespace Editor.Entities.GUI
                     // Set propertiesTable innerHTML to have new row with name and value
                     if (value != null)
                     {
-                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td>{value}</td></tr>";
+                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onkeypress=\"KeyValueChanged('{field.Name}', value)\"></td></tr>";
                     }
                 }
             }

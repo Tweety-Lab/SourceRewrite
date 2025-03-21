@@ -76,6 +76,13 @@
         td {
             height: 5px;
             border: 1px solid var(--bg-medium);
+            padding-left: 6px;
+        }
+
+        #keyvalues-table #first-row td {
+            border-top: 1px solid var(--accent);
+            border-left: 1px solid var(--accent);
+            border-right: 1px solid var(--accent);
         }
 
     </style>
@@ -90,9 +97,13 @@
             <p>Keyvalues:</p>
             <div id="keyvalues-holder">
                 <table id="keyvalues-table">
-                    <tr>
+                    <tr id="first-row">
                         <td>Property Name</td>
                         <td>Value</td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td><input type="text" onkeypress="KeyValueChanged('Name', value)"></td>
                     </tr>
                 </table>
             </div>
