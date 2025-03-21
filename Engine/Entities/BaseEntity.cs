@@ -88,8 +88,18 @@ namespace SourceRewrite.Entities
             // Run Entity destroy logic
             OnDestroy();
 
+            // Remove Entity from hierarchy
+            if (Parent != null)
+            {
+                Parent.Children.Remove(this);
+                Parent = null;
+            }
+
+            // Prevent enumeration issues
+            List<BaseEntity> childrenToDestroy = new List<BaseEntity>(Children);
+
             // Recursively destroy all child objects
-            foreach (var child in Children)
+            foreach (var child in childrenToDestroy)
             {
                 child.DestroyDeferred();
             }

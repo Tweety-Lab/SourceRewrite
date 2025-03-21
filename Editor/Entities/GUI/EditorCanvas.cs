@@ -59,6 +59,9 @@ namespace Editor.Components.GUI
             canvas.UnregisterEvent("PlayCurrentMap");
             canvas.UnregisterEvent("OpenMap");
 
+            // Cleanup Toolbar
+            MainToolbar.UnregisterToolbarEvents();
+
         }
 
         // Register GUI Events

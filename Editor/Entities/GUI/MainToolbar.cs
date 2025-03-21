@@ -23,11 +23,14 @@ namespace Editor.Entities.GUI
         // Map Tools to Actions that run on left click
         private static Dictionary<ToggleableTools, Action> toolActions = new Dictionary<ToggleableTools, Action>()
         {
+            // Tool Enum    |   Action to run on Left Click
+
             // ENTITY TOOL
             {ToggleableTools.Entity, () => {
                 PointLight lightEntity = new PointLight();
-                lightEntity.Parent = EntityManager.MapContainer;
                 lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
+                lightEntity.Name = "PointLight";
+                lightEntity.Parent = EntityManager.MapContainer;
                 } 
             }
         };
