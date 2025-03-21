@@ -86,6 +86,11 @@ namespace SourceRewrite.Entities.GUI
                     return;
                 }
 
+                if(key == Key.Backspace)
+                {
+                    Container.VistaView.SendBackspace();
+                }
+
                 Container.VistaView.SendKeyDown(i, isShiftPressed ? VistaKeyModifiers.ShiftKey : VistaKeyModifiers.None, keyText);
             };
 

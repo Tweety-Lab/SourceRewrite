@@ -218,6 +218,51 @@ namespace VistaGUI
         }
 
         /// <summary>
+        /// Sends a backspace key event to the GUI.
+        /// </summary>
+        public void SendBackspace()
+        {
+            if (!Visible)
+                return; // Don't process input if the GUI is not visible
+
+            // Virtual key code for the backspace key
+            int backspaceKeyCode = 0x08;
+
+            // Text representation for backspace
+            string text = "\b"; // Unicode escape for backspace character
+
+            // Create the key event for the backspace key
+            ULKeyEvent keyEvent = ULKeyEvent.Create(
+                ULKeyEventType.RawKeyDown,
+                (ULKeyEventModifiers)100, // No modifiers like shift, ctrl, etc.
+                backspaceKeyCode,
+                backspaceKeyCode,
+                text,
+                text,
+                false,  // Not a keypad key
+                false,  // Not auto repeat
+                false   // Not a system key
+            );
+
+            // Fire the key event for backspace
+            UltralightView.FireKeyEvent(keyEvent);
+
+            // Send a key up event for the backspace
+            keyEvent = ULKeyEvent.Create(
+                ULKeyEventType.KeyUp,
+                (ULKeyEventModifiers)100,
+                backspaceKeyCode,
+                backspaceKeyCode,
+                text,
+                text,
+                false,
+                false,
+                false
+            );
+            UltralightView.FireKeyEvent(keyEvent);
+        }
+
+        /// <summary>
         /// Sends a key down event to the GUI.
         /// </summary>
         public void SendKeyDown(int keyCode, VistaKeyModifiers modifiers, string text, string unmodifiedText = "", bool isKeypad = false, bool isAutoRepeat = false, bool isSystemKey = false)
