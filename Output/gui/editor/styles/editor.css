@@ -1,6 +1,23 @@
 body {
     margin: 0;
+}
+
+/* Disable text selection and dragging */
+* {
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+}
+
+/* Allow selection and typing in input, textarea, and select fields */
+input, textarea, select {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 input {
