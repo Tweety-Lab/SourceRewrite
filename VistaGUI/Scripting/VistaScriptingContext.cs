@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Web;
 using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
@@ -86,12 +87,23 @@ namespace VistaGUI.Scripting
         // Sets the InnerHTML of an element
         public void SetElementInnerHTML(string elementId, string text)
         {
-            string escapedText = text.Replace("'", "\\'").Replace("\"", "\\\"");
-            UltralightView.EvaluateScript($"document.getElementById('{elementId}').innerHTML = '{escapedText}';", out string output);
+            // Escape single quotes, double quotes, and newlines for JavaScript
+            string escapedText = text
+                .Replace("\\", "\\\\")  // Escape backslashes first
+                .Replace("'", "\\'")     // Escape single quotes
+                .Replace("\"", "\\\"")   // Escape double quotes
+                .Replace("\r", "\\r")    // Escape carriage returns
+                .Replace("\n", "\\n");   // Escape newlines
+
+            // Ensure the HTML content is passed directly as raw HTML
+            string script = $"document.getElementById('{elementId}').innerHTML = '{escapedText}';";
+
+            // Execute the JavaScript to set innerHTML
+            UltralightView.EvaluateScript(script, out string output);
 
             // Print output
             if (output != string.Empty)
-                Console.WriteLine($"Vista Script: {output}");
+                Console.WriteLine($"Vista Script: {output} in {elementId} {escapedText}");
         }
 
         // Get the InnerHTML of an element

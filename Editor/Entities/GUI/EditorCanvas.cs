@@ -4,7 +4,7 @@ using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
-using Editor.Entities.GUI;
+using Editor.Logic;
 
 namespace Editor.Components.GUI
 {

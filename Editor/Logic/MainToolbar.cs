@@ -1,4 +1,5 @@
 ﻿using Editor.Components.GUI;
+using Editor.Entities.GUI;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Entities.GUI
+namespace Editor.Logic
 {
     /// <summary>
     /// Handle Logic for the Main Map Operations Toolbar.
@@ -36,6 +37,9 @@ namespace Editor.Entities.GUI
                 PointLight lightEntity = new PointLight();
                 lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
                 lightEntity.Name = "PointLight";
+
+                // Select Entity
+                Selection.SelectedEntity = lightEntity;
                 }
             }
         };

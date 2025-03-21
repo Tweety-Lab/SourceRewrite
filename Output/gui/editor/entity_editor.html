@@ -45,7 +45,7 @@
         }
         
         #right-align input {
-            margin-top: 123px;
+            margin-top: 84px;
         }
         
         #keyvalues-holder {
@@ -66,7 +66,6 @@
             width: 50px;
             height: 50px;
             margin-left: auto; /* Push the button to the right */
-            margin-bottom: 10px; /* Add spacing below the button */
         }
 
         table {
@@ -87,10 +86,10 @@
             <p>Object Properties: Entity Class Name</p>
             <br>
             <p>Class:</p>
-            <input type="text">
+            <input type="text" id="class-name">
             <p>Keyvalues:</p>
             <div id="keyvalues-holder">
-                <table>
+                <table id="keyvalues-table">
                     <tr>
                         <td>Property Name</td>
                         <td>Value</td>
@@ -100,7 +99,7 @@
         </div>
         
         <div id="right-align">
-            <button id="exit-button">Quit</button>
+            <button id="exit-button" onclick="Quit()">Quit</button>
             <input type="text">
             <br>
             <br>
@@ -108,8 +107,6 @@
             <textarea readonly id="entity-help">Entity Help Information</textarea>
             <p>Comments</p>
             <textarea></textarea>
-
-            
         </div>
     </div>
 </body>
