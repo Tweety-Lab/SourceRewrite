@@ -4,6 +4,7 @@ using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
+using Editor.Entities.GUI;
 
 namespace Editor.Components.GUI
 {
@@ -28,8 +29,6 @@ namespace Editor.Components.GUI
     {
         private GUICanvasEntity canvas;
 
-        public ToggleableTools CurrentTool = ToggleableTools.None;
-
         public override void Start()
         {
             Console.WriteLine("Started Editor GUI");
@@ -44,24 +43,6 @@ namespace Editor.Components.GUI
 
             // Register GUI Events
             RegisterGUIEvents();
-
-            // On Mouse Down
-            Input.MouseButtonDownEvent += (mouse, button) =>
-            {
-                if (button == Silk.NET.Input.MouseButton.Left)
-                {
-                    // Handle tool usage
-                    switch (CurrentTool)
-                    {
-                        // Entity Tool
-                        case ToggleableTools.Entity:
-                            PointLight lightEntity = new PointLight();
-                            lightEntity.Parent = this;
-                            lightEntity.Color = new System.Numerics.Vector4(100, 100, 100, 200);
-                            break;
-                    }
-                }
-            };
         }
 
         public override void Update()
@@ -84,7 +65,10 @@ namespace Editor.Components.GUI
         private void RegisterGUIEvents()
         {
             RegisterMenuEvents();
-            RegisterToolbarEvents();
+
+            // Load the Map Operations Toolbar
+            MainToolbar.Canvas = canvas;
+            MainToolbar.RegisterToolbarEvents();
         }
 
         private void RegisterMenuEvents()
@@ -114,26 +98,6 @@ namespace Editor.Components.GUI
 
                 // Start GUI
                 fileExplorerCanvas.Start();
-            });
-        }
-
-        private void RegisterToolbarEvents()
-        {
-            canvas.RegisterEvent("SetTool", (args) =>
-            {
-                if (args.Length > 0)
-                {
-                    // Attempt to parse the string from args[0] into a ToggleableTools enum
-                    if (Enum.TryParse(args[0], true, out ToggleableTools tool))
-                    {
-                        CurrentTool = tool;
-                        Console.WriteLine($"Tool set to: {CurrentTool}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Invalid tool name: {args[0]}");
-                    }
-                }
             });
         }
     }
