@@ -38,16 +38,6 @@ namespace Editor.Entities.GUI
                 // Get Selected Entities classname
                 string className = Selection.SelectedEntity.GetType().ToString();
 
-                // Split the string
-                string[] parts = className.Split('.');
-
-                // Check if there are parts and remove the first part
-                if (parts.Length > 1)
-                {
-                    // Join the remaining parts back into a single string
-                    className = string.Join(".", parts, 1, parts.Length - 1);
-                }
-
                 // Set Classname
                 VistaElement classNameElement = Canvas.GetElement("class-name");
                 classNameElement.SetProperty("value", className);
@@ -75,6 +65,28 @@ namespace Editor.Entities.GUI
                     field.SetValue(Selection.SelectedEntity, convertedValue);
                     Console.WriteLine($"Set KeyValue {fieldName} to {convertedValue}");
                 }
+            });
+
+            Canvas.RegisterEvent("ChangeClass", (args) =>
+            {
+                // Get the inputted class name
+                VistaElement classNameElement = Canvas.GetElement("class-name");
+                string className = classNameElement.GetProperty("value");
+
+                Type entityType = Type.GetType(className);
+                if (entityType == null)
+                    return;
+
+                // Delete currently selected entity
+                Selection.SelectedEntity.DestroyDeferred();
+                Selection.SelectedEntity = null;
+
+                // Try to get entity of className
+                BaseEntity newEntity = (BaseEntity)Activator.CreateInstance(Type.GetType(className));
+
+                // Replace with newEntity
+                EntityManager.AddMapEntity(newEntity);
+                Selection.SelectedEntity = newEntity;
             });
         }
 
@@ -107,6 +119,7 @@ namespace Editor.Entities.GUI
         {
             Canvas.UnregisterEvent("Quit");
             Canvas.UnregisterEvent("KeyValueChanged");
+            Canvas.UnregisterEvent("ChangeClass");
         }
     }
 }
