@@ -61,8 +61,29 @@ namespace Editor.Entities.GUI
             Canvas.RegisterEvent("Quit", () => DestroyDeferred());
             Canvas.RegisterEvent("KeyValueChanged", (args) =>
             {
-                Console.WriteLine($"KeyValueChanged: {args[0]} {args[1]}");
-                Selection.SelectedEntity.SetProperty(args[0], args[1]);
+                // Extract field name, value, and type
+                string fieldName = args[0];
+                string inputValue = args[1];
+                string fieldTypeString = args[2];
+
+                // Try to get the field from the selected entity
+                var field = Selection.SelectedEntity.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
+                if (field != null)
+                {
+                    // Convert the input value to the appropriate type
+                    object convertedValue = KeyValuesConversion.ConvertToFieldType(inputValue, field.FieldType);
+
+                    // Set the field value on the selected entity
+                    if (convertedValue != null)
+                    {
+                        field.SetValue(Selection.SelectedEntity, convertedValue);
+                        Console.WriteLine($"Set {fieldName} to {convertedValue} of type {field.FieldType}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to convert input value '{inputValue}' to type {field.FieldType}");
+                    }
+                }
             });
         }
 
@@ -85,7 +106,7 @@ namespace Editor.Entities.GUI
                     // Set propertiesTable innerHTML to have new row with name and value
                     if (value != null)
                     {
-                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onkeypress=\"KeyValueChanged('{field.Name}', value)\"></td></tr>";
+                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onchange=\"KeyValueChanged('{field.Name}', this.value, '{field.FieldType.ToString()}')\"></td></tr>";
                     }
                 }
             }
