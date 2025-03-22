@@ -56,8 +56,6 @@ namespace SourceRewrite.Entities
 #if EDITOR
         public override void DrawGizmos()
         {
-            Console.WriteLine("Drawing Gizmos for PointLight");
-
             Gizmos.Color = new Vector4(1, 1, 1, 1);
             Gizmos.DrawCube(Transform.Position, new Vector3(32.0f, 32.0f, 32.0f));
         }

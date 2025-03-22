@@ -24,7 +24,7 @@ namespace SourceRewrite.AssetTypes
             }
 
             Material = material;
-            Texture = Material.Texture;
+            Texture = Material.Textures[0];
             Shader = Material.Shader;
 
             // PLACEHOLDER: Use Assimp to load OBJ

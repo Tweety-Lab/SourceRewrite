@@ -120,7 +120,7 @@ namespace SourceRewrite.Rendering.OpenGL
                 throw new InvalidOperationException("Mesh has not been initialized.");
 
             OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
-            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Texture?.GetTextureInterface();
+            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
 
             if (openglShader == null || openglTexture == null)
                 throw new InvalidOperationException("Shader or Texture is not valid.");

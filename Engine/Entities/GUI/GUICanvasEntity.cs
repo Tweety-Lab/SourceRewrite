@@ -151,7 +151,7 @@ namespace SourceRewrite.Entities.GUI
             if (PanelType == 0)
             {
                 if (guiMesh != null)
-                    guiMesh.Material.Texture = texture;
+                    guiMesh.Material.Textures[0] = texture;
             }
         }
 
