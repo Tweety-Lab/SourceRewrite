@@ -16,19 +16,12 @@ using VistaGUI.Scripting.References;
 
 namespace Editor.Entities.GUI
 {
-    internal class EntityEditorCanvas : BaseEntity
+    internal class EntityEditorCanvas : ScreenspaceGUICanvas
     {
-        public GUICanvasEntity Canvas;
-
         public override void Start()
         {
-            Canvas = new GUICanvasEntity();
-            Canvas.IsTransparent = true;
-            Canvas.PanelName = "editor/entity_editor.html";
-            Canvas.Parent = this;
-
-            // HACK: Manually start the canvas component
-            Canvas.Start();
+            PanelName = "editor/entity_editor.html";
+            base.Start();
 
             // Register GUI Events
             RegisterGUIEvents();
@@ -49,8 +42,8 @@ namespace Editor.Entities.GUI
         // Register GUI Events
         private void RegisterGUIEvents()
         {
-            Canvas.RegisterEvent("Quit", () => DestroyDeferred());
-            Canvas.RegisterEvent("KeyValueChanged", (args) =>
+            RegisterEvent("Quit", () => DestroyDeferred());
+            RegisterEvent("KeyValueChanged", (args) =>
             {
                 // Extract field name, value, and type
                 string fieldName = args[0];
@@ -74,7 +67,7 @@ namespace Editor.Entities.GUI
                 }
             });
 
-            Canvas.RegisterEvent("ChangeClass", (args) =>
+            RegisterEvent("ChangeClass", (args) =>
             {
                 // Get the inputted class name
                 VistaElement classNameElement = Canvas.GetElement("class-name");
@@ -124,9 +117,10 @@ namespace Editor.Entities.GUI
 
         public override void OnDestroy()
         {
-            Canvas.UnregisterEvent("Quit");
-            Canvas.UnregisterEvent("KeyValueChanged");
-            Canvas.UnregisterEvent("ChangeClass");
+            UnregisterEvent("Quit");
+            UnregisterEvent("KeyValueChanged");
+            UnregisterEvent("ChangeClass");
+            base.OnDestroy();
         }
     }
 }

@@ -25,21 +25,12 @@ namespace Editor.Components.GUI
         Vertex
     }
 
-    public class EditorCanvas : BaseEntity
+    public class EditorCanvas : ScreenspaceGUICanvas
     {
-        private GUICanvasEntity canvas;
-
         public override void Start()
         {
-            Console.WriteLine("Started Editor GUI");
-
-            canvas = new GUICanvasEntity();
-            canvas.IsTransparent = true;
-            canvas.PanelName = "editor/editor.html";
-            EntityManager.AddGlobalEntity(canvas);
-
-            // HACK: Manually start the canvas component
-            canvas.Start();
+            PanelName = "editor/editor.html";
+            base.Start();
 
             // Register GUI Events
             RegisterGUIEvents();
@@ -53,11 +44,11 @@ namespace Editor.Components.GUI
         public override void OnDestroy()
         {
             // Unregister all events
-            canvas.UnregisterEvent("OpenVDC");
-            canvas.UnregisterEvent("CloseMap");
-            canvas.UnregisterEvent("PlayGame");
-            canvas.UnregisterEvent("PlayCurrentMap");
-            canvas.UnregisterEvent("OpenMap");
+            UnregisterEvent("OpenVDC");
+            UnregisterEvent("CloseMap");
+            UnregisterEvent("PlayGame");
+            UnregisterEvent("PlayCurrentMap");
+            UnregisterEvent("OpenMap");
 
             // Cleanup Toolbar
             MainToolbar.UnregisterToolbarEvents();
@@ -70,30 +61,30 @@ namespace Editor.Components.GUI
             RegisterMenuEvents();
 
             // Load the Map Operations Toolbar
-            MainToolbar.Canvas = canvas;
+            MainToolbar.Canvas = Canvas;
             MainToolbar.RegisterToolbarEvents();
         }
 
         private void RegisterMenuEvents()
         {
             // Open VDC Website
-            canvas.RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
+            RegisterEvent("OpenVDC", () => Process.Start(new ProcessStartInfo("https://developer.valvesoftware.com/wiki/Main_Page") { UseShellExecute = true }));
 
             // Unload Map
-            canvas.RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
+            RegisterEvent("CloseMap", () => MapSystem.UnloadMap());
 
             // Play Buttons
-            canvas.RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
+            RegisterEvent("PlayGame", () => Process.Start("Engine.exe")); // Just start Engine.exe as it loads game.dll
 
             // Start Engine.exe with the current map as an argument
-            canvas.RegisterEvent("PlayCurrentMap", () =>
+            RegisterEvent("PlayCurrentMap", () =>
             {
                 string mapFileName = MapSystem.CurrentMap.BSPFilePath.Split('/').Last(); // Get the file name of the map
                 Process.Start("Engine.exe", $"-map {mapFileName}"); // Start the process with the map argument
             });
 
             // Allow user to select map file then open it
-            canvas.RegisterEvent("OpenMap", () =>
+            RegisterEvent("OpenMap", () =>
             {
                 // Add FileExplorerCanvas entity
                 FileExplorerCanvas fileExplorerCanvas = new FileExplorerCanvas();

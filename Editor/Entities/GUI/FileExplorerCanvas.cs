@@ -8,22 +8,15 @@ namespace SourceRewrite.Components.GUI
     /// <summary>
     /// Placeholder FileExplorer GUI Element
     /// </summary>
-    public class FileExplorerCanvas : BaseEntity
+    public class FileExplorerCanvas : ScreenspaceGUICanvas
     {
-        public GUICanvasEntity Canvas;
-
         public override void Start()
         {
-            Canvas = new GUICanvasEntity();
-            Canvas.IsTransparent = true;
-            Canvas.PanelName = "elements/file_explorer/file_explorer.html";
-            Canvas.Parent = this;
-
-            // HACK: Manually start the canvas component
-            Canvas.Start();
+            PanelName = "elements/file_explorer/file_explorer.html";
+            base.Start();
 
             // On submit pressed
-            Canvas.RegisterEvent("Submit", () =>
+            RegisterEvent("Submit", () =>
             {
                 string selectedFile = Canvas.GetElement("file-path").GetProperty("value");
                 if (File.Exists(FileSystem.GetMapPath(selectedFile)))
@@ -43,7 +36,9 @@ namespace SourceRewrite.Components.GUI
 
         public override void OnDestroy()
         {
-            Canvas.UnregisterEvent("Submit");
+            UnregisterEvent("Submit");
+
+            base.OnDestroy();
         }
     }
 }
