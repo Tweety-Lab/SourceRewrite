@@ -1,6 +1,7 @@
 ﻿#if EDITOR
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities;
+using SourceRewrite.Files;
 using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace SourceRewrite.Editor
 
             // Create a Mesh
             Mesh mesh = new Mesh();
-            mesh.Material = new Material("dev/missing");
+            mesh.Material = FileSystem.GetMaterial("dev/gizmo");
             mesh.Vertices = new float[24]; // 8 vertices, each with 3 components (X, Y, Z)
             mesh.Indices = new uint[36]; // 12 triangles, 3 indices per triangle
 

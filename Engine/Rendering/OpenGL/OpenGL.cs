@@ -120,13 +120,20 @@ namespace SourceRewrite.Rendering.OpenGL
                 throw new InvalidOperationException("Mesh has not been initialized.");
 
             OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
-            OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
-
-            if (openglShader == null || openglTexture == null)
-                throw new InvalidOperationException("Shader or Texture is not valid.");
-
             openglShader.Use();
-            openglTexture.Bind(TextureUnit.Texture0);
+
+            // Check if texture exists before binding
+            OpenGLTexture openglTexture = null;
+            if (meshObject.Mesh.Material.Textures != null &&
+                meshObject.Mesh.Material.Textures.Count() > 0 &&
+                meshObject.Mesh.Material.Textures[0] != null)
+            {
+                openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
+                if (openglTexture != null)
+                {
+                    openglTexture.Bind(TextureUnit.Texture0);
+                }
+            }
 
             // Projection matrix
             var windowSize = GameWindow.CurrentWindow.GetSilkWindow().Size;
