@@ -23,12 +23,15 @@ namespace SourceRewrite.Editor
         public static Vector4 Color = new Vector4(255, 255, 255, 1);
 
         /// <summary>
-        /// Draws a Cube
+        /// Draws a Cube and returns its MeshEntity
         /// </summary>
         /// <param name="position">Center position of the cube</param>
         /// <param name="size">Size of the cube in each dimension</param>
-        public static void DrawCube(Vector3 position, Vector3 size)
+        public static MeshEntity DrawCube(Vector3 position, Vector3 size)
         {
+            // Calculate a unique key for each mesh (e.g., based on position and size)
+            int meshKey = position.GetHashCode() ^ size.GetHashCode();
+
             // Calculate half size for offsetting vertices from center
             Vector3 halfSize = new Vector3(size.X / 2, size.Y / 2, size.Z / 2);
 
@@ -40,6 +43,7 @@ namespace SourceRewrite.Editor
             mesh.Vertices = new float[24]; // 8 vertices, each with 3 components (X, Y, Z)
             mesh.Indices = new uint[36]; // 12 triangles, 3 indices per triangle
 
+            #region PopulateVertices
             // Populate Vertices with Cube vertices, offsetting from center position
             // Vertex 0: front bottom left
             mesh.Vertices[0] = position.X - halfSize.X;
@@ -81,6 +85,9 @@ namespace SourceRewrite.Editor
             mesh.Vertices[22] = position.Y + halfSize.Y;
             mesh.Vertices[23] = position.Z + halfSize.Z;
 
+            #endregion
+
+            #region PopulateIndices
             // Populate Indices for the 12 triangles
             mesh.Indices[0] = 0; mesh.Indices[1] = 2; mesh.Indices[2] = 1;  // Front face
             mesh.Indices[3] = 0; mesh.Indices[4] = 3; mesh.Indices[5] = 2;
@@ -94,10 +101,14 @@ namespace SourceRewrite.Editor
             mesh.Indices[27] = 0; mesh.Indices[28] = 7; mesh.Indices[29] = 3;
             mesh.Indices[30] = 1; mesh.Indices[31] = 2; mesh.Indices[32] = 6;  // Right face
             mesh.Indices[33] = 1; mesh.Indices[34] = 6; mesh.Indices[35] = 5;
+            #endregion
+
 
             // Create a Mesh Entity
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
+
+            return meshEntity;
         }
     }
 }

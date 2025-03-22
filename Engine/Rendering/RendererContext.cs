@@ -76,16 +76,10 @@ namespace SourceRewrite.Rendering
         /// <param name="g">Green component (0-255).</param>
         /// <param name="b">Blue component (0-255).</param>
         /// <param name="a">Alpha (opacity) component (0-255).</param>
-        public void SetClearColour(int r, int g, int b, int a)
-        {
-            _apiInterface.SetClearColour(r, g, b, a);
-        }
+        public void SetClearColour(int r, int g, int b, int a) => _apiInterface.SetClearColour(r, g, b, a);
 
         // Run any special logic that needs to be ran on load
-        public void OnLoad()
-        {
-            _apiInterface.OnLoad(this);
-        }
+        public void OnLoad() => _apiInterface.OnLoad(this);
 
         // Run any special logic that needs to be ran per frame
         public void OnRender()
@@ -101,10 +95,7 @@ namespace SourceRewrite.Rendering
         }
 
         // Run any special cleanup logic that needs to be when the app is closed
-        public void OnClose()
-        {
-            _apiInterface.OnClose();
-        }
+        public void OnClose() => _apiInterface.OnClose();
 
         public void OnFramebufferResize(Vector2D<int> newSize)
         {
@@ -183,10 +174,7 @@ namespace SourceRewrite.Rendering
             _apiInterface.InitMesh(meshObject);
         }
 
-        public void DrawScreenspaceQuad(GUICanvasEntity canvas)
-        {
-            _apiInterface.RenderScreenspaceGUI(canvas);
-        }
+        public void DrawScreenspaceQuad(GUICanvasEntity canvas) => _apiInterface.RenderScreenspaceGUI(canvas);
     }
 
     /// <summary>

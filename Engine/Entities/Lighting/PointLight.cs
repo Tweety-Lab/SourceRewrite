@@ -1,5 +1,4 @@
 ﻿using SourceRewrite.Attributes;
-using SourceRewrite.Editor;
 using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
 using System;
@@ -8,6 +7,10 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+
+#if EDITOR
+using SourceRewrite.Editor;
+#endif
 
 namespace SourceRewrite.Entities
 {
@@ -56,8 +59,10 @@ namespace SourceRewrite.Entities
 #if EDITOR
         public override void DrawGizmos()
         {
-            Gizmos.Color = new Vector4(255, 255, 255, 1);
-            Gizmos.DrawCube(Transform.Position, new Vector3(32.0f, 32.0f, 32.0f));
+            Gizmos.Color = new Vector4(255, 0, 0, 1);
+            MeshEntity cube = Gizmos.DrawCube(Transform.Position, new Vector3(32.0f, 32.0f, 32.0f));
+
+            cube.Parent = this;
         }
 #endif
     }

@@ -43,7 +43,7 @@ void fragment()
         // Handle transparency: if the alpha value is below a threshold, discard the fragment
         if (finalColor.a < 0.1)
         {
-            discard; // Discard fragments with low alpha (this helps in rendering transparent areas)
+            discard;
         }
 
         // Output the final color
