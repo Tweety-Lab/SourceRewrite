@@ -21,7 +21,7 @@ namespace SourceRewrite.Maps
         // Determines if Entities should start enabled
         public bool EntitiesEnabled { get; set; }
 
-        public string BSPFilePath = "";
+        public string BSPFilePath;
 
         public Map(string inputBspPath)
         {

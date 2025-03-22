@@ -9,16 +9,16 @@ namespace SourceRewrite.AssetTypes
     public class Mesh
     {
         // Array of Vertex positions (x, y, z)
-        public float[] Vertices = { };
+        public float[] Vertices = Array.Empty<float>();
 
         // Array of Vertex normals (nx, ny, nz)
-        public float[] Normals = { };
+        public float[] Normals = Array.Empty<float>();
 
         // Array of Texture coordinates (u, v)
-        public float[] UVs = { };
+        public float[] UVs = Array.Empty<float>();
 
         // Array of Indices
-        public uint[] Indices = { };
+        public uint[] Indices = Array.Empty<uint>();
 
         // Material
         public Material Material = FileSystem.GetMaterial("dev/error");
@@ -164,7 +164,7 @@ namespace SourceRewrite.AssetTypes
                     expandedNormals[newVertexIndex * 3 + 2] = faceNormal.Z;
 
                     // Copy UV if available
-                    if (UVs != null && UVs.Length > 0)
+                    if (UVs?.Length > 0)
                     {
                         expandedUVs[newVertexIndex * 2] = UVs[originalIndex * 2];
                         expandedUVs[newVertexIndex * 2 + 1] = UVs[originalIndex * 2 + 1];

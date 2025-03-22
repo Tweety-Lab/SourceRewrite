@@ -19,11 +19,12 @@ namespace SourceRewrite.Attributes
         {
             // Get all types with the AlwaysExecute attribute
             List<Type> types = Assembly.GetExecutingAssembly()
-                                        .GetTypes()
-                                        .Where(t => t.IsDefined(typeof(AlwaysExecuteAttribute), false))
-                                        .ToList();
+                .GetTypes()
+                .Where(t => t.IsDefined(typeof(AlwaysExecuteAttribute), false))
+                .ToList();
 
-            AlwaysExecuteEntitiesTypes = types;
+            // Update List
+            AlwaysExecuteEntitiesTypes.AddRange(types);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SourceRewrite.Rendering
     public class Shader
     {
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
-        private IShader _shaderInterface; // Use an interface for better abstraction
+        private readonly IShader _shaderInterface; // Use an interface for better abstraction
 
         /// <summary>
         /// List of all shaders.
