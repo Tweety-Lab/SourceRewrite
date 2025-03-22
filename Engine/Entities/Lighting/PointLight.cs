@@ -56,7 +56,7 @@ namespace SourceRewrite.Entities
 #if EDITOR
         public override void DrawGizmos()
         {
-            Gizmos.Color = new Vector4(255, 0, 0, 1);
+            Gizmos.Color = new Vector4(255, 255, 255, 1);
             Gizmos.DrawCube(Transform.Position, new Vector3(32.0f, 32.0f, 32.0f));
         }
 #endif
