@@ -18,9 +18,9 @@ namespace SourceRewrite.Editor
     public static class Gizmos
     {
         /// <summary>
-        /// Determines what Color to render new Gizmos with
+        /// Determines what Color to render new Gizmos with (0-255)
         /// </summary>
-        public static Vector4 Color = new Vector4(1, 1, 1, 1);
+        public static Vector4 Color = new Vector4(255, 255, 255, 1);
 
         /// <summary>
         /// Draws a Cube
@@ -35,6 +35,8 @@ namespace SourceRewrite.Editor
             // Create a Mesh
             Mesh mesh = new Mesh();
             mesh.Material = FileSystem.GetMaterial("dev/gizmo");
+            mesh.Material.Shader.SetParameter("tint", Color);
+
             mesh.Vertices = new float[24]; // 8 vertices, each with 3 components (X, Y, Z)
             mesh.Indices = new uint[36]; // 12 triangles, 3 indices per triangle
 
