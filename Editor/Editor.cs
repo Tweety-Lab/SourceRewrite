@@ -28,7 +28,7 @@ namespace Editor
             {
                 foreach (BaseEntity entity in map.Entities)
                 {
-                    entity.OnDrawGizmos();
+                    entity.DrawGizmos();
                 }
             };
         }

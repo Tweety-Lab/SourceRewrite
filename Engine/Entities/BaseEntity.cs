@@ -83,12 +83,12 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Runs when Gizmos are drawing for this Entity
         /// </summary>
-        public virtual void OnDrawGizmos() { }
+        public virtual void DrawGizmos() { }
 
         /// <summary>
         /// Runs when Gizmos are drawing for this Entity and it's selected
         /// </summary>
-        public virtual void OnDrawGizmosSelected() { }
+        public virtual void DrawGizmosSelected() { }
 #endif
 
         /// <summary>
