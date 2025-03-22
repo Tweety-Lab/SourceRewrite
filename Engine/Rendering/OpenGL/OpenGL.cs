@@ -82,6 +82,9 @@ namespace SourceRewrite.Rendering.OpenGL
             // Create and bind the VAO
             _quadVao = new OpenGLVertexArrayObject<float, uint>(OpenGL, _quadVbo, _quadEbo);
 
+            // Important: We need to explicitly set up the vertex attributes for the quad VAO
+            _quadVao.Bind();
+
             // Set up the vertex attribute pointers
             // Bind position buffer and set attribute
             _quadVbo.Bind();
@@ -92,6 +95,9 @@ namespace SourceRewrite.Rendering.OpenGL
             _quadUbo.Bind();
             OpenGL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
             OpenGL.EnableVertexAttribArray(1);
+
+            // Make sure to unbind the VAO
+            _quadVao.Unbind();
 
             // Load UI shader if it hasn't been loaded yet
             if (_guiShader == null)
@@ -118,6 +124,9 @@ namespace SourceRewrite.Rendering.OpenGL
 
             if (!meshBufferMap.ContainsKey(meshObject.Mesh))
                 throw new InvalidOperationException("Mesh has not been initialized.");
+
+            // Reset OpenGL state before rendering a mesh
+            OpenGL.BindVertexArray(0);
 
             OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
             openglShader.Use();
@@ -156,10 +165,16 @@ namespace SourceRewrite.Rendering.OpenGL
             vao.Bind();
             OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
             vao.Unbind();
+
+            // Reset state after rendering
+            OpenGL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         public unsafe void InitMesh(Mesh meshObject)
         {
+            // Ensure we don't have any active VAO
+            OpenGL.BindVertexArray(0);
+
             // Create buffers for vertices, normals, UVs, and indices
             vboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Vertices, BufferTargetARB.ArrayBuffer));
             nboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Normals, BufferTargetARB.ArrayBuffer));
@@ -203,12 +218,25 @@ namespace SourceRewrite.Rendering.OpenGL
 
             // Unbind VAO
             vao.Unbind();
+
+            // Reset state
+            OpenGL.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+            OpenGL.BindBuffer(BufferTargetARB.ElementArrayBuffer, 0);
         }
 
         public unsafe void RenderScreenspaceGUI(GUICanvasEntity canvas)
         {
+            // Completely reset OpenGL state before GUI rendering
+            OpenGL.BindVertexArray(0);
+            OpenGL.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+            OpenGL.BindBuffer(BufferTargetARB.ElementArrayBuffer, 0);
+
             // Disable depth testing for UI
             OpenGL.Disable(EnableCap.DepthTest);
+
+            // Enable blending for UI elements
+            OpenGL.Enable(EnableCap.Blend);
+            OpenGL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             // Use the UI-specific shader
             OpenGLShader guiOpenGLShader = (OpenGLShader)_guiShader.GetShaderInterface();
@@ -226,11 +254,28 @@ namespace SourceRewrite.Rendering.OpenGL
 
             // Bind the VAO and draw the quad
             _quadVao.Bind();
+
+            // Double-check our attribute settings
+            _quadVbo.Bind();
+            OpenGL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(0);
+
+            _quadUbo.Bind();
+            OpenGL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(1);
+
+            _quadEbo.Bind();
+
+            // Draw the quad with explicit indices count
             OpenGL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, null);
+
+            // Clean up state
             _quadVao.Unbind();
+            OpenGL.BindTexture(TextureTarget.Texture2D, 0);
 
             // Re-enable depth testing for 3D objects
             OpenGL.Enable(EnableCap.DepthTest);
+            OpenGL.Disable(EnableCap.Blend);
         }
 
         public void OnClose()
