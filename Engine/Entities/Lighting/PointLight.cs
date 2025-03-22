@@ -60,7 +60,7 @@ namespace SourceRewrite.Entities
         public override void DrawGizmos()
         {
             Gizmos.Color = new Vector4(255, 0, 0, 1);
-            MeshEntity cube = Gizmos.DrawCube(Transform.Position, new Vector3(32.0f, 32.0f, 32.0f));
+            MeshEntity cube = Gizmos.DrawSphere(Transform.Position, 32, 16);
 
             cube.Parent = this;
         }

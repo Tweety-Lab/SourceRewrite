@@ -110,6 +110,88 @@ namespace SourceRewrite.Editor
 
             return meshEntity;
         }
+
+        /// <summary>
+        /// Draws a Sphere and returns its MeshEntity
+        /// </summary>
+        /// <param name="position">Center position of the sphere</param>
+        /// <param name="radius">Radius of the sphere</param>
+        /// <param name="segments">Number of segments (resolution of the sphere)</param>
+        public static MeshEntity DrawSphere(Vector3 position, float radius, int segments = 16)
+        {
+            // Create a Mesh
+            Mesh mesh = new Mesh();
+            mesh.Material = FileSystem.GetMaterial("dev/gizmo");
+            mesh.Material.Shader.SetParameter("tint", Color);
+
+            // Add Empty UVs
+            mesh.UVs = new float[1] { 0 };
+
+            // Calculate the number of vertices and indices needed
+            int numVertices = (segments + 1) * (segments + 1);
+            int numIndices = segments * segments * 6;
+
+            mesh.Vertices = new float[numVertices * 3]; // 3 components (X, Y, Z) per vertex
+            mesh.Indices = new uint[numIndices];
+
+            #region PopulateVertices
+            // Generate vertices for UV sphere
+            int vertexIndex = 0;
+            for (int y = 0; y <= segments; y++)
+            {
+                float yProgress = (float)y / segments; // 0.0 to 1.0
+                float yAngle = yProgress * MathF.PI; // 0 to π (from top to bottom)
+
+                for (int x = 0; x <= segments; x++)
+                {
+                    float xProgress = (float)x / segments; // 0.0 to 1.0
+                    float xAngle = xProgress * MathF.PI * 2; // 0 to 2π (around the sphere)
+
+                    // Calculate the point on a unit sphere
+                    float xPos = MathF.Sin(yAngle) * MathF.Cos(xAngle);
+                    float yPos = MathF.Cos(yAngle);
+                    float zPos = MathF.Sin(yAngle) * MathF.Sin(xAngle);
+
+                    // Scale by radius and add center position
+                    mesh.Vertices[vertexIndex++] = position.X + xPos * radius;
+                    mesh.Vertices[vertexIndex++] = position.Y + yPos * radius;
+                    mesh.Vertices[vertexIndex++] = position.Z + zPos * radius;
+                }
+            }
+            #endregion
+
+            #region PopulateIndices
+            // Generate indices for the triangles
+            int indexIndex = 0;
+            for (int y = 0; y < segments; y++)
+            {
+                for (int x = 0; x < segments; x++)
+                {
+                    // Calculate the indices of the quad vertices
+                    uint i1 = (uint)(y * (segments + 1) + x);
+                    uint i2 = (uint)(y * (segments + 1) + x + 1);
+                    uint i3 = (uint)((y + 1) * (segments + 1) + x);
+                    uint i4 = (uint)((y + 1) * (segments + 1) + x + 1);
+
+                    // First triangle
+                    mesh.Indices[indexIndex++] = i1;
+                    mesh.Indices[indexIndex++] = i3;
+                    mesh.Indices[indexIndex++] = i2;
+
+                    // Second triangle
+                    mesh.Indices[indexIndex++] = i2;
+                    mesh.Indices[indexIndex++] = i3;
+                    mesh.Indices[indexIndex++] = i4;
+                }
+            }
+            #endregion
+
+            // Create a Mesh Entity
+            MeshEntity meshEntity = new MeshEntity();
+            meshEntity.Mesh = mesh;
+
+            return meshEntity;
+        }
     }
 }
 
