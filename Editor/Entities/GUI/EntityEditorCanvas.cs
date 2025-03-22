@@ -65,7 +65,12 @@ namespace Editor.Entities.GUI
                 {
                     object convertedValue = KeyValuesUtility.ConvertValueToType(inputValue);
 
-                    field.SetValue(Selection.SelectedEntity, convertedValue);
+                    // Check if the field type matches the converted value's type
+                    if (field.FieldType.IsAssignableFrom(convertedValue.GetType()))
+                    {
+                        // Types match, set the value
+                        field.SetValue(Selection.SelectedEntity, convertedValue);
+                    }
                 }
             });
 
