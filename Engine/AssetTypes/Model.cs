@@ -24,15 +24,12 @@ namespace SourceRewrite.AssetTypes
             }
 
             Material = material;
-
             Texture = Material.Texture;
             Shader = Material.Shader;
 
             // PLACEHOLDER: Use Assimp to load OBJ
             var assimp = Assimp.GetApi();
-
             Scene* scene = assimp.ImportFile(filePath, (uint)PostProcessSteps.Triangulate);
-
             if (scene == null || scene->MFlags == Silk.NET.Assimp.Assimp.SceneFlagsIncomplete || scene->MRootNode == null)
             {
                 var error = assimp.GetErrorStringS();
@@ -42,12 +39,15 @@ namespace SourceRewrite.AssetTypes
             // Get the first mesh
             var mesh = scene->MMeshes[0];
 
-            // Extract vertices, normals, and texture coordinates
+            // Extract vertices, normals, and texture coordinates as separate arrays
             List<float> vertexData = new();
+            List<float> normalData = new();
+            List<float> uvData = new();
+
             for (uint i = 0; i < mesh->MNumVertices; i++)
             {
                 var vertexPosition = mesh->MVertices[i];
-                var vertexNormal = mesh->MNormals[i];  // Extract normal for each vertex
+                var vertexNormal = mesh->MNormals[i];
 
                 // Add X, Y, Z components for position
                 vertexData.Add(vertexPosition.X);
@@ -55,22 +55,22 @@ namespace SourceRewrite.AssetTypes
                 vertexData.Add(vertexPosition.Z);
 
                 // Add X, Y, Z components for normal
-                vertexData.Add(vertexNormal.X);
-                vertexData.Add(vertexNormal.Y);
-                vertexData.Add(vertexNormal.Z);
+                normalData.Add(vertexNormal.X);
+                normalData.Add(vertexNormal.Y);
+                normalData.Add(vertexNormal.Z);
 
                 // Add texture coordinates (U, V)
                 if (mesh->MTextureCoords[0] != null)
                 {
                     var texCoord = mesh->MTextureCoords[0][i];
-                    vertexData.Add(texCoord.X);
-                    vertexData.Add(texCoord.Y);
+                    uvData.Add(texCoord.X);
+                    uvData.Add(texCoord.Y);
                 }
                 else
                 {
                     // Default texture coordinates if none are provided
-                    vertexData.Add(0.0f);
-                    vertexData.Add(0.0f);
+                    uvData.Add(0.0f);
+                    uvData.Add(0.0f);
                 }
             }
 
@@ -88,19 +88,11 @@ namespace SourceRewrite.AssetTypes
 
             // Convert Lists to arrays
             Vertices = vertexData.ToArray();
+            Normals = normalData.ToArray();
+            UVs = uvData.ToArray();
             Indices = indexData.ToArray();
 
             assimp.FreeScene(scene); // Cleanup
-        }
-
-        // Create a Mesh from vertices and indices
-        public Model(float[] vertices, uint[] indices, Material material)
-        {
-            Texture = material.Texture;
-            Shader = material.Shader;
-
-            Vertices = vertices;
-            Indices = indices;
         }
     }
 }

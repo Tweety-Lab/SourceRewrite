@@ -60,17 +60,6 @@ classname ""{ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]}""
 
                 uint indexOffset = 0; // Tracks the index of the next vertex
 
-                // Add vertices (Position, Normal, UV)
-                void AddVertex(Vector3 pos, Vector3 norm, Vector2 uv)
-                {
-                    vertices.AddRange(new float[]
-                    {
-                    pos.X, pos.Y, pos.Z,     // Position (3 floats)
-                    norm.X, norm.Y, norm.Z,  // Normal (3 floats)
-                    uv.X, uv.Y               // UV (2 floats)
-                    });
-                }
-
                 // Loop through all solids
                 foreach (Solid solid in VMF.World.Solids)
                 {
@@ -82,24 +71,16 @@ classname ""{ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]}""
                         // Add the material to the list of materials
                         materials.Add(side.Material);
 
-
                         // Find intersections with other geometry
                         List<Vector3> intersectionPoints = CalculateSide(side);
 
-                        // Compute the face normal
-                        Vector3 normal = Vector3.Normalize(Vector3.Cross(intersectionPoints[1] - intersectionPoints[0], intersectionPoints[2] - intersectionPoints[0]));
-
-                        // Default UVs (this can be adjusted based on mapping needs)
-                        Vector2 uv1 = new Vector2(0, 0);
-                        Vector2 uv2 = new Vector2(1, 0);
-                        Vector2 uv3 = new Vector2(1, 1);
-                        Vector2 uv4 = new Vector2(0, 1);
-
-                        // Populate the vertices
-                        AddVertex(intersectionPoints[0], normal, uv1);
-                        AddVertex(intersectionPoints[1], normal, uv2);
-                        AddVertex(intersectionPoints[2], normal, uv3);
-                        AddVertex(intersectionPoints[3], normal, uv4);
+                        // Add vertex positions
+                        for (int i = 0; i < intersectionPoints.Count; i++)
+                        {
+                            vertices.Add(intersectionPoints[i].X);
+                            vertices.Add(intersectionPoints[i].Y);
+                            vertices.Add(intersectionPoints[i].Z);
+                        }
 
                         // Add indices for two triangles (forming a quad)
                         indices.Add(indexOffset);

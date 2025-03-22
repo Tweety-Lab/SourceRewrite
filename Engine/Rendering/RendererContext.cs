@@ -139,6 +139,47 @@ namespace SourceRewrite.Rendering
 
         public void InitMesh(Mesh meshObject)
         {
+            // If no Normals exist, calculate them
+            if (meshObject.Normals == null || meshObject.Normals.Length == 0)
+                meshObject.CalculateNormals();
+
+            // If no UVs exist, default to fixed UVs for each face
+            if (meshObject.UVs == null || meshObject.UVs.Length == 0)
+            {
+                // Initialize UV array with the same length as the vertices
+                meshObject.UVs = new float[meshObject.Vertices.Length / 3 * 2];
+
+                // Apply fixed UVs for each quad/face
+                for (int i = 0; i < meshObject.Vertices.Length; i += 12) // Assuming 4 vertices (12 coordinates) per face
+                {
+                    // Default UVs
+                    Vector2 uv1 = new Vector2(0, 0);
+                    Vector2 uv2 = new Vector2(1, 0);
+                    Vector2 uv3 = new Vector2(1, 1);
+                    Vector2 uv4 = new Vector2(0, 1);
+
+                    // Apply UVs to each vertex in the face
+                    int baseUvIndex = (i / 3) * 2;
+
+                    // First vertex
+                    meshObject.UVs[baseUvIndex] = uv1.X;
+                    meshObject.UVs[baseUvIndex + 1] = uv1.Y;
+
+                    // Second vertex
+                    meshObject.UVs[baseUvIndex + 2] = uv2.X;
+                    meshObject.UVs[baseUvIndex + 3] = uv2.Y;
+
+                    // Third vertex
+                    meshObject.UVs[baseUvIndex + 4] = uv3.X;
+                    meshObject.UVs[baseUvIndex + 5] = uv3.Y;
+
+                    // Fourth vertex
+                    meshObject.UVs[baseUvIndex + 6] = uv4.X;
+                    meshObject.UVs[baseUvIndex + 7] = uv4.Y;
+                }
+            }
+
+
             _apiInterface.InitMesh(meshObject);
         }
 

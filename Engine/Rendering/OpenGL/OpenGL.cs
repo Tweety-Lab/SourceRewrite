@@ -14,14 +14,17 @@ namespace SourceRewrite.Rendering.OpenGL
     public class OpenGLContext : IRendererAPI
     {
         // Add dictionary to map meshes to their buffer indices
-        private Dictionary<Mesh, (int VaoIndex, int VboIndex, int EboIndex)> meshBufferMap =
-            new Dictionary<Mesh, (int VaoIndex, int VboIndex, int EboIndex)>();
+        private Dictionary<Mesh, (int VaoIndex, int VboIndex, int NboIndex, int UboIndex, int EboIndex)> meshBufferMap =
+            new Dictionary<Mesh, (int VaoIndex, int VboIndex, int NboIndex, int UboIndex, int EboIndex)>();
 
         private List<OpenGLBufferObject<uint>> eboList = new List<OpenGLBufferObject<uint>>();
         private List<OpenGLBufferObject<float>> vboList = new List<OpenGLBufferObject<float>>();
+        private List<OpenGLBufferObject<float>> nboList = new List<OpenGLBufferObject<float>>();
+        private List<OpenGLBufferObject<float>> uboList = new List<OpenGLBufferObject<float>>();
         private List<OpenGLVertexArrayObject<float, uint>> vaoList = new List<OpenGLVertexArrayObject<float, uint>>();
 
         private OpenGLBufferObject<float> _quadVbo;
+        private OpenGLBufferObject<float> _quadUbo;
         private OpenGLBufferObject<uint> _quadEbo;
         private OpenGLVertexArrayObject<float, uint> _quadVao;
 
@@ -47,21 +50,31 @@ namespace SourceRewrite.Rendering.OpenGL
         {
             // Define the vertices for a full-screen quad in NDC (Normalized Device Coordinates)
             float[] quadVertices = {
-    // Positions   // UVs (flipped vertically)
-    -1.0f,  1.0f,  0.0f, 0.0f, // Top-left (flipped from 0,1 to 0,0)
-    -1.0f, -1.0f,  0.0f, 1.0f, // Bottom-left (flipped from 0,0 to 0,1)
-     1.0f, -1.0f,  1.0f, 1.0f, // Bottom-right (flipped from 1,0 to 1,1)
-     1.0f,  1.0f,  1.0f, 0.0f  // Top-right (flipped from 1,1 to 1,0)
-};
+                -1.0f,  1.0f,
+                -1.0f, -1.0f,
+                 1.0f, -1.0f,
+                 1.0f,  1.0f
+            };
+
+            // Define UVs for the quad (flipped vertically)
+            float[] quadUVs = {
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+            };
 
             // Define the indices for the quad (two triangles)
             uint[] quadIndices = {
-        0, 1, 2,
-        0, 2, 3
-    };
+                0, 1, 2,
+                0, 2, 3
+            };
 
-            // Create and bind the VBO
+            // Create and bind the VBO for positions
             _quadVbo = new OpenGLBufferObject<float>(OpenGL, quadVertices, BufferTargetARB.ArrayBuffer);
+
+            // Create and bind the VBO for UVs
+            _quadUbo = new OpenGLBufferObject<float>(OpenGL, quadUVs, BufferTargetARB.ArrayBuffer);
 
             // Create and bind the EBO
             _quadEbo = new OpenGLBufferObject<uint>(OpenGL, quadIndices, BufferTargetARB.ElementArrayBuffer);
@@ -70,8 +83,15 @@ namespace SourceRewrite.Rendering.OpenGL
             _quadVao = new OpenGLVertexArrayObject<float, uint>(OpenGL, _quadVbo, _quadEbo);
 
             // Set up the vertex attribute pointers
-            _quadVao.VertexAttributePointer(0, 2, VertexAttribPointerType.Float, 4, 0); // Position
-            _quadVao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 4, 2); // UVs
+            // Bind position buffer and set attribute
+            _quadVbo.Bind();
+            OpenGL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(0);
+
+            // Bind UV buffer and set attribute
+            _quadUbo.Bind();
+            OpenGL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(1);
 
             // Load UI shader if it hasn't been loaded yet
             if (_guiShader == null)
@@ -122,7 +142,6 @@ namespace SourceRewrite.Rendering.OpenGL
             // Model matrix from transform
             Matrix4x4? model = RendererContext.GetEntityViewMatrix(meshObject) ?? Matrix4x4.Identity;
 
-
             openglShader.SetParameter("MODEL_MATRIX", model);
             openglShader.SetParameter("VIEW_MATRIX", view);
             openglShader.SetParameter("PROJECTION_MATRIX", projection);
@@ -138,21 +157,49 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public unsafe void InitMesh(Mesh meshObject)
         {
-            eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));
+            // Create buffers for vertices, normals, UVs, and indices
             vboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Vertices, BufferTargetARB.ArrayBuffer));
+            nboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Normals, BufferTargetARB.ArrayBuffer));
+            uboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.UVs, BufferTargetARB.ArrayBuffer));
+            eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));
+
+            // Create VAO
             vaoList.Add(new OpenGLVertexArrayObject<float, uint>(OpenGL, vboList[vboList.Count - 1], eboList[eboList.Count - 1]));
 
             // Store the mapping
             meshBufferMap[meshObject] = (
                 VaoIndex: vaoList.Count - 1,
                 VboIndex: vboList.Count - 1,
+                NboIndex: nboList.Count - 1,
+                UboIndex: uboList.Count - 1,
                 EboIndex: eboList.Count - 1
             );
 
             var vao = vaoList[vaoList.Count - 1];
-            vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 8, 0); // Position
-            vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 8, 3); // Normals
-            vao.VertexAttributePointer(2, 2, VertexAttribPointerType.Float, 8, 6); // UVs
+
+            // Bind VAO
+            vao.Bind();
+
+            // Set up position attribute (attribute 0)
+            vboList[vboList.Count - 1].Bind();
+            OpenGL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(0);
+
+            // Set up normal attribute (attribute 1)
+            nboList[nboList.Count - 1].Bind();
+            OpenGL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(1);
+
+            // Set up UV attribute (attribute 2)
+            uboList[uboList.Count - 1].Bind();
+            OpenGL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), null);
+            OpenGL.EnableVertexAttribArray(2);
+
+            // Bind element buffer
+            eboList[eboList.Count - 1].Bind();
+
+            // Unbind VAO
+            vao.Unbind();
         }
 
         public unsafe void RenderScreenspaceGUI(GUICanvasEntity canvas)
@@ -186,6 +233,7 @@ namespace SourceRewrite.Rendering.OpenGL
         public void OnClose()
         {
             _quadVbo?.Dispose();
+            _quadUbo?.Dispose();
             _quadEbo?.Dispose();
             _quadVao?.Dispose();
 
@@ -197,6 +245,16 @@ namespace SourceRewrite.Rendering.OpenGL
             foreach (OpenGLBufferObject<float> vbo in vboList)
             {
                 vbo.Dispose();
+            }
+
+            foreach (OpenGLBufferObject<float> nbo in nboList)
+            {
+                nbo.Dispose();
+            }
+
+            foreach (OpenGLBufferObject<float> ubo in uboList)
+            {
+                ubo.Dispose();
             }
 
             foreach (OpenGLVertexArrayObject<float, uint> vao in vaoList)
