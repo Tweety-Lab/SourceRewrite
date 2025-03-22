@@ -79,6 +79,18 @@ namespace SourceRewrite.Entities
         /// </summary>
         public virtual void OnDestroy() { }
 
+#if EDITOR
+        /// <summary>
+        /// Runs when Gizmos are drawing for this Entity
+        /// </summary>
+        public virtual void OnDrawGizmos() { }
+
+        /// <summary>
+        /// Runs when Gizmos are drawing for this Entity and it's selected
+        /// </summary>
+        public virtual void OnDrawGizmosSelected() { }
+#endif
+
         /// <summary>
         /// Destroys the Entity.
         /// </summary>

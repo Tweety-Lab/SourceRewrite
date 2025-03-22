@@ -22,6 +22,15 @@ namespace Editor
 
             // Make sure Entity Logic in maps don't run
             MapSystem.OnMapPreload += (map) => map.EntitiesEnabled = false;
+
+            // Render All Gizmos
+            MapSystem.OnMapLoaded += (map) =>
+            {
+                foreach (BaseEntity entity in map.Entities)
+                {
+                    entity.OnDrawGizmos();
+                }
+            };
         }
 
         // Runs once on Mod Unload
