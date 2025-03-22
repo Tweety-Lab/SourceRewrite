@@ -105,7 +105,7 @@ namespace SourceRewrite.Maps
             Material placeHolderMaterial = FileSystem.GetMaterial(materialsData[0]);
 
             // Create a MeshAsset
-            MeshAsset mapGeometryMesh = new MeshAsset();
+            Mesh mapGeometryMesh = new Mesh();
 
             // Populate the MeshAsset with lump data
             mapGeometryMesh.Vertices = verticesData;

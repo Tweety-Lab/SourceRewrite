@@ -1,106 +1,23 @@
-﻿using Silk.NET.Assimp;
-using SourceRewrite.Rendering;
-using SourceRewrite.Files;
+﻿using SourceRewrite.Files;
 
 namespace SourceRewrite.AssetTypes
 {
     /// <summary>
-    /// Mesh Class, Constructed from filePath to model.
+    /// Base Mesh, contains Vertices, Indices and a Material.
     /// </summary>
-    public class Mesh : MeshAsset
+    public class Mesh
     {
-        public Rendering.Texture Texture;
-        public Shader Shader;
-
-        // Create a Mesh from file path
-        public unsafe Mesh(string filePath, Material material)
+        // Array of Vertex positions
+        public float[] Vertices =
         {
-            // If Mesh cant be found, set it to ERROR
-            if (!System.IO.File.Exists(filePath))
-            {
-                Console.WriteLine($"Could not find model at '{filePath}'");
-                filePath = FileSystem.GetModelPath("dev/error.model");
-                material = FileSystem.GetMaterial("dev/error");
-            }
+        };
 
-            Material = material;
-
-            Texture = Material.Texture;
-            Shader = Material.Shader;
-
-            // PLACEHOLDER: Use Assimp to load OBJ
-            var assimp = Assimp.GetApi();
-
-            Scene* scene = assimp.ImportFile(filePath, (uint)PostProcessSteps.Triangulate);
-
-            if (scene == null || scene->MFlags == Silk.NET.Assimp.Assimp.SceneFlagsIncomplete || scene->MRootNode == null)
-            {
-                var error = assimp.GetErrorStringS();
-                throw new Exception(error);
-            }
-
-            // Get the first mesh
-            var mesh = scene->MMeshes[0];
-
-            // Extract vertices, normals, and texture coordinates
-            List<float> vertexData = new();
-            for (uint i = 0; i < mesh->MNumVertices; i++)
-            {
-                var vertexPosition = mesh->MVertices[i];
-                var vertexNormal = mesh->MNormals[i];  // Extract normal for each vertex
-
-                // Add X, Y, Z components for position
-                vertexData.Add(vertexPosition.X);
-                vertexData.Add(vertexPosition.Y);
-                vertexData.Add(vertexPosition.Z);
-
-                // Add X, Y, Z components for normal
-                vertexData.Add(vertexNormal.X);
-                vertexData.Add(vertexNormal.Y);
-                vertexData.Add(vertexNormal.Z);
-
-                // Add texture coordinates (U, V)
-                if (mesh->MTextureCoords[0] != null)
-                {
-                    var texCoord = mesh->MTextureCoords[0][i];
-                    vertexData.Add(texCoord.X);
-                    vertexData.Add(texCoord.Y);
-                }
-                else
-                {
-                    // Default texture coordinates if none are provided
-                    vertexData.Add(0.0f);
-                    vertexData.Add(0.0f);
-                }
-            }
-
-            // Extract indices
-            List<uint> indexData = new();
-            for (uint i = 0; i < mesh->MNumFaces; i++)
-            {
-                var face = mesh->MFaces[i];
-                // Each face is guaranteed to be a triangle due to Triangulate flag
-                for (uint j = 0; j < face.MNumIndices; j++)
-                {
-                    indexData.Add(face.MIndices[j]);
-                }
-            }
-
-            // Convert Lists to arrays
-            Vertices = vertexData.ToArray();
-            Indices = indexData.ToArray();
-
-            assimp.FreeScene(scene); // Cleanup
-        }
-
-        // Create a Mesh from vertices and indices
-        public Mesh(float[] vertices, uint[] indices, Material material)
+        // Array of Indices
+        public uint[] Indices =
         {
-            Texture = material.Texture;
-            Shader = material.Shader;
+        };
 
-            Vertices = vertices;
-            Indices = indices;
-        }
+        // Material
+        public Material Material = FileSystem.GetMaterial("dev/error");
     }
 }

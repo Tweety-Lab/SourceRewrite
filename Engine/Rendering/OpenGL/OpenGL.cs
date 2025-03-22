@@ -14,8 +14,8 @@ namespace SourceRewrite.Rendering.OpenGL
     public class OpenGLContext : IRendererAPI
     {
         // Add dictionary to map meshes to their buffer indices
-        private Dictionary<MeshAsset, (int VaoIndex, int VboIndex, int EboIndex)> meshBufferMap =
-            new Dictionary<MeshAsset, (int VaoIndex, int VboIndex, int EboIndex)>();
+        private Dictionary<Mesh, (int VaoIndex, int VboIndex, int EboIndex)> meshBufferMap =
+            new Dictionary<Mesh, (int VaoIndex, int VboIndex, int EboIndex)>();
 
         private List<OpenGLBufferObject<uint>> eboList = new List<OpenGLBufferObject<uint>>();
         private List<OpenGLBufferObject<float>> vboList = new List<OpenGLBufferObject<float>>();
@@ -136,7 +136,7 @@ namespace SourceRewrite.Rendering.OpenGL
             vao.Unbind();
         }
 
-        public unsafe void InitMesh(MeshAsset meshObject)
+        public unsafe void InitMesh(Mesh meshObject)
         {
             eboList.Add(new OpenGLBufferObject<uint>(OpenGL, meshObject.Indices, BufferTargetARB.ElementArrayBuffer));
             vboList.Add(new OpenGLBufferObject<float>(OpenGL, meshObject.Vertices, BufferTargetARB.ArrayBuffer));

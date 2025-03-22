@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mesh = SourceRewrite.AssetTypes.Mesh;
+using Mesh = SourceRewrite.AssetTypes.Model;
 
 namespace SourceRewrite.Entities
 {
@@ -18,8 +18,8 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// The mesh associated with the entity.
         /// </summary>
-        private MeshAsset _mesh;
-        public MeshAsset Mesh
+        private AssetTypes.Mesh _mesh;
+        public AssetTypes.Mesh Mesh
         {
             get => _mesh;
             set
@@ -35,10 +35,10 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Constructor to create a MeshEntity with a name and optional mesh.
         /// </summary>
-        public MeshEntity(string name = "MeshEntity", MeshAsset mesh = null)
+        public MeshEntity(string name = "MeshEntity", AssetTypes.Mesh mesh = null)
             : base(name)
         {
-            Mesh = mesh ?? new MeshAsset();  // If no mesh is provided, create a default mesh.
+            Mesh = mesh ?? new AssetTypes.Mesh();  // If no mesh is provided, create a default mesh.
             GameWindow.CurrentWindow.Renderer.GetRendererAPI().InitMesh(Mesh);
         }
 
@@ -47,7 +47,7 @@ namespace SourceRewrite.Entities
             if (Mesh == null)
             {
                 // If no mesh exists, make an empty one
-                Mesh = new MeshAsset();
+                Mesh = new AssetTypes.Mesh();
                 Mesh.Vertices = [];
                 Mesh.Indices = [];
 

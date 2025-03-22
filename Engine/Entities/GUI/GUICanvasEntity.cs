@@ -38,7 +38,7 @@ namespace SourceRewrite.Entities.GUI
         public GUIContainer Container;
 
         // Worldspace rendering
-        private MeshAsset guiMesh;
+        private Mesh guiMesh;
 
         public override void Start()
         {

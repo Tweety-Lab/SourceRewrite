@@ -137,7 +137,7 @@ namespace SourceRewrite.Rendering
             }
         }
 
-        public void InitMesh(MeshAsset meshObject)
+        public void InitMesh(Mesh meshObject)
         {
             _apiInterface.InitMesh(meshObject);
         }
@@ -159,7 +159,7 @@ namespace SourceRewrite.Rendering
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
         void RenderMesh(MeshEntity meshObject);
-        void InitMesh(MeshAsset meshObject);
+        void InitMesh(Mesh meshObject);
         void RenderScreenspaceGUI(GUICanvasEntity canvas);
     }
 
