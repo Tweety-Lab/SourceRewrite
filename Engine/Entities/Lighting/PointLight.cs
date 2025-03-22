@@ -51,5 +51,12 @@ namespace SourceRewrite.Entities
                 shader.SetParameter("light_color", new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
             }
         }
+
+#if EDITOR
+        public override void DrawGizmos()
+        {
+            Console.WriteLine("Drawing PointLight Gizmos");
+        }
+#endif
     }
 }
