@@ -23,7 +23,6 @@ namespace Editor
             // Make sure Entity Logic in maps don't run
             MapSystem.OnMapPreload += (map) => map.EntitiesEnabled = false;
 
-#if EDITOR
             // Render All Gizmos
             MapSystem.OnMapLoaded += (map) =>
             {
@@ -32,7 +31,6 @@ namespace Editor
                     entity.DrawGizmos();
                 }
             };
-#endif
         }
 
         // Runs once on Mod Unload
