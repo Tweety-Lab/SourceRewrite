@@ -99,14 +99,8 @@ namespace SourceRewrite.AssetTypes
         /// </summary>
         private void AddNormalToVertex(Dictionary<int, Vector3> normalsDictionary, int vertexIndex, Vector3 normal)
         {
-            if (normalsDictionary.ContainsKey(vertexIndex))
-            {
-                normalsDictionary[vertexIndex] += normal;
-            }
-            else
-            {
-                normalsDictionary[vertexIndex] = normal;
-            }
+            normalsDictionary.TryAdd(vertexIndex, normal);
+            normalsDictionary[vertexIndex] += normal;
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace SourceRewrite.Maps
         public List<BaseEntity> Entities = new List<BaseEntity>();
 
         // Map Entity that contains all map entities
-        public BaseEntity MapRootEntity { get; private set; }
+        public BaseEntity MapRootEntity { get; }
 
         // Determines if Entities should start enabled
         public bool EntitiesEnabled { get; set; }

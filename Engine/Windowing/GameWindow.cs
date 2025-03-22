@@ -51,7 +51,7 @@ namespace SourceRewrite.Windowing
             }
         }
 
-        private IWindow _window;
+        private readonly IWindow _window;
 
         // Init a Game Window
         public GameWindow(Vector2 windowSize, string windowTitle, string[] arguments = null)
@@ -95,7 +95,7 @@ namespace SourceRewrite.Windowing
             return _window;
         }
 
-        private unsafe async void OnLoad() {
+        private void OnLoad() {
 
             // Load GameInfo
             string gameInfoContent = File.ReadAllText("../../gameinfo.txt");

@@ -4,8 +4,8 @@ namespace SourceRewrite.Rendering.OpenGL
 {
     public class OpenGLTexture : IDisposable, ITexture
     {
-        private uint _handle;
-        private GL _gl;
+        private readonly uint _handle;
+        private readonly GL _gl;
 
         public unsafe OpenGLTexture(GL gl, byte[] data, uint height, uint width)
         {

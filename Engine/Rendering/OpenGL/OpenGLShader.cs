@@ -6,8 +6,8 @@ namespace SourceRewrite.Rendering.OpenGL
     public class OpenGLShader : IDisposable, IShader
     {
         // Our handle and the GL instance this class will use
-        private uint _handle;
-        private GL _gl;
+        private readonly uint _handle;
+        private readonly GL _gl;
 
         public OpenGLShader(GL gl, string vertexSource, string fragmentSource)
         {

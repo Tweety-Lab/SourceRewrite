@@ -5,13 +5,13 @@ namespace SourceRewrite.Entities
     public static class EntityManager
     {
         // Root of the Entity hierarchy
-        public static BaseEntity Root { get; private set; }
+        public static BaseEntity Root { get; }
 
         // Map container Entity
-        public static BaseEntity MapContainer { get; private set; }
+        public static BaseEntity MapContainer { get; }
 
         // Global entities container
-        public static BaseEntity GlobalContainer { get; private set; }
+        public static BaseEntity GlobalContainer { get; }
 
         /// <summary>
         /// List of Entities that persist across maps.

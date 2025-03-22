@@ -106,11 +106,11 @@ namespace SourceRewrite.Files
 
     public struct GamePath
     {
-        public string ShadersPath { get; private set; } = "../../shaders";
-        public string MaterialsPath { get; private set; } = "../../materials";
-        public string ModelsPath { get; private set; } = "../../models";
-        public string MapsPath { get; private set; } = "../../maps";
-        public string GUIPath { get; private set; } = "../../gui";
+        public string ShadersPath { get; } = "../../shaders";
+        public string MaterialsPath { get; } = "../../materials";
+        public string ModelsPath { get; } = "../../models";
+        public string MapsPath { get; } = "../../maps";
+        public string GUIPath { get; } = "../../gui";
 
         /// <summary>
         /// Path to the Game Folder (Folder containing gameinfo.txt).

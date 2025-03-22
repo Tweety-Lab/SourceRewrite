@@ -11,7 +11,7 @@ namespace SourceRewrite.Rendering
     public class Texture : IDisposable
     {
         private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
-        private ITexture _textureInterface; // Use an interface for better abstraction
+        private readonly ITexture _textureInterface; // Use an interface for better abstraction
 
         // Create a texture from a .VTF path
         public Texture(string path)

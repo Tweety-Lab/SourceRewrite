@@ -121,14 +121,12 @@ namespace SourceRewrite.Rendering.OpenGL
 
             OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
             openglShader.Use();
-
-            // Check if texture exists before binding
-            OpenGLTexture openglTexture = null;
             if (meshObject.Mesh.Material.Textures != null &&
                 meshObject.Mesh.Material.Textures.Count() > 0 &&
                 meshObject.Mesh.Material.Textures[0] != null)
             {
-                openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
+                // Check if texture exists before binding
+                OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
                 if (openglTexture != null)
                 {
                     openglTexture.Bind(TextureUnit.Texture0);

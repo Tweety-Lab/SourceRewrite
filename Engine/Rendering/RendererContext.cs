@@ -30,7 +30,7 @@ namespace SourceRewrite.Rendering
             { RendererAPI.OpenGL, typeof(OpenGLContext) }
         };
 
-        private IRendererAPI _apiInterface; // Use an interface for better abstraction
+        private readonly IRendererAPI _apiInterface; // Use an interface for better abstraction
         public RendererContext(RendererAPI chosenRenderer, GameWindow targetWindow)
         {
             API = chosenRenderer; // Pass chosen renderer to our API variable

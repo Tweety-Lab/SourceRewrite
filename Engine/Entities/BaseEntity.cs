@@ -36,7 +36,7 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Children Entities.
         /// </summary>
-        public List<BaseEntity> Children { get; private set; } = new List<BaseEntity>();
+        public List<BaseEntity> Children { get; } = new List<BaseEntity>();
 
         #endregion
 
