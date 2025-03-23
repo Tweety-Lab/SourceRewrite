@@ -34,92 +34,125 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public static class RenderPassManager
     {
-
         private static readonly List<IRenderPass> RenderPasses = new List<IRenderPass>();
 
+        /// <summary>
+        /// Render all registered render passes.
+        /// </summary>
         public static void RenderAllPasses()
         {
             foreach (var pass in RenderPasses)
             {
-                // Enable flags for this pass
-                foreach (var flag in pass.RenderPassFlags)
-                {
-                    GameWindow.CurrentWindow.Renderer.GetRendererAPI().EnableFlag(flag);
-                }
+                // Apply flags before rendering the pass
+                ApplyFlags(pass.RenderPassFlags);
 
-                // Render the pass
+                // Execute the rendering
                 pass.OnRender();
 
-                // Disable flags for this pass
-                foreach (var flag in pass.RenderPassFlags)
-                {
-                    GameWindow.CurrentWindow.Renderer.GetRendererAPI().DisableFlag(flag);
-                }
+                // Revert flags after rendering the pass
+                RevertFlags(pass.RenderPassFlags);
             }
         }
 
         /// <summary>
-        /// Register a new Render Pass
+        /// Register a new Render Pass.
         /// </summary>
-        /// <param name="pass"></param>
+        /// <param name="pass">The render pass to register.</param>
         public static void RegisterPass(IRenderPass pass) => RenderPasses.Add(pass);
+
+        private static void ApplyFlags(IEnumerable<RenderFlag> flags)
+        {
+            var rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+            foreach (var flag in flags)
+            {
+                rendererAPI.EnableFlag(flag);
+            }
+        }
+
+        private static void RevertFlags(IEnumerable<RenderFlag> flags)
+        {
+            var rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+            foreach (var flag in flags)
+            {
+                rendererAPI.DisableFlag(flag);
+            }
+        }
     }
 
     /// <summary>
-    /// Render Meshes from MeshEntity components.
+    /// Base class for Render Passes.
     /// </summary>
-    public class MeshEntityPass : IRenderPass
+    public abstract class BaseRenderPass : IRenderPass
     {
-        private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        public readonly IRendererAPI Renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
 
-        // Enable Depth Testing for Mesh pass
-        public List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
+        /// <summary>
+        /// Handle the actual rendering logic for the pass.
+        /// </summary>
+        public abstract void OnRender();
 
-        public void OnRender()
+        /// <summary>
+        /// Flag(s) that will be enabled during this render pass.
+        /// </summary>
+        public abstract List<RenderFlag> RenderPassFlags { get; }
+
+        /// <summary>
+        /// Render entities of a specific type in a recursive manner.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity to render.</typeparam>
+        protected void RenderEntities<TEntity>(BaseEntity root) where TEntity : BaseEntity
         {
-            RenderEntities(EntityManager.Root);
+            if (root is TEntity entity)
+            {
+                RenderEntity(entity);
+            }
+
+            foreach (var child in root.Children)
+            {
+                RenderEntities<TEntity>(child);
+            }
         }
 
-        private void RenderEntities(BaseEntity root)
+        /// <summary>
+        /// Define how to render individual entities.
+        /// </summary>
+        protected abstract void RenderEntity<TEntity>(TEntity entity) where TEntity : BaseEntity;
+    }
+
+
+    /// <summary>
+    /// Render MeshEntities.
+    /// </summary>
+    public class MeshEntityPass : BaseRenderPass
+    {
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
+
+        public override void OnRender() => RenderEntities<MeshEntity>(EntityManager.Root);
+
+        protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (root is MeshEntity meshEntity)
+            if (entity is MeshEntity meshEntity)
             {
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
-                _renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
-            }
-
-            foreach (var child in root.Children)
-            {
-                RenderEntities(child);
+                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
             }
         }
     }
 
     /// <summary>
-    /// Render Screenspace GUI from GUICanvas components.
+    /// Render GUICanvasEntities.
     /// </summary>
-    public class ScreenSpaceRenderPass : IRenderPass
+    public class ScreenSpaceRenderPass : BaseRenderPass
     {
-        private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend };
 
-        // Enable Blending for GUI Pass
-        public List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend };
+        public override void OnRender() => RenderEntities<GUICanvasEntity>(EntityManager.Root);
 
-        public void OnRender()
+        protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            RenderEntities(EntityManager.Root);
-        }
-
-        private void RenderEntities(BaseEntity root)
-        {
-            if (root is GUICanvasEntity canvas)
+            if (entity is GUICanvasEntity guiEntity)
             {
-                _renderer.RenderScreenspaceGUI(canvas);
-            }
-
-            foreach (var child in root.Children)
-            {
-                RenderEntities(child);
+                Renderer.RenderScreenspaceGUI(guiEntity);
             }
         }
     }
