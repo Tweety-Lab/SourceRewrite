@@ -1,4 +1,4 @@
-// Define custom element
+// Base Vista Panel, allows dragging
 class VistaPanel extends HTMLElement {
   constructor() {
     super();
@@ -106,5 +106,5 @@ class VistaPanel extends HTMLElement {
   }
 }
 
-// Register the panel element
+// Register the Base Panel Element
 customElements.define('vista-panel', VistaPanel);
