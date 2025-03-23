@@ -188,6 +188,10 @@ namespace SourceRewrite.Rendering
         void RenderMesh(Mesh meshObject, Matrix4x4 modelMatrix);
         void InitMesh(Mesh meshObject);
         void RenderScreenspaceGUI(GUICanvasEntity canvas);
+
+        // Flags
+        void EnableFlag(RenderFlag renderFlag);
+        void DisableFlag(RenderFlag renderFlag);
     }
 
     /// <summary>

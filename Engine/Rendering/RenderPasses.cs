@@ -13,6 +13,20 @@ namespace SourceRewrite.Rendering
     public interface IRenderPass
     {
         void OnRender();
+
+        /// <summary>
+        /// List of render pass flags.
+        /// </summary>
+        List<RenderFlag> RenderPassFlags { get; }
+    }
+
+    /// <summary>
+    /// Possible Render Flags.
+    /// </summary>
+    public enum RenderFlag
+    {
+        DepthTest,
+        Blend
     }
 
     /// <summary>
@@ -20,18 +34,32 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public static class RenderPassManager
     {
+
         private static readonly List<IRenderPass> RenderPasses = new List<IRenderPass>();
 
         public static void RenderAllPasses()
         {
             foreach (var pass in RenderPasses)
             {
+                // Enable flags for this pass
+                foreach (var flag in pass.RenderPassFlags)
+                {
+                    GameWindow.CurrentWindow.Renderer.GetRendererAPI().EnableFlag(flag);
+                }
+
+                // Render the pass
                 pass.OnRender();
+
+                // Disable flags for this pass
+                foreach (var flag in pass.RenderPassFlags)
+                {
+                    GameWindow.CurrentWindow.Renderer.GetRendererAPI().DisableFlag(flag);
+                }
             }
         }
 
         /// <summary>
-        /// Register a new Render Pass.
+        /// Register a new Render Pass
         /// </summary>
         /// <param name="pass"></param>
         public static void RegisterPass(IRenderPass pass) => RenderPasses.Add(pass);
@@ -43,6 +71,9 @@ namespace SourceRewrite.Rendering
     public class MeshEntityPass : IRenderPass
     {
         private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+
+        // Enable Depth Testing for Mesh pass
+        public List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
 
         public void OnRender()
         {
@@ -70,6 +101,9 @@ namespace SourceRewrite.Rendering
     public class ScreenSpaceRenderPass : IRenderPass
     {
         private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+
+        // Enable Blending for GUI Pass
+        public List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend };
 
         public void OnRender()
         {

@@ -46,6 +46,37 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.ClearColor(Color.FromArgb(a, r, g, b));
         }
 
+        public void EnableFlag(RenderFlag renderFlag)
+        {
+            switch (renderFlag)
+            {
+                case RenderFlag.DepthTest:
+                    OpenGL.Enable(EnableCap.DepthTest);
+                    break;
+                case RenderFlag.Blend:
+                    OpenGL.Enable(EnableCap.Blend);
+                    OpenGL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(renderFlag), renderFlag, null);
+            }
+        }
+
+        public void DisableFlag(RenderFlag renderFlag)
+        {
+            switch (renderFlag)
+            {
+                case RenderFlag.DepthTest:
+                    OpenGL.Disable(EnableCap.DepthTest);
+                    break;
+                case RenderFlag.Blend:
+                    OpenGL.Disable(EnableCap.Blend);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(renderFlag), renderFlag, null);
+            }
+        }
+
         public unsafe void OnLoad(RendererContext renderer)
         {
             // Define the vertices for a full-screen quad in NDC (Normalized Device Coordinates)
@@ -109,7 +140,6 @@ namespace SourceRewrite.Rendering.OpenGL
         public unsafe void OnRender(RendererContext renderer)
         {
             OpenGL.Clear((uint)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
-            OpenGL.Enable(EnableCap.DepthTest);
         }
 
         public void OnFramebufferResize(Vector2D<int> newSize)
@@ -235,9 +265,6 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
             OpenGL.BindBuffer(BufferTargetARB.ElementArrayBuffer, 0);
 
-            // Disable depth testing for UI
-            OpenGL.Disable(EnableCap.DepthTest);
-
             // Enable blending for UI elements
             OpenGL.Enable(EnableCap.Blend);
             OpenGL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -276,10 +303,6 @@ namespace SourceRewrite.Rendering.OpenGL
             // Clean up state
             _quadVao.Unbind();
             OpenGL.BindTexture(TextureTarget.Texture2D, 0);
-
-            // Re-enable depth testing for 3D objects
-            OpenGL.Enable(EnableCap.DepthTest);
-            OpenGL.Disable(EnableCap.Blend);
         }
 
         public void OnClose()
