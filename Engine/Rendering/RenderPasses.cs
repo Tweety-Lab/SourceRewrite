@@ -125,6 +125,7 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public class MeshEntityPass : BaseRenderPass
     {
+        // Enable Depth-Testing
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
 
         public override void OnRender() => RenderEntities<MeshEntity>(EntityManager.Root);
@@ -142,8 +143,9 @@ namespace SourceRewrite.Rendering
     /// <summary>
     /// Render GUICanvasEntities.
     /// </summary>
-    public class ScreenSpaceRenderPass : BaseRenderPass
+    public class ScreenspaceGUIRenderPass : BaseRenderPass
     {
+        // Enable Blending
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend };
 
         public override void OnRender() => RenderEntities<GUICanvasEntity>(EntityManager.Root);

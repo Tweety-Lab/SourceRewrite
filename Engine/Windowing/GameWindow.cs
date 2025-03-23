@@ -112,7 +112,7 @@ namespace SourceRewrite.Windowing
 
             // Register Default Render Passes
             RenderPassManager.RegisterPass(new MeshEntityPass());
-            RenderPassManager.RegisterPass(new ScreenSpaceRenderPass());
+            RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
 
             // Load Input
             Input = new InputContext(_window.CreateInput());
