@@ -111,7 +111,7 @@ namespace SourceRewrite.Windowing
             Renderer.SetClearColour(13, 13, 13, 255);
 
             // Register Default Render Passes
-            RenderPassManager.RegisterPass(new MeshEntityPass());
+            RenderPassManager.RegisterPass(new OpaquePass());
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
 
             // Load Input

@@ -123,7 +123,7 @@ namespace SourceRewrite.Rendering
     /// <summary>
     /// Render MeshEntities.
     /// </summary>
-    public class MeshEntityPass : BaseRenderPass
+    public class OpaquePass : BaseRenderPass
     {
         // Enable Depth-Testing
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
