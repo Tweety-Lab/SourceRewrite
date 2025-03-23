@@ -29,7 +29,7 @@ namespace SourceRewrite.Editor
         /// </summary>
         /// <param name="position">Center position of the cube</param>
         /// <param name="size">Size of the cube in each dimension</param>
-        public static void DrawCube(Vector3 position, Vector3 size)
+        public static MeshEntity DrawCube(Vector3 position, Vector3 size)
         {
             // Calculate a unique key for each mesh (e.g., based on position and size)
             int meshKey = position.GetHashCode() ^ size.GetHashCode();
@@ -105,12 +105,11 @@ namespace SourceRewrite.Editor
             mesh.Indices[33] = 1; mesh.Indices[34] = 6; mesh.Indices[35] = 5;
             #endregion
 
+            // Create a MeshEntity
+            MeshEntity meshEntity = new MeshEntity();
+            meshEntity.Mesh = mesh;
 
-            // Init Mesh
-            GameWindow.CurrentWindow.Renderer.InitMesh(mesh);
-
-            // Render Mesh
-            GameWindow.CurrentWindow.Renderer.RenderMesh(mesh, Matrix4x4.Identity);
+            return meshEntity;
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace SourceRewrite.Editor
         /// <param name="position">Center position of the sphere</param>
         /// <param name="radius">Radius of the sphere</param>
         /// <param name="segments">Number of segments (resolution of the sphere)</param>
-        public static void DrawSphere(Vector3 position, float radius, int segments = 16)
+        public static MeshEntity DrawSphere(Vector3 position, float radius, int segments = 16)
         {
             // Create a Mesh
             Mesh mesh = new Mesh();
@@ -191,11 +190,11 @@ namespace SourceRewrite.Editor
             }
             #endregion
 
-            // Init Mesh
-            GameWindow.CurrentWindow.Renderer.InitMesh(mesh);
+            // Create a MeshEntity
+            MeshEntity meshEntity = new MeshEntity();
+            meshEntity.Mesh = mesh;
 
-            // Render Mesh
-            GameWindow.CurrentWindow.Renderer.RenderMesh(mesh, Matrix4x4.Identity);
+            return meshEntity;
         }
     }
 }
