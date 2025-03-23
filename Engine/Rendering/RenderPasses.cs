@@ -20,7 +20,7 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public static class RenderPassManager
     {
-        private static readonly List<IRenderPass> RenderPasses = GetRenderPasses();
+        private static readonly List<IRenderPass> RenderPasses = new List<IRenderPass>();
 
         public static void RenderAllPasses()
         {
@@ -30,15 +30,11 @@ namespace SourceRewrite.Rendering
             }
         }
 
-        private static List<IRenderPass> GetRenderPasses()
-        {
-            return Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => typeof(IRenderPass).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                .Select(t => (IRenderPass)Activator.CreateInstance(t))
-                .Where(pass => pass != null)
-                .ToList();
-        }
+        /// <summary>
+        /// Register a new Render Pass.
+        /// </summary>
+        /// <param name="pass"></param>
+        public static void RegisterPass(IRenderPass pass) => RenderPasses.Add(pass);
     }
 
     /// <summary>
