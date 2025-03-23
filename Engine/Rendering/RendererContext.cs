@@ -94,6 +94,8 @@ namespace SourceRewrite.Rendering
                 pass.OnRender();
         }
 
+        
+
         // Run any special cleanup logic that needs to be when the app is closed
         public void OnClose() => _apiInterface.OnClose();
 
@@ -173,6 +175,8 @@ namespace SourceRewrite.Rendering
 
             _apiInterface.InitMesh(meshObject);
         }
+
+        public void RenderMesh(Mesh meshObject, Matrix4x4 modelMatrix) => _apiInterface.RenderMesh(meshObject, modelMatrix);
 
         public void DrawScreenspaceQuad(GUICanvasEntity canvas) => _apiInterface.RenderScreenspaceGUI(canvas);
     }

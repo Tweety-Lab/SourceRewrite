@@ -2,6 +2,7 @@
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities;
 using SourceRewrite.Files;
+using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using UltralightNet;
 
 namespace SourceRewrite.Editor
 {
@@ -27,7 +29,7 @@ namespace SourceRewrite.Editor
         /// </summary>
         /// <param name="position">Center position of the cube</param>
         /// <param name="size">Size of the cube in each dimension</param>
-        public static MeshEntity DrawCube(Vector3 position, Vector3 size)
+        public static void DrawCube(Vector3 position, Vector3 size)
         {
             // Calculate a unique key for each mesh (e.g., based on position and size)
             int meshKey = position.GetHashCode() ^ size.GetHashCode();
@@ -104,11 +106,11 @@ namespace SourceRewrite.Editor
             #endregion
 
 
-            // Create a Mesh Entity
-            MeshEntity meshEntity = new MeshEntity();
-            meshEntity.Mesh = mesh;
+            // Init Mesh
+            GameWindow.CurrentWindow.Renderer.InitMesh(mesh);
 
-            return meshEntity;
+            // Render Mesh
+            GameWindow.CurrentWindow.Renderer.RenderMesh(mesh, Matrix4x4.Identity);
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace SourceRewrite.Editor
         /// <param name="position">Center position of the sphere</param>
         /// <param name="radius">Radius of the sphere</param>
         /// <param name="segments">Number of segments (resolution of the sphere)</param>
-        public static MeshEntity DrawSphere(Vector3 position, float radius, int segments = 16)
+        public static void DrawSphere(Vector3 position, float radius, int segments = 16)
         {
             // Create a Mesh
             Mesh mesh = new Mesh();
@@ -126,6 +128,9 @@ namespace SourceRewrite.Editor
 
             // Add Empty UVs
             mesh.UVs = new float[1] { 0 };
+
+            // Add Empty Normals
+            mesh.Normals = new float[1] { 0 };
 
             // Calculate the number of vertices and indices needed
             int numVertices = (segments + 1) * (segments + 1);
@@ -186,11 +191,11 @@ namespace SourceRewrite.Editor
             }
             #endregion
 
-            // Create a Mesh Entity
-            MeshEntity meshEntity = new MeshEntity();
-            meshEntity.Mesh = mesh;
+            // Init Mesh
+            GameWindow.CurrentWindow.Renderer.InitMesh(mesh);
 
-            return meshEntity;
+            // Render Mesh
+            GameWindow.CurrentWindow.Renderer.RenderMesh(mesh, Matrix4x4.Identity);
         }
     }
 }
