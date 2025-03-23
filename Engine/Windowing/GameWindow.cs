@@ -112,6 +112,7 @@ namespace SourceRewrite.Windowing
 
             // Register Default Render Passes
             RenderPassManager.RegisterPass(new OpaquePass());
+            RenderPassManager.RegisterPass(new LightingPass());
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
 
             // Load Input

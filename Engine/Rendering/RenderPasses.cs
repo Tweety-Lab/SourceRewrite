@@ -2,6 +2,7 @@
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Windowing;
+using System.Drawing;
 using System.Numerics;
 using System.Reflection;
 
@@ -121,7 +122,7 @@ namespace SourceRewrite.Rendering
 
 
     /// <summary>
-    /// Render MeshEntities.
+    /// Render MeshEntities that are Opaque.
     /// </summary>
     public class OpaquePass : BaseRenderPass
     {
@@ -136,6 +137,34 @@ namespace SourceRewrite.Rendering
             {
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Apply Lighting.
+    /// </summary>
+    public class LightingPass : BaseRenderPass
+    {
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { };
+
+        public override void OnRender() => RenderEntities<PointLight>(EntityManager.Root);
+
+        protected override void RenderEntity<TEntity>(TEntity entity)
+        {
+            if (entity is PointLight lightEntity)
+            {
+                // Multiply the intensity (4th component of Color) by arbitrary adjustment factor for our unit system
+                Vector4 modifiedColor = lightEntity.Color;
+                modifiedColor.W *= 90000.0f;
+
+                // Update Uniforms
+                foreach (Shader shader in Shader.Shaders)
+                {
+                    shader.SetParameter("light_position", lightEntity.Transform.Position);
+                    shader.SetParameter("light_color", modifiedColor / 255.0f); // Convert Color from 1-255 range to 0-1 range
+                    shader.SetParameter("light_attenuation", new Vector3(lightEntity.ConstantAttenuation, lightEntity.LinearAttenuation, lightEntity.QuadraticAttenuation));
+                }
             }
         }
     }
