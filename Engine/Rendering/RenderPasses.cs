@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Entities;
+﻿using SourceRewrite.AssetTypes;
+using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Windowing;
 using System.Numerics;
@@ -7,36 +8,36 @@ using System.Reflection;
 namespace SourceRewrite.Rendering
 {
     /// <summary>
-    /// Render Passes are used to group together rendering operations.
+    /// Interface for Render Passes used to group rendering operations.
     /// </summary>
     public interface IRenderPass
     {
-        IRendererAPI Renderer { get; }
         void OnRender();
     }
 
+    /// <summary>
+    /// Manager that handles all render passes.
+    /// </summary>
     public static class RenderPassManager
     {
-        // Get List of all classes that implement IRenderPass
-        public static List<IRenderPass> GetRenderPasses()
+        private static readonly List<IRenderPass> RenderPasses = GetRenderPasses();
+
+        public static void RenderAllPasses()
         {
-            // Get all types that implement IRenderPass in the current assembly
-            var renderPassTypes = Assembly.GetExecutingAssembly()
-                                          .GetTypes()
-                                          .Where(t => typeof(IRenderPass).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                                          .ToList();
-
-            List<IRenderPass> renderPassInstances = new List<IRenderPass>();
-            foreach (var type in renderPassTypes)
+            foreach (var pass in RenderPasses)
             {
-                // Instantiate the class (assuming parameterless constructor)
-                var renderPassInstance = Activator.CreateInstance(type) as IRenderPass;
-
-                if (renderPassInstance != null)
-                    renderPassInstances.Add(renderPassInstance);
+                pass.OnRender();
             }
+        }
 
-            return renderPassInstances;
+        private static List<IRenderPass> GetRenderPasses()
+        {
+            return Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => typeof(IRenderPass).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .Select(t => (IRenderPass)Activator.CreateInstance(t))
+                .Where(pass => pass != null)
+                .ToList();
         }
     }
 
@@ -45,24 +46,21 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public class MeshEntityPass : IRenderPass
     {
-        // Implementing the Renderer property here to access the Renderer of the game window
-        public IRendererAPI Renderer => GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
 
         public void OnRender()
         {
-            // Render Game Objects starting at the root
             RenderEntities(EntityManager.Root);
         }
 
         private void RenderEntities(BaseEntity root)
         {
-            // If the root is a MeshEntity, render it
             if (root is MeshEntity meshEntity)
             {
-                Renderer.RenderMesh(meshEntity.Mesh, RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity);
+                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
+                _renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
             }
 
-            // Recursively render all children
             foreach (var child in root.Children)
             {
                 RenderEntities(child);
@@ -75,27 +73,58 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public class ScreenSpaceRenderPass : IRenderPass
     {
-        public IRendererAPI Renderer => GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        private readonly IRendererAPI _renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
 
         public void OnRender()
         {
-            // Render Game Objects starting at the root
             RenderEntities(EntityManager.Root);
         }
 
         private void RenderEntities(BaseEntity root)
         {
-            // If the root is a GUICanvas, render it
             if (root is GUICanvasEntity canvas)
             {
-                Renderer.RenderScreenspaceGUI(canvas);
+                _renderer.RenderScreenspaceGUI(canvas);
             }
 
-            // Recursively render all children
             foreach (var child in root.Children)
             {
                 RenderEntities(child);
             }
+        }
+    }
+
+    // Mesh Class with UV generation
+    public static class MeshExtensions
+    {
+        public static float[] GenerateDefaultUVs(this Mesh meshObject)
+        {
+            var uvs = new float[meshObject.Vertices.Length / 3 * 2];
+
+            for (int i = 0; i < meshObject.Vertices.Length; i += 12) // Assuming 4 vertices per face
+            {
+                var uv1 = new Vector2(0, 0);
+                var uv2 = new Vector2(1, 0);
+                var uv3 = new Vector2(1, 1);
+                var uv4 = new Vector2(0, 1);
+
+                int baseUvIndex = (i / 3) * 2;
+
+                // Apply UVs to each vertex in the face
+                uvs[baseUvIndex] = uv1.X;
+                uvs[baseUvIndex + 1] = uv1.Y;
+
+                uvs[baseUvIndex + 2] = uv2.X;
+                uvs[baseUvIndex + 3] = uv2.Y;
+
+                uvs[baseUvIndex + 4] = uv3.X;
+                uvs[baseUvIndex + 5] = uv3.Y;
+
+                uvs[baseUvIndex + 6] = uv4.X;
+                uvs[baseUvIndex + 7] = uv4.Y;
+            }
+
+            return uvs;
         }
     }
 }

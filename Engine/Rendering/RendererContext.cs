@@ -85,16 +85,10 @@ namespace SourceRewrite.Rendering
         public void OnRender()
         {
             _apiInterface.OnRender(this);
-
-            // Get all Passes
-            List<IRenderPass> passes = RenderPassManager.GetRenderPasses();
-
-            // Render all Passes
-            foreach (IRenderPass pass in passes)
-                pass.OnRender();
+            RenderPassManager.RenderAllPasses();
         }
 
-        
+
 
         // Run any special cleanup logic that needs to be when the app is closed
         public void OnClose() => _apiInterface.OnClose();
