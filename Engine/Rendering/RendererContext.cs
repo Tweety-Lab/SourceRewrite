@@ -106,7 +106,7 @@ namespace SourceRewrite.Rendering
             // Resize the Entities GUI if applicable
             if (root is GUICanvasEntity)
             {
-                ResizeGUIComponent((GUICanvasEntity)root, newSize);
+                ResizeGUIEntity((GUICanvasEntity)root, newSize);
             }
 
             // Recursively resize all children's GUIs
@@ -116,7 +116,7 @@ namespace SourceRewrite.Rendering
             }
         }
 
-        private void ResizeGUIComponent(GUICanvasEntity entity, Vector2D<int> newSize)
+        private void ResizeGUIEntity(GUICanvasEntity entity, Vector2D<int> newSize)
         {
             if (entity.PanelType != 0 && entity.Container.VistaView.Visible == true)
             {
