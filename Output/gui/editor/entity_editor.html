@@ -1,6 +1,7 @@
 <head>
     <link rel="stylesheet" href="file:///themes/lavender.css">
     <link rel="stylesheet" href="file:///editor/styles/editor.css">
+    <script src="file:///elements/panel.js"></script>
     <style>
         body {
             color: white;
@@ -94,88 +95,38 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="left-align">
-            <p>Object Properties: Entity Class Name</p>
-            <br>
-            <p>Class:</p>
-            <input type="text" id="class-name" onchange="ChangeClass(this.value)">
-            <p>Keyvalues:</p>
-            <div id="keyvalues-holder">
-                <table id="keyvalues-table">
-                    <tr id="first-row">
-                        <td>Property Name</td>
-                        <td>Value</td>
-                    </tr>
-                    <tr>
-                        <td>Name</td>
-                        <td><input type="text" onkeyup="KeyValueChanged('Name', this.value)"></td>
-                    </tr>
-                </table>
+    <vista-panel>
+        <div class="container">
+            <div id="left-align">
+                <p>Object Properties: Entity Class Name</p>
+                <br>
+                <p>Class:</p>
+                <input type="text" id="class-name" onchange="ChangeClass(this.value)">
+                <p>Keyvalues:</p>
+                <div id="keyvalues-holder">
+                    <table id="keyvalues-table">
+                        <tr id="first-row">
+                            <td>Property Name</td>
+                            <td>Value</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td><input type="text" onkeyup="KeyValueChanged('Name', this.value)"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="right-align">
+                <button id="exit-button" onclick="Quit()">Quit</button>
+                <input type="text">
+                <br>
+                <br>
+                <p>Help</p>
+                <textarea readonly id="entity-help">Entity Help Information</textarea>
+                <p>Comments</p>
+                <textarea></textarea>
             </div>
         </div>
-        
-        <div id="right-align">
-            <button id="exit-button" onclick="Quit()">Quit</button>
-            <input type="text">
-            <br>
-            <br>
-            <p>Help</p>
-            <textarea readonly id="entity-help">Entity Help Information</textarea>
-            <p>Comments</p>
-            <textarea></textarea>
-        </div>
-    </div>
-    <script>
-        // Function to make an element draggable
-        function makeDraggable(element) {
-            let offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
-            let dragging = false;
-    
-            // Mouse down event to start dragging
-            element.onmousedown = function(e) {
-                // Check if the mouse is over an input or button element
-                if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button' || e.target.tagName.toLowerCase() === 'textarea') {
-                    return; // Don't start dragging
-                }
-    
-                e.preventDefault(); // Prevent default action
-                dragging = true;
-
-                // Get the mouse position at the start of the drag
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-    
-                // Calculate the current offset
-                document.onmousemove = function(e) {
-                    if (!dragging) return;
-                    e.preventDefault();
-                    // Calculate new position based on the mouse movement
-                    offsetX = mouseX - e.clientX;
-                    offsetY = mouseY - e.clientY;
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-    
-                    // Set the new position of the element
-                    const rect = element.getBoundingClientRect();
-                    element.style.left = rect.left - offsetX + "px";
-                    element.style.top = rect.top - offsetY + "px";
-                };
-    
-                // Stop dragging when the mouse is released
-                document.onmouseup = function() {
-                    dragging = false;
-                    document.onmousemove = null;
-                    document.onmouseup = null;
-                };
-            };
-        }
-    
-        // Make the container draggable
-        window.onload = function() {
-            const container = document.querySelector('.container');
-            container.style.position = "absolute"; // Make sure the container can be moved around
-            makeDraggable(container);
-        };
-    </script>
+    </vista-panel>
 </body>
