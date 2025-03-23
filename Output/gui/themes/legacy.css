@@ -50,6 +50,8 @@ p {
 
 textarea {
     background-color: var(--bg-dark);
+    font-family: var(--font-primary); /* Apply the primary font */
+    color: var(--text-white);
 
     border-left: 1px solid #252525;
     border-top: 1px solid #252525;

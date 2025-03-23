@@ -44,12 +44,12 @@
         </div>
 
         <div>
-            <textarea readonly></textarea>
+            <textarea readonly id="log-area"></textarea>
         </div>
 
         <div>
-            <input type="text">
-            <button>Submit</button>
+            <input type="text" id="command-input">
+            <button onclick="SubmitCommand(document.getElementById('command-input').value)">Submit</button>
         </div>
         
     </vista-panel>

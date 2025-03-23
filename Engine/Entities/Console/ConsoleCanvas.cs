@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VistaGUI.Scripting.References;
 
 namespace SourceRewrite.Entities.ConsoleCanvas
 {
@@ -22,6 +23,17 @@ namespace SourceRewrite.Entities.ConsoleCanvas
                 {
                 }
             };
+
+            string currentLog = String.Empty;
+            RegisterEvent("SubmitCommand", (args) =>
+            {
+                Console.WriteLine("Submitted Console Command: " + args[0]);
+
+                // Add the command to the log
+                VistaElement logArea = Canvas.GetElement("log-area");
+                currentLog += $"] {args[0]}\n";
+                logArea.SetProperty("value", currentLog);
+            });
         }
     }
 }

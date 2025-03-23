@@ -7,6 +7,7 @@ using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
 using VistaGUI.Scripting.Elements;
 using VistaGUI.Scripting.References;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VistaGUI.Scripting
 {
@@ -115,7 +116,14 @@ namespace VistaGUI.Scripting
         // Sets a property of an element
         public void SetElementProperty(string elementId, string property, string value)
         {
-            string escapedValue = value.Replace("'", "\\'").Replace("\"", "\\\"");
+            // Escape single quotes, double quotes, and newlines for JavaScript
+            string escapedValue = value
+                .Replace("\\", "\\\\")  // Escape backslashes first
+                .Replace("'", "\\'")     // Escape single quotes
+                .Replace("\"", "\\\"")   // Escape double quotes
+                .Replace("\r", "\\r")    // Escape carriage returns
+                .Replace("\n", "\\n");   // Escape newlines
+
             UltralightView.EvaluateScript($"document.getElementById('{elementId}').{property} = '{escapedValue}';", out string output);
 
             // Print output
