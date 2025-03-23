@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Windowing;
+using System.Numerics;
 using System.Reflection;
 
 namespace SourceRewrite.Rendering
@@ -58,7 +59,7 @@ namespace SourceRewrite.Rendering
             // If the root is a MeshEntity, render it
             if (root is MeshEntity meshEntity)
             {
-                Renderer.RenderMesh(meshEntity);
+                Renderer.RenderMesh(meshEntity.Mesh, RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity);
             }
 
             // Recursively render all children

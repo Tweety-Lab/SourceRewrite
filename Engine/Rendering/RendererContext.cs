@@ -50,11 +50,11 @@ namespace SourceRewrite.Rendering
         }
 
         /// <summary>
-        /// Calculate an entities ViewMatrix
+        /// Calculate an entity's ModelMatrix (position, rotation, scale).
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Matrix4x4? GetEntityViewMatrix(BaseEntity entity)
+        public static Matrix4x4? GetEntityModelMatrix(BaseEntity entity)
         {
             Matrix4x4 transformation = Matrix4x4.CreateTranslation(entity.Transform.Position) *
                            Matrix4x4.CreateFromQuaternion(entity.Transform.Rotation) *
@@ -187,7 +187,7 @@ namespace SourceRewrite.Rendering
         void OnLoad(RendererContext renderer);
         void OnClose();
         void OnFramebufferResize(Vector2D<int> newSize);
-        void RenderMesh(MeshEntity meshObject);
+        void RenderMesh(Mesh meshObject, Matrix4x4 modelMatrix);
         void InitMesh(Mesh meshObject);
         void RenderScreenspaceGUI(GUICanvasEntity canvas);
     }

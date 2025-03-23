@@ -117,23 +117,26 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.Viewport(newSize);
         }
 
-        public unsafe void RenderMesh(MeshEntity meshObject)
+        public unsafe void RenderMesh(Mesh meshObject, Matrix4x4 modelMatrix)
         {
-            if (meshObject == null || meshObject.Mesh == null)
+            if (meshObject == null)
                 throw new ArgumentNullException(nameof(meshObject));
 
-            if (!meshBufferMap.ContainsKey(meshObject.Mesh))
+            if (!meshBufferMap.ContainsKey(meshObject))
                 throw new InvalidOperationException("Mesh has not been initialized.");
 
             // Reset OpenGL state before rendering a mesh
             OpenGL.BindVertexArray(0);
 
-            OpenGLShader openglShader = (OpenGLShader)meshObject.Mesh.Material.Shader?.GetShaderInterface();
+            // Get the shader for the mesh material
+            OpenGLShader openglShader = (OpenGLShader)meshObject.Material.Shader?.GetShaderInterface();
             openglShader.Use();
-            if (meshObject.Mesh.Material.Textures?.Any(texture => texture != null) == true) 
+
+            // Bind the textures if they exist
+            if (meshObject.Material.Textures?.Any(texture => texture != null) == true)
             {
                 // Check if texture exists before binding
-                OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Mesh.Material.Textures[0]?.GetTextureInterface();
+                OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Material.Textures[0]?.GetTextureInterface();
                 if (openglTexture != null)
                 {
                     openglTexture.Bind(TextureUnit.Texture0);
@@ -151,19 +154,20 @@ namespace SourceRewrite.Rendering.OpenGL
             // View matrix from active camera
             var view = CameraEntity.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
 
-            // Model matrix from transform
-            Matrix4x4? model = RendererContext.GetEntityViewMatrix(meshObject) ?? Matrix4x4.Identity;
+            // Use the provided model matrix
+            Matrix4x4 model = modelMatrix;
 
             openglShader.SetParameter("MODEL_MATRIX", model);
             openglShader.SetParameter("VIEW_MATRIX", view);
             openglShader.SetParameter("PROJECTION_MATRIX", projection);
 
             // Get the VAO for this specific mesh
-            var bufferIndices = meshBufferMap[meshObject.Mesh];
+            var bufferIndices = meshBufferMap[meshObject];
             var vao = vaoList[bufferIndices.VaoIndex];
 
+            // Bind the VAO and render
             vao.Bind();
-            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Mesh.Indices.Length, DrawElementsType.UnsignedInt, null);
+            OpenGL.DrawElements(PrimitiveType.Triangles, (uint)meshObject.Indices.Length, DrawElementsType.UnsignedInt, null);
             vao.Unbind();
 
             // Reset state after rendering
