@@ -46,34 +46,43 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGL.ClearColor(Color.FromArgb(a, r, g, b));
         }
 
+        // Define logic for enabling and disabling render flags
+        private readonly Dictionary<RenderFlag, Action<GL>> _renderFlagEnableMap = new()
+{
+    { RenderFlag.DepthTest, gl => gl.Enable(EnableCap.DepthTest) },
+    { RenderFlag.Blend, gl => {
+        gl.Enable(EnableCap.Blend);
+        gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+    }}
+};
+
+        private readonly Dictionary<RenderFlag, Action<GL>> _renderFlagDisableMap = new()
+{
+    { RenderFlag.DepthTest, gl => gl.Disable(EnableCap.DepthTest) },
+    { RenderFlag.Blend, gl => gl.Disable(EnableCap.Blend) }
+};
+
         public void EnableFlag(RenderFlag renderFlag)
         {
-            switch (renderFlag)
+            if (_renderFlagEnableMap.TryGetValue(renderFlag, out var enableAction))
             {
-                case RenderFlag.DepthTest:
-                    OpenGL.Enable(EnableCap.DepthTest);
-                    break;
-                case RenderFlag.Blend:
-                    OpenGL.Enable(EnableCap.Blend);
-                    OpenGL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(renderFlag), renderFlag, null);
+                enableAction(OpenGL);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(renderFlag), $"Unsupported render flag: {renderFlag}");
             }
         }
 
         public void DisableFlag(RenderFlag renderFlag)
         {
-            switch (renderFlag)
+            if (_renderFlagDisableMap.TryGetValue(renderFlag, out var disableAction))
             {
-                case RenderFlag.DepthTest:
-                    OpenGL.Disable(EnableCap.DepthTest);
-                    break;
-                case RenderFlag.Blend:
-                    OpenGL.Disable(EnableCap.Blend);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(renderFlag), renderFlag, null);
+                disableAction(OpenGL);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(renderFlag), $"Unsupported render flag: {renderFlag}");
             }
         }
 
