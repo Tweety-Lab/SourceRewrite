@@ -14,9 +14,26 @@
             
             min-height: 100px;
             min-width: 100px;
-            
+
             margin-bottom: 10px;
         }
+
+        vista-panel {
+            display: flex;          /* Enable flexbox */
+            flex-direction: column; /* Stack child divs vertically */
+        }
+
+        vista-panel > div {
+            display: flex;          /* Enable flexbox inside each div */
+            align-items: center;    /* Vertically center content */
+            justify-content: flex-start; /* Align items from left to right */
+            margin-bottom: 10px;    /* Add space between divs */
+        }
+
+        input, button {
+            margin-right: 10px; /* Add space between input and button */
+        }
+
     </style>
 </head>
 

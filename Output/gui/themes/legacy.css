@@ -5,6 +5,11 @@
     src: url('file:///themes/fonts/TerminusTTF-4.49.3.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Terminus';
+    src: url('file:///themes/fonts/TerminusTTF-Bold-4.49.3.ttf') format('truetype');
+    font-weight: bold; /* Ensure this font is used for bold text */
+}
 :root {
     /* Color Variables */
     --menu-bar-bg: rgb(219, 219, 219);
@@ -38,7 +43,9 @@ vista-panel {
 
 p {
     color: var(--text-white);
-    font-size: 16px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: -4px;
 }
 
 textarea {
@@ -58,12 +65,20 @@ input {
     border-top: 1px solid #252525;
     border-right: 1px solid #a8a8a8;
     border-bottom: 1px solid #a8a8a8;
+
+    height: 25px;
 }
 
 button {
     font-family: var(--font-primary); /* Apply the primary font */
     background-color: var(--button-bg);
     color: var(--text-white);
+    text-align: left;
+    padding-left: 4px;
+    font-size: 11px; /* Set the font size to be smaller */
+
+    height: 24px;
+    width: 65px;
 
     border-left: 1px solid #a8a8a8;
     border-top: 1px solid #a8a8a8;
