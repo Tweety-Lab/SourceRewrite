@@ -7,11 +7,33 @@
             width: 80%;
             height: 80%;
         }
+
+        textarea {
+            height: 100%;
+            width: 100%;
+            
+            min-height: 100px;
+            min-width: 100px;
+            
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
     <vista-panel>
-        <p>Vista Panel</p>
+        <div>
+            <p>Console</p>
+        </div>
+
+        <div>
+            <textarea readonly></textarea>
+        </div>
+
+        <div>
+            <input type="text">
+            <button>Submit</button>
+        </div>
+        
     </vista-panel>
 </body>
