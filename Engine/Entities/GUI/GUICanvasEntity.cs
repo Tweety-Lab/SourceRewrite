@@ -33,9 +33,21 @@ namespace SourceRewrite.Entities.GUI
         [EntityProperty("IsTransparent")]
         public bool IsTransparent; // Is the panel background transparent
 
+        [EntityProperty("visible")]
+        public bool Visible
+        {
+            get { return Container.VistaView != null && Container.VistaView.Visible; }
+            set
+            {
+                if (Container.VistaView != null)
+                    Container.VistaView.Visible = value;
+            }
+        }
+
         public int PanelType = 1; // Type of Panel, 0 = worldspace, 1 = screenspace.
 
         public GUIContainer Container;
+
 
         // Worldspace rendering
         private Mesh guiMesh;

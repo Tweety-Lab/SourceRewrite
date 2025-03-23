@@ -14,7 +14,9 @@ namespace SourceRewrite.Entities.ConsoleCanvas
         {
             PanelName = "console/console.html";
             base.Start();
-            
+
+            Canvas.Visible = false;
+
 
             Input.KeyDownEvent += (keyboard, key, _) =>
             {
@@ -22,6 +24,8 @@ namespace SourceRewrite.Entities.ConsoleCanvas
                 {
                     // Print the key that was pressed
                     Console.WriteLine($"Key pressed: {key}");
+
+                    Canvas.Visible = !Canvas.Visible;
                 }
             };
         }
