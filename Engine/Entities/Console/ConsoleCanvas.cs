@@ -33,6 +33,10 @@ namespace SourceRewrite.Entities.ConsoleCanvas
                 VistaElement logArea = Canvas.GetElement("log-area");
                 currentLog += $"] {args[0]}\n";
                 logArea.SetProperty("value", currentLog);
+
+                // Clear current command input
+                VistaElement inputField = Canvas.GetElement("command-input");
+                inputField.SetProperty("value", "");
             });
         }
     }
