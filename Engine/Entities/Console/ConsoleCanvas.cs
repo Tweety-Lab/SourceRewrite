@@ -20,11 +20,10 @@ namespace SourceRewrite.Entities.ConsoleCanvas
 
             Input.KeyDownEvent += (keyboard, key, _) =>
             {
+                // On ` key
                 if (key == Silk.NET.Input.Key.GraveAccent)
                 {
-                    // Print the key that was pressed
-                    Console.WriteLine($"Key pressed: {key}");
-
+                    // Toggle Visibility
                     Canvas.Visible = !Canvas.Visible;
                 }
             };
