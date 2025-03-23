@@ -18,7 +18,6 @@ class VistaPanel extends HTMLElement {
     // Set panel style
     this.style.display = 'block';
     this.style.position = 'absolute';
-    this.style.backgroundColor = 'white';
     this.style.overflow = 'hidden';
     this.style.userSelect = 'none';
     this.style.minWidth = '10px';

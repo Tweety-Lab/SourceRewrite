@@ -36,26 +36,7 @@ namespace VistaGUI
         /// </summary>
         public VistaScriptingContext ScriptingContext;
 
-        private bool _visible;
-        public bool Visible
-        {
-            get => _visible;
-            set
-            {
-                _visible = value;
-
-                if (_visible)
-                {
-                    // Re-render content when the view is made visible
-                    RenderOutput();
-                }
-                else
-                {
-                    // Clear the output when the view is made invisible
-                    Output = Array.Empty<byte>();
-                }
-            }
-        }
+        public bool Visible;
 
 
         public View UltralightView;
