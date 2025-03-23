@@ -15,16 +15,11 @@ namespace SourceRewrite.Entities.ConsoleCanvas
             PanelName = "console/console.html";
             base.Start();
 
-            Canvas.Visible = false;
-
-
             Input.KeyDownEvent += (keyboard, key, _) =>
             {
                 // On ` key
                 if (key == Silk.NET.Input.Key.GraveAccent)
                 {
-                    // Toggle Visibility
-                    Canvas.Visible = !Canvas.Visible;
                 }
             };
         }

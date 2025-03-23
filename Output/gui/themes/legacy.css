@@ -6,7 +6,7 @@
     --menu-bar-text: rgb(163, 163, 163);
 
     --bg-dark: #1e1e1e;
-    --bg-medium: #565656af;
+    --bg-medium: #565656f1;
     --bg-light: #313136;
     --accent: #323232;
     --separator: #323232;
@@ -22,4 +22,8 @@
 
     /* Text Visuals */
     --font-primary: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+vista-panel {
+    background-color: var(--bg-medium);
 }

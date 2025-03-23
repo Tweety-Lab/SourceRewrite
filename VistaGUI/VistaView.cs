@@ -35,8 +35,7 @@ namespace VistaGUI
         /// JavaScript context.
         /// </summary>
         public VistaScriptingContext ScriptingContext;
-
-        public bool Visible;
+        public bool Visible = true;
 
 
         public View UltralightView;
