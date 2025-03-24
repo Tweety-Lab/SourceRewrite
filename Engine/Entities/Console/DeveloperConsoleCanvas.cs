@@ -23,6 +23,7 @@ namespace SourceRewrite
                 // On ` key
                 if (key == Silk.NET.Input.Key.GraveAccent)
                 {
+                    Canvas.Visible = !Canvas.Visible;
                 }
             };
 

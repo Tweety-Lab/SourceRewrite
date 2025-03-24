@@ -7,12 +7,6 @@ using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using VistaGUI;
 using VistaGUI.Scripting.References;
 
@@ -40,7 +34,14 @@ namespace SourceRewrite.Entities.GUI
             set
             {
                 if (Container.VistaView != null)
+                {
                     Container.VistaView.Visible = value;
+                    if (!value && Container.Output != null)
+                    {
+                        // Clear the texture when visibility is turned off
+                        Container.ClearTexture();
+                    }
+                }
             }
         }
 

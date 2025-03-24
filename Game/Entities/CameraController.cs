@@ -20,8 +20,6 @@ namespace Game.Entities
             camEntity.Parent = this;
 
             CameraEntity.SetActiveCamera(camEntity);
-
-            Console.WriteLine("Camera created and set as active.");
         }
 
         public override void Update()
