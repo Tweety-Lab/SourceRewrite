@@ -17,6 +17,9 @@ namespace SourceRewrite
         {
             // Initialize the cache for ConCommandAttribute
             AttributeManager.Initialize<ConCommandAttribute>();
+
+            // Cache Entity Attributes
+            AttributeManager.Initialize<EntityAttribute>();
         }
 
         public static void Msg(string message)

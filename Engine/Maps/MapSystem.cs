@@ -198,9 +198,6 @@ namespace SourceRewrite.Maps
         {
             // Ensure EntityManager is initialized
             var root = EntityManager.Root;
-
-            // Cache Entity Attributes
-            AttributeManager.Initialize<EntityAttribute>();
         }
 
         // Event triggered when a map is about to load

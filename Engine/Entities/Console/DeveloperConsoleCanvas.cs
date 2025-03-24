@@ -18,12 +18,15 @@ namespace SourceRewrite
             PanelName = "console/console.html";
             base.Start();
 
+            // Hide the console by default
+            Canvas.Visible = false;
+
             Input.KeyDownEvent += (keyboard, key, _) =>
             {
                 // On ` key
                 if (key == Silk.NET.Input.Key.GraveAccent)
                 {
-                    Canvas.Visible = !Canvas.Visible;
+                    Canvas.Visible = !Canvas.Visible; // Toggle Visibility
                 }
             };
 
