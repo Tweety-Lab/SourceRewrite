@@ -94,7 +94,9 @@ namespace SourceRewrite
                 }
                 catch (Exception ex)
                 {
-                    Error($"Error executing command '{commandName}': {ex.Message}");
+                    // Log the inner exception if available
+                    var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception";
+                    Error($"Error executing command '{commandName}': {ex.Message}. Inner exception: {innerExceptionMessage}");
                     return;
                 }
             }
