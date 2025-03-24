@@ -79,29 +79,13 @@ namespace SourceRewrite
                     {
                         try
                         {
-                            // Handle boolean conversion for 0-1 values
-                            if (parameters[i].ParameterType == typeof(bool))
-                            {
-                                bool boolValue = false;
-                                if (args[i] == "1")
-                                    boolValue = true;
-                                else if (args[i] != "0")
-                                {
-                                    // Handle invalid boolean input
-                                    Error($"Argument {i + 1} should be '0' or '1', got '{args[i]}'");
-                                    return;
-                                }
-                                convertedArgs[i] = boolValue;
-                            }
-                            else
-                            {
-                                // Convert other arguments to the requested type
-                                convertedArgs[i] = Convert.ChangeType(args[i], parameters[i].ParameterType);
-                            }
+                            // Convert the argument to the appropriate type
+                            convertedArgs[i] = ConvertConValueToType(args[i], parameters[i].ParameterType);
                         }
                         catch (Exception ex)
                         {
                             Error($"Failed to convert argument {i + 1} ({args[i]}) to {parameters[i].ParameterType.Name}: {ex.Message}");
+                            return;
                         }
                     }
 
@@ -117,6 +101,38 @@ namespace SourceRewrite
             else
             {
                 Msg($"Unknown command \"{commandName}\"");
+            }
+        }
+
+
+        /// <summary>
+        /// Convert a Console variable value to the specified type.
+        /// </summary>
+        /// <param name="input">The input string to convert.</param>
+        /// <param name="type">The target type to convert to.</param>
+        /// <returns>The converted value.</returns>
+        private static object ConvertConValueToType(string input, Type type)
+        {
+            if (type == typeof(bool))
+            {
+                if (input == "1")
+                    return true;
+                else if (input == "0")
+                    return false;
+                else
+                    throw new ArgumentException($"Argument should be '0' or '1', got '{input}'");
+            }
+            else
+            {
+                // Handle conversion for other types
+                try
+                {
+                    return Convert.ChangeType(input, type);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException($"Failed to convert '{input}' to {type.Name}: {ex.Message}");
+                }
             }
         }
     }
