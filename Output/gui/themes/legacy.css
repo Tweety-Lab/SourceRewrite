@@ -15,16 +15,16 @@
     --menu-bar-bg: rgb(219, 219, 219);
     --menu-bar-text: rgb(163, 163, 163);
 
-    --bg-dark: #2d2d2d;
-    --bg-medium: #646464;
+    --bg-dark: #555555;
+    --bg-medium: #767676;
     --bg-light: #a8a8a8;
     --accent: #323232;
     --separator: #323232;
-    --text-white: #ffffff;
+    --text-white: #f1f1f1;
     --text-hover: rgb(223, 223, 223);
     --highlight-hover: rgb(199, 199, 199);
-    --button-border: #adadad;
-    --button-bg: #646464;
+    --button-border: #878787;
+    --button-bg: #767676;
 
     /* Button Visuals */
     --button-border-thickness: 1px;
@@ -48,32 +48,19 @@ p {
     margin-top: -4px;
 }
 
-textarea {
-    background-color: var(--bg-dark);
-    font-family: var(--font-primary); /* Apply the primary font */
-    color: var(--text-white);
-
-    border-left: 1px solid #252525;
-    border-top: 1px solid #252525;
-    border-right: 1px solid #a8a8a8;
-    border-bottom: 1px solid #a8a8a8;
-
-    outline: none;
-}
-
 input {
     background-color: var(--bg-dark);
     color: var(--text-white);
     font-family: var(--font-primary); /* Apply the primary font */
 
-    border-left: 1px solid #252525;
-    border-top: 1px solid #252525;
-    border-right: 1px solid #a8a8a8;
-    border-bottom: 1px solid #a8a8a8;
+    border-left: 1px solid #3a3a3a;
+    border-top: 1px solid #3a3a3a;
+    border-right: 1px solid #8c8c8c;
+    border-bottom: 1px solid #8c8c8c;
     
     outline: none;
 
-    height: 25px;
+    height: 24px;
     width: 100%;
 }
 
@@ -85,14 +72,14 @@ button {
     padding-left: 4px;
     font-size: 11px; /* Set the font size to be smaller */
 
-    height: 24px;
-    width: 65px;
+    height: 22px;
+    width: 70px;
 
     border-left: 1px solid #a8a8a8;
     border-top: 1px solid #a8a8a8;
-    border-right: 1px solid #252525;
-    border-bottom: 1px solid #252525;
+    border-right: 1px solid #3a3a3a;
+    border-bottom: 1px solid #3a3a3a;
 
     /* Additional black border using box-shadow */
-    box-shadow: 0 0 0 1px #141414;
+    box-shadow: 0 0 0 1px #3a3a3a;
 }
