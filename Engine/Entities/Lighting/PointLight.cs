@@ -15,6 +15,7 @@ using SourceRewrite.Editor;
 namespace SourceRewrite.Entities
 {
     [AlwaysExecute]
+    [Entity("light")]
     public class PointLight : BaseEntity
     {
         // Light Properties

@@ -4,6 +4,22 @@ using System.Reflection;
 namespace SourceRewrite.Attributes
 {
     /// <summary>
+    /// Allows an Entity to be spawned in hammer.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EntityAttribute : Attribute
+    {
+        public string ClassName { get; set; }
+
+        public EntityAttribute(string className)
+        {
+            // Assign the class name
+            ClassName = className;
+        }
+    }
+
+
+    /// <summary>
     /// Entity Properties are variables that are defined in the BSP (map) file.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]

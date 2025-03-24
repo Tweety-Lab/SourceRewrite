@@ -143,10 +143,9 @@ namespace SourceRewrite.Maps
 
                 // Create Entity with correct class
                 string entityNamespace = (string)entityKeyValues.GetKeyValue("classname").Value;
-                entityNamespace = entityNamespace.Replace("_", ".");
 
-                // Attempt to find type from across all loaded assemblies
-                Type entityType = ModSystem.FindTypeInLoadedAssemblies(entityNamespace);
+                // Find the Type that matches the ClassName
+                Type entityType = AttributeManager.GetTypeByAttributeValue<EntityAttribute, string>("ClassName", entityNamespace);
 
                 if (entityType == null)
                 {

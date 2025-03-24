@@ -39,7 +39,7 @@ namespace VBSP.Conversion
                     string entityString = @$"{i} {{
 position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
 rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
-classname ""{ClassConversion.ClassMap[$"{vmfEntity.ClassName}"]}""
+classname ""{vmfEntity.ClassName}""
 {entityPropertiesString}
                     }}";
 
