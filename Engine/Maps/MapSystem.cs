@@ -7,6 +7,7 @@ using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Modding;
 using System.ComponentModel;
+using SourceRewrite.Attributes;
 
 namespace SourceRewrite.Maps
 {
@@ -70,13 +71,14 @@ namespace SourceRewrite.Maps
             {
                 EntityManager.DisableEntityRecursive(MapRootEntity);
             }
-            
+
             // Re-Enable Entities with AlwaysExecute attribute
-            foreach (BaseEntity entity in Entities)
+            foreach (Type type in AttributeManager.GetTypesWithAttribute<AlwaysExecuteAttribute>())
             {
-                if (Attributes.AttributeCache.AlwaysExecuteEntitiesTypes.Contains(entity.GetType()))
+                foreach (BaseEntity entity in Entities)
                 {
-                    entity.IsEnabled = true;
+                    if (entity.GetType() == type)
+                        entity.IsEnabled = true;
                 }
             }
 

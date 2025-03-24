@@ -28,7 +28,14 @@ namespace SourceRewrite
 
             RegisterEvent("SubmitCommand", (args) =>
             {
-                Msg("] " + args[0]);
+                Msg("] " + args[0]); // Display the typed command
+                string result = EngineConsole.EvaluateCommand(args[0]); // Run the typed command and get the result
+
+                // Only log the result if it was abnormal (not empty)
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Msg(result);
+                }
             });
         }
 

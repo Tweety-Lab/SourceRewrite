@@ -31,6 +31,7 @@ namespace SourceRewrite.Entities
         [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation = 0.032f;
 
+
         // LIGHT RENDERING IS APPLIED IN LIGHTING RENDER PASS!
 
         public override void OnDestroy()
