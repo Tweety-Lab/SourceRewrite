@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Modding;
+﻿using SourceRewrite.Maps;
+using SourceRewrite.Modding;
 using SourceRewrite.Windowing;
 using System.Numerics;
 

@@ -6,6 +6,7 @@ using System.Numerics;
 
 namespace Game.Entities
 {
+    [Entity("info_player_start")]
     public class CameraController : BaseEntity
     {
         [EntityProperty("angles")]
@@ -13,15 +14,14 @@ namespace Game.Entities
 
         public override void Start()
         {
-            if (CameraEntity.ActiveCamera == null)
-            {
-                CameraEntity camEntity = new CameraEntity();
-                camEntity.Start();
+            CameraEntity camEntity = new CameraEntity();
+            camEntity.Start();
 
-                camEntity.Parent = this;
+            camEntity.Parent = this;
 
-                CameraEntity.SetActiveCamera(camEntity);
-            }
+            CameraEntity.SetActiveCamera(camEntity);
+
+            Console.WriteLine("Camera created and set as active.");
         }
 
         public override void Update()

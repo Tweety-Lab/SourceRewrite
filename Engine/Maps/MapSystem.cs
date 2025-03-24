@@ -20,7 +20,7 @@ namespace SourceRewrite.Maps
         public BaseEntity MapRootEntity { get; }
 
         // Determines if Entities should start enabled
-        public bool EntitiesEnabled { get; set; }
+        public bool EntitiesEnabled { get; set; } = true;
 
         public string BSPFilePath;
 
@@ -198,6 +198,9 @@ namespace SourceRewrite.Maps
         {
             // Ensure EntityManager is initialized
             var root = EntityManager.Root;
+
+            // Cache Entity Attributes
+            AttributeManager.Initialize<EntityAttribute>();
         }
 
         // Event triggered when a map is about to load
