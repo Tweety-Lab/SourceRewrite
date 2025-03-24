@@ -39,7 +39,7 @@ namespace SourceRewrite
         }
 
         // Log a yellow warning message to the console
-        public void Warn(string message)
+        public void Warning(string message)
         {
             VistaElement logArea = Canvas.GetElement("log-area");
             logArea.InnerHTML = $"{logArea.InnerHTML}<br><span style='color: yellow;'>{message}</span>";
