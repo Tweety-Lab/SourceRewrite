@@ -8,13 +8,24 @@
             width: fit-content;
         }
 
-        textarea {
+        #log-area {
             width: 100%;
-            
+
             min-height: 120px;
             min-width: 100px;
 
             margin-bottom: 10px;
+
+            background-color: var(--bg-dark);
+            font-family: var(--font-primary); /* Apply the primary font */
+            color: var(--text-white);
+
+            border-left: 1px solid #252525;
+            border-top: 1px solid #252525;
+            border-right: 1px solid #a8a8a8;
+            border-bottom: 1px solid #a8a8a8;
+
+            outline: none;
         }
 
         vista-panel {
@@ -43,7 +54,7 @@
         </div>
 
         <div>
-            <textarea readonly id="log-area"></textarea>
+            <div id="log-area" readonly></div>
         </div>
 
         <div>

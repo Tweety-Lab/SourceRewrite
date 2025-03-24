@@ -27,14 +27,29 @@ namespace SourceRewrite
             string currentLog = String.Empty;
             RegisterEvent("SubmitCommand", (args) =>
             {
-                Log("Submitted Console Command: " + args[0]);
+                Msg("Submitted Console Command: " + args[0]);
             });
         }
 
-        public void Log(string message)
+        // Log a message to the console
+        public void Msg(string message)
         {
             VistaElement logArea = Canvas.GetElement("log-area");
-            logArea.SetProperty("value", $"{logArea.GetProperty("value")}\n{message}");
+            logArea.InnerHTML = $"{logArea.InnerHTML}<br>{message}";
+        }
+
+        // Log a yellow warning message to the console
+        public void Warn(string message)
+        {
+            VistaElement logArea = Canvas.GetElement("log-area");
+            logArea.InnerHTML = $"{logArea.InnerHTML}<br><span style='color: yellow;'>{message}</span>";
+        }
+
+        // Log a red error message to the console
+        public void Error(string message)
+        {
+            VistaElement logArea = Canvas.GetElement("log-area");
+            logArea.InnerHTML = $"{logArea.InnerHTML}<br><span style='color: red;'>{message}</span>";
         }
     }
 }
