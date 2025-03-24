@@ -46,7 +46,7 @@ p {
     color: var(--text-white);
     font-size: 11px;
     font-weight: bold;
-    margin-top: -4px;
+    margin-top: -1px;
 }
 
 input {
@@ -75,7 +75,7 @@ button {
     font-size: 12px;
 
     height: 22px;
-    width: 70px;
+    width: 74px;
 
     border-left: 1px solid #a8a8a8;
     border-top: 1px solid #a8a8a8;
