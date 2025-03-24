@@ -190,7 +190,7 @@ namespace SourceRewrite.Entities
                 // Remove from GlobalEntities if applicable
                 GlobalEntities.Remove(obj);
 
-                EngineConsole.Msg("Destroyed Entity: " + obj.Name);
+                DeveloperConsole.Msg("Destroyed Entity: " + obj.Name);
             }
         }
 

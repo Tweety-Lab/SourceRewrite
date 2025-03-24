@@ -9,11 +9,11 @@ using VistaGUI.Scripting.References;
 
 namespace SourceRewrite
 {
-    public class EngineConsoleCanvas : ScreenspaceGUICanvas
+    public class DeveloperConsoleCanvas : ScreenspaceGUICanvas
     {
         public override void Start()
         {
-            EngineConsole.ConsoleCanvas = this;
+            DeveloperConsole.ConsoleCanvas = this;
 
             PanelName = "console/console.html";
             base.Start();
@@ -29,7 +29,7 @@ namespace SourceRewrite
             RegisterEvent("SubmitCommand", (args) =>
             {
                 Msg("] " + args[0]); // Display the typed command
-                EngineConsole.EvaluateCommand(args[0]); // Run the typed command
+                DeveloperConsole.EvaluateCommand(args[0]); // Run the typed command
 
             });
         }

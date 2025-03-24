@@ -116,7 +116,7 @@ namespace SourceRewrite.Windowing
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
 
             // Load Console as Global Entity
-            EntityManager.AddGlobalEntity(new EngineConsoleCanvas());
+            EntityManager.AddGlobalEntity(new DeveloperConsoleCanvas());
 
             // Load Input
             Input = new InputContext(_window.CreateInput());

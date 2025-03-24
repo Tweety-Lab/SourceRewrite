@@ -16,19 +16,19 @@ namespace Game.ConCommands
         [ConCommand("ping_client")]
         static void Ping()
         {
-            EngineConsole.Msg($"Pong! You have run this command {++pingCount} times.");
+            DeveloperConsole.Msg($"Pong! You have run this command {++pingCount} times.");
         }
 
         [ConCommand("echo")]
         static void Echo(string input)
         {
-            EngineConsole.Msg(input);
+            DeveloperConsole.Msg(input);
         }
 
         [ConCommand("print_boolean")]
         static void PrintBoolean(bool value)
         {
-            EngineConsole.Msg(value ? "true" : "false");
+            DeveloperConsole.Msg(value ? "true" : "false");
         }
     }
 }

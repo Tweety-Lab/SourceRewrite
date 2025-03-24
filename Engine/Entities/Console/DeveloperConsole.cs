@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite
 {
-    public static class EngineConsole
+    public static class DeveloperConsole
     {
-        public static EngineConsoleCanvas ConsoleCanvas { get; set; }
+        public static DeveloperConsoleCanvas ConsoleCanvas { get; set; }
 
-        static EngineConsole()
+        static DeveloperConsole()
         {
             // Initialize the cache for ConCommandAttribute
             AttributeManager.Initialize<ConCommandAttribute>();
