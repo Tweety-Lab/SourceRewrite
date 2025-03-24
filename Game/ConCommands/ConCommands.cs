@@ -24,5 +24,11 @@ namespace Game.ConCommands
         {
             EngineConsole.Msg(input);
         }
+
+        [ConCommand("print_boolean")]
+        static void PrintBoolean(bool value)
+        {
+            EngineConsole.Msg(value ? "true" : "false");
+        }
     }
 }

@@ -69,33 +69,43 @@ namespace SourceRewrite
                         return;
                     }
 
-                    // If method takes individual string parameters
-                    if (parameters.All(p => p.ParameterType == typeof(string)))
+                    if (parameters.Length != args.Length)
                     {
-                        if (parameters.Length != args.Length)
-                        {
-                            Error($"Command requires {parameters.Length} arguments, got {args.Length}");
-                            return;
-                        }
-
-                        for (int i = 0; i < parameters.Length; i++)
-                        {
-                            try
-                            {
-                                // Convert to the requested type
-                                convertedArgs[i] = Convert.ChangeType(args[i], parameters[i].ParameterType);
-                            }
-                            catch (Exception ex)
-                            {
-                                Error($"Failed to convert argument {i + 1} ({args[i]}) to {parameters[i].ParameterType.Name}: {ex.Message}");
-                            }
-                        }
-
-                        method.Invoke(null, convertedArgs);
+                        Error($"Command requires {parameters.Length} arguments, got {args.Length}");
                         return;
                     }
 
-                    Error($"Unsupported parameter types for command '{commandName}'");
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        try
+                        {
+                            // Handle boolean conversion for 0-1 values
+                            if (parameters[i].ParameterType == typeof(bool))
+                            {
+                                bool boolValue = false;
+                                if (args[i] == "1")
+                                    boolValue = true;
+                                else if (args[i] != "0")
+                                {
+                                    // Handle invalid boolean input
+                                    Error($"Argument {i + 1} should be '0' or '1', got '{args[i]}'");
+                                    return;
+                                }
+                                convertedArgs[i] = boolValue;
+                            }
+                            else
+                            {
+                                // Convert other arguments to the requested type
+                                convertedArgs[i] = Convert.ChangeType(args[i], parameters[i].ParameterType);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Error($"Failed to convert argument {i + 1} ({args[i]}) to {parameters[i].ParameterType.Name}: {ex.Message}");
+                        }
+                    }
+
+                    method.Invoke(null, convertedArgs);
                     return;
                 }
                 catch (Exception ex)
