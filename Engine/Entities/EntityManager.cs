@@ -190,7 +190,7 @@ namespace SourceRewrite.Entities
                 // Remove from GlobalEntities if applicable
                 GlobalEntities.Remove(obj);
 
-                Console.WriteLine("Destroyed Entity: " + obj.Name);
+                EngineConsole.Msg("Destroyed Entity: " + obj.Name);
             }
         }
 
@@ -203,21 +203,6 @@ namespace SourceRewrite.Entities
             global.Name = name;
             EntityManager.AddGlobalEntity(global);
             return global;
-        }
-
-        /// <summary>
-        /// Helper function to print the root and its children in a tree structure
-        /// </summary>
-        public static void PrintEntityHierarchy(BaseEntity root, string indent = "")
-        {
-            // Print the current Entity's name
-            Console.WriteLine(indent + root.Name);
-
-            // Recursively print all child Entities
-            foreach (var child in root.Children)
-            {
-                PrintEntityHierarchy(child, indent + "  ");  // Indent each child to represent the hierarchy
-            }
         }
     }
 }

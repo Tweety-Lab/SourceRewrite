@@ -13,6 +13,8 @@ namespace SourceRewrite
     {
         public override void Start()
         {
+            EngineConsole.ConsoleCanvas = this;
+
             PanelName = "console/console.html";
             base.Start();
 
@@ -24,10 +26,9 @@ namespace SourceRewrite
                 }
             };
 
-            string currentLog = String.Empty;
             RegisterEvent("SubmitCommand", (args) =>
             {
-                Msg("Submitted Console Command: " + args[0]);
+                // Msg("] " + args[0]);
             });
         }
 

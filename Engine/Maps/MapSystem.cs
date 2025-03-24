@@ -176,8 +176,6 @@ namespace SourceRewrite.Maps
 
                 Entities.Add(entity);
                 entity.Parent = MapRootEntity; // Ensure parent is set correctly
-
-                EntityManager.PrintEntityHierarchy(EntityManager.Root);
             }
         }
 
