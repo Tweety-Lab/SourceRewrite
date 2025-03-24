@@ -10,7 +10,6 @@ using System.Numerics;
 using VistaGUI;
 using FileFormats.KeyValues.GameInfo;
 using SourceRewrite.TimeSystem;
-using SourceRewrite.Entities.ConsoleCanvas;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -117,7 +116,7 @@ namespace SourceRewrite.Windowing
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
 
             // Load Console as Global Entity
-            EntityManager.AddGlobalEntity(new ConsoleCanvas());
+            EntityManager.AddGlobalEntity(new EngineConsoleCanvas());
 
             // Load Input
             Input = new InputContext(_window.CreateInput());

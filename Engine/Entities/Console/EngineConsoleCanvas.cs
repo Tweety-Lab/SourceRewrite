@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VistaGUI.Scripting.References;
 
-namespace SourceRewrite.Entities.ConsoleCanvas
+namespace SourceRewrite
 {
-    public class ConsoleCanvas : ScreenspaceGUICanvas
+    public class EngineConsoleCanvas : ScreenspaceGUICanvas
     {
         public override void Start()
         {
@@ -27,17 +27,14 @@ namespace SourceRewrite.Entities.ConsoleCanvas
             string currentLog = String.Empty;
             RegisterEvent("SubmitCommand", (args) =>
             {
-                Console.WriteLine("Submitted Console Command: " + args[0]);
-
-                // Add the command to the log
-                VistaElement logArea = Canvas.GetElement("log-area");
-                currentLog += $"] {args[0]}\n";
-                logArea.SetProperty("value", currentLog);
-
-                // Clear current command input
-                VistaElement inputField = Canvas.GetElement("command-input");
-                inputField.SetProperty("value", "");
+                Log("Submitted Console Command: " + args[0]);
             });
+        }
+
+        public void Log(string message)
+        {
+            VistaElement logArea = Canvas.GetElement("log-area");
+            logArea.SetProperty("value", $"{logArea.GetProperty("value")}\n{message}");
         }
     }
 }
