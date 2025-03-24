@@ -14,6 +14,9 @@ namespace Editor
         // Runs once on Mod Load
         public void OnLoad()
         {
+            // Load Game.dll as a Mod
+            ModSystem.LoadModAssembly("Game.dll");
+
             EditorCameraController editorCameraController = new EditorCameraController();
             EditorCanvas editorGUI = new EditorCanvas();
 
