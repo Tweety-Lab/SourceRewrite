@@ -11,10 +11,12 @@ namespace Game.ConCommands
 {
     public static class ConCommands
     {
+        static int pingCount = 0;
+
         [ConCommand("ping_client")]
         static void Ping()
         {
-            EngineConsole.Msg("Pong!");
+            EngineConsole.Msg($"Pong! You have run this command {++pingCount} times.");
         }
     }
 }

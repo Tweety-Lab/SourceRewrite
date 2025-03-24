@@ -43,7 +43,16 @@ namespace SourceRewrite
         public void Msg(string message)
         {
             VistaElement logArea = Canvas.GetElement("log-area");
-            logArea.InnerHTML = $"{logArea.InnerHTML}<br>{message}";
+
+            // Only append <br> if the logArea is not empty
+            if (!string.IsNullOrEmpty(logArea.InnerHTML))
+            {
+                logArea.InnerHTML = $"{logArea.InnerHTML}<br>{message}";
+            }
+            else
+            {
+                logArea.InnerHTML = message;
+            }
         }
 
         // Log a yellow warning message to the console
