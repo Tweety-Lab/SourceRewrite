@@ -28,7 +28,7 @@ namespace SourceRewrite
 
             RegisterEvent("SubmitCommand", (args) =>
             {
-                // Msg("] " + args[0]);
+                Msg("] " + args[0]);
             });
         }
 

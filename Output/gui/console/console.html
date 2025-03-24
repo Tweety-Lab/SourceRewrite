@@ -59,7 +59,7 @@
 
         <div>
             <input type="text" id="command-input">
-            <button onclick="SubmitCommand(document.getElementById('command-input').value)">Submit</button>
+            <button onclick="SubmitCommand(document.getElementById('command-input').value); document.getElementById('command-input').value = ''">Submit</button>
         </div>
         
     </vista-panel>
