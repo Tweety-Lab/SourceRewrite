@@ -18,5 +18,11 @@ namespace Game.ConCommands
         {
             EngineConsole.Msg($"Pong! You have run this command {++pingCount} times.");
         }
+
+        [ConCommand("echo")]
+        static void Echo(string input)
+        {
+            EngineConsole.Msg(input);
+        }
     }
 }
