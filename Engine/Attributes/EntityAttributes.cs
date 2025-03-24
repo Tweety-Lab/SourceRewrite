@@ -4,7 +4,7 @@ using System.Reflection;
 namespace SourceRewrite.Attributes
 {
     /// <summary>
-    /// Allows an Entity to be spawned in hammer.
+    /// Defines the Class Name of the Entity for use in Hammer.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class EntityAttribute : Attribute
