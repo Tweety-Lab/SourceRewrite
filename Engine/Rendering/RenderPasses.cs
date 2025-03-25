@@ -1,10 +1,7 @@
-﻿using SourceRewrite.AssetTypes;
-using SourceRewrite.Entities;
+﻿using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Windowing;
-using System.Drawing;
 using System.Numerics;
-using System.Reflection;
 
 namespace SourceRewrite.Rendering
 {

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using UltralightNet;
 using UltralightNet.AppCore;

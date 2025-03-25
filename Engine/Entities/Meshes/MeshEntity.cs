@@ -1,11 +1,4 @@
-﻿using Silk.NET.Assimp;
-using SourceRewrite.AssetTypes;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SourceRewrite.Windowing;
 using Mesh = SourceRewrite.AssetTypes.Model;
 
 namespace SourceRewrite.Entities

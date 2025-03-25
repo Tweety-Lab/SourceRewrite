@@ -1,7 +1,4 @@
-﻿using SourceRewrite.Entities;
-using System.Reflection;
-
-namespace SourceRewrite.Attributes
+﻿namespace SourceRewrite.Attributes
 {
     /// <summary>
     /// Defines the Class Name of the Entity for use in Hammer.

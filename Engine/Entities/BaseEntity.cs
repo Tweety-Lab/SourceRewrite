@@ -1,5 +1,4 @@
 ﻿using SourceRewrite.Attributes;
-using System.Numerics;
 using System.Reflection;
 
 namespace SourceRewrite.Entities

@@ -3,7 +3,6 @@ using SourceRewrite;
 using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Maps;
 using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
 using System.Numerics;

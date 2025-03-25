@@ -2,15 +2,7 @@
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities;
 using SourceRewrite.Files;
-using SourceRewrite.Rendering;
-using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using UltralightNet;
 
 namespace SourceRewrite.Editor
 {

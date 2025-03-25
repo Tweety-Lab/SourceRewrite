@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Entities;
-using SourceRewrite.Entities.GUI;
+﻿using SourceRewrite.Entities.GUI;
 using SourceRewrite.Files;
 using SourceRewrite.Maps;
 

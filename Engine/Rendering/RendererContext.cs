@@ -4,7 +4,6 @@ using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities.GUI;
-using Silk.NET.Input;
 using System.Numerics;
 
 

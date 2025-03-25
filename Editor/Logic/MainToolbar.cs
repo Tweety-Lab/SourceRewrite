@@ -3,12 +3,6 @@ using Editor.Entities.GUI;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Maps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Editor.Logic
 {

@@ -1,9 +1,7 @@
-﻿using SourceRewrite.Entities;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using SourceRewrite.Maps;
 using SourceRewrite.Components.GUI;
 using SourceRewrite.Entities.GUI;
-using SourceRewrite.InputSystem;
 using Editor.Logic;
 
 namespace Editor.Components.GUI

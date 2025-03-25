@@ -5,8 +5,6 @@ using SourceRewrite.Entities;
 using FileFormats.KeyValues;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
-using SourceRewrite.Modding;
-using System.ComponentModel;
 using SourceRewrite.Attributes;
 
 namespace SourceRewrite.Maps

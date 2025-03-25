@@ -3,15 +3,7 @@ using FileFormats.KeyValues;
 using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
-using SourceRewrite.Files;
-using SourceRewrite.InputSystem;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using VistaGUI.Scripting.References;
 
 namespace Editor.Entities.GUI

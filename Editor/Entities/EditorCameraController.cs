@@ -4,7 +4,6 @@ using SourceRewrite.Entities;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
-using SourceRewrite.Windowing;
 
 namespace Editor.Components
 {

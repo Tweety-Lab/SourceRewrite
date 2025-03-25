@@ -1,11 +1,5 @@
-﻿using Silk.NET.Assimp;
-using SourceRewrite.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using SourceRewrite.Rendering;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities
 {

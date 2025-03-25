@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SourceRewrite
+﻿namespace SourceRewrite
 {
     /// <summary>
     /// Information about the underlying Application

@@ -1,13 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Web;
 using UltralightNet;
 using UltralightNet.JavaScript;
 using UltralightNet.JavaScript.Low;
 using VistaGUI.Scripting.Elements;
 using VistaGUI.Scripting.References;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace VistaGUI.Scripting
 {

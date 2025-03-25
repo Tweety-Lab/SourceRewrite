@@ -1,7 +1,4 @@
-﻿using SourceRewrite.Entities;
-using System.Reflection;
-
-namespace SourceRewrite.Attributes
+﻿namespace SourceRewrite.Attributes
 {
     /// <summary>
     /// Method that can be called from the Developer Console.

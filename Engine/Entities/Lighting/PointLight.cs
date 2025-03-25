@@ -1,12 +1,6 @@
 ﻿using SourceRewrite.Attributes;
-using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 #if EDITOR
 using SourceRewrite.Editor;
