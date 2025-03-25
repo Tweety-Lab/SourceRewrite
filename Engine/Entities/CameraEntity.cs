@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Rendering;
+﻿using SourceRewrite.Maps;
+using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Entities
@@ -15,6 +16,11 @@ namespace SourceRewrite.Entities
         /// Currently active Camera Component.
         /// </summary>
         public static CameraEntity ActiveCamera { get; private set; }
+
+        public CameraEntity()
+        {
+            MapSystem.OnMapUnloaded += () => ActiveCamera = null;
+        }
 
         /// <summary>
         /// Set the active Camera.
