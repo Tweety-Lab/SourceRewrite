@@ -85,3 +85,12 @@ button {
     /* Additional black border using box-shadow */
     box-shadow: 0 0 0 1px #3a3a3a;
 }
+
+button:active {
+    border-left: 1px solid #3a3a3a;
+    border-top: 1px solid #3a3a3a;
+    border-right: 1px solid #a8a8a8;
+    border-bottom: 1px solid #a8a8a8;
+
+    box-shadow: none;
+}
