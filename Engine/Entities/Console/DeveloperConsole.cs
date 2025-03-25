@@ -91,12 +91,11 @@ namespace SourceRewrite
                     return;
                 }
             }
-            else if(convar != null)
+            else if(convar != null && args.Length == 1)
             {
                 try
                 {
                     // Change Convar to the given argument
-
                     var propertyType = convar.PropertyType;
                     var convertedArg = ConvertConValueToType(args[0], propertyType);
                     convar.SetValue(null, convertedArg);
@@ -125,6 +124,32 @@ namespace SourceRewrite
             foreach (string line in lines)
             {
                 EvaluateCommand(line);
+            }
+        }
+
+        public static void WriteConfig(string path)
+        {
+            // Get all ConVars
+            var convars = AttributeManager.GetPropertiesWithAttribute<ConVarAttribute>();
+
+            // Write each ConVar to the file
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                foreach (var convar in convars)
+                {
+                    // Retrieve the ConVar attribute
+                    ConVarAttribute conVarAttribute = (ConVarAttribute)convar.Value;
+
+                    // Skip ConVars that don't have the Save flag
+                    if (conVarAttribute.Flag != ConVarFlag.Save)
+                        continue;
+
+                    // Get the current value of the ConVar
+                    var currentValue = convar.Key.GetValue(null);
+
+                    // Write the ConVar name and value to the file
+                    writer.WriteLine($"{conVarAttribute.Name} {currentValue}");
+                }
             }
         }
 

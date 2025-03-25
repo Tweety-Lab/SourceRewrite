@@ -163,6 +163,9 @@ namespace SourceRewrite.Windowing
         private void OnClose()
         {
             Renderer.OnClose();
+
+            // Save Developer Console config.cfg
+            DeveloperConsole.WriteConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace SourceRewrite.Attributes
 {
+
     /// <summary>
     /// Method that can be called from the Developer Console.
     /// </summary>
@@ -19,6 +20,15 @@
     }
 
     /// <summary>
+    /// Flags for ConVars.
+    /// </summary>
+    public enum ConVarFlag
+    {
+        None = 0,
+        Save = 1
+    }
+
+    /// <summary>
     /// Variable that can be altered from the Developer Console.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
@@ -29,9 +39,15 @@
         /// </summary>
         public string Name { get; set; }
 
-        public ConVarAttribute(string name)
+        /// <summary>
+        /// Flags for the variable.
+        /// </summary>
+        public ConVarFlag Flag { get; set; }
+
+        public ConVarAttribute(string name, ConVarFlag flag = ConVarFlag.None)
         {
             Name = name;
+            Flag = flag;
         }
     }
 }
