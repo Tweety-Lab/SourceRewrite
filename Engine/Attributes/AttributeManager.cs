@@ -390,17 +390,6 @@ namespace SourceRewrite.Attributes
                     if (attribute != null)
                     {
                         dict[field] = attribute;
-
-                        // Also cache by attribute value if the attribute has a name property (common pattern)
-                        var nameProperty = attribute.GetType().GetProperty("Name");
-                        if (nameProperty != null)
-                        {
-                            var name = nameProperty.GetValue(attribute)?.ToString();
-                            if (!string.IsNullOrEmpty(name))
-                            {
-                                AttributeValueCache[$"{typeof(T).FullName}_Name_{name}"] = field;
-                            }
-                        }
                     }
                 }
             }
@@ -419,17 +408,6 @@ namespace SourceRewrite.Attributes
                     if (attribute != null)
                     {
                         dict[property] = attribute;
-
-                        // Also cache by attribute value if the attribute has a name property
-                        var nameProperty = attribute.GetType().GetProperty("Name");
-                        if (nameProperty != null)
-                        {
-                            var name = nameProperty.GetValue(attribute)?.ToString();
-                            if (!string.IsNullOrEmpty(name))
-                            {
-                                AttributeValueCache[$"{typeof(T).FullName}_Name_{name}"] = property;
-                            }
-                        }
                     }
                 }
             }
@@ -448,28 +426,6 @@ namespace SourceRewrite.Attributes
                     if (attribute != null)
                     {
                         dict[method] = attribute;
-
-                        // Also cache by attribute value if the attribute has a name or command property
-                        var nameProperty = attribute.GetType().GetProperty("Name");
-                        if (nameProperty != null)
-                        {
-                            var name = nameProperty.GetValue(attribute)?.ToString();
-                            if (!string.IsNullOrEmpty(name))
-                            {
-                                AttributeValueCache[$"{typeof(T).FullName}_Name_{name}"] = method;
-                            }
-                        }
-
-                        // Special handling for ConCommandAttribute
-                        var commandProperty = attribute.GetType().GetProperty("Command");
-                        if (commandProperty != null)
-                        {
-                            var command = commandProperty.GetValue(attribute)?.ToString();
-                            if (!string.IsNullOrEmpty(command))
-                            {
-                                AttributeValueCache[command] = method;
-                            }
-                        }
                     }
                 }
             }
