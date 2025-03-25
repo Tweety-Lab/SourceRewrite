@@ -158,9 +158,9 @@ namespace SourceRewrite.Rendering
                 // Update Uniforms
                 foreach (Shader shader in Shader.Shaders)
                 {
-                    shader.SetParameter("light.position", lightEntity.Transform.Position);
-                    shader.SetParameter("light.color", modifiedColor / 255.0f); // Convert Color from 1-255 range to 0-1 range
-                    shader.SetParameter("light.attenuation", new Vector3(lightEntity.ConstantAttenuation, lightEntity.LinearAttenuation, lightEntity.QuadraticAttenuation));
+                    shader.SetParameter("lights[0].position", lightEntity.Transform.Position);
+                    shader.SetParameter("lights[0].color", modifiedColor / 255.0f); // Convert Color from 1-255 range to 0-1 range
+                    shader.SetParameter("lights[0].attenuation", new Vector3(lightEntity.ConstantAttenuation, lightEntity.LinearAttenuation, lightEntity.QuadraticAttenuation));
                 }
             }
         }

@@ -9,7 +9,7 @@ struct Light {
     vec3 attenuation; // Constant, Linear, Quadratic
 };
 
-uniform Light light;
+uniform Light lights[10];
 
 // Vertex Code
 void vertex() 
@@ -61,11 +61,11 @@ void fragment()
 
         // Light Variables
         vec3 norm = normalize(VERT_NORMAL);
-        vec3 lightDir = normalize(light.position - FragPos);
+        vec3 lightDir = normalize(lights[0].position - FragPos);
 
         // Extract intensity from light.color.a
-        float intensity = light.color.a;
-        vec3 color = light.color.rgb; // Extract RGB component
+        float intensity = lights[0].color.a;
+        vec3 color = lights[0].color.rgb; // Extract RGB component
 
         // Ambient
         float ambientStrength = 0.2;
@@ -81,10 +81,10 @@ void fragment()
         vec3 specularOutput = specular * spec * color * intensity;
 
         // Distance to light
-        float distance = length(light.position - FragPos);
+        float distance = length(lights[0].position - FragPos);
 
         // Calculate attenuation
-        float attenuation = 1.0 / (light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * (distance * distance));
+        float attenuation = 1.0 / (lights[0].attenuation.x + lights[0].attenuation.y * distance + lights[0].attenuation.z * (distance * distance));
 
         // Final lighting calculations
         vec3 finalLight = (ambient + diffuse + specularOutput) * attenuation;
