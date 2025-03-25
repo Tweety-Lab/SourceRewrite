@@ -115,7 +115,7 @@ namespace SourceRewrite.Files
         /// <summary>
         /// Path to the Game Folder (Folder containing gameinfo.txt).
         /// </summary>
-        public static string BasePath { get; private set; } = "../../";
+        public string BasePath { get; private set; } = "../../";
         
         public GamePath (string basePath)
         {

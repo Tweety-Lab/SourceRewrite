@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Files;
 
 namespace SourceRewrite
 {
@@ -111,6 +112,21 @@ namespace SourceRewrite
             }
         }
 
+        /// <summary>
+        /// Load a config file and execute each command in it.
+        /// </summary>
+        /// <param name="path"></param>
+        public static void LoadConfig(string path)
+        {
+            // Read the config file
+            string[] lines = File.ReadAllLines(path);
+
+            // Evaluate each line as a command
+            foreach (string line in lines)
+            {
+                EvaluateCommand(line);
+            }
+        }
 
         /// <summary>
         /// Convert a Console variable value to the specified type.
@@ -142,5 +158,7 @@ namespace SourceRewrite
                 }
             }
         }
+
+        
     }
 }

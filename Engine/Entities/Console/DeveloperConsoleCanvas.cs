@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Entities.GUI;
+using SourceRewrite.Files;
 using SourceRewrite.InputSystem;
 using VistaGUI.Scripting.References;
 
@@ -12,6 +13,8 @@ namespace SourceRewrite
 
             PanelName = "console/console.html";
             base.Start();
+
+            DeveloperConsole.LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
 
             // Hide the console by default
             Canvas.Visible = false;
