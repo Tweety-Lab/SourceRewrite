@@ -47,6 +47,8 @@ void fragment()
     in vec2 Uv;
     in vec3 VERT_NORMAL;  // Normal information passed from vertex shader
     in vec3 FragPos; // Fragment position passed from vertex shader
+    
+    uniform float specular = 0.5;
 
     void main()
     {
@@ -69,12 +71,10 @@ void fragment()
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = diff * color * intensity;
 
-        // Specular
-        float specularStrength = 0.5;
         vec3 viewDir = normalize(VIEW_POS - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);  
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-        vec3 specular = specularStrength * spec * color * intensity;
+        vec3 specularOutput = specular * spec * color * intensity;
 
         // Distance to light
         float distance = length(light_position - FragPos);
@@ -83,7 +83,7 @@ void fragment()
         float attenuation = 1.0 / (light_attenuation.x + light_attenuation.y * distance + light_attenuation.z * (distance * distance));
 
         // Final lighting calculations
-        vec3 finalLight = (ambient + diffuse + specular) * attenuation;
+        vec3 finalLight = (ambient + diffuse + specularOutput) * attenuation;
 
         // Final result with texture
         vec3 result = finalLight * texColor.rgb; // texColor.rgb to exclude alpha
