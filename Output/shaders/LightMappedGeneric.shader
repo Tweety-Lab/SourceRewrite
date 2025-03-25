@@ -7,6 +7,39 @@ uniform vec3 light_position;
 uniform vec4 light_color; // RGB = color, A = intensity
 uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
 
+// Vertex Code
+void vertex() 
+{
+    // Input attributes
+    layout(location = 0) in vec3 vPos;    // Vertex position
+    layout(location = 1) in vec3 vNormal; // Vertex normal (from location 1)
+    layout(location = 2) in vec2 vUv;     // UVs (from location 2)
+
+    out vec2 Uv;
+    out vec3 VERT_NORMAL; // Pass the normal to the fragment shader
+    out vec3 FragPos; // Pass the fragment position to the fragment shader
+
+    void main()
+    {
+        // Model matrix for transforming positions and normals
+        mat4 model = MODEL_MATRIX;
+
+        // Compute the scale factor based on the model matrix
+        vec3 scale = vec3(length(model[0] * 100), length(model[1] * 100), length(model[2] * 100));
+
+        // Normalize the UVs to map them based on the size of the object
+        vec2 scaledUv = vUv * scale.xy;
+
+        // Transform the vertex position to clip space
+        gl_Position = PROJECTION_MATRIX * VIEW_MATRIX * model * vec4(vPos, 1.0);
+    
+        // Pass the scaled UV and normal to the fragment shader
+        Uv = scaledUv;
+        VERT_NORMAL = normalize(mat3(transpose(inverse(model))) * vNormal); // Transform normal
+        FragPos = vec3(model * vec4(vPos, 1.0)); // Calculate world space fragment position
+    }
+}
+
 // Fragment Code
 void fragment() 
 {
