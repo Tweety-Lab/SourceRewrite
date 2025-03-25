@@ -13,16 +13,19 @@ namespace Game.Entities
     [Entity("info_player_start")]
     public class CameraController : BaseEntity
     {
-        // Move at 1512 units per second
-        public float MovementSpeed = 1512f;
-        public float Sensitivity = 20f;
+
+        [ConVar("movement_speed")]
+        public static float MovementSpeed { get; set; } = 1512f;
+
+        [ConVar("sensitivity")]
+        public static float Sensitivity { get; set; } = 20f;
 
         private float pitch = 0f;
         private float yaw = 0f;
 
         public override void Start()
         {
-            DeveloperConsole.Msg("Started Editor Camera Controller");
+            DeveloperConsole.Msg("Started Camera Controller");
 
             if (CameraEntity.ActiveCamera == null)
             {
