@@ -54,6 +54,15 @@
             margin-bottom: 2px;
         }
 
+        .held-button {
+            border-left: 1px solid #3a3a3a;
+            border-top: 1px solid #3a3a3a;
+            border-right: 1px solid #a8a8a8;
+            border-bottom: 1px solid #a8a8a8;
+
+            box-shadow: none;
+        }
+
     </style>
 </head>
 
@@ -69,8 +78,31 @@
 
         <div>
             <input type="text" id="command-input">
-            <button onclick="SubmitCommand(document.getElementById('command-input').value); document.getElementById('command-input').value = ''">Submit</button>
+            <button id="submit-button" onclick="SubmitCommand(document.getElementById('command-input').value); document.getElementById('command-input').value = ''">Submit</button>
         </div>
         
     </vista-panel>
+
+    
+    <script>
+        const button = document.getElementById('submit-button');
+
+        // When mouse button is pressed down
+        button.addEventListener('mousedown', () => {
+            console.log('Button pressed');
+            button.classList.add('held-button');  // Add the 'held-button' class when button is held
+        });
+
+        // When mouse button is released
+        button.addEventListener('mouseup', () => {
+            console.log('Button released');
+            button.classList.remove('held-button');  // Remove the 'held-button' class when button is released
+        });
+
+        // When mouse leaves the button, stop holding event
+        button.addEventListener('mouseleave', () => {
+            console.log('Button released due to mouse leaving');
+            button.classList.remove('held-button');  // Remove the 'held-button' class
+        });
+    </script>
 </body>
