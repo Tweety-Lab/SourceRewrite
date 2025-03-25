@@ -24,34 +24,24 @@ namespace SourceRewrite.Windowing
         // Property to dynamically fetch the current window title
         public string WindowTitle
         {
-            get
-            {
-                return _window.Title;
-            }
-
-            set
-            {
-                _window.Title = value;
-            }
+            get => _window.Title;
+            set => _window.Title = value;
         }
 
         // Property to dynamically fetch the current window size
         public Vector2 WindowSize
         {
-            get
-            {
-                Vector2D<int> currentSize = _window.Size;
-                return new Vector2(currentSize.X, currentSize.Y);
-            }
-
-            set
-            {
-                Vector2D<int> newSize = new Vector2D<int>((int)value.X, (int)value.Y);
-                _window.Size = newSize;
-            }
+            get => new Vector2(_window.Size.X, _window.Size.Y);
+            set => _window.Size = new Vector2D<int>((int)value.X, (int)value.Y);
         }
 
         private readonly IWindow _window;
+
+        public delegate void LoadAction();
+        public delegate void UnloadAction();
+
+        public LoadAction? OnLoadAction { get; set; }
+        public UnloadAction? OnUnloadAction { get; set; }
 
         // Init a Game Window
         public GameWindow(Vector2 windowSize, string windowTitle, string[] arguments = null)
@@ -74,7 +64,7 @@ namespace SourceRewrite.Windowing
 
             // Create the window
             _window = Window.Create(options);
-            
+
             // Subscribe to window events
             _window.Load += OnLoad;
             _window.Update += OnUpdate;
@@ -86,7 +76,6 @@ namespace SourceRewrite.Windowing
             _window.Run();
 
             _window.Dispose();
-
         }
 
         // Return the IWindow Context
@@ -95,15 +84,31 @@ namespace SourceRewrite.Windowing
             return _window;
         }
 
-        private void OnLoad() {
+        private void OnLoad()
+        {
+            // Default Load actions
+            LoadGameInfo();
+            LoadRenderer();
+            LoadEntities();
+            LoadInput();
+            LoadMap();
 
+            // Invoke OnLoadActions
+            OnLoadAction?.Invoke();
+        }
+
+        private void LoadGameInfo()
+        {
             // Load GameInfo
             string gameInfoContent = File.ReadAllText("../../gameinfo.txt");
             GameInfo = new GameInfoFormat(gameInfoContent);
 
             // Set window title to game name as defined in GameInfo
             _window.Title = GameInfo.GameName;
+        }
 
+        private void LoadRenderer()
+        {
             // Load Renderer (OpenGL)
             Renderer = new RendererContext(RendererAPI.OpenGL, this);
             Renderer.OnLoad();
@@ -114,28 +119,35 @@ namespace SourceRewrite.Windowing
             RenderPassManager.RegisterPass(new OpaquePass());
             RenderPassManager.RegisterPass(new LightingPass());
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
+        }
 
+        private void LoadEntities()
+        {
             // Load Console as Global Entity
             EntityManager.AddGlobalEntity(new DeveloperConsoleCanvas());
+        }
 
+        private void LoadInput()
+        {
             // Load Input
             Input = new InputContext(_window.CreateInput());
+        }
 
+        private void LoadMap()
+        {
             // Get -map window argument
             Application.Arguments.TryGetValue("-map", out string mapPath);
             if (mapPath != null)
             {
                 MapSystem.LoadMap(FileSystem.GetMapPath(mapPath)); // Load Map from argument
-            } else
+            }
+            else
             {
                 MapSystem.LoadMap(FileSystem.GetMapPath("default.bsp")); // Load default map
             }
-
-            // Load Developer Console config.cfg
-            DeveloperConsole.LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
         }
 
-        private void OnUpdate(double deltaTime) 
+        private void OnUpdate(double deltaTime)
         {
             // Update Input
             Input.InputUpdate();
@@ -150,7 +162,8 @@ namespace SourceRewrite.Windowing
             EntityManager.UpdateAllEntities();
         }
 
-        private unsafe void OnRender(double deltaTime) {
+        private unsafe void OnRender(double deltaTime)
+        {
             // Render
             Renderer.OnRender();
         }
@@ -164,8 +177,8 @@ namespace SourceRewrite.Windowing
         {
             Renderer.OnClose();
 
-            // Save Developer Console config.cfg
-            DeveloperConsole.WriteConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
+            // Invoke OnUnloadActions
+            OnUnloadAction?.Invoke();
         }
     }
 }

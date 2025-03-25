@@ -1,11 +1,27 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.Files;
+using SourceRewrite.Windowing;
 
 namespace SourceRewrite
 {
     public static class DeveloperConsole
     {
         public static DeveloperConsoleCanvas ConsoleCanvas { get; set; }
+
+        static DeveloperConsole()
+        {
+            GameWindow.CurrentWindow.OnLoadAction += () =>
+            {
+                // Load config.cfg
+                LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
+            };
+
+            GameWindow.CurrentWindow.OnUnloadAction += () =>
+            {
+                // Write config.cfg
+                WriteConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
+            };
+        }
 
         public static void Msg(string message)
         {
@@ -183,7 +199,5 @@ namespace SourceRewrite
                 }
             }
         }
-
-        
     }
 }
