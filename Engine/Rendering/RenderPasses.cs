@@ -139,28 +139,71 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Apply Lighting.
+    /// Manages and applies lighting from all point light sources in the scene.
     /// </summary>
     public class LightingPass : BaseRenderPass
     {
-        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { };
+        private readonly List<PointLight> _activeLights = new List<PointLight>();
+        private const int MaxLights = 10; // Match the shader's array size
 
-        public override void OnRender() => RenderEntities<PointLight>(EntityManager.Root);
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag>();
+
+        public override void OnRender()
+        {
+            // Clear previous frame's lights
+            _activeLights.Clear();
+
+            // Collect all active lights
+            RenderEntities<PointLight>(EntityManager.Root);
+
+            // Update shaders with all active lights
+            UpdateShaderLighting();
+        }
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is PointLight lightEntity)
+            if (entity is PointLight lightEntity && _activeLights.Count < MaxLights)
             {
-                // Multiply the intensity (4th component of Color) by arbitrary adjustment factor for our unit system
-                Vector4 modifiedColor = lightEntity.Color;
-                modifiedColor.W *= 90000.0f;
+                _activeLights.Add(lightEntity);
+            }
+        }
 
-                // Update Uniforms
-                foreach (Shader shader in Shader.Shaders)
+        private void UpdateShaderLighting()
+        {
+            foreach (Shader shader in Shader.Shaders)
+            {
+                // Set the number of active lights
+                shader.SetParameter("activeLights", _activeLights.Count);
+
+                // Update each light in the array
+                for (int i = 0; i < _activeLights.Count && i < MaxLights; i++)
                 {
-                    shader.SetParameter("lights[0].position", lightEntity.Transform.Position);
-                    shader.SetParameter("lights[0].color", modifiedColor / 255.0f); // Convert Color from 1-255 range to 0-1 range
-                    shader.SetParameter("lights[0].attenuation", new Vector3(lightEntity.ConstantAttenuation, lightEntity.LinearAttenuation, lightEntity.QuadraticAttenuation));
+                    var light = _activeLights[i];
+
+                    // Multiply the intensity (4th component of Color) by adjustment factor
+                    Vector4 modifiedColor = light.Color;
+                    modifiedColor.W *= 90000.0f;
+
+                    // Normalize color from 0-255 to 0-1 range
+                    Vector4 normalizedColor = modifiedColor / 255.0f;
+
+                    // Set all light properties
+                    string lightPrefix = $"lights[{i}]";
+                    shader.SetParameter($"{lightPrefix}.position", light.Transform.Position);
+                    shader.SetParameter($"{lightPrefix}.color", normalizedColor);
+                    shader.SetParameter($"{lightPrefix}.attenuation",
+                        new Vector3(light.ConstantAttenuation,
+                                  light.LinearAttenuation,
+                                  light.QuadraticAttenuation));
+                }
+
+                // Clear any remaining light slots in the array
+                for (int i = _activeLights.Count; i < MaxLights; i++)
+                {
+                    string lightPrefix = $"lights[{i}]";
+                    shader.SetParameter($"{lightPrefix}.position", Vector3.Zero);
+                    shader.SetParameter($"{lightPrefix}.color", Vector4.Zero);
+                    shader.SetParameter($"{lightPrefix}.attenuation", Vector3.One);
                 }
             }
         }
