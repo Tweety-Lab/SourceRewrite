@@ -130,6 +130,9 @@ namespace SourceRewrite.Windowing
             {
                 MapSystem.LoadMap(FileSystem.GetMapPath("default.bsp")); // Load default map
             }
+
+            // Load Developer Console config.cfg
+            DeveloperConsole.LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
         }
 
         private void OnUpdate(double deltaTime) 

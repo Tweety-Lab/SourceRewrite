@@ -14,8 +14,6 @@ namespace SourceRewrite
             PanelName = "console/console.html";
             base.Start();
 
-            DeveloperConsole.LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
-
             // Hide the console by default
             Canvas.Visible = false;
 
