@@ -20,4 +20,21 @@ namespace SourceRewrite.Attributes
             Command = command;
         }
     }
+
+    /// <summary>
+    /// Variable that can be altered from the Developer Console.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class ConVarAttribute : Attribute
+    {
+        /// <summary>
+        /// Name of the variable.
+        /// </summary>
+        public string Name { get; set; }
+
+        public ConVarAttribute(string name)
+        {
+            Name = name;
+        }
+    }
 }

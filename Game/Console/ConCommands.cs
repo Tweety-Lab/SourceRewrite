@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.ConCommands
+namespace Game.Console
 {
     public static class ConCommands
     {
@@ -25,10 +25,10 @@ namespace Game.ConCommands
             DeveloperConsole.Msg(input);
         }
 
-        [ConCommand("print_boolean")]
-        static void PrintBoolean(bool value)
+        [ConCommand("print_convar")]
+        static void PrintConvar()
         {
-            DeveloperConsole.Msg(value ? "true" : "false");
+            DeveloperConsole.Msg($"Value of my_convar: {ConVars.MyConvar}");
         }
     }
 }

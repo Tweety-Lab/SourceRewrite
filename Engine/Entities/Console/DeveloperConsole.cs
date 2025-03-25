@@ -3,6 +3,7 @@ using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,11 @@ namespace SourceRewrite
             string commandName = parts[0];
             string[] args = parts.Length > 1 ? parts.Skip(1).ToArray() : Array.Empty<string>();
 
-            // Find the method with the matching command
+            // Find method with the matching command
             var method = AttributeManager.GetMethodByAttributeValue<ConCommandAttribute, string>("Command", commandName);
+
+            // Find convar with the matching command
+            var convar = AttributeManager.GetPropertyByAttributeValue<ConVarAttribute, string>("Name", commandName);
 
             if (method != null)
             {
@@ -92,6 +96,21 @@ namespace SourceRewrite
                     var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception";
                     Error($"Error executing command '{commandName}': {ex.Message}. Inner exception: {innerExceptionMessage}");
                     return;
+                }
+            }
+            else if(convar != null)
+            {
+                try
+                {
+                    // Change Convar to the given argument
+
+                    var propertyType = convar.PropertyType;
+                    var convertedArg = ConvertConValueToType(args[0], propertyType);
+                    convar.SetValue(null, convertedArg);
+                }
+                catch (Exception ex)
+                {
+                    Error($"Failed to set {commandName} to {args[0]}: {ex.Message}");
                 }
             }
             else
