@@ -133,6 +133,10 @@ namespace SourceRewrite
         /// <param name="path"></param>
         public static void LoadConfig(string path)
         {
+            // Check if file exists
+            if (!File.Exists(path))
+                return;
+
             // Read the config file
             string[] lines = File.ReadAllLines(path);
 

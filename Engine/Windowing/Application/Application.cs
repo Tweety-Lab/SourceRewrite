@@ -6,7 +6,8 @@
     public static class Application
     {
         /// <summary>
-        /// The arguments passed to the application on launch. Key is argument name, value is argument value.
+        /// The arguments passed to the application on launch.
+        /// Key is argument name, value is argument value.
         /// </summary>
         public static Dictionary<string, string> Arguments { get; set; } = new Dictionary<string, string>();
 
