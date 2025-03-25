@@ -3,9 +3,13 @@
 // Global Uniforms
 uniform sampler2D uTexture0;
 
-uniform vec3 light_position;
-uniform vec4 light_color; // RGB = color, A = intensity
-uniform vec3 light_attenuation; // We store attenuation in a Vector3 that goes Constant, Linear, Quadratic.
+struct Light {
+    vec3 position;
+    vec4 color; // RGB = color, A = intensity
+    vec3 attenuation; // Constant, Linear, Quadratic
+};
+
+uniform Light light;
 
 // Vertex Code
 void vertex() 
@@ -57,11 +61,11 @@ void fragment()
 
         // Light Variables
         vec3 norm = normalize(VERT_NORMAL);
-        vec3 lightDir = normalize(light_position - FragPos);
+        vec3 lightDir = normalize(light.position - FragPos);
 
-        // Extract intensity from light_color.a
-        float intensity = light_color.a;
-        vec3 color = light_color.rgb; // Extract RGB component
+        // Extract intensity from light.color.a
+        float intensity = light.color.a;
+        vec3 color = light.color.rgb; // Extract RGB component
 
         // Ambient
         float ambientStrength = 0.2;
@@ -77,10 +81,10 @@ void fragment()
         vec3 specularOutput = specular * spec * color * intensity;
 
         // Distance to light
-        float distance = length(light_position - FragPos);
+        float distance = length(light.position - FragPos);
 
         // Calculate attenuation
-        float attenuation = 1.0 / (light_attenuation.x + light_attenuation.y * distance + light_attenuation.z * (distance * distance));
+        float attenuation = 1.0 / (light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * (distance * distance));
 
         // Final lighting calculations
         vec3 finalLight = (ambient + diffuse + specularOutput) * attenuation;
