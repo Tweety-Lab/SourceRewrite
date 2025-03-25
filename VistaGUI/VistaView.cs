@@ -150,8 +150,6 @@ namespace VistaGUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonDown(int mouseButton)
         {
-            Console.WriteLine($"Mouse DOWN - Button: {mouseButton}");
-
             if (!Visible) 
                 return; // Don't process input if the GUI is not visible
 
@@ -176,8 +174,6 @@ namespace VistaGUI
         /// <param name="mouseButton"></param>
         public void SendMouseButtonUp(int mouseButton)
         {
-            Console.WriteLine($"Mouse UP - Button: {mouseButton}");
-
             if (!Visible) 
                 return; // Don't process input if the GUI is not visible
 
