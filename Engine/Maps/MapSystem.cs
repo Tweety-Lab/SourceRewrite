@@ -165,7 +165,7 @@ namespace SourceRewrite.Maps
                 }
 
                 // Assign Entity Name
-                entity.Name = entity.GetType().ToString();
+                entity.Name = entityKeyValues.ParentKeys[0].Name;
 
                 // Adjust position relative to the WorldTransform's Position
                 Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;
