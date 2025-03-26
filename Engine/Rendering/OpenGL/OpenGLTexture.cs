@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Silk.NET.OpenAL;
+using Silk.NET.OpenGL;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -49,6 +50,11 @@ namespace SourceRewrite.Rendering.OpenGL
             _gl.TexParameter(TextureTarget.Texture2D,
                 TextureParameterName.TextureWrapT,
                 (int)TextureWrapMode.Repeat);
+
+            _gl.GetFloat(GLEnum.MaxTextureMaxAnisotropy, out float maxAniso);
+            _gl.TexParameter(TextureTarget.Texture2D,
+    TextureParameterName.TextureMaxAnisotropy,
+    Math.Min(4.0f, maxAniso)); // Lower value = less anisotropic filtering
 
             // Generate mipmaps
             _gl.GenerateMipmap(TextureTarget.Texture2D);
