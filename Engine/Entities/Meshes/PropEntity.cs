@@ -5,6 +5,7 @@ using SourceRewrite.Windowing;
 
 namespace SourceRewrite.Entities
 {
+    [Entity("prop_static")]
     public class PropEntity : MeshEntity
     {
         /// <summary>
