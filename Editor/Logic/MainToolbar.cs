@@ -28,7 +28,7 @@ namespace Editor.Logic
                     return;
 
                 // Create Point Light
-                PointLight lightEntity = new PointLight();
+                Light lightEntity = new Light();
                 lightEntity.Color = new System.Numerics.Vector4(1, 10, 10, 10);
                 lightEntity.Name = "PointLight";
 

@@ -10,7 +10,7 @@ namespace SourceRewrite.Entities
 {
     [AlwaysExecute]
     [Entity("light")]
-    public class PointLight : BaseEntity
+    public class Light : BaseEntity
     {
         // Light Properties
         [EntityProperty("_light")]

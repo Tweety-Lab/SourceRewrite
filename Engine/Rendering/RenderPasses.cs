@@ -143,7 +143,7 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public class LightingPass : BaseRenderPass
     {
-        private readonly List<PointLight> _activeLights = new List<PointLight>();
+        private readonly List<Light> _activeLights = new List<Light>();
         private const int MaxLights = 10; // Match the shader's array size
 
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag>();
@@ -154,7 +154,7 @@ namespace SourceRewrite.Rendering
             _activeLights.Clear();
 
             // Collect all active lights
-            RenderEntities<PointLight>(EntityManager.Root);
+            RenderEntities<Light>(EntityManager.Root);
 
             // Update shaders with all active lights
             UpdateShaderLighting();
@@ -162,7 +162,7 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is PointLight lightEntity && _activeLights.Count < MaxLights)
+            if (entity is Light lightEntity && _activeLights.Count < MaxLights)
             {
                 _activeLights.Add(lightEntity);
             }
