@@ -169,10 +169,17 @@ namespace SourceRewrite.Entities
             }
         }
 
+        /// <summary>
+        /// Fire an Entity Output.
+        /// </summary>
+        /// <param name="outputName"></param>
         public void FireOutput(string outputName)
         {
-            var output = Outputs.FirstOrDefault(o => o.OutputName == outputName);
-            if (output != null)
+            // Get all outputs with the matching name
+            var matchingOutputs = Outputs.Where(o => o.OutputName == outputName);
+
+            // Fire each matching output
+            foreach (var output in matchingOutputs)
             {
                 output.Fire();
             }

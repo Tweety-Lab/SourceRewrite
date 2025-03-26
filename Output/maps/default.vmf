@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "99"
+	"mapversion" "101"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "99"
+	"mapversion" "101"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -112,6 +112,7 @@ entity
 	connections
 	{
 		"OnMapSpawn" "counterAdd10-1"
+		"OnMapSpawn" "counterSubtract10-1"
 	}
 	"origin" "-96.6566 -96 64"
 	editor

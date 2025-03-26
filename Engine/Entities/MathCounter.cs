@@ -16,7 +16,15 @@ namespace SourceRewrite.Entities
         [Input]
         public void Add()
         {
-            DeveloperConsole.Msg("Add Input was ran!");
+            Value++;
+            DeveloperConsole.Msg($"MathCounter {Name} incremented to {Value}");
+        }
+
+        [Input]
+        public void Subtract()
+        {
+            Value--;
+            DeveloperConsole.Msg($"MathCounter {Name} decremented to {Value}");
         }
     }
 }
