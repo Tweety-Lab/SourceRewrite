@@ -21,7 +21,7 @@ namespace SourceRewrite.Editor
         /// </summary>
         /// <param name="position">Center position of the cube</param>
         /// <param name="size">Size of the cube in each dimension</param>
-        public static MeshEntity DrawCube(Vector3 position, Vector3 size)
+        public static void DrawCube(Vector3 position, Vector3 size, BaseEntity parent = null)
         {
             // Calculate a unique key for each mesh (e.g., based on position and size)
             int meshKey = position.GetHashCode() ^ size.GetHashCode();
@@ -101,7 +101,8 @@ namespace SourceRewrite.Editor
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
 
-            return meshEntity;
+            // Parent MeshEntity
+            meshEntity.Parent = parent;
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace SourceRewrite.Editor
         /// <param name="position">Center position of the sphere</param>
         /// <param name="radius">Radius of the sphere</param>
         /// <param name="segments">Number of segments (resolution of the sphere)</param>
-        public static MeshEntity DrawSphere(Vector3 position, float radius, int segments = 16)
+        public static void DrawSphere(Vector3 position, float radius, int segments = 16, BaseEntity parent = null)
         {
             // Create a Mesh
             Mesh mesh = new Mesh();
@@ -186,7 +187,8 @@ namespace SourceRewrite.Editor
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
 
-            return meshEntity;
+            // Parent MeshEntity
+            meshEntity.Parent = parent;
         }
     }
 }

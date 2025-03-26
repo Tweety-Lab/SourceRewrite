@@ -41,11 +41,8 @@ namespace SourceRewrite.Entities
 #if EDITOR
         public override void DrawGizmos()
         {
-            DeveloperConsole.Msg("Drawing Light Gizmos");
             Gizmos.Color = new Vector4(255, 0, 0, 1);
-            MeshEntity sphereGizmo = Gizmos.DrawSphere(Transform.Position, 32, 16);
-
-            sphereGizmo.Parent = this;
+            Gizmos.DrawSphere(Transform.Position, 32, 16, this);
         }
 #endif
     }
