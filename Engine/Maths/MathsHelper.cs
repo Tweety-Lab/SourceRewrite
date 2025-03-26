@@ -4,6 +4,25 @@ namespace SourceRewrite.Maths
 {
     public static class MathsHelper
     {
+        /// <summary>
+        /// Converts degrees to radians.
+        /// </summary>
+        /// <param name="degrees">Angle in degrees</param>
+        /// <returns>Angle in radians</returns>
+        public static float DegreesToRadians(float degrees)
+        {
+            return degrees * (MathF.PI / 180f);
+        }
+
+        /// <summary>
+        /// Converts radians to degrees.
+        /// </summary>
+        /// <param name="radians">Angle in radians</param>
+        /// <returns>Angle in degrees</returns>
+        public static float RadiansToDegrees(float radians)
+        {
+            return radians * (180f / MathF.PI);
+        }
 
         /// <summary>
         /// Convert Euler degrees to Quaternion.
@@ -11,17 +30,17 @@ namespace SourceRewrite.Maths
         public static Quaternion EulerToQuaternion(Vector3 euler)
         {
             // Convert Euler angles from degrees to radians
-            float roll = euler.X * (float)Math.PI / 180f;  // x-axis rotation
-            float pitch = euler.Y * (float)Math.PI / 180f; // y-axis rotation
-            float yaw = euler.Z * (float)Math.PI / 180f;   // z-axis rotation
+            float roll = DegreesToRadians(euler.X);  // x-axis rotation
+            float pitch = DegreesToRadians(euler.Y); // y-axis rotation
+            float yaw = DegreesToRadians(euler.Z);   // z-axis rotation
 
             // Compute the quaternion components
-            float cy = (float)Math.Cos(yaw * 0.5f);
-            float sy = (float)Math.Sin(yaw * 0.5f);
-            float cr = (float)Math.Cos(roll * 0.5f);
-            float sr = (float)Math.Sin(roll * 0.5f);
-            float cp = (float)Math.Cos(pitch * 0.5f);
-            float sp = (float)Math.Sin(pitch * 0.5f);
+            float cy = MathF.Cos(yaw * 0.5f);
+            float sy = MathF.Sin(yaw * 0.5f);
+            float cr = MathF.Cos(roll * 0.5f);
+            float sr = MathF.Sin(roll * 0.5f);
+            float cp = MathF.Cos(pitch * 0.5f);
+            float sp = MathF.Sin(pitch * 0.5f);
 
             // Calculate the quaternion components
             float w = cy * cr * cp + sy * sr * sp;
@@ -40,9 +59,9 @@ namespace SourceRewrite.Maths
             float roll = MathF.Atan2(2.0f * (quat.W * quat.Z + quat.X * quat.Y), 1.0f - 2.0f * (quat.Y * quat.Y + quat.Z * quat.Z));
 
             // Convert from radians to degrees
-            pitch = pitch * (180.0f / MathF.PI);
-            yaw = yaw * (180.0f / MathF.PI);
-            roll = roll * (180.0f / MathF.PI);
+            pitch = RadiansToDegrees(pitch);
+            yaw = RadiansToDegrees(yaw);
+            roll = RadiansToDegrees(roll);
 
             return new Vector3(pitch, yaw, roll);
         }

@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "45"
+	"mapversion" "80"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "45"
+	"mapversion" "80"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -106,6 +106,42 @@ world
 }
 entity
 {
+	"id" "354"
+	"classname" "prop_static"
+	"angles" "37.7612 309.232 26.565"
+	"disableflashlight" "0"
+	"disableselfshadowing" "0"
+	"disableshadowdepth" "0"
+	"disableshadows" "0"
+	"disablevertexlighting" "0"
+	"disableX360" "0"
+	"drawinfastreflection" "0"
+	"fademaxdist" "0"
+	"fademindist" "-1"
+	"fadescale" "1"
+	"ignorenormals" "0"
+	"maxcpulevel" "0"
+	"maxgpulevel" "0"
+	"mincpulevel" "0"
+	"mingpulevel" "0"
+	"model" "primitives/cube.model"
+	"renderamt" "255"
+	"rendercolor" "255 255 255"
+	"screenspacefade" "0"
+	"shadowdepthnocache" "0"
+	"skin" "msising"
+	"solid" "6"
+	"origin" "295.511 32 32"
+	editor
+	{
+		"color" "255 255 0"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
 	"id" "48"
 	"classname" "light"
 	"_constant_attn" "0"
@@ -143,7 +179,7 @@ entity
 	"_quadratic_attn" "1"
 	"_zero_percent_distance" "0"
 	"style" "0"
-	"origin" "-32 -160 96"
+	"origin" "352 -32 128"
 	editor
 	{
 		"color" "220 30 220"
@@ -169,19 +205,24 @@ entity
 entity
 {
 	"id" "15"
-	"classname" "light"
+	"classname" "light_spot"
+	"_cone" "45"
 	"_constant_attn" "0"
 	"_distance" "0"
+	"_exponent" "1"
 	"_fifty_percent_distance" "0"
 	"_hardfalloff" "0"
+	"_inner_cone" "30"
 	"_light" "69 236 250 200"
 	"_lightHDR" "-1 -1 -1 1"
 	"_lightscaleHDR" "1"
 	"_linear_attn" "0"
 	"_quadratic_attn" "1"
 	"_zero_percent_distance" "0"
+	"angles" "-56.7741 283.187 155.854"
+	"pitch" "-56.7741"
 	"style" "0"
-	"origin" "0 0 96"
+	"origin" "32 128 128"
 	editor
 	{
 		"color" "220 30 220"

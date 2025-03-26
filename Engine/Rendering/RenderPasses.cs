@@ -1,5 +1,7 @@
 ﻿using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
+using SourceRewrite.Entities.Lighting;
+using SourceRewrite.Maths;
 using SourceRewrite.Windowing;
 using System.Numerics;
 
@@ -139,11 +141,11 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Manages and applies lighting from all point light sources in the scene.
+    /// Manages and applies lighting from all light sources (point lights and spotlights) in the scene.
     /// </summary>
     public class LightingPass : BaseRenderPass
     {
-        private readonly List<Light> _activeLights = new List<Light>();
+        private readonly List<object> _activeLights = new List<object>(); // Stores both Light and LightSpot
         private const int MaxLights = 10; // Match the shader's array size
 
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag>();
@@ -153,8 +155,9 @@ namespace SourceRewrite.Rendering
             // Clear previous frame's lights
             _activeLights.Clear();
 
-            // Collect all active lights
+            // Collect all active lights of both types
             RenderEntities<Light>(EntityManager.Root);
+            RenderEntities<LightSpot>(EntityManager.Root);
 
             // Update shaders with all active lights
             UpdateShaderLighting();
@@ -162,9 +165,9 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is Light lightEntity && _activeLights.Count < MaxLights)
+            if ((entity is Light || entity is LightSpot) && _activeLights.Count < MaxLights)
             {
-                _activeLights.Add(lightEntity);
+                _activeLights.Add(entity);
             }
         }
 
@@ -178,23 +181,48 @@ namespace SourceRewrite.Rendering
                 // Update each light in the array
                 for (int i = 0; i < _activeLights.Count && i < MaxLights; i++)
                 {
-                    var light = _activeLights[i];
-
-                    // Multiply the intensity (4th component of Color) by adjustment factor
-                    Vector4 modifiedColor = light.Color;
-                    modifiedColor.W *= 90000.0f;
-
-                    // Normalize color from 0-255 to 0-1 range
-                    Vector4 normalizedColor = modifiedColor / 255.0f;
-
-                    // Set all light properties
                     string lightPrefix = $"lights[{i}]";
-                    shader.SetParameter($"{lightPrefix}.position", light.Transform.Position);
-                    shader.SetParameter($"{lightPrefix}.color", normalizedColor);
-                    shader.SetParameter($"{lightPrefix}.attenuation",
-                        new Vector3(light.ConstantAttenuation,
-                                  light.LinearAttenuation,
-                                  light.QuadraticAttenuation));
+
+                    if (_activeLights[i] is Light light)
+                    {
+                        // Handle regular point light
+                        Vector4 modifiedColor = light.Color;
+                        modifiedColor.W *= 90000.0f;
+                        Vector4 normalizedColor = modifiedColor / 255.0f;
+
+                        shader.SetParameter($"{lightPrefix}.position", light.Transform.Position);
+                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
+                        shader.SetParameter($"{lightPrefix}.attenuation",
+                            new Vector3(light.ConstantAttenuation,
+                                      light.LinearAttenuation,
+                                      light.QuadraticAttenuation));
+
+                        // Set point light defaults
+                        shader.SetParameter($"{lightPrefix}.lightType", 0);
+                        shader.SetParameter($"{lightPrefix}.direction", Vector3.Zero);
+                        shader.SetParameter($"{lightPrefix}.cutOff", 0.0f);
+                        shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
+                    }
+                    else if (_activeLights[i] is LightSpot lightSpot)
+                    {
+                        // Handle spotlight
+                        Vector4 modifiedColor = lightSpot.Color;
+                        modifiedColor.W *= 90000.0f;
+                        Vector4 normalizedColor = modifiedColor / 255.0f;
+
+                        shader.SetParameter($"{lightPrefix}.position", lightSpot.Transform.Position);
+                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
+                        shader.SetParameter($"{lightPrefix}.attenuation",
+                            new Vector3(lightSpot.ConstantAttenuation,
+                                      lightSpot.LinearAttenuation,
+                                      lightSpot.QuadraticAttenuation));
+
+                        // Set spotlight specific properties
+                        shader.SetParameter($"{lightPrefix}.lightType", 1);
+                        shader.SetParameter($"{lightPrefix}.direction", lightSpot.Transform.Forward);
+                        shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.InnerConeAngle)));
+                        shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.OuterConeAngle)));
+                    }
                 }
 
                 // Clear any remaining light slots in the array
@@ -204,6 +232,10 @@ namespace SourceRewrite.Rendering
                     shader.SetParameter($"{lightPrefix}.position", Vector3.Zero);
                     shader.SetParameter($"{lightPrefix}.color", Vector4.Zero);
                     shader.SetParameter($"{lightPrefix}.attenuation", Vector3.One);
+                    shader.SetParameter($"{lightPrefix}.lightType", 0);
+                    shader.SetParameter($"{lightPrefix}.direction", Vector3.Zero);
+                    shader.SetParameter($"{lightPrefix}.cutOff", 0.0f);
+                    shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
                 }
             }
         }

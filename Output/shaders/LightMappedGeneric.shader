@@ -1,4 +1,4 @@
-// Lit Brush Shader - Multi-Light Version
+// Lit Brush Shader - Multi-Light Version with Spotlight Support
 
 // Global Uniforms
 uniform sampler2D uTexture0;
@@ -7,6 +7,14 @@ struct Light {
     vec3 position;
     vec4 color; // RGB = color, A = intensity
     vec3 attenuation; // Constant, Linear, Quadratic
+
+    // SpotLights
+    vec3 direction;
+    float cutOff;     // Cosine of inner cutoff angle
+    float outerCutOff; // Cosine of outer cutoff angle
+
+    
+    int lightType;    // 0 = point, 1 = spotlight
 };
 
 uniform Light lights[10];
@@ -68,6 +76,15 @@ void fragment()
             float attenuation = 1.0 / (lights[i].attenuation.x + 
                                       lights[i].attenuation.y * distance + 
                                       lights[i].attenuation.z * (distance * distance));
+            
+            // Spotlight calculations
+            float spotlightEffect = 1.0;
+            if (lights[i].lightType == 1) { // If spotlight
+                float theta = dot(lightDir, normalize(-lights[i].direction));
+                float epsilon = lights[i].cutOff - lights[i].outerCutOff;
+                spotlightEffect = clamp((theta - lights[i].outerCutOff) / epsilon, 0.0, 1.0);
+                attenuation *= spotlightEffect;
+            }
             
             // Ambient component
             vec3 ambient = ambientStrength * color * intensity;
