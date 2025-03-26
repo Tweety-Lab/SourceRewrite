@@ -47,6 +47,10 @@ namespace SourceRewrite.Entities
 
         // Controls whether Entity logic is enabled
         public bool IsEnabled { get; set; } = true;
+        
+
+        // IO Outputs
+        public List<EntityIOConnection> Outputs { get; set; } = new List<EntityIOConnection>();
 
         // Named constructor
         public BaseEntity(string name)
@@ -165,5 +169,13 @@ namespace SourceRewrite.Entities
             }
         }
 
+        public void FireOutput(string outputName)
+        {
+            var output = Outputs.FirstOrDefault(o => o.OutputName == outputName);
+            if (output != null)
+            {
+                output.Fire();
+            }
+        }
     }
 }

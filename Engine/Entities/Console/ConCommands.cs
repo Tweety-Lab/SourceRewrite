@@ -2,7 +2,7 @@
 using SourceRewrite.Files;
 using SourceRewrite.Maps;
 
-namespace SourceRewrite.Entities.Console
+namespace SourceRewrite.Entities
 {
     public static class ConCommands
     {

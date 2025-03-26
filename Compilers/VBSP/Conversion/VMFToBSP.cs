@@ -2,6 +2,7 @@
 using FileFormats.KeyValues;
 using FileFormats.VMF;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace VBSP.Conversion
 {
@@ -38,7 +39,7 @@ namespace VBSP.Conversion
 
                     foreach (KeyValue kvConnection in vmfEntity.Connections)
                     {
-                        entityPropertiesString += $" @{kvConnection.Key} \"{kvConnection.Value}\"\n";
+                        entityPropertiesString += $" connection_{kvConnection.Key} \"{kvConnection.Value}\"\n";
                     }
 
                     string entityString = @$"{vmfEntity.TargetName} {{

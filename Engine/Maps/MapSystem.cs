@@ -136,11 +136,6 @@ namespace SourceRewrite.Maps
                 // Create Entity from KeyValues
                 KeyValuesFormat entityKeyValues = new KeyValuesFormat(entityString);
 
-                // Get Entity data as KeyValues
-                KeyValue positionKeyValue = entityKeyValues.GetKeyValue("position");
-                KeyValue rotationKeyValue = entityKeyValues.GetKeyValue("rotation");
-                KeyValue scaleKeyValue = entityKeyValues.GetKeyValue("scale");
-
                 // Create Entity with correct class
                 string entityNamespace = (string)entityKeyValues.GetKeyValue("classname").Value;
 
@@ -161,11 +156,31 @@ namespace SourceRewrite.Maps
                 // Process Entity properties
                 foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
                 {
+                    Console.WriteLine($"Entity property: {propertyKeyValue.Key} = {propertyKeyValue.Value}");
+                    // Skip Entity IO events
+                    if (propertyKeyValue.Key.StartsWith("connection_"))
+                        continue;
+
                     entity.SetProperty(propertyKeyValue.Key, propertyKeyValue.Value);
+                }
+
+                foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+                {
+                    // Process Entity IO events
+                    if (propertyKeyValue.Key.StartsWith("connection_"))
+                    {
+                        EntityIOConnection io = EntityIOUtils.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
+                        entity.Outputs.Add(io);
+                    }
                 }
 
                 // Assign Entity Name
                 entity.Name = entityKeyValues.ParentKeys[0].Name;
+
+                // Get Entity data as KeyValues
+                KeyValue positionKeyValue = entityKeyValues.GetKeyValue("position");
+                KeyValue rotationKeyValue = entityKeyValues.GetKeyValue("rotation");
+                KeyValue scaleKeyValue = entityKeyValues.GetKeyValue("scale");
 
                 // Adjust position relative to the WorldTransform's Position
                 Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;

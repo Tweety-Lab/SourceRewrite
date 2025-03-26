@@ -12,7 +12,7 @@ namespace SourceRewrite.Entities
     {
         public override void Start()
         {
-            
+            FireOutput("OnMapSpawn");
         }
     }
 }
