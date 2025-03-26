@@ -36,6 +36,11 @@ namespace VBSP.Conversion
                         entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
                     }
 
+                    foreach (KeyValue kvConnection in vmfEntity.Connections)
+                    {
+                        entityPropertiesString += $" @{kvConnection.Key} \"{kvConnection.Value}\"\n";
+                    }
+
                     string entityString = @$"{vmfEntity.TargetName} {{
 position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
 rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""

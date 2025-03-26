@@ -65,8 +65,9 @@ namespace FileFormats.VMF
                     entity.ClassName = (string)parentKey.GetKeyValue("classname").Value; // Set the Entity Class Name
                     entity.Origin = (Vector3)parentKey.GetKeyValue("origin").Value; // Set the Entity Origin
                     entity.Angles = parentKey.GetKeyValue("angles")?.Value is Vector3 angles ? angles : new Vector3(0, 0, 0); // Set the Entity Angles
-                    entity.Properties = new List<KeyValue>(); // Init properties for later storage
 
+                    entity.Properties = new List<KeyValue>(); // Init properties for later storage
+                    entity.Connections = new List<KeyValue>(); // Init connections for later storage
 
                     entity.TargetName = (string)(parentKey.GetKeyValue("targetname")?.Value ?? entityCount.ToString()); // Set the Entity Target Name (if applicable)
 
@@ -74,6 +75,11 @@ namespace FileFormats.VMF
                     foreach (KeyValue keyValue in parentKey.ChildKeyValues)
                     {
                         entity.Properties.Add(keyValue); // Add the attribute
+                    }
+
+                    foreach(KeyValue keyValue in parentKey.GetChildParentKey("connections") ?.ChildKeyValues ?? Enumerable.Empty<KeyValue>())
+                    {
+                        entity.Connections.Add(keyValue);
                     }
 
                     Entities.Add(entity);
