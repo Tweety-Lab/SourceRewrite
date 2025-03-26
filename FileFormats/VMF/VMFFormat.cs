@@ -52,17 +52,23 @@ namespace FileFormats.VMF
                 }
             }
 
-            foreach(ParentKey parentKey in kvVMF.ParentKeys)
+            int entityCount = 0;
+            foreach (ParentKey parentKey in kvVMF.ParentKeys)
             {
                 // Entity Processing
                 if (parentKey.Name == "entity")
                 {
+                    entityCount++;
+
                     Entity entity = new Entity();
                     entity.ID = (int)parentKey.GetKeyValue("id").Value; // Set the Entity ID
                     entity.ClassName = (string)parentKey.GetKeyValue("classname").Value; // Set the Entity Class Name
                     entity.Origin = (Vector3)parentKey.GetKeyValue("origin").Value; // Set the Entity Origin
                     entity.Angles = parentKey.GetKeyValue("angles")?.Value is Vector3 angles ? angles : new Vector3(0, 0, 0); // Set the Entity Angles
                     entity.Properties = new List<KeyValue>(); // Init properties for later storage
+
+
+                    entity.TargetName = (string)(parentKey.GetKeyValue("targetname")?.Value ?? entityCount.ToString()); // Set the Entity Target Name (if applicable)
 
                     // Loop through every key value attribute in the entity
                     foreach (KeyValue keyValue in parentKey.ChildKeyValues)

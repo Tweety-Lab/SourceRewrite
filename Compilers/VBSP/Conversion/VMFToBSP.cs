@@ -36,7 +36,7 @@ namespace VBSP.Conversion
                         entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
                     }
 
-                    string entityString = @$"{i} {{
+                    string entityString = @$"{vmfEntity.TargetName} {{
 position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
 rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
 {entityPropertiesString}
