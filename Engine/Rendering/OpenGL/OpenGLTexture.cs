@@ -28,12 +28,29 @@ namespace SourceRewrite.Rendering.OpenGL
 
         private void SetParameters()
         {
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            _gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            // Enable mipmap filtering for minification
+            _gl.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.LinearMipmapLinear);
 
-            //Generating mipmaps.
+            // Add negative LOD bias to favor higher resolution mips
+            _gl.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureLodBias,
+                -1.5f);
+
+            // Mag filter should remain non-mipmapped
+            _gl.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Linear);
+
+            _gl.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureWrapS,
+                (int)TextureWrapMode.Repeat);
+            _gl.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureWrapT,
+                (int)TextureWrapMode.Repeat);
+
+            // Generate mipmaps
             _gl.GenerateMipmap(TextureTarget.Texture2D);
         }
 
