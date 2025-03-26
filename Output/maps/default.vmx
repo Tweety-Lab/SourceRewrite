@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "80"
+	"mapversion" "95"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "80"
+	"mapversion" "95"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -106,35 +106,18 @@ world
 }
 entity
 {
-	"id" "354"
-	"classname" "prop_static"
-	"angles" "37.7612 309.232 26.565"
-	"disableflashlight" "0"
-	"disableselfshadowing" "0"
-	"disableshadowdepth" "0"
-	"disableshadows" "0"
-	"disablevertexlighting" "0"
-	"disableX360" "0"
-	"drawinfastreflection" "0"
-	"fademaxdist" "0"
-	"fademindist" "-1"
-	"fadescale" "1"
-	"ignorenormals" "0"
-	"maxcpulevel" "0"
-	"maxgpulevel" "0"
-	"mincpulevel" "0"
-	"mingpulevel" "0"
-	"model" "primitives/cube.model"
-	"renderamt" "255"
-	"rendercolor" "255 255 255"
-	"screenspacefade" "0"
-	"shadowdepthnocache" "0"
-	"skin" "msising"
-	"solid" "6"
-	"origin" "295.511 32 32"
+	"id" "97"
+	"classname" "light_directional"
+	"_light" "171 194 194 200"
+	"_lightHDR" "-1 -1 -1 1"
+	"_lightscaleHDR" "0.7"
+	"angles" "90 90 0"
+	"pitch" "0"
+	"SunSpreadAngle" "0"
+	"origin" "88.5305 -128 64"
 	editor
 	{
-		"color" "255 255 0"
+		"color" "220 30 220"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
@@ -219,10 +202,10 @@ entity
 	"_linear_attn" "0"
 	"_quadratic_attn" "1"
 	"_zero_percent_distance" "0"
-	"angles" "-56.7741 283.187 155.854"
-	"pitch" "-56.7741"
+	"angles" "-58.8025 178.016 -52.4395"
+	"pitch" "-58.8025"
 	"style" "0"
-	"origin" "32 128 128"
+	"origin" "384 96 64"
 	editor
 	{
 		"color" "220 30 220"

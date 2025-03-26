@@ -1,0 +1,19 @@
+﻿using SourceRewrite.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SourceRewrite.Entities.Lighting
+{
+    [AlwaysExecute]
+    [Entity("light_directional")]
+    public class LightDirectional : BaseEntity
+    {
+        // Light Properties
+        [EntityProperty("_light")]
+        public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
+    }
+}

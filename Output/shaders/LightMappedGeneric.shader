@@ -1,4 +1,4 @@
-// Lit Brush Shader - Multi-Light Version with Spotlight Support
+// Lit Brush Shader - Multi-Light Version with Spotlight and Directional Light Support
 
 // Global Uniforms
 uniform sampler2D uTexture0;
@@ -13,8 +13,7 @@ struct Light {
     float cutOff;     // Cosine of inner cutoff angle
     float outerCutOff; // Cosine of outer cutoff angle
 
-    
-    int lightType;    // 0 = point, 1 = spotlight
+    int lightType;    // 0 = point, 1 = spotlight, 2 = directional
 };
 
 uniform Light lights[10];
@@ -67,15 +66,21 @@ void fragment()
         // Iterate through all active lights
         for (int i = 0; i < activeLights; i++) {
             // Light properties
-            vec3 lightDir = normalize(lights[i].position - FragPos);
+            vec3 lightDir;
             float intensity = lights[i].color.a;
             vec3 color = lights[i].color.rgb;
             
-            // Calculate distance and attenuation
-            float distance = length(lights[i].position - FragPos);
-            float attenuation = 1.0 / (lights[i].attenuation.x + 
-                                      lights[i].attenuation.y * distance + 
-                                      lights[i].attenuation.z * (distance * distance));
+            // Calculate light direction and attenuation based on light type
+            float attenuation = 1.0;
+            if (lights[i].lightType == 2) { // Directional light
+                lightDir = normalize(-lights[i].direction); // Directional light uses constant direction
+            } else { // Point or spotlight
+                lightDir = normalize(lights[i].position - FragPos);
+                float distance = length(lights[i].position - FragPos);
+                attenuation = 1.0 / (lights[i].attenuation.x + 
+                                    lights[i].attenuation.y * distance + 
+                                    lights[i].attenuation.z * (distance * distance));
+            }
             
             // Spotlight calculations
             float spotlightEffect = 1.0;

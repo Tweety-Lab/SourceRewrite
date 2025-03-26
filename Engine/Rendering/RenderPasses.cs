@@ -141,11 +141,11 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Manages and applies lighting from all light sources (point lights and spotlights) in the scene.
+    /// Manages and applies lighting from all light sources in the scene.
     /// </summary>
     public class LightingPass : BaseRenderPass
     {
-        private readonly List<object> _activeLights = new List<object>(); // Stores both Light and LightSpot
+        private readonly List<object> _activeLights = new List<object>(); // Stores lights
         private const int MaxLights = 10; // Match the shader's array size
 
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag>();
@@ -155,9 +155,10 @@ namespace SourceRewrite.Rendering
             // Clear previous frame's lights
             _activeLights.Clear();
 
-            // Collect all active lights of both types
+            // Collect all active lights of all types
             RenderEntities<Light>(EntityManager.Root);
             RenderEntities<LightSpot>(EntityManager.Root);
+            RenderEntities<LightDirectional>(EntityManager.Root);
 
             // Update shaders with all active lights
             UpdateShaderLighting();
@@ -165,7 +166,7 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if ((entity is Light || entity is LightSpot) && _activeLights.Count < MaxLights)
+            if ((entity is Light || entity is LightSpot || entity is LightDirectional) && _activeLights.Count < MaxLights)
             {
                 _activeLights.Add(entity);
             }
@@ -222,6 +223,15 @@ namespace SourceRewrite.Rendering
                         shader.SetParameter($"{lightPrefix}.direction", lightSpot.Transform.Forward);
                         shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.InnerConeAngle)));
                         shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.OuterConeAngle)));
+                    }
+                    else if (_activeLights[i] is LightDirectional lightDirectional)
+                    {
+                        // Handle directional light
+                        Vector4 modifiedColor = lightDirectional.Color;
+                        Vector4 normalizedColor = modifiedColor / 255.0f;
+                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
+                        shader.SetParameter($"{lightPrefix}.lightType", 2);
+                        shader.SetParameter($"{lightPrefix}.direction", lightDirectional.Transform.Forward);
                     }
                 }
 
