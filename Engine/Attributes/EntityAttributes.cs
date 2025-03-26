@@ -39,4 +39,10 @@
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class AlwaysExecuteAttribute : Attribute { }
+
+    /// <summary>
+    /// Allows the method to be called from the IO system.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    public class InputAttribute : Attribute { }
 }
