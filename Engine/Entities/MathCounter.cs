@@ -26,5 +26,12 @@ namespace SourceRewrite.Entities
             Value -= amount;
             DeveloperConsole.Msg($"MathCounter {Name} decremented to {Value}");
         }
+
+        [Input]
+        public void Divide(int amount)
+        {
+            Value /= amount;
+            DeveloperConsole.Msg($"MathCounter {Name} divided to {Value}");
+        }
     }
 }
