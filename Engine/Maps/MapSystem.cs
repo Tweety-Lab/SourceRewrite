@@ -156,7 +156,6 @@ namespace SourceRewrite.Maps
                 // Process Entity properties
                 foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
                 {
-                    Console.WriteLine($"Entity property: {propertyKeyValue.Key} = {propertyKeyValue.Value}");
                     // Skip Entity IO events
                     if (propertyKeyValue.Key.StartsWith("connection_"))
                         continue;
@@ -169,7 +168,7 @@ namespace SourceRewrite.Maps
                     // Process Entity IO events
                     if (propertyKeyValue.Key.StartsWith("connection_"))
                     {
-                        EntityIOConnection io = EntityIOUtils.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
+                        EntityIOConnection io = EntityIOUtility.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
                         entity.Outputs.Add(io);
                     }
                 }

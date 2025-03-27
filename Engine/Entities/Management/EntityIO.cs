@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Attributes;
+﻿using FileFormats.KeyValues;
+using SourceRewrite.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace SourceRewrite.Entities
         public string OutputName { get; set; }
         public string TargetName { get; set; }
         public string InputName { get; set; }
-        public string Parameter { get; set; }
+        public object Parameter { get; set; }
 
         public void Fire()
         {
@@ -29,27 +30,15 @@ namespace SourceRewrite.Entities
                 var method = entity.GetType().GetMethod(InputName);
                 if (method != null)
                 {
-                    // Get Input Parameter if it has InputAttribute
-                    var parameter = method.GetParameters().FirstOrDefault(p => p.GetCustomAttribute<InputAttribute>() != null);
-
-                    // If the method has a parameter, parse it
-                    if (parameter != null)
-                    {
-                        object[] args = new object[] { Parameter };
-                        method.Invoke(entity, args);
-                    }
-
-                    // If the method doesn't have a parameter, invoke it without args
-                    else
-                    {
-                        method.Invoke(entity, null);
-                    }
+                    // Invoke the method with or without parameters
+                    if (Parameter == null) method.Invoke(entity, null);
+                    else method.Invoke(entity, new object[] { Parameter });
                 }
             }
         }
     }
 
-    public static class EntityIOUtils
+    public static class EntityIOUtility
     {
         // We store strings in BSPs like so: "connection_OutputName "TargetNameInputNameParameterdiscard-discard""
         public static EntityIOConnection ParseIOString(string ioString)
@@ -91,6 +80,12 @@ namespace SourceRewrite.Entities
                     io.TargetName = parts[0];
                     io.InputName = parts[1];
                     io.Parameter = parts.Length > 2 ? parts[2] : null;
+
+                    // Only try to convert if the parameter is not null
+                    if (io.Parameter != null)
+                    {
+                        io.Parameter = KeyValuesUtility.ConvertValueToType(io.Parameter.ToString());
+                    }
                 }
                 else
                 {

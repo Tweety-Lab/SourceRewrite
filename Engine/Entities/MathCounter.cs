@@ -14,16 +14,16 @@ namespace SourceRewrite.Entities
         public int Value { get; set; } = 0;
 
         [Input]
-        public void Add()
+        public void Add(int amount)
         {
-            Value++;
+            Value += amount;
             DeveloperConsole.Msg($"MathCounter {Name} incremented to {Value}");
         }
 
         [Input]
-        public void Subtract()
+        public void Subtract(int amount)
         {
-            Value--;
+            Value -= amount;
             DeveloperConsole.Msg($"MathCounter {Name} decremented to {Value}");
         }
     }
