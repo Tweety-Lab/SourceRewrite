@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "104"
+	"mapversion" "109"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "104"
+	"mapversion" "109"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -106,13 +106,43 @@ world
 }
 entity
 {
+	"id" "183"
+	"classname" "point_servercommand"
+	"targetname" "server"
+	"origin" "-96 -96 96"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
+	"id" "194"
+	"classname" "point_servercommand"
+	"targetname" "client"
+	"origin" "-96 -64 96"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
 	"id" "112"
 	"classname" "logic_auto"
 	"spawnflags" "1"
 	connections
 	{
-		"OnMapSpawn" "counterAdd21230-1"
-		"OnMapSpawn" "counterSubtract3450-1"
+		"OnMapSpawn" "counterAdd7657560-1"
+		"OnMapSpawn" "counterSubtract7860-1"
+		"OnMapSpawn" "counterDivide60-1"
+		"OnMapSpawn" "serverCommandecho server_test0-1"
 	}
 	"origin" "-96.6566 -96 64"
 	editor

@@ -30,6 +30,10 @@ namespace SourceRewrite.Entities
         [Input]
         public void Divide(int amount)
         {
+            // Avoid division by zero
+            if (amount == 0)
+                return;
+
             Value /= amount;
             DeveloperConsole.Msg($"MathCounter {Name} divided to {Value}");
         }
