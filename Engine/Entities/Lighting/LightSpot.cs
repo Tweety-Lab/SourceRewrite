@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Editor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,5 +33,13 @@ namespace SourceRewrite.Entities.Lighting
 
         [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation = 0.032f;
+
+#if EDITOR
+        public override void DrawGizmos()
+        {
+            Gizmos.Color = new Vector4(255, 255, 255, 1);
+            Gizmos.DrawSprite(Transform.Position, "sprites/spot_light", 2f, this);
+        }
+#endif
     }
 }
