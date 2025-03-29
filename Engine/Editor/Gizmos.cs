@@ -197,7 +197,7 @@ namespace SourceRewrite.Editor
         /// </summary>
         /// <param name="position">Center position of the sprite</param>
         /// <param name="size">Size of the sprite</param>
-        public static void DrawSprite(Vector3 position, string spritePath, BaseEntity parent = null)
+        public static void DrawSprite(Vector3 position, string spritePath, float size = 1f, BaseEntity parent = null)
         {
             // Create the Sprite
             EnvSprite sprite = new EnvSprite();
@@ -206,6 +206,8 @@ namespace SourceRewrite.Editor
             // Set the sprite path and parent
             sprite.SpriteName = spritePath;
             sprite.Parent = parent;
+
+            sprite.ScaleFactor = size;
 
             // Start the Sprite
             sprite.Start();
