@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
+using SourceRewrite.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace SourceRewrite.Entities.Env
         public override void Start()
         {
             Mesh newMesh = new Mesh();
-            newMesh.Material = new Material(SpriteName);
+            newMesh.Material = FileSystem.GetMaterial(SpriteName.Replace(".vmt", ""));
 
             // Placeholder Scaling factor
             float scaleFactor = 20.0f;
