@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "109"
+	"mapversion" "118"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "109"
+	"mapversion" "118"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -106,6 +106,33 @@ world
 }
 entity
 {
+	"id" "219"
+	"classname" "env_sprite"
+	"disablereceiveshadows" "0"
+	"disableX360" "0"
+	"framerate" "10.0"
+	"GlowProxySize" "2.0"
+	"HDRColorScale" "1.0"
+	"maxcpulevel" "0"
+	"maxgpulevel" "0"
+	"mincpulevel" "0"
+	"mingpulevel" "0"
+	"model" "sprites/glow01.spr"
+	"renderamt" "255"
+	"rendercolor" "255 255 255"
+	"renderfx" "0"
+	"rendermode" "0"
+	"origin" "385.57 128 64"
+	editor
+	{
+		"color" "20 140 20"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1000]"
+	}
+}
+entity
+{
 	"id" "183"
 	"classname" "point_servercommand"
 	"targetname" "server"
@@ -143,6 +170,7 @@ entity
 		"OnMapSpawn" "counterSubtract7860-1"
 		"OnMapSpawn" "counterDivide60-1"
 		"OnMapSpawn" "serverCommandecho server_test0-1"
+		"OnMapSpawn" "clientCommandecho client_test0-1"
 	}
 	"origin" "-96.6566 -96 64"
 	editor

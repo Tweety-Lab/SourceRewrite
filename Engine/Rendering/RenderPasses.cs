@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Entities;
+using SourceRewrite.Entities.Env;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Entities.Lighting;
 using SourceRewrite.Maths;
@@ -132,7 +133,7 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is MeshEntity meshEntity)
+            if (entity is MeshEntity meshEntity && entity is not EnvSprite) // Make sure not to also render sprites in this pass
             {
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
@@ -266,6 +267,35 @@ namespace SourceRewrite.Rendering
             if (entity is GUICanvasEntity guiEntity)
             {
                 Renderer.RenderScreenspaceGUI(guiEntity);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Render env_sprites.
+    /// </summary>
+    public class SpritePass : BaseRenderPass
+    {
+        // Enable Blending and Depth-Testing
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend, RenderFlag.DepthTest };
+
+        public override void OnRender() => RenderEntities<EnvSprite>(EntityManager.Root);
+
+        protected override void RenderEntity<TEntity>(TEntity entity)
+        {
+            if (entity is EnvSprite meshEntity)
+            {
+                // Get Model Matrix
+                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
+
+                // Get Active Camera
+                CameraEntity camera = CameraEntity.ActiveCamera;
+
+                // Make model matrix face the camera
+                modelMatrix = Matrix4x4.CreateFromQuaternion(camera.Transform.Rotation) * modelMatrix;
+
+                // Render
+                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
             }
         }
     }
