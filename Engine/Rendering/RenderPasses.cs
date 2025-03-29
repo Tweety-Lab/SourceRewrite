@@ -133,7 +133,7 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is MeshEntity meshEntity && entity is not EnvSprite) // Make sure not to also render sprites in this pass
+            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render env_ entities REPLACE THIS
             {
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
@@ -272,21 +272,21 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Render env_sprites.
+    /// Render all entities that require billboarding.
     /// </summary>
-    public class SpritePass : BaseRenderPass
+    public class BillboardPass : BaseRenderPass
     {
         // Enable Blending and Depth-Testing
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.Blend, RenderFlag.DepthTest };
 
-        public override void OnRender() => RenderEntities<EnvSprite>(EntityManager.Root);
+        public override void OnRender() => RenderEntities<MeshEntity>(EntityManager.Root);
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is EnvSprite meshEntity)
+            if (entity is EnvSprite spriteEntity)
             {
                 // Get Model Matrix
-                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
+                var modelMatrix = RendererContext.GetEntityModelMatrix(spriteEntity) ?? Matrix4x4.Identity;
 
                 // Get Active Camera
                 CameraEntity camera = CameraEntity.ActiveCamera;
@@ -295,7 +295,15 @@ namespace SourceRewrite.Rendering
                 modelMatrix = Matrix4x4.CreateFromQuaternion(camera.Transform.Rotation) * modelMatrix;
 
                 // Render the sprite
-                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
+                Renderer.RenderMesh(spriteEntity.Mesh, modelMatrix);
+            }
+            if (entity is EnvBeam beamEntity)
+            {
+                // Get Model Matrix
+                var modelMatrix = RendererContext.GetEntityModelMatrix(beamEntity) ?? Matrix4x4.Identity;
+
+                // Render the beam with the updated model matrix
+                Renderer.RenderMesh(beamEntity.Mesh, modelMatrix);
             }
         }
     }
