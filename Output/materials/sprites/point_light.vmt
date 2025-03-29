@@ -1,0 +1,3 @@
+Sprite {
+	$basetexture "sprites/point_light"
+}

@@ -1,7 +1,0 @@
-Sprite
-{
-$basetexture "sprites/glow01"
-$nosrgb 1
-$spriteorientation vp_parallel
-$spriteorigin "[ 0.50 0.50 ]"
-}
