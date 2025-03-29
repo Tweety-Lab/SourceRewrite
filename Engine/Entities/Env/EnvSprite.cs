@@ -15,7 +15,7 @@ namespace SourceRewrite.Entities.Env
         [EntityProperty("model")]
         public string SpriteName { get; set; }
 
-        public EnvSprite()
+        public override void Start()
         {
             Mesh newMesh = new Mesh();
             newMesh.Material = new Material(SpriteName);
