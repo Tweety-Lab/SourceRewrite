@@ -1,6 +1,7 @@
 ﻿#if EDITOR
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities;
+using SourceRewrite.Entities.Env;
 using SourceRewrite.Files;
 using System.Numerics;
 
@@ -17,7 +18,7 @@ namespace SourceRewrite.Editor
         public static Vector4 Color = new Vector4(255, 255, 255, 1);
 
         /// <summary>
-        /// Draws a Cube and returns its MeshEntity
+        /// Draws a Cube.
         /// </summary>
         /// <param name="position">Center position of the cube</param>
         /// <param name="size">Size of the cube in each dimension</param>
@@ -106,7 +107,7 @@ namespace SourceRewrite.Editor
         }
 
         /// <summary>
-        /// Draws a Sphere and returns its MeshEntity
+        /// Draws a Sphere.
         /// </summary>
         /// <param name="position">Center position of the sphere</param>
         /// <param name="radius">Radius of the sphere</param>
@@ -190,6 +191,29 @@ namespace SourceRewrite.Editor
             // Parent MeshEntity
             meshEntity.Parent = parent;
         }
+
+        /// <summary>
+        /// Draws a Sprite
+        /// </summary>
+        /// <param name="position">Center position of the sprite</param>
+        /// <param name="size">Size of the sprite</param>
+        public static void DrawSprite(Vector3 position, string spritePath, BaseEntity parent = null)
+        {
+            // Create the Sprite
+            EnvSprite sprite = new EnvSprite();
+            sprite.Transform.Position = position;
+
+            // Set the sprite path and parent
+            sprite.SpriteName = spritePath;
+            sprite.Parent = parent;
+
+            // Start the Sprite
+            sprite.Start();
+
+            // Set Sprite Color
+            sprite.Mesh.Material.Shader.SetParameter("color", Color);
+        }
+
     }
 }
 

@@ -294,7 +294,7 @@ namespace SourceRewrite.Rendering
                 // Make model matrix face the camera
                 modelMatrix = Matrix4x4.CreateFromQuaternion(camera.Transform.Rotation) * modelMatrix;
 
-                // Render
+                // Render the sprite
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
             }
         }

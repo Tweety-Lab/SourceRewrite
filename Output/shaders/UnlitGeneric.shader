@@ -38,12 +38,6 @@ void fragment()
         vec4 defaultColor = vec4(1.0, 1.0, 1.0, 1.0); // White color by default
         vec4 texColor = texture(uTexture0, Uv);
 
-        // Check if uTexture0 is valid
-        if (texColor.a == 0.0) // if texture is missing or fully transparent
-        {
-            texColor = defaultColor; // Fallback to a default color (e.g., white)
-        }
-
         // Check if the color uniform is set, and use it. If not, fallback to a default color
         vec4 finalColor = texColor * (color.a > 0.0 ? color : defaultColor);
 

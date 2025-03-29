@@ -41,8 +41,8 @@ namespace SourceRewrite.Entities
 #if EDITOR
         public override void DrawGizmos()
         {
-            Gizmos.Color = new Vector4(255, 0, 0, 1);
-            Gizmos.DrawSphere(Transform.Position, 32, 16, this);
+            Gizmos.Color = new Vector4(255, 255, 255, 1);
+            Gizmos.DrawSprite(Transform.Position, "sprites/point_light", this);
         }
 #endif
     }
