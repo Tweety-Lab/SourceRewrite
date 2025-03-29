@@ -193,7 +193,7 @@ namespace SourceRewrite.Editor
         }
 
         /// <summary>
-        /// Draws a Sprite
+        /// Draws a Sprite.
         /// </summary>
         /// <param name="position">Center position of the sprite</param>
         /// <param name="size">Size of the sprite</param>
