@@ -1,7 +1,6 @@
 Sprite
 {
 $basetexture "sprites/glow01"
-$color "<255, 255, 255, 1>"
 $nosrgb 1
 $spriteorientation vp_parallel
 $spriteorigin "[ 0.50 0.50 ]"

@@ -34,17 +34,18 @@ void fragment()
 
     void main()
     {
-        // Sample the texture using the UV coordinates
+        // Default fallback values in case the uniforms are not set
+        vec4 defaultColor = vec4(1.0, 1.0, 1.0, 1.0); // White color by default
         vec4 texColor = texture(uTexture0, Uv);
 
-        // Apply tint by multiplying the texture color by the tint color
-        vec4 finalColor = texColor * vec4(color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a);
-
-        // Handle transparency: if the alpha value is below a threshold, discard the fragment
-        if (finalColor.a < 0.1)
+        // Check if uTexture0 is valid (not null or unset)
+        if (texColor.a == 0.0) // if texture is missing or fully transparent
         {
-            discard;
+            texColor = defaultColor; // Fallback to a default color (e.g., white)
         }
+
+        // Check if the color uniform is set, and use it. If not, fallback to a default color
+        vec4 finalColor = texColor * (color.a > 0.0 ? color : defaultColor);
 
         // Output the final color
         FRAG_COLOR = finalColor;
