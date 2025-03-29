@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities.Env
 {
+    [AlwaysExecute]
     [Entity("env_sprite")]
     public class EnvSprite : MeshEntity
     {
