@@ -49,6 +49,14 @@ namespace SourceRewrite.Entities.Env
 
             newMesh.Indices = new uint[] { 0, 1, 2, 0, 2, 3 };
 
+            // Set Uvs to tile
+            newMesh.UVs = new float[] {
+                0, 0,  // Vertex 1 (bottom-left)
+                0, Radius / horizontalDistance,  // Vertex 2 (top-left)
+                horizontalDistance / horizontalDistance, Radius / horizontalDistance,  // Vertex 3 (top-right)
+                horizontalDistance / horizontalDistance, 0  // Vertex 4 (bottom-right)
+            };
+
             for (int i = 0; i < newMesh.Vertices.Length; i += 3)
             {
                 // Adjust the vertices based on the center offset
