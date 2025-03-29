@@ -1,7 +1,7 @@
 // Unlit Object Shader
 
 uniform sampler2D uTexture0;
-uniform vec4 tint; // Color to multiply with the texture
+uniform vec4 color; // Color to multiply with the texture
 
 // Vertex Code
 void vertex() 
@@ -38,7 +38,7 @@ void fragment()
         vec4 texColor = texture(uTexture0, Uv);
 
         // Apply tint by multiplying the texture color by the tint color
-        vec4 finalColor = texColor * vec4(tint.r / 255.0, tint.g / 255.0, tint.b / 255.0, tint.a);
+        vec4 finalColor = texColor * vec4(color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a);
 
         // Handle transparency: if the alpha value is below a threshold, discard the fragment
         if (finalColor.a < 0.1)
