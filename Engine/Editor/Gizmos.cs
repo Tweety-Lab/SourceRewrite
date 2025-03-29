@@ -101,6 +101,7 @@ namespace SourceRewrite.Editor
             // Create a MeshEntity
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
+            meshEntity.Name = "Gizmo";
 
             // Parent MeshEntity
             meshEntity.Parent = parent;
@@ -187,6 +188,7 @@ namespace SourceRewrite.Editor
             // Create a MeshEntity
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
+            meshEntity.Name = "Gizmo";
 
             // Parent MeshEntity
             meshEntity.Parent = parent;
@@ -201,6 +203,7 @@ namespace SourceRewrite.Editor
         {
             // Create the Sprite
             EnvSprite sprite = new EnvSprite();
+            sprite.Name = "Gizmo";
             sprite.Transform.Position = position;
 
             // Set the sprite path and parent
