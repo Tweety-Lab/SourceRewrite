@@ -1,10 +1,5 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities.Console
 {
@@ -19,6 +14,16 @@ namespace SourceRewrite.Entities.Console
             set
             {
                 GameWindow.CurrentWindow.GetSilkWindow().UpdatesPerSecond = value;
+            }
+        }
+
+        [ConVar("vsync")]
+        public static bool VSync
+        {
+            get => GameWindow.CurrentWindow.GetSilkWindow().VSync;
+            set
+            {
+                GameWindow.CurrentWindow.GetSilkWindow().VSync = value;
             }
         }
     }
