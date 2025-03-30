@@ -44,9 +44,15 @@ namespace SourceRewrite.Files
         /// <summary>
         /// Returns the paths to all mounted games defined in gameinfo.txt.
         /// </summary>
-        public static string GetMountedPaths()
+        public static string[] GetMountedPaths()
         {
-            return $"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)GetKeyValue("Game").Value}";
+            List<string> paths = new List<string>();
+            foreach(var searchPath in GetParentKey("GameInfo").GetChildParentKey("FileSystem").GetChildParentKey("SearchPaths").ChildKeyValues)
+            {
+                paths.Add($"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)searchPath.Value}");
+            }
+
+            return paths.ToArray();
         }
     }
 }

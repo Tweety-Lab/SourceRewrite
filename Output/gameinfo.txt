@@ -9,6 +9,7 @@
 		SearchPaths
 		{
 			Game				"portal2"
+			Game				"platform"
 		}
 	}
 }
