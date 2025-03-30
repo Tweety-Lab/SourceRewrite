@@ -1,9 +1,12 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Maps;
+using SourceRewrite.TimeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VistaGUI.Scripting.References;
 
 namespace SourceRewrite.Entities.GUI.BuiltIn
 {
@@ -41,7 +44,9 @@ namespace SourceRewrite.Entities.GUI.BuiltIn
 
         public override void Update()
         {
-            base.Update();
+            // Update the FPS counter
+            int fps = (int)(1.0f / Time.DeltaTime);
+            Canvas.GetElementAsType<VistaText>("fps-counter").TextContent = $"{fps} fps on {MapSystem.CurrentMap.BSPFilePath.Replace("../..//", "")}";
         }
     }
 }
