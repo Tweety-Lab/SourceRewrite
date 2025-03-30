@@ -94,7 +94,7 @@ namespace SourceRewrite.Entities
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error parsing IO string: {ex.Message}");
+                System.Console.WriteLine($"Error parsing IO string: {ex.Message}");
                 io.OutputName = ioString; // Fallback to original string
             }
 
