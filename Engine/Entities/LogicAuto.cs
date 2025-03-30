@@ -21,7 +21,7 @@ namespace SourceRewrite.Entities
         public override void DrawGizmos()
         {
             Gizmos.Color = new Vector4(255, 255, 255, 0);
-            Gizmos.DrawSprite(Transform.Position, "editor/logic_auto", 2f, this);
+            Gizmos.DrawSprite(Transform.Position, "editor/logic_auto", 1f, this);
         }
 #endif
     }

@@ -1,7 +1,9 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Editor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,5 +39,13 @@ namespace SourceRewrite.Entities
             Value /= amount;
             DeveloperConsole.Msg($"MathCounter {Name} divided to {Value}");
         }
+
+#if EDITOR
+        public override void DrawGizmos()
+        {
+            Gizmos.Color = new Vector4(255, 255, 255, 0);
+            Gizmos.DrawSprite(Transform.Position, "editor/math_counter", 1f, this);
+        }
+#endif
     }
 }
