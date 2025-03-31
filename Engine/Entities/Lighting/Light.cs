@@ -44,6 +44,7 @@ namespace SourceRewrite.Entities
         {
             Gizmos.Color = new Vector4(255, 255, 255, 1);
             Gizmos.DrawSprite(Transform.Position, "sprites/point_light", 2f, this);
+            Gizmos.DrawWireframeCube(Transform.Position, new Vector3(32f, 32f, 32f), this);
         }
 #endif
     }

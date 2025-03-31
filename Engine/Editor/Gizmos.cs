@@ -108,6 +108,26 @@ namespace SourceRewrite.Editor
         }
 
         /// <summary>
+        /// Draws a Wireframe Cube.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <param name="parent"></param>
+        public static void DrawWireframeCube(Vector3 position, Vector3 size, BaseEntity parent = null)
+        {
+            // Create a MeshEntity
+            MeshEntity meshEntity = new MeshEntity();
+            meshEntity.Transform.Scale = size;
+            meshEntity.Transform.Position = position;
+            meshEntity.Mesh = new Model(FileSystem.GetModelPath("dev/wireframe_cube.model"), FileSystem.GetMaterial("dev/gizmo"));
+            meshEntity.Mesh.Material.Shader.SetParameter("color", Color);
+            meshEntity.Name = "Gizmo";
+
+            // Parent MeshEntity
+            meshEntity.Parent = parent;
+        }
+
+        /// <summary>
         /// Draws a Sphere.
         /// </summary>
         /// <param name="position">Center position of the sphere</param>
@@ -229,6 +249,7 @@ namespace SourceRewrite.Editor
             // Create a MeshEntity
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
+            meshEntity.Mesh.Material.Shader.SetParameter("color", Color);
             meshEntity.Name = "Gizmo";
 
             // Parent MeshEntity
