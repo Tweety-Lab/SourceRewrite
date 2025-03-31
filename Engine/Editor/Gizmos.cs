@@ -219,6 +219,22 @@ namespace SourceRewrite.Editor
             sprite.Mesh.Material.Shader.SetParameter("color", Color);
         }
 
+        /// <summary>
+        /// Draws a Mesh.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="mesh"></param>
+        public static void DrawMesh(Vector3 position, Mesh mesh, BaseEntity parent = null)
+        {
+            // Create a MeshEntity
+            MeshEntity meshEntity = new MeshEntity();
+            meshEntity.Mesh = mesh;
+            meshEntity.Name = "Gizmo";
+
+            // Parent MeshEntity
+            meshEntity.Parent = parent;
+        }
+
     }
 }
 
