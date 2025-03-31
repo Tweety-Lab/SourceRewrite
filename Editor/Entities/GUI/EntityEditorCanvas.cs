@@ -87,7 +87,7 @@ namespace Editor.Entities.GUI
         {
             VistaElement propertiesTable = Canvas.GetElement("keyvalues-table");
 
-            var fieldsWithAttribute = Selection.SelectedEntity.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            var fieldsWithAttribute = Selection.SelectedEntity.GetType().GetFields(BindingFlags.Instance);
 
 
             foreach (var field in fieldsWithAttribute)

@@ -14,16 +14,16 @@ namespace SourceRewrite.Entities.GUI
     public class GUICanvasEntity : BaseEntity
     {
         [EntityProperty("height")]
-        private int height; // Panel Height
+        private int height { get; set; } // Panel Height
 
         [EntityProperty("width")]
-        private int width; // Panel Width
+        private int width { get; set; } // Panel Width
 
         [EntityProperty("panelname")]
-        public string PanelName; // Name of HTML Panel to render
+        public string PanelName { get; set; } // Name of HTML Panel to render
 
         [EntityProperty("IsTransparent")]
-        public bool IsTransparent; // Is the panel background transparent
+        public bool IsTransparent { get; set; } // Is the panel background transparent
 
         [EntityProperty("visible")]
         public bool Visible

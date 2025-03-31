@@ -15,7 +15,7 @@ namespace SourceRewrite.Entities.Lighting
     {
         // Light Properties
         [EntityProperty("_light")]
-        public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
+        public Vector4 Color { get; set; } = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
 
 #if EDITOR
         public override void DrawGizmos()

@@ -15,17 +15,17 @@ namespace SourceRewrite.Entities
     {
         // Light Properties
         [EntityProperty("_light")]
-        public Vector4 Color = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
+        public Vector4 Color { get; set; } = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
 
         // Attenuation Properties
         [EntityProperty("_constant_attn")]
-        public float ConstantAttenuation = 1.0f;
+        public float ConstantAttenuation { get; set; } = 1.0f;
 
         [EntityProperty("_linear_attn")]
-        public float LinearAttenuation = 0.09f;
+        public float LinearAttenuation { get; set; } = 0.09f;
 
         [EntityProperty("_quadratic_attn")]
-        public float QuadraticAttenuation = 0.032f;
+        public float QuadraticAttenuation { get; set; } = 0.032f;
 
 
         // LIGHT RENDERING IS APPLIED IN LIGHTING RENDER PASS!
