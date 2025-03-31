@@ -120,7 +120,7 @@ namespace SourceRewrite.Editor
             meshEntity.Transform.Scale = size;
             meshEntity.Transform.Position = position;
             meshEntity.Mesh = new Model(FileSystem.GetModelPath("dev/wireframe_cube.model"), FileSystem.GetMaterial("dev/gizmo"));
-            meshEntity.Mesh.Material.Shader.SetParameter("color", Color);
+            meshEntity.Mesh.Material.Shader.SetParameter("tint", Color);
             meshEntity.Name = "Gizmo";
 
             // Parent MeshEntity

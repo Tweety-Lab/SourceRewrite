@@ -4,6 +4,19 @@ namespace Editor.Logic
 {
     public static class Selection
     {
-        public static BaseEntity SelectedEntity { get; set; }
+        private static BaseEntity _selectedEntity;
+
+        public static BaseEntity SelectedEntity
+        {
+            get { return _selectedEntity; }
+            set
+            {
+                _selectedEntity = value;
+                if (_selectedEntity != null)
+                {
+                    _selectedEntity.DrawGizmosSelected();
+                }
+            }
+        }
     }
 }
