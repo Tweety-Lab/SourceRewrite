@@ -21,8 +21,13 @@ namespace SourceRewrite.Entities.Point
 #if EDITOR
         public override void DrawGizmos()
         {
-            Gizmos.Color = new Vector4(205, 205, 205, 1);
-            Gizmos.DrawCube(Transform.Position, new Vector3(128f, 128f, 128f), this);
+            Gizmos.Color = new Vector4(205, 20, 205, 1);
+            Gizmos.DrawCube(Transform.Position, new Vector3(24f, 24f, 24f), this);
+        }
+
+        public override void DrawGizmosSelected()
+        {
+            base.DrawGizmosSelected();
         }
 #endif
     }

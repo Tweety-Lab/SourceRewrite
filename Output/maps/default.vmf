@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "148"
+	"mapversion" "149"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "148"
+	"mapversion" "149"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -173,7 +173,7 @@ entity
 entity
 {
 	"id" "194"
-	"classname" "point_servercommand"
+	"classname" "point_clientcommand"
 	"targetname" "client"
 	"origin" "-96 -64 96"
 	editor
