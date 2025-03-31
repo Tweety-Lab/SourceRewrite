@@ -88,7 +88,7 @@ namespace Editor.Entities.GUI
             VistaElement propertiesTable = Canvas.GetElement("keyvalues-table");
 
             // Get all properties of the selected entity, including instance properties
-            var propertiesWithAttribute = Selection.SelectedEntity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var propertiesWithAttribute = Selection.SelectedEntity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var property in propertiesWithAttribute)
             {
