@@ -1,4 +1,5 @@
-﻿using VistaGUI;
+﻿using SourceRewrite.AssetTypes;
+using VistaGUI;
 
 namespace SourceRewrite.GUI
 {
@@ -10,11 +11,11 @@ namespace SourceRewrite.GUI
         /// <summary>
         /// Texture the GUI renders to.
         /// </summary>
-        public Rendering.Texture Output;
+        public Texture Output;
         public VistaView VistaView;
 
         /// Renders the GUI Output to a texture
-        public unsafe Rendering.Texture RenderToTexture()
+        public unsafe Texture RenderToTexture()
         {
             // Dispose of old texture
             if (Output != null)
@@ -23,7 +24,7 @@ namespace SourceRewrite.GUI
             // Create new texture only if the view is visible
             if (VistaView.Visible)
             {
-                Output = new Rendering.Texture(VistaView.Output, VistaView.Height, VistaView.Width);
+                Output = new AssetTypes.Texture(VistaView.Output, VistaView.Height, VistaView.Width);
             }
             else
             {
@@ -49,11 +50,11 @@ namespace SourceRewrite.GUI
         /// <summary>
         /// Creates a blank transparent texture
         /// </summary>
-        private Rendering.Texture CreateBlankTexture()
+        private Texture CreateBlankTexture()
         {
             // Create a 1x1 transparent texture
             byte[] blankData = new byte[4] { 0, 0, 0, 0 }; // RGBA
-            return new Rendering.Texture(blankData, 1, 1);
+            return new AssetTypes.Texture(blankData, 1, 1);
         }
     }
 }

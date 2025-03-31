@@ -2,8 +2,9 @@
 using SourceRewrite.Windowing;
 using SourceRewrite.Files;
 using FileFormats.VTF;
+using SourceRewrite.Rendering;
 
-namespace SourceRewrite.Rendering
+namespace SourceRewrite.AssetTypes
 {
     /// <summary>
     /// Texture Interaction Class.
@@ -17,7 +18,7 @@ namespace SourceRewrite.Rendering
         public Texture(string path)
         {
             // If Texture cant be found, set it to missing
-            if (!File.Exists(path)) 
+            if (!File.Exists(path))
             {
                 Console.WriteLine($"Could not find texture at '{path}'");
                 path = FileSystem.GetTexturePath("dev/missing");
@@ -67,7 +68,7 @@ namespace SourceRewrite.Rendering
     /// <summary>
     /// Texture Interface that allows for easy texture use across different Rendering APIs.
     /// </summary>
-    public interface ITexture 
+    public interface ITexture
     {
         public void Dispose();
     }

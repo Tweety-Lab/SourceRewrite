@@ -4,7 +4,6 @@ using SourceRewrite.Attributes;
 using SourceRewrite.Files;
 using SourceRewrite.GUI;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Rendering;
 using SourceRewrite.Windowing;
 using VistaGUI;
 using VistaGUI.Scripting.References;

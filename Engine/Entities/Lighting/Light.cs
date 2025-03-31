@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Attributes;
-using SourceRewrite.Rendering;
 using System.Numerics;
+using SourceRewrite.AssetTypes;
+
 
 #if EDITOR
 using SourceRewrite.Editor;

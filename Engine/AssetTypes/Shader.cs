@@ -1,9 +1,10 @@
 ﻿using FileFormats.Shaders;
 using SourceRewrite.Files;
+using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
 
-namespace SourceRewrite.Rendering
+namespace SourceRewrite.AssetTypes
 {
     /// <summary>
     /// Shader Interaction Class.
@@ -40,7 +41,7 @@ namespace SourceRewrite.Rendering
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext
-                    OpenGLContext glContext = (OpenGLContext) _rendererAPI;
+                    OpenGLContext glContext = (OpenGLContext)_rendererAPI;
 
                     // Create a new OpenGL shader
                     _shaderInterface = new OpenGLShader(glContext.OpenGL, vertexSource, fragmentSource);
@@ -77,7 +78,7 @@ namespace SourceRewrite.Rendering
         /// </summary>
         public int GetIntParameter(string uniformName)
         {
-           return _shaderInterface.GetIntParameter(uniformName);
+            return _shaderInterface.GetIntParameter(uniformName);
         }
     }
 

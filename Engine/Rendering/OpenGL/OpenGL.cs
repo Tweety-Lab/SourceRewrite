@@ -29,7 +29,7 @@ namespace SourceRewrite.Rendering.OpenGL
         private OpenGLVertexArrayObject<float, uint> _quadVao;
 
         // GUI Screenspace Shader
-        private Shader _guiShader;
+        private AssetTypes.Shader _guiShader;
 
         public GL OpenGL;
         public OpenGLContext(GameWindow targetWindow)
@@ -142,7 +142,7 @@ namespace SourceRewrite.Rendering.OpenGL
             // Load UI shader if it hasn't been loaded yet
             if (_guiShader == null)
             {
-                _guiShader = new Shader(FileSystem.GetShaderPath("ScreenspaceGUI"));
+                _guiShader = new AssetTypes.Shader(FileSystem.GetShaderPath("ScreenspaceGUI"));
             }
         }
 

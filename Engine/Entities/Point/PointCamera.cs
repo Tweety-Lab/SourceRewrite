@@ -1,7 +1,7 @@
-﻿using SourceRewrite.Attributes;
+﻿using SourceRewrite.AssetTypes;
+using SourceRewrite.Attributes;
 using SourceRewrite.Editor;
 using SourceRewrite.Maps;
-using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Entities.Point

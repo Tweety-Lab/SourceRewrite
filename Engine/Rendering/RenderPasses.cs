@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Entities;
+﻿using SourceRewrite.AssetTypes;
+using SourceRewrite.Entities;
 using SourceRewrite.Entities.Env;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Entities.Lighting;

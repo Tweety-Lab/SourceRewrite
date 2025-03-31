@@ -1,5 +1,4 @@
 ﻿using Silk.NET.Assimp;
-using SourceRewrite.Rendering;
 using SourceRewrite.Files;
 
 namespace SourceRewrite.AssetTypes
@@ -9,7 +8,7 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Model : Mesh
     {
-        public Rendering.Texture Texture;
+        public Texture Texture;
         public Shader Shader;
 
         // Create a Model from file path

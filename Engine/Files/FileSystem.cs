@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Rendering;
-using SourceRewrite.AssetTypes;
+﻿using SourceRewrite.AssetTypes;
 using System.IO;
 
 namespace SourceRewrite.Files
