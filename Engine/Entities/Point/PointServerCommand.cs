@@ -24,11 +24,6 @@ namespace SourceRewrite.Entities.Point
             Gizmos.Color = new Vector4(205, 20, 205, 1);
             Gizmos.DrawCube(Transform.Position, new Vector3(24f, 24f, 24f), this);
         }
-
-        public override void DrawGizmosSelected()
-        {
-            base.DrawGizmosSelected();
-        }
 #endif
     }
 }

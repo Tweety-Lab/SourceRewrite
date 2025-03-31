@@ -23,11 +23,6 @@ namespace SourceRewrite.Entities.Lighting
             Gizmos.Color = new Vector4(255, 255, 255, 1);
             Gizmos.DrawSprite(Transform.Position, "sprites/directional_light", 2f, this);
         }
-
-        public override void DrawGizmosSelected()
-        {
-            base.DrawGizmosSelected();
-        }
 #endif
     }
 }
