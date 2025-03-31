@@ -5,8 +5,8 @@ using Silk.NET.Maths;
 using System.Numerics;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Files;
-using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
+using SourceRewrite.Entities.Point;
 
 namespace SourceRewrite.Rendering.OpenGL
 {
@@ -188,10 +188,10 @@ namespace SourceRewrite.Rendering.OpenGL
             if (aspectRatio <= 0)
                 aspectRatio = 1.0f; // Fallback to avoid division by zero
 
-            var projection = CameraEntity.ActiveCamera?.GetPerspectiveProjectionMatrix();
+            var projection = PointCamera.ActiveCamera?.GetPerspectiveProjectionMatrix();
 
             // View matrix from active camera
-            var view = CameraEntity.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
+            var view = PointCamera.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
 
             // Use the provided model matrix
             Matrix4x4 model = modelMatrix;

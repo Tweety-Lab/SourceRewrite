@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Silk.NET.Input;
 using SourceRewrite.Entities;
+using SourceRewrite.Entities.Point;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
@@ -21,14 +22,14 @@ namespace Editor.Components
         {
             Console.WriteLine("Started Editor Camera Controller");
 
-            if (CameraEntity.ActiveCamera == null)
+            if (PointCamera.ActiveCamera == null)
             {
-                CameraEntity camEntity = new CameraEntity();
+                PointCamera camEntity = new PointCamera();
                 camEntity.Start();
 
                 camEntity.Parent = this;
 
-                CameraEntity.SetActiveCamera(camEntity);
+                PointCamera.SetActiveCamera(camEntity);
             }
 
             // Initialize rotation angles from current transform
@@ -54,29 +55,29 @@ namespace Editor.Components
             // Forward Movement (W)
             if (Input.GetKeyDown(Key.W))
             {
-                movement += CameraEntity.ActiveCamera.Transform.Forward;
+                movement += PointCamera.ActiveCamera.Transform.Forward;
             }
 
             // Backward Movement (S)
             if (Input.GetKeyDown(Key.S))
             {
-                movement -= CameraEntity.ActiveCamera.Transform.Forward;
+                movement -= PointCamera.ActiveCamera.Transform.Forward;
             }
 
             // Left Movement (A)
             if (Input.GetKeyDown(Key.A))
             {
-                movement -= CameraEntity.ActiveCamera.Transform.Right;
+                movement -= PointCamera.ActiveCamera.Transform.Right;
             }
 
             // Right Movement (D)
             if (Input.GetKeyDown(Key.D))
             {
-                movement += CameraEntity.ActiveCamera.Transform.Right;
+                movement += PointCamera.ActiveCamera.Transform.Right;
             }
 
             // Apply movement
-            CameraEntity.ActiveCamera.Transform.Position += movement * MovementSpeed * deltaTime;
+            PointCamera.ActiveCamera.Transform.Position += movement * MovementSpeed * deltaTime;
         }
 
         // Mouse input for camera rotation
@@ -98,7 +99,7 @@ namespace Editor.Components
                 pitch = Math.Clamp(pitch, -89f, 89f);
 
                 // Update the rotation based on yaw and pitch (roll remains 0)
-                CameraEntity.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                PointCamera.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
             }
             else
             {

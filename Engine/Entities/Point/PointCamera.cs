@@ -1,10 +1,12 @@
-﻿using SourceRewrite.Maps;
+﻿using SourceRewrite.Attributes;
+using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
 using System.Numerics;
 
-namespace SourceRewrite.Entities
+namespace SourceRewrite.Entities.Point
 {
-    public class CameraEntity : BaseEntity
+    [Entity("point_camera")]
+    public class PointCamera : BaseEntity
     {
         // Camera properties like field of view, aspect ratio, near and far clipping planes
         public float FieldOfView { get; set; } = MathF.PI / 4f; // Default FOV 45 degrees
@@ -15,9 +17,9 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Currently active Camera Component.
         /// </summary>
-        public static CameraEntity ActiveCamera { get; private set; }
+        public static PointCamera ActiveCamera { get; private set; }
 
-        public CameraEntity()
+        public PointCamera()
         {
             MapSystem.OnMapUnloaded += () => ActiveCamera = null;
         }
@@ -25,7 +27,7 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Set the active Camera.
         /// </summary>
-        public static void SetActiveCamera(CameraEntity camera)
+        public static void SetActiveCamera(PointCamera camera)
         {
             ActiveCamera = camera;
         }
@@ -76,6 +78,9 @@ namespace SourceRewrite.Entities
 
         public override void Start()
         {
+            if (ActiveCamera != null)
+                return;
+
             SetActiveCamera(this);
         }
     }

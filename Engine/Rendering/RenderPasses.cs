@@ -2,6 +2,7 @@
 using SourceRewrite.Entities.Env;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Entities.Lighting;
+using SourceRewrite.Entities.Point;
 using SourceRewrite.Maths;
 using SourceRewrite.Windowing;
 using System.Numerics;
@@ -289,7 +290,7 @@ namespace SourceRewrite.Rendering
                 var modelMatrix = RendererContext.GetEntityModelMatrix(spriteEntity) ?? Matrix4x4.Identity;
 
                 // Get Active Camera
-                CameraEntity camera = CameraEntity.ActiveCamera;
+                PointCamera camera = PointCamera.ActiveCamera;
 
                 // Make model matrix face the camera
                 modelMatrix = Matrix4x4.CreateFromQuaternion(camera.Transform.Rotation) * modelMatrix;
