@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Entities;
+﻿using SourceRewrite.Editor;
+using SourceRewrite.Entities;
 
 namespace Editor.Logic
 {
@@ -11,10 +12,30 @@ namespace Editor.Logic
             get { return _selectedEntity; }
             set
             {
-                _selectedEntity = value;
-                if (_selectedEntity != null)
+                if (_selectedEntity != value)
                 {
-                    _selectedEntity.DrawGizmosSelected();
+                    // Remove the previous selected gizmos, if any
+                    if (_selectedEntity != null)
+                    {
+                        foreach (var gizmo in _selectedEntity.Children)
+                        {
+                            if (gizmo.Name == "SelectedGizmo")
+                            {
+                                gizmo.DestroyDeferred();
+                            }
+                        }
+                    }
+
+                    // Set the new selected entity
+                    _selectedEntity = value;
+
+                    if (_selectedEntity != null)
+                    {
+                        // Create new Gizmos
+                        Gizmos.Name = "SelectedGizmo";
+                        _selectedEntity.DrawGizmosSelected();
+                        Gizmos.Name = "Gizmo";
+                    }
                 }
             }
         }

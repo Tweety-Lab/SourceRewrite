@@ -13,6 +13,11 @@ namespace SourceRewrite.Editor
     public static class Gizmos
     {
         /// <summary>
+        /// Name of Gizmo Children.
+        /// </summary>
+        public static string Name = "Gizmo";
+
+        /// <summary>
         /// Determines what Color to render new Gizmos with (0-255)
         /// </summary>
         public static Vector4 Color = new Vector4(255, 255, 255, 1);
@@ -121,7 +126,7 @@ namespace SourceRewrite.Editor
             meshEntity.Transform.Position = position;
             meshEntity.Mesh = new Model(FileSystem.GetModelPath("dev/wireframe_cube.model"), FileSystem.GetMaterial("dev/gizmo"));
             meshEntity.Mesh.Material.Shader.SetParameter("tint", Color);
-            meshEntity.Name = "Gizmo";
+            meshEntity.Name = Name;
 
             // Parent MeshEntity
             meshEntity.Parent = parent;
@@ -208,7 +213,7 @@ namespace SourceRewrite.Editor
             // Create a MeshEntity
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
-            meshEntity.Name = "Gizmo";
+            meshEntity.Name = Name;
 
             // Parent MeshEntity
             meshEntity.Parent = parent;
@@ -223,7 +228,7 @@ namespace SourceRewrite.Editor
         {
             // Create the Sprite
             EnvSprite sprite = new EnvSprite();
-            sprite.Name = "Gizmo";
+            sprite.Name = Name;
             sprite.Transform.Position = position;
 
             // Set the sprite path and parent
@@ -250,7 +255,7 @@ namespace SourceRewrite.Editor
             MeshEntity meshEntity = new MeshEntity();
             meshEntity.Mesh = mesh;
             meshEntity.Mesh.Material.Shader.SetParameter("color", Color);
-            meshEntity.Name = "Gizmo";
+            meshEntity.Name = Name;
 
             // Parent MeshEntity
             meshEntity.Parent = parent;
