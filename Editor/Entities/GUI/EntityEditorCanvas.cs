@@ -87,21 +87,21 @@ namespace Editor.Entities.GUI
         {
             VistaElement propertiesTable = Canvas.GetElement("keyvalues-table");
 
-            var fieldsWithAttribute = Selection.SelectedEntity.GetType().GetFields(BindingFlags.Instance);
+            // Get all properties of the selected entity, including instance properties
+            var propertiesWithAttribute = Selection.SelectedEntity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-
-            foreach (var field in fieldsWithAttribute)
+            foreach (var property in propertiesWithAttribute)
             {
-                // Check if the field has the EntityPropertyAttribute
-                if (Attribute.IsDefined(field, typeof(EntityPropertyAttribute)))
+                // Check if the property has the EntityPropertyAttribute
+                if (Attribute.IsDefined(property, typeof(EntityPropertyAttribute)))
                 {
-                    // Get the value of the field from the selected entity
-                    var value = field.GetValue(Selection.SelectedEntity);
+                    // Get the value of the property from the selected entity
+                    var value = property.GetValue(Selection.SelectedEntity);
 
                     // Set propertiesTable innerHTML to have new row with name and value
                     if (value != null)
                     {
-                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{field.Name}</td><td><input type=\"text\" value=\"{value}\" onkeyup=\"KeyValueChanged('{field.Name}', this.value)\" onkeydown=\"checkEnter(event, this)\"></td></tr>";
+                        propertiesTable.InnerHTML = propertiesTable.InnerHTML + $"<tr><td>{property.Name}</td><td><input type=\"text\" value=\"{value}\" onkeyup=\"KeyValueChanged('{property.Name}', this.value)\" onkeydown=\"checkEnter(event, this)\"></td></tr>";
                     }
                 }
             }
