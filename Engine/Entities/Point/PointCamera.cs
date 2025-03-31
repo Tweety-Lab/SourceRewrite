@@ -9,7 +9,15 @@ namespace SourceRewrite.Entities.Point
     public class PointCamera : BaseEntity
     {
         // Camera properties like field of view, aspect ratio, near and far clipping planes
-        public float FieldOfView { get; set; } = MathF.PI / 4f; // Default FOV 45 degrees
+        private float _fieldOfView = MathF.PI / 4f; // Default FOV 45 degrees (in radians)
+
+        [EntityProperty("FOV")]
+        public float FieldOfView
+        {
+            get => _fieldOfView;
+            set => _fieldOfView = value * (MathF.PI / 180f);
+        }
+
         public float AspectRatio { get; set; } = 16f / 9f; // Default 16:9 aspect ratio
         public float NearPlane { get; set; } = 0.1f; // Default near plane
         public float FarPlane { get; set; } = 99999f; // Default far plane

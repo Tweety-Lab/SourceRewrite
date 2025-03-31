@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "145"
+	"mapversion" "148"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "145"
+	"mapversion" "148"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -106,6 +106,27 @@ world
 }
 entity
 {
+	"id" "285"
+	"classname" "point_camera"
+	"angles" "0 45 0"
+	"fogColor" "0 0 0"
+	"fogEnable" "0"
+	"fogEnd" "4096"
+	"fogMaxDensity" "1"
+	"fogStart" "2048"
+	"FOV" "90"
+	"UseScreenAspectRatio" "0"
+	"origin" "-128 -224 160"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
 	"id" "254"
 	"classname" "env_beam"
 	"BoltWidth" "2"
@@ -117,7 +138,7 @@ entity
 	"HDRColorScale" "1.0"
 	"life" "1"
 	"NoiseAmplitude" "0"
-	"Radius" "32"
+	"Radius" "128"
 	"renderamt" "100"
 	"rendercolor" "255 255 255"
 	"renderfx" "0"
@@ -265,20 +286,6 @@ entity
 	editor
 	{
 		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 0]"
-	}
-}
-entity
-{
-	"id" "20"
-	"classname" "info_player_start"
-	"angles" "0 0 0"
-	"origin" "64 0 4"
-	editor
-	{
-		"color" "0 255 0"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
