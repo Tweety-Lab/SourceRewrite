@@ -1,0 +1,4 @@
+Sprite 
+{
+	$basetexture "sprites/point_camera"
+}

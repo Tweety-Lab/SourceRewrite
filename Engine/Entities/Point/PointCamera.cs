@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Editor;
 using SourceRewrite.Maps;
 using SourceRewrite.Rendering;
 using System.Numerics;
@@ -91,5 +92,13 @@ namespace SourceRewrite.Entities.Point
 
             SetActiveCamera(this);
         }
+
+#if EDITOR
+        public override void DrawGizmos()
+        {
+            Gizmos.Color = new Vector4(255, 255, 255, 1);
+            Gizmos.DrawSprite(Transform.Position, "sprites/point_camera", 2f, this);
+        }
+#endif
     }
 }
