@@ -1,5 +1,6 @@
 ﻿using Editor.Components.GUI;
 using Editor.Entities.GUI;
+using SourceRewrite;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
@@ -16,10 +17,30 @@ namespace Editor.Logic
         // Track the Currently active Tool
         public static ToggleableTools CurrentTool = ToggleableTools.None;
 
+        // Track the index of the currently selected entity
+        private static int selectedEntityIndex = -1;
+
         // Map Tools to Actions that run on left click
         private static Dictionary<ToggleableTools, Action> clickToolActions = new Dictionary<ToggleableTools, Action>()
         {
             // Tool Enum    |   Action to run on Left Click
+
+            // SELECT TOOL
+            {ToggleableTools.Select, () => {
+                List<BaseEntity> entities = EntityManager.MapContainer.Children[0].Children.ToList();
+
+                // Update the index to select the next entity
+                selectedEntityIndex = (selectedEntityIndex + 1) % entities.Count;
+
+                // Get the new entity to select
+                BaseEntity newEntity = entities[selectedEntityIndex];
+
+                // Select Entity
+                Selection.SelectedEntity = newEntity;
+
+                DeveloperConsole.Msg($"Selected Entity: {newEntity.Name}");
+                }
+            },
 
             // ENTITY TOOL
             {ToggleableTools.Entity, () => {
