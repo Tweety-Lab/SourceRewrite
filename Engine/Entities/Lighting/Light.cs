@@ -48,8 +48,7 @@ namespace SourceRewrite.Entities
 
         public override void DrawGizmosSelected()
         {
-            Gizmos.Color = new Vector4(255, 255, 0, 1);
-            Gizmos.DrawWireframeCube(Transform.Position, new Vector3(22f, 22f, 22f), this);
+            base.DrawGizmosSelected();
         }
 #endif
     }

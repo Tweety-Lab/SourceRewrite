@@ -1,4 +1,6 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Editor;
+using System.Numerics;
 using System.Reflection;
 
 namespace SourceRewrite.Entities
@@ -91,7 +93,11 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Runs when Gizmos are drawing for this Entity and it's selected
         /// </summary>
-        public virtual void DrawGizmosSelected() { }
+        public virtual void DrawGizmosSelected()
+        {
+            Gizmos.Color = new Vector4(255, 255, 0, 1);
+            Gizmos.DrawWireframeCube(Transform.Position, new Vector3(22f, 22f, 22f), this);
+        }
 #endif
 
         /// <summary>
