@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Input;
 using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
 namespace SourceRewrite.InputSystem
@@ -57,22 +58,23 @@ namespace SourceRewrite.InputSystem
         // MouseDoubleClick Event
         public static event Action<IMouse, MouseButton, Vector2> MouseDoubleClickEvent;
 
+        private static InputContext Context => GameWindow.CurrentWindow.Modules.GetModule<InputModule>().Context;
+
         static Input()
         {
-            // Subscribe to the KeyDown event of the PrimaryKeyboard
-            if (GameWindow.CurrentWindow.Input.PrimaryKeyboard != null)
+            if (Context.PrimaryKeyboard != null)
             {
-                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyDown += OnKeyDown;
-                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyUp += OnKeyUp;
-                GameWindow.CurrentWindow.Input.PrimaryKeyboard.KeyChar += OnKeyChar;
+                Context.PrimaryKeyboard.KeyDown += OnKeyDown;
+                Context.PrimaryKeyboard.KeyUp += OnKeyUp;
+                Context.PrimaryKeyboard.KeyChar += OnKeyChar;
             }
             
-            if (GameWindow.CurrentWindow.Input.PrimaryMouse != null)
+            if (Context.PrimaryMouse != null)
             {
-                GameWindow.CurrentWindow.Input.PrimaryMouse.MouseDown += OnMouseButtonDown;
-                GameWindow.CurrentWindow.Input.PrimaryMouse.MouseUp += OnMouseButtonUp;
+                Context.PrimaryMouse.MouseDown += OnMouseButtonDown;
+                Context.PrimaryMouse.MouseUp += OnMouseButtonUp;
 
-                GameWindow.CurrentWindow.Input.PrimaryMouse.DoubleClick += OnMouseDoubleClick;
+                Context.PrimaryMouse.DoubleClick += OnMouseDoubleClick;
             }
         }
 
@@ -117,7 +119,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static bool GetKeyDown(Key key)
         {
-            return GameWindow.CurrentWindow.Input.PrimaryKeyboard.IsKeyPressed(key);
+            return Context.PrimaryKeyboard.IsKeyPressed(key);
         }
 
         
@@ -127,7 +129,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static bool GetKeyUp(Key key)
         {
-            return !GameWindow.CurrentWindow.Input.PrimaryKeyboard.IsKeyPressed(key);
+            return !Context.PrimaryKeyboard.IsKeyPressed(key);
         }
 
         /// <summary>
@@ -139,7 +141,7 @@ namespace SourceRewrite.InputSystem
             MouseButton button = (Silk.NET.Input.MouseButton)mouseButton;
 
             // Check if the specific mouse button is pressed
-            return GameWindow.CurrentWindow.Input.PrimaryMouse.IsButtonPressed(button);
+            return Context.PrimaryMouse.IsButtonPressed(button);
         }
 
         /// <summary>
@@ -156,7 +158,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static Vector2 GetMousePosition()
         {
-            return GameWindow.CurrentWindow.Input.PrimaryMouse.Position;
+            return Context.PrimaryMouse.Position;
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static float GetMouseX()
         {
-            return GameWindow.CurrentWindow.Input.PrimaryMouse.Position.X;
+            return Context.PrimaryMouse.Position.X;
         }
 
         /// <summary>
@@ -172,7 +174,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static float GetMouseY()
         {
-            return GameWindow.CurrentWindow.Input.PrimaryMouse.Position.Y;
+            return Context.PrimaryMouse.Position.Y;
         }
 
         /// <summary>
@@ -180,7 +182,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static Vector2 GetMouseMovement()
         {
-            return GameWindow.CurrentWindow.Input.MouseDelta;
+            return Context.MouseDelta;
         }
 
         /// <summary>
@@ -188,7 +190,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static float GetMouseXMovement()
         {
-            return GameWindow.CurrentWindow.Input.MouseDelta.X;
+            return Context.MouseDelta.X;
         }
 
         /// <summary>
@@ -196,7 +198,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static float GetMouseYMovement()
         {
-            return GameWindow.CurrentWindow.Input.MouseDelta.Y;
+            return Context.MouseDelta.Y;
         }
 
         /// <summary>
@@ -204,7 +206,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static string GetClipboardText()
         {
-            return GameWindow.CurrentWindow.Input.PrimaryKeyboard.ClipboardText;
+            return Context.PrimaryKeyboard.ClipboardText;
         }
 
         /// <summary>
@@ -212,7 +214,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static void LockCursor()
         {
-            GameWindow.CurrentWindow.Input.PrimaryMouse.Cursor.CursorMode = CursorMode.Hidden;
+            Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Hidden;
         }
 
         /// <summary>
@@ -220,7 +222,7 @@ namespace SourceRewrite.InputSystem
         /// </summary>
         public static void UnlockCursor()
         {
-            GameWindow.CurrentWindow.Input.PrimaryMouse.Cursor.CursorMode = CursorMode.Normal;
+            Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Normal;
         }
     }
 }

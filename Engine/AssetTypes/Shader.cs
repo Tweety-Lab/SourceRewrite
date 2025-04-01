@@ -3,6 +3,7 @@ using SourceRewrite.Files;
 using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.AssetTypes
 {
@@ -11,7 +12,7 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Shader
     {
-        private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
         private readonly IShader _shaderInterface; // Use an interface for better abstraction
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace SourceRewrite.AssetTypes
             }
 
             // Create a shader based on current renderer
-            switch (GameWindow.CurrentWindow.Renderer.API)
+            switch (GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.API)
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext

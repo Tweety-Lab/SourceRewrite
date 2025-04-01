@@ -10,6 +10,7 @@ using System.Numerics;
 using VistaGUI;
 using FileFormats.KeyValues.GameInfo;
 using SourceRewrite.TimeSystem;
+using SourceRewrite.Windowing.Modules;
 
 // Application Window Instance that runs the engine in it, only one can exist at a time.
 namespace SourceRewrite.Windowing
@@ -17,9 +18,8 @@ namespace SourceRewrite.Windowing
     public class GameWindow
     {
         public static GameWindow? CurrentWindow { get; private set; } // Active Game Window currently running
-        public RendererContext Renderer { get; private set; } // Active Renderer 
-        public InputContext Input { get; private set; } // Active Input Manager
-        public GameInfoFormat GameInfo { get; private set; } // Active GameInfo.txt
+
+        public ModuleManager Modules = new ModuleManager();
 
         // Property to dynamically fetch the current window title
         public string WindowTitle
@@ -86,52 +86,22 @@ namespace SourceRewrite.Windowing
 
         private void OnLoad()
         {
-            // Default Load actions
-            LoadGameInfo();
-            LoadRenderer();
+            Modules.RegisterModule(new GameInfoModule());
+            Modules.RegisterModule(new RenderModule());
+            Modules.RegisterModule(new InputModule());
+            
+
             LoadEntities();
-            LoadInput();
             LoadMap();
 
             // Invoke OnLoadActions
             OnLoadAction?.Invoke();
         }
 
-        private void LoadGameInfo()
-        {
-            // Load GameInfo
-            string gameInfoContent = File.ReadAllText("../../gameinfo.txt");
-            GameInfo = new GameInfoFormat(gameInfoContent);
-
-            // Set window title to game name as defined in GameInfo
-            _window.Title = GameInfo.GameName;
-        }
-
-        private void LoadRenderer()
-        {
-            // Load Renderer (OpenGL)
-            Renderer = new RendererContext(RendererAPI.OpenGL, this);
-            Renderer.OnLoad();
-
-            Renderer.SetClearColour(13, 13, 13, 255);
-
-            // Register Default Render Passes
-            RenderPassManager.RegisterPass(new OpaquePass());
-            RenderPassManager.RegisterPass(new BillboardPass());
-            RenderPassManager.RegisterPass(new LightingPass());
-            RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());
-        }
-
         private void LoadEntities()
         {
             // Load Console as Global Entity
             EntityManager.AddGlobalEntity(new DeveloperConsoleCanvas());
-        }
-
-        private void LoadInput()
-        {
-            // Load Input
-            Input = new InputContext(_window.CreateInput());
         }
 
         private void LoadMap()
@@ -150,8 +120,7 @@ namespace SourceRewrite.Windowing
 
         private void OnUpdate(double deltaTime)
         {
-            // Update Input
-            Input.InputUpdate();
+            Modules.UpdateModules(deltaTime);
 
             // Update VistaGUI
             VistaContext.Update();
@@ -166,20 +135,17 @@ namespace SourceRewrite.Windowing
         private unsafe void OnRender(double deltaTime)
         {
             // Render
-            Renderer.OnRender();
+            Modules.RenderModules(deltaTime);
         }
 
         private void OnFramebufferResize(Vector2D<int> newSize)
         {
-            Renderer.OnFramebufferResize(newSize);
+            Modules.ResizeModules(newSize);
         }
 
         private void OnClose()
         {
-            Renderer.OnClose();
-
-            // Invoke OnUnloadActions
-            OnUnloadAction?.Invoke();
+            Modules.ShutdownModules();
         }
     }
 }

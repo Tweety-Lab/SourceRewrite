@@ -2,6 +2,7 @@
 using SourceRewrite.Attributes;
 using SourceRewrite.Files;
 using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Entities
 {
@@ -25,7 +26,7 @@ namespace SourceRewrite.Entities
             Material material = FileSystem.GetMaterial(MaterialPath);
             Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace(".model", "")), material);
 
-            GameWindow.CurrentWindow.Renderer.InitMesh(Mesh); // Render the (empty) mesh
+            GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
         }
     }
 }

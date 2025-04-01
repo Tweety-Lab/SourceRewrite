@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Windowing;
 using SourceRewrite.Steam;
 using FileFormats.KeyValues;
+using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Files
 {
@@ -14,7 +15,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static KeyValue GetKeyValue(string name)
         {
-            return GameWindow.CurrentWindow.GameInfo.KeyValues.GetKeyValue(name);
+            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetKeyValue(name);
         }
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static ParentKey GetParentKey(string name)
         {
-            return GameWindow.CurrentWindow.GameInfo.KeyValues.GetParentKey(name);
+            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetParentKey(name);
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetGameName()
         {
-            return GameWindow.CurrentWindow.GameInfo.GameName;
+            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.GameName;
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static int GetSteamAppID()
         {
-            return GameWindow.CurrentWindow.GameInfo.SteamAppID;
+            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.SteamAppID;
         }
 
         /// <summary>

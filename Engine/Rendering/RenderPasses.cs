@@ -6,6 +6,7 @@ using SourceRewrite.Entities.Lighting;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.Maths;
 using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
 namespace SourceRewrite.Rendering
@@ -65,7 +66,7 @@ namespace SourceRewrite.Rendering
 
         private static void ApplyFlags(IEnumerable<RenderFlag> flags)
         {
-            var rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+            var rendererAPI = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
             foreach (var flag in flags)
             {
                 rendererAPI.EnableFlag(flag);
@@ -74,7 +75,7 @@ namespace SourceRewrite.Rendering
 
         private static void RevertFlags(IEnumerable<RenderFlag> flags)
         {
-            var rendererAPI = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+            var rendererAPI = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
             foreach (var flag in flags)
             {
                 rendererAPI.DisableFlag(flag);
@@ -87,7 +88,7 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public abstract class BaseRenderPass : IRenderPass
     {
-        public readonly IRendererAPI Renderer = GameWindow.CurrentWindow.Renderer.GetRendererAPI();
+        public readonly IRendererAPI Renderer = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
 
         /// <summary>
         /// Handle the actual rendering logic for the pass.
