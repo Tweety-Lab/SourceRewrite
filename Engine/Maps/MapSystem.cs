@@ -61,8 +61,8 @@ namespace SourceRewrite.Maps
             Lump MaterialsLump = reader.GetLump(LumpType.LUMP_SOLID_MATERIALS);
 
             // Create the map from Lump data
-            CreateGeometry(VerticesLump, IndicesLump, MaterialsLump);
-            CreateEntities(EntitiesLump);
+            CreateGeometry((float[])VerticesLump.Data, (uint[])IndicesLump.Data, (string[])MaterialsLump.Data);
+            CreateEntities((string[])EntitiesLump.Data);
 
             // Disable all Entities if EntitiesEnabled is false
             if (EntitiesEnabled == false)
@@ -90,13 +90,8 @@ namespace SourceRewrite.Maps
         }
 
         // Create Geometry from Lump data
-        public void CreateGeometry(Lump vertices, Lump indices, Lump materials)
+        public void CreateGeometry(float[] verticesData, uint[] indicesData, string[] materialsData)
         {
-            // Convert Lump data to arrays
-            float[] verticesData = (float[]) vertices.Data;
-            uint[] indicesData = (uint[]) indices.Data;
-            string[] materialsData = (string[])materials.Data;
-
             // Create a Entity to house the MeshEntity
             MeshEntity mapGeometry = new MeshEntity();
 
@@ -122,11 +117,8 @@ namespace SourceRewrite.Maps
         }
 
         // Create Entities from Lump data
-        public void CreateEntities(Lump entities)
+        public void CreateEntities(string[] entitiesData)
         {
-            // Convert Lump data to array
-            string[] entitiesData = (string[]) entities.Data;
-
             if (entitiesData == null)
                 return;
 
