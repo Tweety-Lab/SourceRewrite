@@ -55,8 +55,10 @@ namespace SourceRewrite.Entities.Point
         /// Get the projection matrix (Perspective or Orthographic).
         /// </summary>
         /// <returns>Projection matrix.</returns>
-        public Matrix4x4 GetPerspectiveProjectionMatrix()
+        public Matrix4x4 GetProjectionMatrix()
         {
+            // TODO: Orthographic projection
+
             // Perspective Projection Matrix
             return Matrix4x4.CreatePerspectiveFieldOfView(
                 FieldOfView,   // Field of View

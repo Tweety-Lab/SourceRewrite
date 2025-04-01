@@ -188,7 +188,7 @@ namespace SourceRewrite.Rendering.OpenGL
             if (aspectRatio <= 0)
                 aspectRatio = 1.0f; // Fallback to avoid division by zero
 
-            var projection = PointCamera.ActiveCamera?.GetPerspectiveProjectionMatrix();
+            var projection = PointCamera.ActiveCamera?.GetProjectionMatrix();
 
             // View matrix from active camera
             var view = PointCamera.ActiveCamera?.GetViewMatrix() ?? Matrix4x4.Identity;
