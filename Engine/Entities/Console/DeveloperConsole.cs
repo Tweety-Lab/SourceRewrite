@@ -14,6 +14,9 @@ namespace SourceRewrite
             {
                 // Load config.cfg
                 LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
+                
+                // Load autoexec.cfg
+                LoadConfig(FileSystem.GamePath.BasePath + "cfg/autoexec.cfg");
             };
 
             GameWindow.CurrentWindow.OnUnloadAction += () =>

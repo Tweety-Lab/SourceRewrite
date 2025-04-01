@@ -1,0 +1,1 @@
+cl_showfps 1
