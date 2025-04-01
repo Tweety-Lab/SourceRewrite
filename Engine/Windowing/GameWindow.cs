@@ -84,19 +84,11 @@ namespace SourceRewrite.Windowing
             Modules.RegisterModule(new GameInfoModule());
             Modules.RegisterModule(new RenderModule());
             Modules.RegisterModule(new InputModule());
-
-            LoadEntities();
-
+            Modules.RegisterModule(new EntityModule());
             Modules.RegisterModule(new MapModule());
 
             // Invoke OnLoadAction
             OnLoadAction?.Invoke();
-        }
-
-        private void LoadEntities()
-        {
-            // Load Console as Global Entity
-            EntityManager.AddGlobalEntity(new DeveloperConsoleCanvas());
         }
 
         private void OnUpdate(double deltaTime)
