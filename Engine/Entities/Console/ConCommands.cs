@@ -11,5 +11,11 @@ namespace SourceRewrite.Entities
         {
             MapSystem.LoadMap(FileSystem.GetMapPath(path));
         }
+
+        [ConCommand("ent_create")]
+        static void EntCreate(string entityName)
+        {
+            EntityManager.CreateEntityFromName(entityName);
+        }
     }
 }

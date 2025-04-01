@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Maps;
+﻿using SourceRewrite.Attributes;
+using SourceRewrite.Maps;
 
 namespace SourceRewrite.Entities
 {
@@ -203,6 +204,27 @@ namespace SourceRewrite.Entities
             global.Name = name;
             EntityManager.AddGlobalEntity(global);
             return global;
+        }
+
+        public static void CreateEntityFromName(string name)
+        {
+            // Find entity type with the matching name
+            object entityType = AttributeManager.GetTypeByAttributeValue<EntityAttribute, string>("ClassName", name);
+
+            if (entityType != null)
+            {
+                // Create Entity
+                BaseEntity entity = (BaseEntity)Activator.CreateInstance((Type)entityType);
+                entity.Name = name;
+                AddMapEntity(entity);
+
+                // Start the Entity
+                entity.Start();
+            }
+            else
+            {
+                DeveloperConsole.Error($"Attempted to create unknown entity type {name}!");
+            }
         }
     }
 }
