@@ -140,9 +140,12 @@ namespace SourceRewrite
             // Read the config file
             string[] lines = File.ReadAllLines(path);
 
-            // Evaluate each line as a command
+            // Evaluate each line as a command (ignoring comments)
             foreach (string line in lines)
             {
+                if (line.StartsWith("//"))
+                    continue;
+
                 EvaluateCommand(line);
             }
         }
