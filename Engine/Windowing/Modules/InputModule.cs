@@ -12,7 +12,7 @@ namespace SourceRewrite.Windowing.Modules
 {
     public class InputModule : IGameModule
     {
-        public InputContext Context;
+        public InputContext Context { get; private set; }
 
         public void OnStart()
         {

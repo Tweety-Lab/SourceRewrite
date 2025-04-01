@@ -10,7 +10,7 @@ namespace SourceRewrite.Windowing.Modules
 {
     public class RenderModule : IGameModule
     {
-        public RendererContext Context;
+        public RendererContext Context { get; private set; }
 
         public void OnStart()
         {
