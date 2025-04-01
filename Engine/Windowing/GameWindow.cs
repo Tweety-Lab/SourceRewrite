@@ -1,14 +1,8 @@
-﻿using Silk.NET.Input;
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
 using Silk.NET.Windowing;
 using SourceRewrite.Entities;
-using SourceRewrite.Rendering;
-using SourceRewrite.InputSystem;
-using SourceRewrite.Files;
-using SourceRewrite.Maps;
 using System.Numerics;
 using VistaGUI;
-using FileFormats.KeyValues.GameInfo;
 using SourceRewrite.TimeSystem;
 using SourceRewrite.Windowing.Modules;
 
@@ -86,13 +80,14 @@ namespace SourceRewrite.Windowing
 
         private void OnLoad()
         {
+            // Register Modules, Order here DOES matter
             Modules.RegisterModule(new GameInfoModule());
             Modules.RegisterModule(new RenderModule());
             Modules.RegisterModule(new InputModule());
-            
 
             LoadEntities();
-            LoadMap();
+
+            Modules.RegisterModule(new MapModule());
 
             // Invoke OnLoadActions
             OnLoadAction?.Invoke();
@@ -102,20 +97,6 @@ namespace SourceRewrite.Windowing
         {
             // Load Console as Global Entity
             EntityManager.AddGlobalEntity(new DeveloperConsoleCanvas());
-        }
-
-        private void LoadMap()
-        {
-            // Get -map window argument
-            Application.Arguments.TryGetValue("-map", out string mapPath);
-            if (mapPath != null)
-            {
-                MapSystem.LoadMap(FileSystem.GetMapPath(mapPath)); // Load Map from argument
-            }
-            else
-            {
-                MapSystem.LoadMap(FileSystem.GetMapPath("default.bsp")); // Load default map
-            }
         }
 
         private void OnUpdate(double deltaTime)
