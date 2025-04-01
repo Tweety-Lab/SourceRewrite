@@ -4,11 +4,38 @@
             background-color: transparent;
             color: white;
             font-family: 'Verdana', sans-serif;
+            border: none;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: white;
+            font-family: 'Verdana', sans-serif;
+            padding-left: 7px;
+            font-size: 80px;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-left: 30px;
+        }
+
+        button {
+            margin-bottom: 10px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <div>
+    <div class="buttons-container">
+        <h1>Portal</h1>
         <button>NEW GAME</button>
         <button>BONUS MAPS</button>
         <button>LOAD GAME</button>
