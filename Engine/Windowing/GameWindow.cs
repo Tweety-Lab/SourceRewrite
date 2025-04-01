@@ -89,7 +89,7 @@ namespace SourceRewrite.Windowing
 
             Modules.RegisterModule(new MapModule());
 
-            // Invoke OnLoadActions
+            // Invoke OnLoadAction
             OnLoadAction?.Invoke();
         }
 
@@ -127,6 +127,9 @@ namespace SourceRewrite.Windowing
         private void OnClose()
         {
             Modules.ShutdownModules();
+
+            // Invoke OnUnloadAction
+            OnUnloadAction?.Invoke();
         }
     }
 }
