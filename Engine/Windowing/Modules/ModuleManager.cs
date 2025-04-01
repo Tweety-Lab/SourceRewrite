@@ -56,7 +56,7 @@ namespace SourceRewrite.Windowing.Modules
     }
 
     /// <summary>
-    /// Current GameWindows Modules abstraction.
+    /// Current Game Modules abstraction.
     /// </summary>
     public static class GameModules
     {
