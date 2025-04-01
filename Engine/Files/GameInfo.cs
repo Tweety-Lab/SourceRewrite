@@ -15,7 +15,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static KeyValue GetKeyValue(string name)
         {
-            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetKeyValue(name);
+            return GameModules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetKeyValue(name);
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static ParentKey GetParentKey(string name)
         {
-            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetParentKey(name);
+            return GameModules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetParentKey(name);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetGameName()
         {
-            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.GameName;
+            return GameModules.GetModule<GameInfoModule>().GameInfo.GameName;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static int GetSteamAppID()
         {
-            return GameWindow.CurrentWindow.Modules.GetModule<GameInfoModule>().GameInfo.SteamAppID;
+            return GameModules.GetModule<GameInfoModule>().GameInfo.SteamAppID;
         }
 
         /// <summary>

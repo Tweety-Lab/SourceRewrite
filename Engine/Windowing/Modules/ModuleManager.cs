@@ -54,4 +54,15 @@ namespace SourceRewrite.Windowing.Modules
                 module.OnShutdown();
         }
     }
+
+    /// <summary>
+    /// Current GameWindows Modules abstraction.
+    /// </summary>
+    public static class GameModules
+    {
+        /// <summary>
+        /// Get a Module from it's type
+        /// </summary>
+        public static T? GetModule<T>() where T : class, IGameModule => GameWindow.CurrentWindow.Modules.GetModule<T>();
+    }
 }

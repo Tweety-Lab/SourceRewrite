@@ -58,7 +58,7 @@ namespace SourceRewrite.InputSystem
         // MouseDoubleClick Event
         public static event Action<IMouse, MouseButton, Vector2> MouseDoubleClickEvent;
 
-        private static InputContext Context => GameWindow.CurrentWindow.Modules.GetModule<InputModule>().Context;
+        private static InputContext Context => GameModules.GetModule<InputModule>().Context;
 
         static Input()
         {

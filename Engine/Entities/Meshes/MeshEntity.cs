@@ -33,7 +33,7 @@ namespace SourceRewrite.Entities
             : base(name)
         {
             Mesh = mesh ?? new AssetTypes.Mesh();  // If no mesh is provided, create a default mesh.
-            GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI().InitMesh(Mesh);
+            GameModules.GetModule<RenderModule>().Context.GetRendererAPI().InitMesh(Mesh);
         }
 
         public override void Start()
@@ -45,16 +45,16 @@ namespace SourceRewrite.Entities
                 Mesh.Vertices = [];
                 Mesh.Indices = [];
 
-                GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
+                GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
             }
         }
 
         // Render Mesh when it gets changed
         private void RefreshMesh()
         {
-            if (GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context != null && _mesh != null)
+            if (GameModules.GetModule<RenderModule>().Context != null && _mesh != null)
             {
-                GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.InitMesh(_mesh);
+                GameModules.GetModule<RenderModule>().Context.InitMesh(_mesh);
             }
         }
     }

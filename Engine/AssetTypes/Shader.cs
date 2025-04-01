@@ -12,7 +12,7 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Shader
     {
-        private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
+        private IRendererAPI _rendererAPI = GameModules.GetModule<RenderModule>().Context.GetRendererAPI();
         private readonly IShader _shaderInterface; // Use an interface for better abstraction
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace SourceRewrite.AssetTypes
             }
 
             // Create a shader based on current renderer
-            switch (GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.API)
+            switch (GameModules.GetModule<RenderModule>().Context.API)
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext

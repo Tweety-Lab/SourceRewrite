@@ -12,7 +12,7 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Texture : IDisposable
     {
-        private IRendererAPI _rendererAPI = GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.GetRendererAPI();
+        private IRendererAPI _rendererAPI = GameModules.GetModule<RenderModule>().Context.GetRendererAPI();
         private readonly ITexture _textureInterface; // Use an interface for better abstraction
 
         // Create a texture from a .VTF path
@@ -30,7 +30,7 @@ namespace SourceRewrite.AssetTypes
             byte[] data = texture.GetBgra32Data();
 
             // Create a texture based on current renderer
-            switch (GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.API)
+            switch (GameModules.GetModule<RenderModule>().Context.API)
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext
@@ -46,7 +46,7 @@ namespace SourceRewrite.AssetTypes
         public Texture(byte[] bgra32Data, uint height, uint width)
         {
             // Create a texture based on current renderer
-            switch (GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.API)
+            switch (GameModules.GetModule<RenderModule>().Context.API)
             {
                 case RendererAPI.OpenGL:
                     // Convert Renderer API Interface to an OpenGLContext

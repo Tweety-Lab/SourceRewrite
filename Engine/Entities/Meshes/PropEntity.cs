@@ -26,7 +26,7 @@ namespace SourceRewrite.Entities
             Material material = FileSystem.GetMaterial(MaterialPath);
             Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace(".model", "")), material);
 
-            GameWindow.CurrentWindow.Modules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
+            GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
         }
     }
 }
