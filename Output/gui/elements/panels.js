@@ -1,4 +1,4 @@
-// Base Vista Panel, allows dragging
+// Base Vista Panel, allows dragging and handles button events
 class VistaPanel extends HTMLElement {
   constructor() {
     super();
@@ -12,6 +12,8 @@ class VistaPanel extends HTMLElement {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleButtonDown = this.handleButtonDown.bind(this);
+    this.handleButtonUp = this.handleButtonUp.bind(this);
   }
   
   connectedCallback() {
@@ -28,6 +30,9 @@ class VistaPanel extends HTMLElement {
     
     // Add event listeners for dragging
     this.addEventListener('mousedown', this.handleMouseDown);
+
+    // Add event listeners for button pressing
+    this.addEventListener('mousedown', this.handleButtonDown);
   }
 
   centerPanel() {
@@ -57,6 +62,9 @@ class VistaPanel extends HTMLElement {
     this.removeEventListener('mousedown', this.handleMouseDown);
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
+    this.removeEventListener('mousedown', this.handleButtonDown);
+    document.removeEventListener('mouseup', this.handleButtonUp);
+    document.removeEventListener('mouseleave', this.handleButtonUp);
   }
   
   handleMouseDown(e) {
@@ -102,6 +110,30 @@ class VistaPanel extends HTMLElement {
     // Remove global event listeners
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+  
+  handleButtonDown(e) {
+    const button = e.target.closest('button');
+    if (button && this.contains(button)) {
+      console.log('Button pressed');
+      button.classList.add('held-button');  // Add the 'held-button' class when button is held
+      
+      // Listen for global events to handle releasing the button
+      document.addEventListener('mouseup', this.handleButtonUp);
+      document.addEventListener('mouseleave', this.handleButtonUp);
+    }
+  }
+
+  handleButtonUp(e) {
+    const buttons = this.querySelectorAll('button.held-button');
+    buttons.forEach(button => {
+      console.log('Button released');
+      button.classList.remove('held-button');  // Remove the 'held-button' class
+    });
+
+    // Remove global event listeners
+    document.removeEventListener('mouseup', this.handleButtonUp);
+    document.removeEventListener('mouseleave', this.handleButtonUp);
   }
 }
 
