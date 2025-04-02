@@ -42,14 +42,14 @@ vista-panel {
     padding: 10px;
 }
 
-p {
+vista-panel p {
     color: var(--text-white);
     font-size: 11px;
     font-weight: bold;
     margin-top: -1px;
 }
 
-input {
+vista-panel input {
     background-color: var(--bg-dark);
     color: var(--text-white);
     font-family: var(--font-primary); /* Apply the primary font */
@@ -66,7 +66,7 @@ input {
     width: 100%;
 }
 
-button {
+vista-panel button {
     font-family: var(--font-primary); /* Apply the primary font */
     background-color: var(--button-bg);
     color: var(--text-white);
