@@ -10,6 +10,7 @@ namespace VistaGUI.Preprocessor
 {
     public class VistaFileSystem : IFileSystem
     {
+        // Base path for resources
         public string ResourcePathPrefix { get; set; }
 
         public VistaFileSystem(string resourcePathPrefix)
@@ -17,14 +18,14 @@ namespace VistaGUI.Preprocessor
             ResourcePathPrefix = resourcePathPrefix;
         }
 
-        // File Exists
+        // Check if a File Exists
         public bool FileExists(string path)
         {
             string fullPath = Path.Combine(ResourcePathPrefix, path);
             return File.Exists(fullPath);
         }
 
-        // Get File Mime Type
+        // Get a File's Mime Type
         public string GetFileMimeType(string path)
         {
             string fullPath = Path.Combine(ResourcePathPrefix, path);
@@ -44,17 +45,26 @@ namespace VistaGUI.Preprocessor
             };
         }
 
-        // Get File Charset
+        // Get a File's Charset
         public string GetFileCharset(string path)
         {
             return "UTF-8";
         }
 
-        // Open File
+        // Open a File in a buffer
         public unsafe ULBuffer OpenFile(string path)
         {
             string fullPath = Path.Combine(ResourcePathPrefix, path);
-            byte[] fileData = File.ReadAllBytes(fullPath);
+
+            // Read the file
+            string fileContents = File.ReadAllText(fullPath, Encoding.UTF8);
+
+            // Pre-process HTML
+            if (Path.GetExtension(fullPath).ToLower() == ".html")
+                fileContents = PreProccesor.ProcessHTML(fileContents);
+
+            // Convert to byte array and return buffer
+            byte[] fileData = Encoding.UTF8.GetBytes(fileContents);
             fixed (byte* dataPtr = fileData)
             {
                 return ULBuffer.CreateFromDataCopy((void*)dataPtr, (nuint)fileData.Length);
