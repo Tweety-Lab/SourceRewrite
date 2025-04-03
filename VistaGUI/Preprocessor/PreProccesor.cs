@@ -50,7 +50,6 @@ namespace VistaGUI.Preprocessor
                     }
                 }
 
-                Console.WriteLine($"Processed HTML: {html}");
                 return html;
             }
         };

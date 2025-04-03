@@ -36,6 +36,7 @@ namespace SourceRewrite.Entities.GUI.BuiltIn
             }
         }
 
+
         public override void Start()
         {
             PanelName = "utilities/fpscounter/counter.html";
