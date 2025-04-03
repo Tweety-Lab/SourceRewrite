@@ -17,7 +17,7 @@ namespace VistaGUI.Preprocessor
         /// </summary>
         public static List<Func<string, string>> HTMLRules = new List<Func<string, string>>()
         {
-            // Rule: Auto include scripts for custom elements
+            // RULE: Auto include scripts for custom elements
             html =>
             {
                 bool modified = false;
@@ -32,25 +32,25 @@ namespace VistaGUI.Preprocessor
                     // Check if the element exists in the HTML
                     if (Regex.IsMatch(html, $@"<{elementName}[^>]*>", RegexOptions.IgnoreCase))
                     {
-                        Console.WriteLine($"Adding script for: {elementName}");
                         scriptIncludes.AppendLine($"<script src=\"file:///{scriptPath}\"></script>");
                         modified = true;
                     }
                 }
 
-                // Inject scripts before </body>
+                // Inject scripts before </head>
                 if (modified)
                 {
-                    if (html.Contains("</body>"))
+                    if (html.Contains("</head>"))
                     {
-                        html = Regex.Replace(html, @"</body>", scriptIncludes.ToString() + "</body>", RegexOptions.IgnoreCase);
+                        html = Regex.Replace(html, @"</head>", scriptIncludes.ToString() + "</head>", RegexOptions.IgnoreCase);
                     }
                     else
                     {
-                        html += scriptIncludes.ToString(); // Append at end if no </body> found
+                        html += scriptIncludes.ToString(); // Append at end if no </head> found
                     }
                 }
 
+                Console.WriteLine($"Processed HTML: {html}");
                 return html;
             }
         };
