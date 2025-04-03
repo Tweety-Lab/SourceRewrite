@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using UltralightNet;
 using UltralightNet.AppCore;
+using VistaGUI.Preprocessor;
 using VistaGUI.Scripting;
 
 namespace VistaGUI
@@ -54,6 +55,9 @@ namespace VistaGUI
 
             // Set resources path
             AppCoreMethods.ulEnablePlatformFileSystem(viewConfig.ResourcesPath);
+
+            // Load our file system
+            ULPlatform.FileSystem = new VistaFileSystem(viewConfig.ResourcesPath);
 
 
             // Create Renderer
