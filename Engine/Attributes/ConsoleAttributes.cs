@@ -25,7 +25,7 @@
     public enum ConVarFlag
     {
         None = 0,
-        Save = 1
+        Archived = 1
     }
 
     /// <summary>
