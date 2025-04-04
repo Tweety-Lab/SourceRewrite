@@ -175,7 +175,7 @@ namespace SourceRewrite
                     ConVarAttribute conVarAttribute = (ConVarAttribute)convar.Value;
 
                     // Skip ConVars that don't have the Save flag
-                    if (conVarAttribute.Flag != ConVarFlag.Archived)
+                    if (conVarAttribute.Flag != ConVarFlag.Archive)
                         continue;
 
                     // Get the current value of the ConVar

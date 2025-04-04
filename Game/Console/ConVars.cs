@@ -4,7 +4,7 @@ namespace Game.Console
 {
     public static class ConVars
     {
-        [ConVar("my_convar", ConVarFlag.Archived)]
+        [ConVar("my_convar", ConVarFlag.Archive)]
         public static string MyConvar { get; set; }
     }
 }

@@ -25,7 +25,7 @@
     public enum ConVarFlag
     {
         None = 0,
-        Archived = 1,
+        Archive = 1,
         Cheat = 2
     }
 
