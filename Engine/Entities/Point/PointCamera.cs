@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
+using SourceRewrite.InputSystem;
 using SourceRewrite.Maps;
 using System.Numerics;
 

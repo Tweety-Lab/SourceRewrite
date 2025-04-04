@@ -1,4 +1,5 @@
 ﻿using Silk.NET.Input;
+using SourceRewrite.Attributes;
 using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
@@ -6,6 +7,11 @@ namespace SourceRewrite.InputSystem
 {
     public class InputContext
     {
+        public Dictionary<string, string> Keybinds = new(); // <Action, Key>
+
+        // Keybind Map
+        public Dictionary<string, Key> KeybindMap = CreateKeybindMap();
+
         public IKeyboard PrimaryKeyboard;
         public IMouse PrimaryMouse;
 
@@ -15,22 +21,119 @@ namespace SourceRewrite.InputSystem
         public Vector2 MouseDelta;
 
         private Vector2 lastMousePos;
+
         public InputContext(IInputContext input)
         {
             PrimaryKeyboard = input.Keyboards.FirstOrDefault();
             PrimaryMouse = input.Mice.FirstOrDefault();
-
-            // Initialize lastMousePos
-            lastMousePos = PrimaryMouse.Position;
+            lastMousePos = PrimaryMouse.Position; // Initialize last mouse position
         }
 
         public void InputUpdate()
         {
-            // Calculate the difference (delta) between frames
+            // Calculate and update MouseDelta
             MouseDelta = PrimaryMouse.Position - lastMousePos;
-
-            // Store the current mouse position for the next frame
             lastMousePos = PrimaryMouse.Position;
+        }
+
+        private static Dictionary<string, Key> CreateKeybindMap()
+        {
+            return new Dictionary<string, Key>
+            {
+                // Alphanumeric Keys (0-9, A-Z)
+                { "0", Key.Number0 },
+                { "1", Key.Number1 },
+                { "2", Key.Number2 },
+                { "3", Key.Number3 },
+                { "4", Key.Number4 },
+                { "5", Key.Number5 },
+                { "6", Key.Number6 },
+                { "7", Key.Number7 },
+                { "8", Key.Number8 },
+                { "9", Key.Number9 },
+                { "a", Key.A },
+                { "b", Key.B },
+                { "c", Key.C },
+                { "d", Key.D },
+                { "e", Key.E },
+                { "f", Key.F },
+                { "g", Key.G },
+                { "h", Key.H },
+                { "i", Key.I },
+                { "j", Key.J },
+                { "k", Key.K },
+                { "l", Key.L },
+                { "m", Key.M },
+                { "n", Key.N },
+                { "o", Key.O },
+                { "p", Key.P },
+                { "q", Key.Q },
+                { "r", Key.R },
+                { "s", Key.S },
+                { "t", Key.T },
+                { "u", Key.U },
+                { "v", Key.V },
+                { "w", Key.W },
+                { "x", Key.X },
+                { "y", Key.Y },
+                { "z", Key.Z },
+
+
+                // Modifier Keys
+                { "space", Key.Space },
+                { "ctrl", Key.ControlLeft },
+                { "shift", Key.ShiftLeft },
+                { "alt", Key.AltLeft },
+                { "tab", Key.Tab },
+                { "enter", Key.Enter },
+                { "escape", Key.Escape },
+                { "capslock", Key.CapsLock },
+                { "numlock", Key.NumLock },
+                { "scrolllock", Key.ScrollLock },
+                { "rshift", Key.ShiftRight },
+                { "rctrl", Key.ControlRight },
+                { "ralt", Key.AltRight },
+
+                // Function Keys
+                { "f1", Key.F1 },
+                { "f2", Key.F2 },
+                { "f3", Key.F3 },
+                { "f4", Key.F4 },
+                { "f5", Key.F5 },
+                { "f6", Key.F6 },
+                { "f7", Key.F7 },
+                { "f8", Key.F8 },
+                { "f9", Key.F9 },
+                { "f10", Key.F10 },
+                { "f11", Key.F11 },
+                { "f12", Key.F12 },
+
+                // Navigation Keys
+                { "uparrow", Key.Up },
+                { "downarrow", Key.Down },
+                { "leftarrow", Key.Left },
+                { "rightarrow", Key.Right },
+                { "ins", Key.Insert },
+                { "del", Key.Delete },
+                { "pgdn", Key.PageDown },
+                { "pgup", Key.PageUp },
+                { "home", Key.Home },
+                { "end", Key.End },
+                { "pause", Key.Pause },
+
+                // Special Keys
+                { "backspace", Key.Backspace },
+                { ";", Key.Semicolon },
+                { "/", Key.Slash },
+                { ",", Key.Comma },
+                { ".", Key.Period },
+                { "'", Key.Apostrophe },
+                { "[", Key.LeftBracket },
+                { "]", Key.RightBracket },
+                { "\\", Key.BackSlash },
+                { "=", Key.Equal },
+                { "`", Key.GraveAccent }
+            };
         }
     }
 
@@ -39,27 +142,22 @@ namespace SourceRewrite.InputSystem
     /// </summary>
     public static class Input
     {
-        // KeyDown Event
+        // Events
         public static event Action<IKeyboard, Key, int> KeyDownEvent;
-
-        // KeyUp Event
         public static event Action<IKeyboard, Key, int> KeyUpEvent;
-
-        // Char Event
         public static event Action<IKeyboard, char> KeyCharEvent;
-
-        // MouseButtonDown Event
         public static event Action<IMouse, MouseButton> MouseButtonDownEvent;
-
-        // MouseButtonUp Event
         public static event Action<IMouse, MouseButton> MouseButtonUpEvent;
-
-        // MouseDoubleClick Event
         public static event Action<IMouse, MouseButton, Vector2> MouseDoubleClickEvent;
 
         private static InputContext Context => GameModules.GetModule<InputModule>().Context;
 
         static Input()
+        {
+            InitializeInputEvents();
+        }
+
+        private static void InitializeInputEvents()
         {
             if (Context.PrimaryKeyboard != null)
             {
@@ -67,161 +165,59 @@ namespace SourceRewrite.InputSystem
                 Context.PrimaryKeyboard.KeyUp += OnKeyUp;
                 Context.PrimaryKeyboard.KeyChar += OnKeyChar;
             }
-            
+
             if (Context.PrimaryMouse != null)
             {
                 Context.PrimaryMouse.MouseDown += OnMouseButtonDown;
                 Context.PrimaryMouse.MouseUp += OnMouseButtonUp;
-
                 Context.PrimaryMouse.DoubleClick += OnMouseDoubleClick;
             }
         }
 
-        // Handler for the KeyDown event
-        private static void OnKeyDown(IKeyboard sender, Key key, int i)
+        // Key Handlers
+        private static void OnKeyDown(IKeyboard sender, Key key, int i) => KeyDownEvent?.Invoke(sender, key, i);
+        private static void OnKeyUp(IKeyboard sender, Key key, int i) => KeyUpEvent?.Invoke(sender, key, i);
+        private static void OnKeyChar(IKeyboard sender, char character) => KeyCharEvent?.Invoke(sender, character);
+
+        // Mouse Handlers
+        private static void OnMouseButtonDown(IMouse sender, MouseButton button) => MouseButtonDownEvent?.Invoke(sender, button);
+        private static void OnMouseButtonUp(IMouse sender, MouseButton button) => MouseButtonUpEvent?.Invoke(sender, button);
+        private static void OnMouseDoubleClick(IMouse sender, MouseButton button, Vector2 position) => MouseDoubleClickEvent?.Invoke(sender, button, position);
+
+        // Key Functions
+        public static bool GetKeyDown(Key key) => Context.PrimaryKeyboard.IsKeyPressed(key);
+        public static bool GetKeyUp(Key key) => !GetKeyDown(key);
+
+        // Mouse Functions
+        public static bool GetMouseButtonDown(int mouseButton) => Context.PrimaryMouse.IsButtonPressed((Silk.NET.Input.MouseButton)mouseButton);
+        public static bool GetMouseButtonUp(int mouseButton) => !GetMouseButtonDown(mouseButton);
+        public static Vector2 GetMousePosition() => Context.PrimaryMouse.Position;
+        public static float GetMouseX() => Context.PrimaryMouse.Position.X;
+        public static float GetMouseY() => Context.PrimaryMouse.Position.Y;
+        public static Vector2 GetMouseMovement() => Context.MouseDelta;
+        public static float GetMouseXMovement() => Context.MouseDelta.X;
+        public static float GetMouseYMovement() => Context.MouseDelta.Y;
+
+        public static string GetClipboardText() => Context.PrimaryKeyboard.ClipboardText;
+
+        // Cursor Lock/Unlock
+        public static void LockCursor() => Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Hidden;
+        public static void UnlockCursor() => Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Normal;
+
+        // Binding Functions
+        [ConCommand("bind")]
+        public static void BindKey(string key, string action) => Context.Keybinds[action] = key.ToLower();
+
+        public static bool GetDown(string action)
         {
-            KeyDownEvent?.Invoke(sender, key, i);
+            if (Context.Keybinds.TryGetValue(action, out var keyString) &&
+                Context.KeybindMap.TryGetValue(keyString, out var key))
+            {
+                return Context.PrimaryKeyboard.IsKeyPressed(key);
+            }
+            return false;
         }
 
-        // Handler for the KeyUp event
-        private static void OnKeyUp(IKeyboard sender, Key key, int i)
-        {
-            KeyUpEvent?.Invoke(sender, key, i);
-        }
-
-        // Handler for the KeyChar event
-        private static void OnKeyChar(IKeyboard sender, char character)
-        {
-            KeyCharEvent?.Invoke(sender, character);
-        }
-
-        // Handler for the MouseButtonDown event
-        private static void OnMouseButtonDown(IMouse sender, MouseButton button)
-        {
-            MouseButtonDownEvent?.Invoke(sender, button);
-        }
-
-        // Handler for the MouseButtonUp event
-        private static void OnMouseButtonUp(IMouse sender, MouseButton button)
-        {
-            MouseButtonUpEvent?.Invoke(sender, button);
-        }
-
-        // Handler for the MouseDoubleClick event
-        private static void OnMouseDoubleClick(IMouse sender, MouseButton button, Vector2 position)
-        {
-            MouseDoubleClickEvent?.Invoke(sender, button, position);
-        }
-
-        /// <summary>
-        /// Returns True if the chosen key is pressed down.
-        /// </summary>
-        public static bool GetKeyDown(Key key)
-        {
-            return Context.PrimaryKeyboard.IsKeyPressed(key);
-        }
-
-        
-
-        /// <summary>
-        /// Returns True if the chosen key is up.
-        /// </summary>
-        public static bool GetKeyUp(Key key)
-        {
-            return !Context.PrimaryKeyboard.IsKeyPressed(key);
-        }
-
-        /// <summary>
-        /// Returns True if chosen Mouse Button is down.
-        /// </summary>
-        public static bool GetMouseButtonDown(int mouseButton)
-        {
-            // Convert the int to a Silk.NET MouseButton
-            MouseButton button = (Silk.NET.Input.MouseButton)mouseButton;
-
-            // Check if the specific mouse button is pressed
-            return Context.PrimaryMouse.IsButtonPressed(button);
-        }
-
-        /// <summary>
-        /// Returns True if chosen Mouse Button is up.
-        /// </summary>
-        public static bool GetMouseButtonUp(int mouseButton)
-        {
-            // Check if the specific mouse button is not pressed
-            return !GetMouseButtonDown(mouseButton);
-        }
-
-        /// <summary>
-        /// Returns current Mouse Position as Vector2.
-        /// </summary>
-        public static Vector2 GetMousePosition()
-        {
-            return Context.PrimaryMouse.Position;
-        }
-
-        /// <summary>
-        /// Returns current Mouse X Position.
-        /// </summary>
-        public static float GetMouseX()
-        {
-            return Context.PrimaryMouse.Position.X;
-        }
-
-        /// <summary>
-        /// Returns current Mouse Y Position.
-        /// </summary>
-        public static float GetMouseY()
-        {
-            return Context.PrimaryMouse.Position.Y;
-        }
-
-        /// <summary>
-        /// Returns Mouse Movement since last Frame.
-        /// </summary>
-        public static Vector2 GetMouseMovement()
-        {
-            return Context.MouseDelta;
-        }
-
-        /// <summary>
-        /// Returns X Mouse Movement since last Frame.
-        /// </summary>
-        public static float GetMouseXMovement()
-        {
-            return Context.MouseDelta.X;
-        }
-
-        /// <summary>
-        /// Returns Y Mouse Movement since last Frame.
-        /// </summary>
-        public static float GetMouseYMovement()
-        {
-            return Context.MouseDelta.Y;
-        }
-
-        /// <summary>
-        /// Returns the current Clipboard Text.
-        /// </summary>
-        public static string GetClipboardText()
-        {
-            return Context.PrimaryKeyboard.ClipboardText;
-        }
-
-        /// <summary>
-        /// Locks the cursor in the Window.
-        /// </summary>
-        public static void LockCursor()
-        {
-            Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Hidden;
-        }
-
-        /// <summary>
-        /// Unlocks the cursor from the Window.
-        /// </summary>
-        public static void UnlockCursor()
-        {
-            Context.PrimaryMouse.Cursor.CursorMode = CursorMode.Normal;
-        }
+        public static bool GetUp(string action) => !GetDown(action);
     }
 }
