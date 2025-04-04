@@ -137,7 +137,7 @@ namespace SourceRewrite.Maps
                 if (entityType == null)
                 {
                     Console.WriteLine($"Could not find type: '{entityNamespace}' ");
-                    entityType = typeof(BaseEntity); // Fallback to BaseEntity if not found
+                    continue;
                 }
 
                 Console.WriteLine($"Creating entity of type: {entityNamespace}");
