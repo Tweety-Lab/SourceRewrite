@@ -9,12 +9,12 @@ using System.Text;
 namespace VBSP.Conversion
 {
     /// <summary>
-    /// Provides conversion functionality from Valve Map Format (VMF) to Binary Space Partition (BSP) format
+    /// Convert from Valve Map Format (VMF) to our BSP format.
     /// </summary>
     public static class VMFToBSP
     {
         /// <summary>
-        /// Compiles a VMF file content into a BSP format object
+        /// Compiles a VMF file content into a BSP format object.
         /// </summary>
         /// <param name="contents">The VMF file contents as a string</param>
         /// <returns>A compiled BSPFormat object</returns>
@@ -37,7 +37,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Processes VMF entities and stores them in the BSP format
+        /// Processes VMF entities and stores them in the BSP format.
         /// </summary>
         private static void ProcessEntities(VMFFormat vmf, BSPFormat bsp)
         {
@@ -58,7 +58,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Converts a VMF entity to its BSP string representation
+        /// Converts a VMF entity to its BSP string representation.
         /// </summary>
         private static string ConvertEntityToBspString(Entity vmfEntity)
         {
@@ -93,7 +93,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Processes world geometry from VMF and stores it in the BSP format
+        /// Processes world geometry from VMF and stores it in the BSP format.
         /// </summary>
         private static void ProcessWorldGeometry(VMFFormat vmf, BSPFormat bsp)
         {
@@ -123,7 +123,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Processes a single solid and adds its geometry to the vertex and index buffers
+        /// Processes a single solid and adds its geometry to the vertex and index lumps.
         /// </summary>
         private static void ProcessSolid(Solid solid, List<float> vertices, List<uint> indices,
                                         List<string> materials, ref uint indexOffset)
@@ -159,7 +159,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system
+        /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system.
         /// </summary>
         private static List<Vector3> CalculateSideVertices(Side side)
         {
@@ -175,7 +175,7 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Converts a point from VMF coordinate system to BSP's Y-up coordinate system
+        /// Converts a point from VMF coordinate system to BSP's Y-up coordinate system.
         /// </summary>
         private static Vector3 ConvertToYUpCoordSystem(Vector3 point)
         {
