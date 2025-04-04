@@ -47,31 +47,31 @@ namespace Editor.Components
             HandleMouseInput(Time.DeltaTime);
         }
 
-        // Movement input (W, A, S, D)
+        // Movement input
         private void HandleMovementInput(float deltaTime)
         {
             Vector3 movement = Vector3.Zero;
 
-            // Forward Movement (W)
-            if (Input.GetKeyDown(Key.W))
+            // Forward Movement
+            if (Input.GetDown("forward"))
             {
                 movement += PointCamera.ActiveCamera.Transform.Forward;
             }
 
-            // Backward Movement (S)
-            if (Input.GetKeyDown(Key.S))
+            // Backward Movement
+            if (Input.GetDown("back"))
             {
                 movement -= PointCamera.ActiveCamera.Transform.Forward;
             }
 
-            // Left Movement (A)
-            if (Input.GetKeyDown(Key.A))
+            // Left Movement
+            if (Input.GetDown("left"))
             {
                 movement -= PointCamera.ActiveCamera.Transform.Right;
             }
 
-            // Right Movement (D)
-            if (Input.GetKeyDown(Key.D))
+            // Right Movement
+            if (Input.GetDown("right"))
             {
                 movement += PointCamera.ActiveCamera.Transform.Right;
             }

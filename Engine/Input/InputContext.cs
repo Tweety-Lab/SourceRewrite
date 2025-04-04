@@ -212,7 +212,6 @@ namespace SourceRewrite.InputSystem
         /// Checks if an action is down.
         /// </summary>
         /// <param name="action"></param>
-        /// <returns></returns>
         public static bool GetDown(string action)
         {
             if (Context.Keybinds.TryGetValue(action, out var keyString) &&
@@ -227,13 +226,11 @@ namespace SourceRewrite.InputSystem
         /// Checks if an action is up.
         /// </summary>
         /// <param name="action"></param>
-        /// <returns></returns>
         public static bool GetUp(string action) => !GetDown(action);
 
         /// <summary>
         /// Returns a list of all bound actions.
         /// </summary>
-        /// <returns></returns>
         public static List<string> GetBoundActions()
         {
             var boundActions = new List<string>();
