@@ -4,7 +4,6 @@ using SourceRewrite.AssetTypes;
 
 
 #if EDITOR
-using SourceRewrite.Editor;
 #endif
 
 namespace SourceRewrite.Entities

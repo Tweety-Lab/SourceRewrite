@@ -1,4 +1,4 @@
-﻿using SourceRewrite.Editor;
+﻿using SourceRewrite;
 using SourceRewrite.Entities;
 
 namespace Editor.Logic

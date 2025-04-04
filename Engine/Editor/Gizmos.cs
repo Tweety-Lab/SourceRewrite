@@ -5,7 +5,7 @@ using SourceRewrite.Entities.Env;
 using SourceRewrite.Files;
 using System.Numerics;
 
-namespace SourceRewrite.Editor
+namespace SourceRewrite
 {
     /// <summary>
     /// Manage Editor Gizmos

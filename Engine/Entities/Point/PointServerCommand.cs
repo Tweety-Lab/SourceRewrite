@@ -1,5 +1,4 @@
 ﻿using SourceRewrite.Attributes;
-using SourceRewrite.Editor;
 using System.Numerics;
 
 namespace SourceRewrite.Entities.Point
