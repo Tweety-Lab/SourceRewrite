@@ -17,5 +17,11 @@ namespace SourceRewrite.Entities
         {
             EntityManager.CreateEntityFromName(entityName);
         }
+
+        [ConCommand("echo")]
+        static void Echo(string input)
+        {
+            DeveloperConsole.Msg(input);
+        }
     }
 }

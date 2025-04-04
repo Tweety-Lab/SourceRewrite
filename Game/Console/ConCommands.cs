@@ -13,12 +13,6 @@ namespace Game.Console
             DeveloperConsole.Msg($"Pong! You have run this command {++pingCount} times.");
         }
 
-        [ConCommand("echo")]
-        static void Echo(string input)
-        {
-            DeveloperConsole.Msg(input);
-        }
-
         [ConCommand("print_convar")]
         static void PrintConvar()
         {
