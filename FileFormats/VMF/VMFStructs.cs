@@ -53,5 +53,6 @@ namespace FileFormats.VMF
         public Vector3 Angles;
         public List<KeyValue> Properties;
         public List<KeyValue> Connections;
+        public List<Solid> Solids; // Brush Entity Solids
     }
 }

@@ -28,29 +28,8 @@ namespace FileFormats.VMF
             ParentKey pkWorld = kvVMF.GetParentKey("world");
             LoadWorld(pkWorld);
 
-            // Loop through every parent key in the world
-            foreach (ParentKey parentKey in pkWorld.ChildParentKeys)
-            {
-                // Solid Processing
-                if (parentKey.Name == "solid")
-                {
-                    Solid newSolid = new Solid();
-                    newSolid.ID = (int)parentKey.GetKeyValue("id").Value; // Set the Solid ID
-                    newSolid.Sides = new List<Side>(); // Init sides for later storage
-
-                    // Loop through every parent key in the solid
-                    foreach (ParentKey solidParentKey in parentKey.ChildParentKeys)
-                    {
-                        // Side Processing
-                        if (solidParentKey.Name == "side")
-                        {
-                            newSolid.Sides.Add(ProcessSide(solidParentKey)); // Add the processed side to the list
-                        }
-                    }
-
-                    World.Solids.Add(newSolid); // Add the solid to the world
-                }
-            }
+            // Process world solids
+            ProcessSolids(pkWorld, ref World.Solids);
 
             int entityCount = 0;
             foreach (ParentKey parentKey in kvVMF.ParentKeys)
@@ -68,8 +47,12 @@ namespace FileFormats.VMF
 
                     entity.Properties = new List<KeyValue>(); // Init properties for later storage
                     entity.Connections = new List<KeyValue>(); // Init connections for later storage
+                    entity.Solids = new List<Solid>();  // Initialize solids list for entity
 
                     entity.TargetName = (string)(parentKey.GetKeyValue("targetname")?.Value ?? entityCount.ToString()); // Set the Entity Target Name (if applicable)
+
+                    // Process entity solids
+                    ProcessSolids(parentKey, ref entity.Solids);
 
                     // Loop through every key value attribute in the entity
                     foreach (KeyValue keyValue in parentKey.ChildKeyValues)
@@ -83,6 +66,29 @@ namespace FileFormats.VMF
                     }
 
                     Entities.Add(entity);
+                }
+            }
+        }
+
+        private void ProcessSolids(ParentKey parentKey, ref List<Solid> solidsList)
+        {
+            foreach (ParentKey childParentKey in parentKey.ChildParentKeys)
+            {
+                if (childParentKey.Name == "solid")
+                {
+                    Solid newSolid = new Solid();
+                    newSolid.ID = (int)childParentKey.GetKeyValue("id").Value;
+                    newSolid.Sides = new List<Side>();
+
+                    foreach (ParentKey solidParentKey in childParentKey.ChildParentKeys)
+                    {
+                        if (solidParentKey.Name == "side")
+                        {
+                            newSolid.Sides.Add(ProcessSide(solidParentKey));
+                        }
+                    }
+
+                    solidsList.Add(newSolid);
                 }
             }
         }
