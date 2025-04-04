@@ -208,6 +208,11 @@ namespace SourceRewrite.InputSystem
         [ConCommand("bind")]
         public static void BindKey(string key, string action) => Context.Keybinds[action] = key.ToLower();
 
+        /// <summary>
+        /// Checks if an action is down.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static bool GetDown(string action)
         {
             if (Context.Keybinds.TryGetValue(action, out var keyString) &&
@@ -218,6 +223,32 @@ namespace SourceRewrite.InputSystem
             return false;
         }
 
+        /// <summary>
+        /// Checks if an action is up.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static bool GetUp(string action) => !GetDown(action);
+
+        /// <summary>
+        /// Returns a list of all bound actions.
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetBoundActions()
+        {
+            var boundActions = new List<string>();
+
+            foreach (var keybind in Context.Keybinds)
+            {
+                // Get the action (key) and its associated key (as a string)
+                var action = keybind.Key;
+                var key = keybind.Value;
+
+                // Add the action and associated key to the list in string form
+                boundActions.Add($"{key} {action}");
+            }
+
+            return boundActions;
+        }
     }
 }

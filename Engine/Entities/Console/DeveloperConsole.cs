@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.Entities.Console;
 using SourceRewrite.Files;
+using SourceRewrite.InputSystem;
 using SourceRewrite.Windowing;
 
 namespace SourceRewrite
@@ -162,12 +163,22 @@ namespace SourceRewrite
 
         public static void WriteConfig(string path)
         {
+            // Get all Binds
+            var binds = Input.GetBoundActions();
+
             // Get all ConVars
             var convars = AttributeManager.GetPropertiesWithAttribute<ConVarAttribute>();
 
-            // Write each ConVar to the file
+            // Write to file
             using (StreamWriter writer = new StreamWriter(path))
             {
+                // Write all Binds
+                foreach (var bind in binds)
+                {
+                    writer.WriteLine($"bind {bind}");
+                }
+
+                // Write all ConVars
                 foreach (var convar in convars)
                 {
                     // Retrieve the ConVar attribute
