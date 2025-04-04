@@ -1,6 +1,8 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.Entities.Console;
 using SourceRewrite.Files;
 using SourceRewrite.Windowing;
+using System.Reflection;
 
 namespace SourceRewrite
 {
@@ -116,6 +118,12 @@ namespace SourceRewrite
                 {
                     // Change Convar to the given argument
                     var propertyType = convar.PropertyType;
+
+                    // Dont run if it's a cheat and cheats are disabled
+                    ConVarAttribute attribute = AttributeManager.GetAttribute<ConVarAttribute>(convar);
+                    if (attribute.Flag == ConVarFlag.Cheat && !ConVars.CheatsEnabled)
+                        return;
+
                     var convertedArg = ConvertConValueToType(args[0], propertyType);
                     convar.SetValue(null, convertedArg);
                 }

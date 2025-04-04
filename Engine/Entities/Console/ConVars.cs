@@ -7,6 +7,7 @@ namespace SourceRewrite.Entities.Console
     {
         private static int _maxFps = 60;
 
+        // Max FPS
         [ConVar("max_fps")]
         public static int MaxFPS
         {
@@ -17,6 +18,7 @@ namespace SourceRewrite.Entities.Console
             }
         }
 
+        // Vertical Sync
         [ConVar("vsync")]
         public static bool VSync
         {
@@ -26,5 +28,9 @@ namespace SourceRewrite.Entities.Console
                 GameWindow.CurrentWindow.GetSilkWindow().VSync = value;
             }
         }
+
+        // Cheats
+        [ConVar("sv_cheats")]
+        public static bool CheatsEnabled { get; set; } = false;
     }
 }
