@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Windowing;
-using SourceRewrite.Windowing.Modules;
+﻿using SourceRewrite.Windowing.Modules;
 using Mesh = SourceRewrite.AssetTypes.Model;
 
 namespace SourceRewrite.Entities

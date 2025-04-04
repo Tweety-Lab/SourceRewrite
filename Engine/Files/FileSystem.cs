@@ -1,5 +1,4 @@
 ﻿using SourceRewrite.AssetTypes;
-using System.IO;
 
 namespace SourceRewrite.Files
 {

@@ -1,7 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
 using SourceRewrite.Files;
-using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Entities

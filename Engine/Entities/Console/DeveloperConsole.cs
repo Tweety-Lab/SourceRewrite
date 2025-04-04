@@ -2,7 +2,6 @@
 using SourceRewrite.Entities.Console;
 using SourceRewrite.Files;
 using SourceRewrite.Windowing;
-using System.Reflection;
 
 namespace SourceRewrite
 {

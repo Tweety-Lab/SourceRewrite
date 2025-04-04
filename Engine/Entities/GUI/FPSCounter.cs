@@ -1,11 +1,6 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.Maps;
 using SourceRewrite.TimeSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VistaGUI.Scripting.References;
 
 namespace SourceRewrite.Entities.GUI.BuiltIn

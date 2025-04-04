@@ -1,5 +1,4 @@
 ﻿using SourceRewrite.Rendering.OpenGL;
-using SourceRewrite.Windowing;
 using SourceRewrite.Files;
 using FileFormats.VTF;
 using SourceRewrite.Rendering;

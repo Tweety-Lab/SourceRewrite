@@ -1,13 +1,5 @@
 ﻿using FileFormats.KeyValues.GameInfo;
-using Silk.NET.Input;
 using Silk.NET.Maths;
-using SourceRewrite.Files;
-using SourceRewrite.InputSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Windowing.Modules
 {

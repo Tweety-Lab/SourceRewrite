@@ -2,7 +2,6 @@
 using SourceRewrite.Files;
 using SourceRewrite.Rendering;
 using SourceRewrite.Rendering.OpenGL;
-using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.AssetTypes

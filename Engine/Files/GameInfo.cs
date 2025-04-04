@@ -1,5 +1,4 @@
-﻿using SourceRewrite.Windowing;
-using SourceRewrite.Steam;
+﻿using SourceRewrite.Steam;
 using FileFormats.KeyValues;
 using SourceRewrite.Windowing.Modules;
 

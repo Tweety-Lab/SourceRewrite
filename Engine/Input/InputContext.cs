@@ -1,5 +1,4 @@
 ﻿using Silk.NET.Input;
-using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 

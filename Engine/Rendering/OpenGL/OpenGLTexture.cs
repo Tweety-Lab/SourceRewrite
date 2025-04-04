@@ -1,5 +1,4 @@
-﻿using Silk.NET.OpenAL;
-using Silk.NET.OpenGL;
+﻿using Silk.NET.OpenGL;
 using SourceRewrite.AssetTypes;
 
 namespace SourceRewrite.Rendering.OpenGL

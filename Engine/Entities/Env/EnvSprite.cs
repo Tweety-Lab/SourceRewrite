@@ -1,11 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
 using SourceRewrite.Files;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities.Env
 {

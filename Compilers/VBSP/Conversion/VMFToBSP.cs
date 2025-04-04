@@ -2,7 +2,6 @@
 using FileFormats.KeyValues;
 using FileFormats.VMF;
 using System.Numerics;
-using System.Text.RegularExpressions;
 
 namespace VBSP.Conversion
 {

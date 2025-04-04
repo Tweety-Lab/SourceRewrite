@@ -5,7 +5,6 @@ using SourceRewrite.Entities.GUI;
 using SourceRewrite.Entities.Lighting;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.Maths;
-using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
