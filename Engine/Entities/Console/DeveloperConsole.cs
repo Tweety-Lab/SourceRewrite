@@ -3,6 +3,7 @@ using SourceRewrite.Entities.Console;
 using SourceRewrite.Files;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Windowing;
+using System.Text.RegularExpressions;
 
 namespace SourceRewrite
 {
@@ -46,7 +47,12 @@ namespace SourceRewrite
         public static void EvaluateCommand(string command)
         {
             // Split the command into parts (first part is command name, rest are arguments)
-            var parts = command.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var regex = new Regex(@"(\""(.*?)\"")|(\S+)");
+            var parts = regex.Matches(command)
+                             .Cast<Match>()
+                             .Select(m => m.Value.Trim('"'))
+                             .ToArray();
+
             if (parts.Length == 0)
                 return;
 
