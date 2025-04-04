@@ -4,11 +4,12 @@ using FileFormats.VMF;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
 
 namespace VBSP.Conversion
 {
     /// <summary>
-    /// Conversion from Valve VMF files to our BSP format
+    /// Provides conversion functionality from Valve Map Format (VMF) to Binary Space Partition (BSP) format
     /// </summary>
     public static class VMFToBSP
     {
@@ -65,27 +66,30 @@ namespace VBSP.Conversion
             string position = $"\"{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}\"";
             string rotation = $"\"{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}\"";
 
-            // Build properties string
-            string entityPropertiesString = string.Empty;
+            // Build properties string using StringBuilder
+            StringBuilder propertiesBuilder = new StringBuilder();
 
             // Add regular properties
             foreach (KeyValue kvProperty in vmfEntity.Properties)
             {
-                entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
+                propertiesBuilder.AppendLine($" {kvProperty.Key} \"{kvProperty.Value}\"");
             }
 
             // Add connections with connection_ prefix
             foreach (KeyValue kvConnection in vmfEntity.Connections)
             {
-                entityPropertiesString += $" connection_{kvConnection.Key} \"{kvConnection.Value}\"\n";
+                propertiesBuilder.AppendLine($" connection_{kvConnection.Key} \"{kvConnection.Value}\"");
             }
 
             // Format the complete entity string
-            return $@"{vmfEntity.TargetName} {{
-position {position}
-rotation {rotation}
-{entityPropertiesString}
-}}";
+            StringBuilder entityBuilder = new StringBuilder();
+            entityBuilder.AppendLine($"{vmfEntity.TargetName} {{");
+            entityBuilder.AppendLine($"position {position}");
+            entityBuilder.AppendLine($"rotation {rotation}");
+            entityBuilder.Append(propertiesBuilder);
+            entityBuilder.Append("}");
+
+            return entityBuilder.ToString();
         }
 
         /// <summary>
