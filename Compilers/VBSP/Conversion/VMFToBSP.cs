@@ -1,139 +1,181 @@
 ﻿using FileFormats.BSP;
 using FileFormats.KeyValues;
 using FileFormats.VMF;
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace VBSP.Conversion
 {
+    /// <summary>
+    /// Conversion from Valve VMF files to our BSP format
+    /// </summary>
     public static class VMFToBSP
     {
         /// <summary>
-        /// Returns a BSPFormat object compiled from a VMF file.
+        /// Compiles a VMF file content into a BSP format object
         /// </summary>
+        /// <param name="contents">The VMF file contents as a string</param>
+        /// <returns>A compiled BSPFormat object</returns>
         public static BSPFormat CompileVMF(string contents)
         {
-            // Load the VMF file
-            VMFFormat VMF = new VMFFormat(contents);
+            // Parse the VMF file
+            VMFFormat vmf = new VMFFormat(contents);
+            BSPFormat outputBsp = new BSPFormat();
 
-            BSPFormat outputBSP = new BSPFormat();
+            // Set the BSP header version from VMF
+            outputBsp.Header.mapRevision = vmf.VersionInfo.MapVersion;
 
-            // Set the BSP header to the VMF MapVersion
-            outputBSP.Header.mapRevision = VMF.VersionInfo.MapVersion;
+            // Process entities
+            ProcessEntities(vmf, outputBsp);
 
-            // Handle entities only if they exist
-            if (VMF.Entities != null && VMF.Entities.Count > 0)
-            {
-                string[] entities = new string[VMF.Entities.Count];
+            // Process world geometry
+            ProcessWorldGeometry(vmf, outputBsp);
 
-                // Convert entities to Entity strings
-                int i = 0;
-                foreach (Entity vmfEntity in VMF.Entities)
-                {
-                    // Get their properties
-                    string entityPropertiesString = string.Empty;
-                    foreach (KeyValue kvProperty in vmfEntity.Properties)
-                    {
-                        entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
-                    }
-
-                    foreach (KeyValue kvConnection in vmfEntity.Connections)
-                    {
-                        entityPropertiesString += $" connection_{kvConnection.Key} \"{kvConnection.Value}\"\n";
-                    }
-
-                    string entityString = @$"{vmfEntity.TargetName} {{
-position ""{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}""
-rotation ""{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}""
-{entityPropertiesString}
-                    }}";
-
-                    entities[i] = entityString;
-
-                    i++;
-                }
-
-                outputBSP.SetLumpData(LumpType.LUMP_ENTITIES, entities);
-            }
-
-            // Handle solids only if they exist
-            if (VMF.World.Solids != null && VMF.World.Solids.Count > 0)
-            {
-                List<float> vertices = new List<float>(); // Store vertex positions
-                List<uint> indices = new List<uint>(); // Store triangle indices
-                List<string> materials = new List<string>(); // Store material names
-
-                uint indexOffset = 0; // Tracks the index of the next vertex
-
-                // Loop through all solids
-                foreach (Solid solid in VMF.World.Solids)
-                {
-                    Console.WriteLine($"Compiling solid with id of {solid.ID}...");
-
-                    // Loop through all solid sides
-                    foreach (Side side in solid.Sides)
-                    {
-                        // Add the material to the list of materials
-                        materials.Add(side.Material);
-
-                        // Find intersections with other geometry
-                        List<Vector3> intersectionPoints = CalculateSide(side);
-
-                        // Add vertex positions
-                        for (int i = 0; i < intersectionPoints.Count; i++)
-                        {
-                            vertices.Add(intersectionPoints[i].X);
-                            vertices.Add(intersectionPoints[i].Y);
-                            vertices.Add(intersectionPoints[i].Z);
-                        }
-
-                        // Add indices for two triangles (forming a quad)
-                        indices.Add(indexOffset);
-                        indices.Add(indexOffset + 1);
-                        indices.Add(indexOffset + 2);
-
-                        indices.Add(indexOffset);
-                        indices.Add(indexOffset + 2);
-                        indices.Add(indexOffset + 3);
-
-                        indexOffset += 4; // Move to the next set of indices
-                    }
-                }
-
-                // Store vertices and indices in the BSP lumps
-                outputBSP.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
-                outputBSP.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
-
-                // Store side materials in the BSP lump
-                outputBSP.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
-
-                Console.WriteLine($"Compiled {VMF.World.Solids.Count} solids.");
-            }
-
-            return outputBSP;
+            return outputBsp;
         }
 
-        // Returns a list of intersection points between a plane and other geometry
-        private static List<Vector3> CalculateSide(Side side)
+        /// <summary>
+        /// Processes VMF entities and stores them in the BSP format
+        /// </summary>
+        private static void ProcessEntities(VMFFormat vmf, BSPFormat bsp)
         {
-            List<Vector3> output = new List<Vector3>();
+            if (vmf.Entities == null || vmf.Entities.Count == 0)
+            {
+                return;
+            }
 
-            // Create a Plane for brush processing
+            string[] entities = new string[vmf.Entities.Count];
 
-            // Get corners and convert them to Y up coordinate system
-            Vector3 corner1 = new Vector3(-side.plane.Point1.Y, side.plane.Point1.Z, -side.plane.Point1.X);
-            Vector3 corner2 = new Vector3(-side.plane.Point2.Y, side.plane.Point2.Z, -side.plane.Point2.X);
-            Vector3 corner3 = new Vector3(-side.plane.Point3.Y, side.plane.Point3.Z, -side.plane.Point3.X);
+            for (int i = 0; i < vmf.Entities.Count; i++)
+            {
+                Entity vmfEntity = vmf.Entities[i];
+                entities[i] = ConvertEntityToBspString(vmfEntity);
+            }
 
-            // Calculate the fourth corner
+            bsp.SetLumpData(LumpType.LUMP_ENTITIES, entities);
+        }
+
+        /// <summary>
+        /// Converts a VMF entity to its BSP string representation
+        /// </summary>
+        private static string ConvertEntityToBspString(Entity vmfEntity)
+        {
+            // Convert coordinate system: Source uses Y-forward, Z-up, but BSP uses different convention
+            string position = $"\"{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}\"";
+            string rotation = $"\"{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}\"";
+
+            // Build properties string
+            string entityPropertiesString = string.Empty;
+
+            // Add regular properties
+            foreach (KeyValue kvProperty in vmfEntity.Properties)
+            {
+                entityPropertiesString += $" {kvProperty.Key} \"{kvProperty.Value}\"\n";
+            }
+
+            // Add connections with connection_ prefix
+            foreach (KeyValue kvConnection in vmfEntity.Connections)
+            {
+                entityPropertiesString += $" connection_{kvConnection.Key} \"{kvConnection.Value}\"\n";
+            }
+
+            // Format the complete entity string
+            return $@"{vmfEntity.TargetName} {{
+position {position}
+rotation {rotation}
+{entityPropertiesString}
+}}";
+        }
+
+        /// <summary>
+        /// Processes world geometry from VMF and stores it in the BSP format
+        /// </summary>
+        private static void ProcessWorldGeometry(VMFFormat vmf, BSPFormat bsp)
+        {
+            if (vmf.World.Solids == null || vmf.World.Solids.Count == 0)
+            {
+                return;
+            }
+
+            List<float> vertices = new List<float>();
+            List<uint> indices = new List<uint>();
+            List<string> materials = new List<string>();
+
+            uint indexOffset = 0;
+
+            foreach (Solid solid in vmf.World.Solids)
+            {
+                Console.WriteLine($"Compiling solid with id of {solid.ID}...");
+                ProcessSolid(solid, vertices, indices, materials, ref indexOffset);
+            }
+
+            // Store compiled geometry in BSP lumps
+            bsp.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
+            bsp.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
+            bsp.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
+
+            Console.WriteLine($"Compiled {vmf.World.Solids.Count} solids.");
+        }
+
+        /// <summary>
+        /// Processes a single solid and adds its geometry to the vertex and index buffers
+        /// </summary>
+        private static void ProcessSolid(Solid solid, List<float> vertices, List<uint> indices,
+                                        List<string> materials, ref uint indexOffset)
+        {
+            foreach (Side side in solid.Sides)
+            {
+                // Add material
+                materials.Add(side.Material);
+
+                // Calculate side geometry
+                List<Vector3> sideVertices = CalculateSideVertices(side);
+
+                // Add vertex positions to the buffer
+                foreach (Vector3 vertex in sideVertices)
+                {
+                    vertices.Add(vertex.X);
+                    vertices.Add(vertex.Y);
+                    vertices.Add(vertex.Z);
+                }
+
+                // Create triangles from the quad (two triangles)
+                indices.Add(indexOffset);
+                indices.Add(indexOffset + 1);
+                indices.Add(indexOffset + 2);
+
+                indices.Add(indexOffset);
+                indices.Add(indexOffset + 2);
+                indices.Add(indexOffset + 3);
+
+                // Move to the next set of vertices
+                indexOffset += 4;
+            }
+        }
+
+        /// <summary>
+        /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system
+        /// </summary>
+        private static List<Vector3> CalculateSideVertices(Side side)
+        {
+            // Convert from VMF to BSP coordinate system (Y-up)
+            Vector3 corner1 = ConvertToYUpCoordSystem(side.plane.Point1);
+            Vector3 corner2 = ConvertToYUpCoordSystem(side.plane.Point2);
+            Vector3 corner3 = ConvertToYUpCoordSystem(side.plane.Point3);
+
+            // Calculate the fourth corner to complete the quad
             Vector3 corner4 = corner1 + (corner3 - corner2);
 
-            // Add the corners to the output list
-            output.Add(corner1);
-            output.Add(corner2);
-            output.Add(corner3);
-            output.Add(corner4);
+            return new List<Vector3> { corner1, corner2, corner3, corner4 };
+        }
 
-            return output;
+        /// <summary>
+        /// Converts a point from VMF coordinate system to BSP's Y-up coordinate system
+        /// </summary>
+        private static Vector3 ConvertToYUpCoordSystem(Vector3 point)
+        {
+            return new Vector3(-point.Y, point.Z, -point.X);
         }
     }
 }
