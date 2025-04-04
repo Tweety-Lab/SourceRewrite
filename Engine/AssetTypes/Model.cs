@@ -17,7 +17,7 @@ namespace SourceRewrite.AssetTypes
             // If Mesh cant be found, set it to ERROR
             if (!System.IO.File.Exists(filePath))
             {
-                Console.WriteLine($"Could not find model at '{filePath}'");
+                DeveloperConsole.Warning($"Could not find model at '{filePath}'");
                 filePath = FileSystem.GetModelPath("dev/error.model");
                 material = FileSystem.GetMaterial("dev/error");
             }

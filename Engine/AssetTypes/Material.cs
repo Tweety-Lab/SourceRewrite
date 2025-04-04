@@ -23,7 +23,7 @@ namespace SourceRewrite.AssetTypes
                 // If Material cant be found, set it to missing
                 if (!File.Exists(filePath))
                 {
-                    Console.WriteLine($"Could not find material at '{filePath}'");
+                    DeveloperConsole.Warning($"Could not find material at '{filePath}'");
                     filePath = FileSystem.GetMaterialPath("dev/missing");
                 }
 
@@ -55,7 +55,7 @@ namespace SourceRewrite.AssetTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"A Material error occurred: {ex.Message}");
+                DeveloperConsole.Error($"A Material error occurred: {ex.Message}");
             }
         }
     }
