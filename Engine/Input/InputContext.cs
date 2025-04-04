@@ -206,7 +206,16 @@ namespace SourceRewrite.InputSystem
 
         // Binding Functions
         [ConCommand("bind")]
-        public static void BindKey(string key, string action) => Context.Keybinds[action] = key.ToLower();
+        public static void BindKey(string key, string action)
+        {
+            // Remove Source Engine keybind prefixes
+            if (action.StartsWith('+') || action.StartsWith('-'))
+            {
+                action = action.Substring(1);
+            }
+
+            Context.Keybinds[action.Replace('+', ' ').Replace('-', ' ')] = key.ToLower();
+        }
 
         [ConCommand("unbind")]
         public static void UnbindKey(string action) => Context.Keybinds.Remove(action);
