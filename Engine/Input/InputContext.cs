@@ -208,6 +208,12 @@ namespace SourceRewrite.InputSystem
         [ConCommand("bind")]
         public static void BindKey(string key, string action) => Context.Keybinds[action] = key.ToLower();
 
+        [ConCommand("unbind")]
+        public static void UnbindKey(string action) => Context.Keybinds.Remove(action);
+
+        [ConCommand("unbindall")]
+        public static void UnbindAllKeys() => Context.Keybinds.Clear();
+
         /// <summary>
         /// Checks if an action is down.
         /// </summary>
