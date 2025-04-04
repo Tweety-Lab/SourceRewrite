@@ -52,7 +52,7 @@ namespace VistaGUI.Preprocessor
         }
 
         // Open a File in a buffer
-        public unsafe ULBuffer OpenFile(string path)
+        public ULBuffer OpenFile(string path)
         {
             string fullPath = Path.Combine(ResourcePathPrefix, path);
 
@@ -65,10 +65,7 @@ namespace VistaGUI.Preprocessor
 
             // Convert to byte array and return buffer
             byte[] fileData = Encoding.UTF8.GetBytes(fileContents);
-            fixed (byte* dataPtr = fileData)
-            {
-                return ULBuffer.CreateFromDataCopy((void*)dataPtr, (nuint)fileData.Length);
-            }
+            return ULBuffer.CreateFromDataCopy<byte>(fileData);
         }
 
     }
