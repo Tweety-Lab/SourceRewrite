@@ -198,7 +198,7 @@ namespace SourceRewrite
                     var currentValue = convar.Key.GetValue(null);
 
                     // Write the ConVar name and value to the file
-                    writer.WriteLine($"{conVarAttribute.Name} {currentValue}");
+                    writer.WriteLine($"{conVarAttribute.Name} \"{currentValue}\"");
                 }
             }
         }
