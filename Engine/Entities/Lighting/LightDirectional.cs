@@ -5,7 +5,7 @@ namespace SourceRewrite.Entities.Lighting
 {
     [AlwaysExecute]
     [Entity("light_directional")]
-    public class LightDirectional : BaseEntity
+    public class LightDirectional : PointEntity
     {
         // Light Properties
         [EntityProperty("_light")]

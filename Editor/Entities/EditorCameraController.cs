@@ -9,7 +9,7 @@ using SourceRewrite.TimeSystem;
 namespace Editor.Components
 {
     // FPS Camera Controller
-    public class EditorCameraController : BaseEntity
+    public class EditorCameraController : PointEntity
     {
         // Move at 1512 units per second
         public float MovementSpeed = 1512f;

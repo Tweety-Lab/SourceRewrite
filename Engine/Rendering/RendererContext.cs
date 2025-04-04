@@ -53,7 +53,7 @@ namespace SourceRewrite.Rendering
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Matrix4x4? GetEntityModelMatrix(BaseEntity entity)
+        public static Matrix4x4? GetEntityModelMatrix(PointEntity entity)
         {
             Matrix4x4 transformation = Matrix4x4.CreateScale(entity.Transform.Scale) *
                                        Matrix4x4.CreateFromQuaternion(entity.Transform.Rotation) *

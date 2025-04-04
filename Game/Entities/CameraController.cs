@@ -11,7 +11,7 @@ using System.Numerics;
 namespace Game.Entities
 {
     [Entity("info_player_start")]
-    public class CameraController : BaseEntity
+    public class CameraController : PointEntity
     {
 
         [ConVar("movement_speed")]

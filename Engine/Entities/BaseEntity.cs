@@ -40,16 +40,12 @@ namespace SourceRewrite.Entities
 
         #endregion
 
-        // Entity Transform
-        public Transform Transform { get; set; } = new Transform();
-
         // Name of Entity
         public string Name { get; set; }
 
         // Controls whether Entity logic is enabled
         public bool IsEnabled { get; set; } = true;
         
-
         // IO Outputs
         public List<EntityIOConnection> Outputs { get; set; } = new List<EntityIOConnection>();
 
@@ -92,11 +88,7 @@ namespace SourceRewrite.Entities
         /// <summary>
         /// Runs when Gizmos are drawing for this Entity and it's selected
         /// </summary>
-        public virtual void DrawGizmosSelected()
-        {
-            Gizmos.Color = new Vector4(255, 255, 0, 1);
-            Gizmos.DrawWireframeCube(Transform.Position, new Vector3(22f, 22f, 22f), this);
-        }
+        public virtual void DrawGizmosSelected() { }
 #endif
 
         /// <summary>

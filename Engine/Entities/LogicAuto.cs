@@ -4,7 +4,7 @@ using System.Numerics;
 namespace SourceRewrite.Entities
 {
     [Entity("logic_auto")]
-    public class LogicAuto : BaseEntity
+    public class LogicAuto : PointEntity
     {
         public override void Start()
         {

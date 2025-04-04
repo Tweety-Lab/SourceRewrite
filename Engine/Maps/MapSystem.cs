@@ -143,7 +143,7 @@ namespace SourceRewrite.Maps
                 Console.WriteLine($"Creating entity of type: {entityNamespace}");
 
                 // Dynamically create the correct entity type
-                BaseEntity entity = (BaseEntity)Activator.CreateInstance(entityType);
+                PointEntity entity = (PointEntity)Activator.CreateInstance(entityType);
 
                 // Process Entity properties
                 foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)

@@ -7,7 +7,7 @@ using System.Numerics;
 namespace SourceRewrite.Entities.Point
 {
     [Entity("point_camera")]
-    public class PointCamera : BaseEntity
+    public class PointCamera : PointEntity
     {
         // Camera properties like field of view, aspect ratio, near and far clipping planes
         private float _fieldOfView = MathF.PI / 4f; // Default FOV 45 degrees (in radians)

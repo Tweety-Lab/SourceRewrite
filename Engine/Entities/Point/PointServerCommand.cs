@@ -4,7 +4,7 @@ using System.Numerics;
 namespace SourceRewrite.Entities.Point
 {
     [Entity("point_servercommand")]
-    public class PointServerCommand : BaseEntity
+    public class PointServerCommand : PointEntity
     {
         [Input]
         public void Command(string command)

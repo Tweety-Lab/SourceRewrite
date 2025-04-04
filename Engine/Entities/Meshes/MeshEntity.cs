@@ -6,7 +6,7 @@ namespace SourceRewrite.Entities
     /// <summary>
     /// Takes a "Mesh" Asset Type and renders it in 3D space.
     /// </summary>
-    public class MeshEntity : BaseEntity
+    public class MeshEntity : PointEntity
     {
         /// <summary>
         /// The mesh associated with the entity.

@@ -5,7 +5,7 @@ namespace SourceRewrite.Entities.Lighting
 {
     [AlwaysExecute]
     [Entity("light_spot")]
-    public class LightSpot : BaseEntity
+    public class LightSpot : PointEntity
     {
         // Spot Light Properties
         [EntityProperty("_cone")]

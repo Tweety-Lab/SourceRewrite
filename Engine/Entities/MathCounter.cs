@@ -4,7 +4,7 @@ using System.Numerics;
 namespace SourceRewrite.Entities
 {
     [Entity("math_counter")]
-    public class MathCounter : BaseEntity
+    public class MathCounter : PointEntity
     {
         [EntityProperty("startvalue")]
         public int Value { get; set; } = 0;
