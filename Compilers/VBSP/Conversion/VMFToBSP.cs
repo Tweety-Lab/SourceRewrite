@@ -72,7 +72,11 @@ namespace VBSP.Conversion
             // Add regular properties
             foreach (KeyValue kvProperty in vmfEntity.Properties)
             {
-                propertiesBuilder.AppendLine($" {kvProperty.Key} \"{kvProperty.Value}\"");
+                // Skip origin and angles since we handle them specially
+                if (kvProperty.Key != "origin" && kvProperty.Key != "angles")
+                {
+                    propertiesBuilder.AppendLine($" {kvProperty.Key} \"{kvProperty.Value}\"");
+                }
             }
 
             // Add connections with connection_ prefix
