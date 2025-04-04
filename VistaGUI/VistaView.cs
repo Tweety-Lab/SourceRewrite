@@ -345,6 +345,10 @@ namespace VistaGUI
 
             // Copy the data from the IntPtr to the pre-allocated byte array
             byte* rawData = bitmap.RawPixels;
+
+            if (rawData == null || bitmap.Width == 0 || bitmap.Height == 0)
+                return;
+
             Marshal.Copy((IntPtr)rawData, pixelBuffer, 0, (int)dataSize);
 
             // Create output

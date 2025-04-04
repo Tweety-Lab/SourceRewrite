@@ -54,18 +54,21 @@ namespace VistaGUI.Preprocessor
         // Open a File in a buffer
         public ULBuffer OpenFile(string path)
         {
+            // Read Data
             string fullPath = Path.Combine(ResourcePathPrefix, path);
+            byte[] fileData = File.ReadAllBytes(fullPath);
 
-            // Read the file
-            string fileContents = File.ReadAllText(fullPath, Encoding.UTF8);
-
-            // Pre-process HTML
+            // Preprocessing
             if (Path.GetExtension(fullPath).ToLower() == ".html")
+            {
+                string fileContents = Encoding.UTF8.GetString(fileData);
                 fileContents = PreProccesor.ProcessHTML(fileContents);
+                fileData = Encoding.UTF8.GetBytes(fileContents);
+            }
 
-            // Convert to byte array and return buffer
-            byte[] fileData = Encoding.UTF8.GetBytes(fileContents);
-            return ULBuffer.CreateFromDataCopy<byte>(fileData);
+            // Create buffer
+            var buffer = ULBuffer.CreateFromDataCopy<byte>(fileData);
+            return buffer;
         }
 
     }
