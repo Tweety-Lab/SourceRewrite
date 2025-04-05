@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileFormats.BSP
 {
-    // Lump-specific structures
+    // Lump-specific structs
     public struct SideData
     {
         public float X;

@@ -21,6 +21,9 @@ namespace FileFormats.BSP.IO
             this.bsp = bsp;
         }
 
+        /// <summary>
+        /// Writes the BSP file.
+        /// </summary>
         public void WriteToFile()
         {
             // Open the output stream
@@ -40,6 +43,11 @@ namespace FileFormats.BSP.IO
             writer.Flush();
         }
 
+        /// <summary>
+        /// Writes the BSP header.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="header"></param>
         public void WriteHeader(BinaryWriter writer, BSPHeader header)
         {
             writer.Write(Encoding.ASCII.GetBytes(header.Identifier.PadRight(4, '\0')));
@@ -64,6 +72,11 @@ namespace FileFormats.BSP.IO
             writer.Write(header.MapRevision);
         }
 
+        /// <summary>
+        /// Writes a BSP lump.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="lump"></param>
         public void WriteLump(BinaryWriter writer, BSPLump lump)
         {
             long start = writer.BaseStream.Position;

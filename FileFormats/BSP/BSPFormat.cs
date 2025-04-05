@@ -14,7 +14,11 @@ namespace FileFormats.BSP
         /// </summary>
         public BSPHeader Header;
 
-        // Get a Lump
+        /// <summary>
+        /// Returns the lump of the specified type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public BSPLump GetLump(BSPLumpType type)
         {
             return Header.Lumps.FirstOrDefault(l => l.Type == type);

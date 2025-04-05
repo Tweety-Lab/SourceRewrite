@@ -8,6 +8,9 @@ namespace FileFormats.BSP.IO
 {
     public class BSPReader
     {
+        /// <summary>
+        /// The Output BSP.
+        /// </summary>
         public BSPFormat BSP { get; private set; }
 
         public BSPReader(string path)
@@ -27,7 +30,6 @@ namespace FileFormats.BSP.IO
         /// Reads the BSP header.
         /// </summary>
         /// <param name="reader"></param>
-        /// <returns></returns>
         private BSPHeader ReadHeader(BinaryReader reader)
         {
             BSPHeader header = new BSPHeader();
@@ -37,6 +39,10 @@ namespace FileFormats.BSP.IO
             return header;
         }
 
+        /// <summary>
+        /// Reads the BSP lumps.
+        /// </summary>
+        /// <param name="reader"></param>
         private BSPLump[] ReadLumps(BinaryReader reader)
         {
             List<BSPLump> lumps = new List<BSPLump>();
