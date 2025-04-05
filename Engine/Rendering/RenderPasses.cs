@@ -135,7 +135,7 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render env_ entities REPLACE THIS
+            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render billboard entities REPLACE THIS
             {
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);

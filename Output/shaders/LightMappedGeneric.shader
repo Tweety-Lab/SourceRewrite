@@ -1,4 +1,4 @@
-// Lit Brush Shader - Multi-Light Version with Spotlight and Directional Light Support
+// Lit Brush Shader
 
 // Global Uniforms
 uniform sampler2D uTexture0;
@@ -34,14 +34,12 @@ void vertex()
     void main()
     {
         mat4 model = MODEL_MATRIX;
-        vec3 scale = vec3(length(model[0] * 100), length(model[1] * 100), length(model[2] * 100));
-        vec2 scaledUv = vUv * scale.xy;
-
-        gl_Position = PROJECTION_MATRIX * VIEW_MATRIX * model * vec4(vPos, 1.0);
+        vec4 worldPos = model * vec4(vPos, 1.0);
     
-        Uv = scaledUv;
+        FragPos = worldPos.xyz;
         VERT_NORMAL = normalize(mat3(transpose(inverse(model))) * vNormal);
-        FragPos = vec3(model * vec4(vPos, 1.0));
+    
+        gl_Position = PROJECTION_MATRIX * VIEW_MATRIX * worldPos;
     }
 }
 
@@ -55,9 +53,28 @@ void fragment()
     uniform float specular = 0.5;
     uniform float ambientStrength = 0.2;
 
+    uniform float worldUvScale = 0.025;
+
     void main()
     {
-        vec4 texColor = texture(uTexture0, Uv);
+        vec3 worldPos = FragPos;
+        vec3 blend = abs(normalize(VERT_NORMAL));
+        blend = pow(blend, vec3(4.0)); // Sharpen blend zones
+        blend /= (blend.x + blend.y + blend.z); // Normalize blend weights
+
+        // Project from each axis
+        vec2 uvX = worldPos.zy * worldUvScale; // Projection onto YZ plane
+        vec2 uvY = worldPos.xz * worldUvScale; // Projection onto XZ plane
+        vec2 uvZ = worldPos.xy * worldUvScale; // Projection onto XY plane
+
+        // Sample each projection
+        vec4 texX = texture(uTexture0, uvX);
+        vec4 texY = texture(uTexture0, uvY);
+        vec4 texZ = texture(uTexture0, uvZ);
+
+        // Blend the projections by surface normal
+        vec4 texColor = texX * blend.x + texY * blend.y + texZ * blend.z;
+
         vec3 norm = normalize(VERT_NORMAL);
         vec3 viewDir = normalize(VIEW_POS - FragPos);
         
