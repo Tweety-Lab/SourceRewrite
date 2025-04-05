@@ -62,7 +62,7 @@ namespace FileFormats.Binary
             // Write array length
             bytes.AddRange(BitConverter.GetBytes(value.Length));
 
-            // Write type information for the array elements
+            // Write type information for the array elements (TODO: Optimize this so it uses less bytes)
             if (value.Length > 0)
             {
                 Type elementType = value[0].GetType();

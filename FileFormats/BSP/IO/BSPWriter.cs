@@ -56,6 +56,8 @@ namespace FileFormats.BSP.IO
                 {
                     writer.Write(lump.Offset);
                     writer.Write(lump.Length);
+
+                    Console.WriteLine($"Writing Lump at {lump.Offset} ({lump.Length})");
                 }
             }
 
@@ -74,9 +76,6 @@ namespace FileFormats.BSP.IO
             byte[] lumpBytes = BinarySerialization.SerializeObject(data);
 
             writer.Write(lumpBytes);
-
-            long end = writer.BaseStream.Position;
-            lump.Length = (int)(end - start);
         }
     }
 }

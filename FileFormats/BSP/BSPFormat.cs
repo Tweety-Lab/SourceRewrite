@@ -35,7 +35,7 @@ namespace FileFormats.BSP
                 {
                     Type = type,
                     Offset = 0,
-                    Length = 0,
+                    Length = data.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(T)),
                     Data = data
                 };
 
@@ -43,6 +43,30 @@ namespace FileFormats.BSP
             }
 
             lump.Data = data;
+            lump.Length = data.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+
+            // Recalculate the offsets for all lumps
+            UpdateLumpOffsets();
+        }
+
+        public static int CurrentOffset = 0;
+        private void UpdateLumpOffsets()
+        {
+            // Loop through all lumps using an index to modify the original array
+            for (int i = 0; i < Header.Lumps.Length; i++)
+            {
+                var lump = Header.Lumps[i];
+
+                if (lump.Data != null)
+                {
+                    // Set the lump's offset directly through the array
+                    lump.Offset = CurrentOffset;
+                    CurrentOffset += lump.Length;
+
+                    // Update the lump back into the array after modifying it
+                    Header.Lumps[i] = lump;
+                }
+            }
         }
     }
 }
