@@ -129,6 +129,10 @@ namespace VBSP.Conversion
         {
             foreach (VMFSide side in solid.Sides)
             {
+                // Skip NODRAW Sides
+                if (side.Material == "TOOLS/TOOLSNODRAW")
+                    continue;
+
                 // Calculate side geometry
                 float[] sideVertices = CalculateSideVertices(side);
 
