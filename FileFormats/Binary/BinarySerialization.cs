@@ -45,11 +45,28 @@ namespace FileFormats.Binary
         }
 
         // Serialize an object into a byte array
+        // Serialize an object into a byte array
         public static byte[] SerializeObject(object obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-
             Type type = obj.GetType();
+
+            // Handle arrays of structs specially
+            if (type.IsArray && type.GetElementType().IsValueType &&
+                !type.GetElementType().IsPrimitive && type.GetElementType() != typeof(decimal))
+            {
+                var structArraySerializer = (IBinaryType<object[]>)BinaryTypes[typeof(object[])];
+
+                // Convert the struct array to an object array rather than direct casting
+                Array sourceArray = (Array)obj;
+                object[] objectArray = new object[sourceArray.Length];
+                for (int i = 0; i < sourceArray.Length; i++)
+                {
+                    objectArray[i] = sourceArray.GetValue(i);
+                }
+
+                return structArraySerializer.ToBytes(objectArray);
+            }
 
             if (BinaryTypes.TryGetValue(type, out var serializer))
             {
@@ -71,6 +88,23 @@ namespace FileFormats.Binary
         // Serialize a byte array into an object
         public static object DeserializeObject(Type type, byte[] bytes)
         {
+            // Handle arrays of structs specially
+            if (type.IsArray && type.GetElementType().IsValueType &&
+                !type.GetElementType().IsPrimitive && type.GetElementType() != typeof(decimal))
+            {
+                var structArraySerializer = (IBinaryType<object[]>)BinaryTypes[typeof(object[])];
+                object[] objects = (object[])structArraySerializer.FromBytes(bytes);
+
+                // Convert the object array to the specific array type
+                Array typedArray = Array.CreateInstance(type.GetElementType(), objects.Length);
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    typedArray.SetValue(objects[i], i);
+                }
+
+                return typedArray;
+            }
+
             if (BinaryTypes.TryGetValue(type, out var serializer))
             {
                 return serializer.FromBytes(bytes);

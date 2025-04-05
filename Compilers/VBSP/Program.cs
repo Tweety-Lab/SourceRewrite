@@ -55,11 +55,15 @@ class Program
         testBSP.Header.Version = 26;
         testBSP.Header.Lumps = new BSPLump[16];
 
-        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData() { ID = 3, MaterialName="TEST MATERAIL1", X=0,Y=0,Z=0});
+        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[2] { new SideData() { ID = 3, MaterialName = "TEST MATERAIL1", X = 0, Y = 0, Z = 0 }, new SideData() { ID = 4, MaterialName = "TEST MATERAIL2", X = 1, Y = 2, Z = 3 } });
 
-        SideData lumpData = (SideData)testBSP.GetLump(BSPLumpType.LUMP_SIDES).Data;
+        SideData[] lumpData = (SideData[])testBSP.GetLump(BSPLumpType.LUMP_SIDES).Data;
 
-        Console.WriteLine($"Lump ID: {lumpData.ID}, Material Name: {lumpData.MaterialName}, X: {lumpData.X}, Y: {lumpData.Y}, Z: {lumpData.Z}");
+        // Print all sides
+        foreach (SideData side in lumpData)
+        {
+            Console.WriteLine($"ID: {side.ID}, Material: {side.MaterialName}, X: {side.X}, Y: {side.Y}, Z: {side.Z}");
+        }
 
         BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
         writer.WriteToFile();
