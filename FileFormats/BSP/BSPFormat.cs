@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,67 +10,33 @@ namespace FileFormats.BSP
     // Represents the structure of a BSP file
     public class BSPFormat
     {
-        /// <summary>
-        /// The header of the BSP file.
-        /// </summary>
         public BSPHeader Header;
 
-        /// <summary>
-        /// Returns the lump of the specified type.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public BSPLump GetLump(BSPLumpType type)
+        public T[] GetLumpData<T>(BSPLumpType type) where T : struct
         {
-            return Header.Lumps.FirstOrDefault(l => l.Type == type);
+            if (Header.Lumps.TryGetValue(type, out var data))
+            {
+                return (T[])data;
+            }
+            return null;
         }
 
-
-        /// <summary>
-        /// Sets the lump of the specified type. Creates the lump if it doesn't exist.
-        /// </summary>
         public void SetLumpData<T>(BSPLumpType type, T[] data) where T : struct
         {
-            var lump = GetLump(type);
+            // Ensure the Lumps dictionary exists
+            Header.Lumps ??= new Dictionary<BSPLumpType, object>();
 
-            if (lump.Data == null)
+            // Serialize the array of structs into a byte array
+            var serializedData = MessagePackSerializer.Serialize(data);
+
+            // Set or add the lump data as a byte array
+            if (Header.Lumps.ContainsKey(type))
             {
-                // Create a new lump if it doesn't exist
-                lump = new BSPLump
-                {
-                    Type = type,
-                    Offset = 0,
-                    Length = data.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(T)),
-                    Data = data
-                };
-
-                Header.Lumps[(int)type] = lump;
+                Header.Lumps[type] = serializedData;
             }
-
-            lump.Data = data;
-            lump.Length = data.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
-
-            // Recalculate the offsets for all lumps
-            UpdateLumpOffsets();
-        }
-
-        public static int CurrentOffset = 0;
-        private void UpdateLumpOffsets()
-        {
-            // Loop through all lumps using an index to modify the original array
-            for (int i = 0; i < Header.Lumps.Length; i++)
+            else
             {
-                var lump = Header.Lumps[i];
-
-                if (lump.Data != null)
-                {
-                    // Set the lump's offset directly through the array
-                    lump.Offset = CurrentOffset;
-                    CurrentOffset += lump.Length;
-
-                    // Update the lump back into the array after modifying it
-                    Header.Lumps[i] = lump;
-                }
+                Header.Lumps.Add(type, serializedData);
             }
         }
     }

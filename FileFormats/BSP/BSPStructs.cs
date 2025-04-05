@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -13,19 +14,20 @@ namespace FileFormats.BSP
         LUMP_ENTITIES = 1,
     }
 
+    [MessagePackObject]
     public struct BSPHeader
     {
-        public string Identifier; // "VBSP"
-        public int Version; // BSP File Version
-        public BSPLump[] Lumps; // Lump Dictionary
-        public int MapRevision; // Iteration Number
+        [Key(0)] public string Identifier;
+        [Key(1)] public int Version;
+        [Key(2)] public Dictionary<BSPLumpType, object> Lumps;
+        [Key(3)] public int MapRevision;
     }
 
-    public struct BSPLump
+
+    [MessagePackObject]
+    public struct BSPLump<T> where T : struct
     {
-        public int Offset;
-        public int Length;
-        public BSPLumpType Type;
-        public object Data;
+        [Key(0)] public BSPLumpType Type;
+        [Key(1)] public T[] Data;
     }
 }

@@ -1,5 +1,4 @@
-﻿using FileFormats.Binary;
-using FileFormats.BSP;
+﻿using FileFormats.BSP;
 using FileFormats.BSP.IO;
 using System.Numerics;
 using VBSP.Conversion;
@@ -53,19 +52,18 @@ class Program
         BSPFormat testBSP = new BSPFormat();
         testBSP.Header.Identifier = "VBSP";
         testBSP.Header.Version = 26;
-        testBSP.Header.Lumps = new BSPLump[64];
 
-        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[2] { new SideData() { ID = 3, MaterialName = "TEST MATERAIL1", X = 0, Y = 0, Z = 0 }, new SideData() { ID = 4, MaterialName = "TEST MATERAIL2", X = 1, Y = 2, Z = 3 } });
 
-        testBSP.SetLumpData(BSPLumpType.LUMP_ENTITIES, new EntityLumpData[1] { new EntityLumpData() { EntityString = "Test"} });
-
-        SideData[] lumpData = (SideData[])testBSP.GetLump(BSPLumpType.LUMP_SIDES).Data;
-
-        // Print all sides
-        foreach (SideData side in lumpData)
+        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[]
         {
-            Console.WriteLine($"ID: {side.ID}, Material: {side.MaterialName}, X: {side.X}, Y: {side.Y}, Z: {side.Z}");
-        }
+            new SideData { ID = 3, MaterialName = "TEST_MATERIAL1", X = 0, Y = 0, Z = 0 },
+            new SideData { ID = 4, MaterialName = "TEST_MATERIAL2", X = 1, Y = 2, Z = 3 }
+        });
+
+        testBSP.SetLumpData(BSPLumpType.LUMP_ENTITIES, new EntityLumpData[]
+        {
+            new EntityLumpData { EntityString = "Test" }
+        });
 
         BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
         writer.WriteToFile();
@@ -74,6 +72,18 @@ class Program
         BSPFormat loadedBSP = reader.BSP;
 
         Console.WriteLine($"Loaded {loadedBSP.Header.Identifier} bsp with version of v{loadedBSP.Header.Version}");
-        Console.WriteLine($"Loaded Lump of type {loadedBSP.Header.Lumps[0].Type} with length of {loadedBSP.Header.Lumps[0].Length} bytes");
+
+        var sides = reader.GetLumpData<SideData>(BSPLumpType.LUMP_SIDES);
+        Console.WriteLine(sides.Length);
+        foreach (var side in sides)
+        {
+            Console.WriteLine($"Side {side.ID} with material: {side.MaterialName} at ({side.X}, {side.Y}, {side.Z})");
+        }
+
+        var entities = reader.GetLumpData<EntityLumpData>(BSPLumpType.LUMP_ENTITIES);
+        foreach (var entity in entities)
+        {
+            Console.WriteLine($"Entity with string: {entity.EntityString}");
+        }
     }
 }

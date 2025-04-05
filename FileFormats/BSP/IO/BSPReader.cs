@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FileFormats.VMF;
+using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,55 +10,35 @@ namespace FileFormats.BSP.IO
 {
     public class BSPReader
     {
-        /// <summary>
-        /// The Output BSP.
-        /// </summary>
-        public BSPFormat BSP { get; private set; }
+        public BSPFormat BSP { get; }
 
         public BSPReader(string path)
         {
             BSP = new BSPFormat();
 
-            // Read the Binary file
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(stream, Encoding.UTF8))
+            using (var stream = File.OpenRead(path))
             {
-                BSP.Header = ReadHeader(reader);
-                BSP.Header.Lumps = ReadLumps(reader);
+                // Deserialize the header
+                BSP.Header = MessagePackSerializer.Deserialize<BSPHeader>(stream);
+
+                // Initialize the lumps dictionary if it's null
+                BSP.Header.Lumps ??= new Dictionary<BSPLumpType, object>();
             }
         }
 
-        /// <summary>
-        /// Reads the BSP header.
-        /// </summary>
-        /// <param name="reader"></param>
-        private BSPHeader ReadHeader(BinaryReader reader)
+        // Deserialize lumps as their specific struct types
+        public T[] GetLumpData<T>(BSPLumpType type) where T : struct
         {
-            BSPHeader header = new BSPHeader();
-            header.Identifier = Encoding.ASCII.GetString(reader.ReadBytes(4)).TrimEnd('\0');
-            header.Version = reader.ReadInt32();
-
-            return header;
-        }
-
-        /// <summary>
-        /// Reads the BSP lumps.
-        /// </summary>
-        /// <param name="reader"></param>
-        private BSPLump[] ReadLumps(BinaryReader reader)
-        {
-            List<BSPLump> lumps = new List<BSPLump>();
-
-            for (int i = 0; i < 64; i++)
+            if (BSP.Header.Lumps.TryGetValue(type, out var data))
             {
-                BSPLump lump = new BSPLump();
-                lump.Type = (BSPLumpType)i;
-                lump.Offset = reader.ReadInt32();
-                lump.Length = reader.ReadInt32();
-                lumps.Add(lump);
+                // Ensure data is a byte array before deserializing
+                if (data is byte[] byteArray)
+                {
+                    // Deserialize the byte array back into the correct struct array
+                    return MessagePackSerializer.Deserialize<T[]>(byteArray);
+                }
             }
-
-            return lumps.ToArray();
+            return Array.Empty<T>();
         }
     }
 }

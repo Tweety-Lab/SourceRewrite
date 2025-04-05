@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -9,18 +10,20 @@ using System.Threading.Tasks;
 namespace FileFormats.BSP
 {
     // Lump-specific structs
+    [MessagePackObject]
     public struct SideData
     {
-        public float X;
-        public float Y;
-        public float Z;
+        [Key(0)] public float X;
+        [Key(1)] public float Y;
+        [Key(2)] public float Z;
 
-        public string MaterialName;
-        public int ID;
+        [Key(3)] public string MaterialName;
+        [Key(4)] public int ID;
     }
 
+    [MessagePackObject]
     public struct EntityLumpData
     {
-        public string EntityString;
+        [Key(0)] public string EntityString;
     }
 }
