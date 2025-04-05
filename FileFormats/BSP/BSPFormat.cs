@@ -24,7 +24,7 @@ namespace FileFormats.BSP
         /// <summary>
         /// Sets the lump of the specified type. Creates the lump if it doesn't exist.
         /// </summary>
-        public void SetLumpData<T>(BSPLumpType type, T[] data) where T : struct
+        public void SetLumpData<T>(BSPLumpType type, T data) where T : struct
         {
             var lump = GetLump(type);
 

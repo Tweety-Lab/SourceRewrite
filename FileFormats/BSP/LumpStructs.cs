@@ -11,7 +11,10 @@ namespace FileFormats.BSP
     // Lump-specific structures
     public struct SideData
     {
-        public Vector3 FaceVertices;
+        public float X;
+        public float Y;
+        public float Z;
+
         public string MaterialName;
         public int ID;
     }

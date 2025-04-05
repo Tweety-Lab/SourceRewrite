@@ -34,6 +34,8 @@ namespace FileFormats.Binary
             Register<double[]>(new DoubleArraySerialization());
             Register<bool[]>(new BooleanArraySerialization());
             Register<string[]>(new StringArraySerialization());
+
+            Register<object[]>(new StructArraySerialization());
         }
 
 

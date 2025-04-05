@@ -1,4 +1,5 @@
-﻿using FileFormats.BSP;
+﻿using FileFormats.Binary;
+using FileFormats.BSP;
 using FileFormats.BSP.IO;
 using System.Numerics;
 using VBSP.Conversion;
@@ -54,7 +55,11 @@ class Program
         testBSP.Header.Version = 26;
         testBSP.Header.Lumps = new BSPLump[16];
 
-        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[1] { new() {FaceVertices = new(1,2,3), ID=1, MaterialName="TestSide"  } });
+        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData() { ID = 3, MaterialName="TEST MATERAIL1", X=0,Y=0,Z=0});
+
+        SideData lumpData = (SideData)testBSP.GetLump(BSPLumpType.LUMP_SIDES).Data;
+
+        Console.WriteLine($"Lump ID: {lumpData.ID}, Material Name: {lumpData.MaterialName}, X: {lumpData.X}, Y: {lumpData.Y}, Z: {lumpData.Z}");
 
         BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
         writer.WriteToFile();

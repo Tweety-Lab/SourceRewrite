@@ -26,6 +26,6 @@ namespace FileFormats.BSP
         public int Offset;
         public int Length;
         public BSPLumpType Type;
-        public Array Data;
+        public object Data;
     }
 }

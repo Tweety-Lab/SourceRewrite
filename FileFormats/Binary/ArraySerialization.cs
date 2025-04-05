@@ -48,4 +48,11 @@ namespace FileFormats.Binary
         protected override bool UsesVariableLength() => true;
     }
 
+    // Struct Array
+    public class StructArraySerialization : BinaryArrayType<object>
+    {
+        private static readonly StructSerialization _serializer = new StructSerialization();
+        protected override BinaryType<object> ElementSerializer => _serializer;
+        protected override bool UsesVariableLength() => true;
+    }
 }

@@ -67,61 +67,13 @@ namespace FileFormats.BSP.IO
             long start = writer.BaseStream.Position;
             lump.Offset = (int)start;
 
-            Array data = lump.Data;
+            object data = lump.Data;
 
             Console.WriteLine($"Writing {lump.Type} ({data})");
 
-            byte[] stringBytes = BinarySerialization.SerializeObject("TESTING SERIALIZATION!");
-            byte[] intBytes = BinarySerialization.SerializeObject(123);
-            byte[] floatBytes = BinarySerialization.SerializeObject(999.123f);
-            byte[] boolBytes = BinarySerialization.SerializeObject(true);
+            byte[] lumpBytes = BinarySerialization.SerializeObject(data);
 
-            byte[] endStringBytes = BinarySerialization.SerializeObject("END OF SINGULAR DATA... STARTING ARRAY DATA");
-            
-            float floatValue = (float)BinarySerialization.DeserializeObject(typeof(float), floatBytes);
-            Console.WriteLine(floatValue);
-
-            writer.Write(stringBytes);
-            writer.Write(intBytes);
-            writer.Write(floatBytes);
-            writer.Write(boolBytes);
-
-            writer.Write(endStringBytes);
-
-            // Write the string array data
-            byte[] arrayBytes = BinarySerialization.SerializeObject(new string[3] { "A", "BB", "CCC" });
-            string[] array = (string[])BinarySerialization.DeserializeObject(typeof(string[]), arrayBytes);
-
-            Console.WriteLine($"Array: {string.Join(", ", array)}");
-            writer.Write(arrayBytes);
-
-            // Write the int array data
-            arrayBytes = BinarySerialization.SerializeObject(new int[3] { 1, 2, 3 });
-            int[] intArray = (int[])BinarySerialization.DeserializeObject(typeof(int[]), arrayBytes);
-
-            Console.WriteLine($"Array: {string.Join(", ", intArray)}");
-            writer.Write(arrayBytes);
-
-            // Write the float array data
-            arrayBytes = BinarySerialization.SerializeObject(new float[3] { 1.1f, 2.2f, 3.3f });
-            float[] floatArray = (float[])BinarySerialization.DeserializeObject(typeof(float[]), arrayBytes);
-
-            Console.WriteLine($"Array: {string.Join(", ", floatArray)}");
-            writer.Write(arrayBytes);
-
-            // Write the bool array data
-            arrayBytes = BinarySerialization.SerializeObject(new bool[3] { true, false, true });
-            bool[] boolArray = (bool[])BinarySerialization.DeserializeObject(typeof(bool[]), arrayBytes);
-
-            Console.WriteLine($"Array: {string.Join(", ", boolArray)}");
-            writer.Write(arrayBytes);
-
-            byte[] structBytes = BinarySerialization.SerializeObject(new EntityLumpData() { EntityString = "TEST STRUCT SERIALIZATION"});
-            EntityLumpData entityData = (EntityLumpData)BinarySerialization.DeserializeObject(typeof(EntityLumpData), structBytes);
-            Console.WriteLine(entityData.EntityString);
-
-            writer.Write(structBytes);
-
+            writer.Write(lumpBytes);
 
             long end = writer.BaseStream.Position;
             lump.Length = (int)(end - start);
