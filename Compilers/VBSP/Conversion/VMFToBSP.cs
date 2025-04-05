@@ -28,10 +28,10 @@ namespace VBSP.Conversion
             outputBsp.Header.MapRevision = vmf.VersionInfo.MapVersion;
 
             // Process entities
-            // ProcessEntities(vmf, outputBsp);
+            ProcessEntities(vmf, outputBsp);
 
             // Process world geometry
-            // ProcessWorldGeometry(vmf, outputBsp);
+            ProcessWorldGeometry(vmf, outputBsp);
 
             return outputBsp;
         }
@@ -46,21 +46,21 @@ namespace VBSP.Conversion
                 return;
             }
 
-            string[] entities = new string[vmf.Entities.Count];
+            BSPEntity[] BSPEntities = new BSPEntity[vmf.Entities.Count];
 
             for (int i = 0; i < vmf.Entities.Count; i++)
             {
-                Entity vmfEntity = vmf.Entities[i];
-                entities[i] = ConvertEntityToBspString(vmfEntity);
+                VMFEntity vmfEntity = vmf.Entities[i];
+                BSPEntities[i].KeyValuesString = ConvertEntityToBspString(vmfEntity);
             }
 
-            // bsp.SetLumpData(LumpType.LUMP_ENTITIES, entities);
+            bsp.SetLumpData<BSPEntity>(BSPLumpType.LUMP_ENTITIES, BSPEntities);
         }
 
         /// <summary>
         /// Converts a VMF entity to its BSP string representation.
         /// </summary>
-        private static string ConvertEntityToBspString(Entity vmfEntity)
+        private static string ConvertEntityToBspString(VMFEntity vmfEntity)
         {
             // Convert coordinate system: Source uses Y-forward, Z-up, but BSP uses different convention
             string position = $"\"{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}\"";
@@ -106,22 +106,18 @@ namespace VBSP.Conversion
                 return;
             }
 
-            List<float> vertices = new List<float>();
-            List<uint> indices = new List<uint>();
-            List<string> materials = new List<string>();
+            List<BSPSide> bspSides = new List<BSPSide>();
 
             uint indexOffset = 0;
 
-            foreach (Solid solid in vmf.World.Solids)
+            foreach (VMFSolid solid in vmf.World.Solids)
             {
                 Console.WriteLine($"Compiling solid with id of {solid.ID}...");
-                ProcessSolid(solid, vertices, indices, materials, ref indexOffset);
+                ProcessSolid(solid, bspSides);  // Updated to pass bspSides
             }
 
             // Store compiled geometry in BSP lumps
-            // bsp.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
-            // bsp.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
-            // bsp.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
+            bsp.SetLumpData<BSPSide>(BSPLumpType.LUMP_SIDES, bspSides.ToArray());
 
             Console.WriteLine($"Compiled {vmf.World.Solids.Count} solids.");
         }
@@ -129,43 +125,30 @@ namespace VBSP.Conversion
         /// <summary>
         /// Processes a single solid and adds its geometry to the vertex and index lumps.
         /// </summary>
-        private static void ProcessSolid(Solid solid, List<float> vertices, List<uint> indices,
-                                        List<string> materials, ref uint indexOffset)
+        private static void ProcessSolid(VMFSolid solid, List<BSPSide> bspSides)
         {
-            foreach (Side side in solid.Sides)
+            foreach (VMFSide side in solid.Sides)
             {
-                // Add material
-                materials.Add(side.Material);
-
                 // Calculate side geometry
                 List<Vector3> sideVertices = CalculateSideVertices(side);
 
-                // Add vertex positions to the buffer
-                foreach (Vector3 vertex in sideVertices)
+                // Create the Side struct for BSP
+                BSPSide bspSide = new BSPSide
                 {
-                    vertices.Add(vertex.X);
-                    vertices.Add(vertex.Y);
-                    vertices.Add(vertex.Z);
-                }
+                    MaterialName = side.Material,  // Assuming the side has a material property
+                    ID = side.ID,
+                    Vertices = sideVertices,  // Store vertices for the side
+                    Indices = new List<int> { 0, 1, 2, 3 }  // Assuming a quad with 4 vertices (change this later)
+                };
 
-                // Create triangles from the quad (two triangles)
-                indices.Add(indexOffset);
-                indices.Add(indexOffset + 1);
-                indices.Add(indexOffset + 2);
-
-                indices.Add(indexOffset);
-                indices.Add(indexOffset + 2);
-                indices.Add(indexOffset + 3);
-
-                // Move to the next set of vertices
-                indexOffset += 4;
+                bspSides.Add(bspSide);
             }
         }
 
         /// <summary>
         /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system.
         /// </summary>
-        private static List<Vector3> CalculateSideVertices(Side side)
+        private static List<Vector3> CalculateSideVertices(VMFSide side)
         {
             // Convert from VMF to BSP coordinate system (Y-up)
             Vector3 corner1 = ConvertToYUpCoordSystem(side.plane.Point1);

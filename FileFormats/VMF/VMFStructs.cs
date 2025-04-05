@@ -17,18 +17,18 @@ namespace FileFormats.VMF
     {
         public int ID;
         public int MapVersion;
-        public List<Solid> Solids;
+        public List<VMFSolid> Solids;
     }
 
     // Solid Brush
-    public struct Solid
+    public struct VMFSolid
     {
         public int ID;
-        public List<Side> Sides;
+        public List<VMFSide> Sides;
     }
 
     // Solid Brush Side
-    public struct Side
+    public struct VMFSide
     {
         public int ID;
         public Plane plane;
@@ -44,7 +44,7 @@ namespace FileFormats.VMF
     }
 
     // Entity
-    public struct Entity
+    public struct VMFEntity
     {
         public int ID;
         public string ClassName;
@@ -53,6 +53,6 @@ namespace FileFormats.VMF
         public Vector3 Angles;
         public List<KeyValue> Properties;
         public List<KeyValue> Connections;
-        public List<Solid> Solids; // Brush Entity Solids
+        public List<VMFSolid> Solids; // Brush Entity Solids
     }
 }

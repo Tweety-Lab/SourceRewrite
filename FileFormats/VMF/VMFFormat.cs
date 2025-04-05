@@ -13,7 +13,7 @@ namespace FileFormats.VMF
         public VersionInfo VersionInfo;
         public World World;
 
-        public List<Entity> Entities = new List<Entity>();
+        public List<VMFEntity> Entities = new List<VMFEntity>();
 
         public VMFFormat(string contents)
         {
@@ -39,7 +39,7 @@ namespace FileFormats.VMF
                 {
                     entityCount++;
 
-                    Entity entity = new Entity();
+                    VMFEntity entity = new VMFEntity();
                     entity.ID = (int)parentKey.GetKeyValue("id").Value; // Set the Entity ID
                     entity.ClassName = (string)parentKey.GetKeyValue("classname").Value; // Set the Entity Class Name
                     entity.Origin = (Vector3)parentKey.GetKeyValue("origin").Value; // Set the Entity Origin
@@ -47,7 +47,7 @@ namespace FileFormats.VMF
 
                     entity.Properties = new List<KeyValue>(); // Init properties for later storage
                     entity.Connections = new List<KeyValue>(); // Init connections for later storage
-                    entity.Solids = new List<Solid>();  // Initialize solids list for entity
+                    entity.Solids = new List<VMFSolid>();  // Initialize solids list for entity
 
                     entity.TargetName = (string)(parentKey.GetKeyValue("targetname")?.Value ?? entityCount.ToString()); // Set the Entity Target Name (if applicable)
 
@@ -70,15 +70,15 @@ namespace FileFormats.VMF
             }
         }
 
-        private void ProcessSolids(ParentKey parentKey, ref List<Solid> solidsList)
+        private void ProcessSolids(ParentKey parentKey, ref List<VMFSolid> solidsList)
         {
             foreach (ParentKey childParentKey in parentKey.ChildParentKeys)
             {
                 if (childParentKey.Name == "solid")
                 {
-                    Solid newSolid = new Solid();
+                    VMFSolid newSolid = new VMFSolid();
                     newSolid.ID = (int)childParentKey.GetKeyValue("id").Value;
-                    newSolid.Sides = new List<Side>();
+                    newSolid.Sides = new List<VMFSide>();
 
                     foreach (ParentKey solidParentKey in childParentKey.ChildParentKeys)
                     {
@@ -93,14 +93,14 @@ namespace FileFormats.VMF
             }
         }
 
-        private Side ProcessSide(ParentKey pkSide)
+        private VMFSide ProcessSide(ParentKey pkSide)
         {
             string planeValue = (string) pkSide.GetKeyValue("plane").Value;
 
             // Process the plane
             Vector3[] plane = ProcessSidePlane(planeValue);
 
-            return new Side()
+            return new VMFSide()
             {
                 ID = (int)pkSide.GetKeyValue("id").Value,
                 plane = new Plane()
@@ -154,7 +154,7 @@ namespace FileFormats.VMF
         {
             World.ID = (int)pkWorld.GetKeyValue("id").Value; // Set the World ID
             World.MapVersion = (int)pkWorld.GetKeyValue("mapversion").Value; // Set the World Map Version (is this any different from version info?)
-            World.Solids = new List<Solid>(); // Init solids for later storage
+            World.Solids = new List<VMFSolid>(); // Init solids for later storage
         }
     }
 }

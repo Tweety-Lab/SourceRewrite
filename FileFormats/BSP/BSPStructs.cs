@@ -8,12 +8,6 @@ using System.Threading.Tasks;
 
 namespace FileFormats.BSP
 {
-    public enum BSPLumpType
-    {
-        LUMP_SIDES = 0,
-        LUMP_ENTITIES = 1,
-    }
-
     [MessagePackObject]
     public struct BSPHeader
     {

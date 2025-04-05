@@ -49,41 +49,10 @@ class Program
         // Compile the BSP
         BSPFormat compiledBSP = VMFToBSP.CompileVMF(contents);
 
-        BSPFormat testBSP = new BSPFormat();
-        testBSP.Header.Identifier = "VBSP";
-        testBSP.Header.Version = 26;
+        compiledBSP.Header.Identifier = "VBSP";
+        compiledBSP.Header.Version = 26;
 
-
-        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[]
-        {
-            new SideData { ID = 3, MaterialName = "TEST_MATERIAL1", X = 0, Y = 0, Z = 0 },
-            new SideData { ID = 4, MaterialName = "TEST_MATERIAL2", X = 1, Y = 2, Z = 3 }
-        });
-
-        testBSP.SetLumpData(BSPLumpType.LUMP_ENTITIES, new EntityLumpData[]
-        {
-            new EntityLumpData { EntityString = "Test" }
-        });
-
-        BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
+        BSPWriter writer = new BSPWriter(bspOutputPath, compiledBSP);
         writer.WriteToFile();
-
-        BSPReader reader = new BSPReader(bspOutputPath);
-        BSPFormat loadedBSP = reader.BSP;
-
-        Console.WriteLine($"Loaded {loadedBSP.Header.Identifier} bsp with version of v{loadedBSP.Header.Version}");
-
-        var sides = reader.GetLumpData<SideData>(BSPLumpType.LUMP_SIDES);
-        Console.WriteLine(sides.Length);
-        foreach (var side in sides)
-        {
-            Console.WriteLine($"Side {side.ID} with material: {side.MaterialName} at ({side.X}, {side.Y}, {side.Z})");
-        }
-
-        var entities = reader.GetLumpData<EntityLumpData>(BSPLumpType.LUMP_ENTITIES);
-        foreach (var entity in entities)
-        {
-            Console.WriteLine($"Entity with string: {entity.EntityString}");
-        }
     }
 }
