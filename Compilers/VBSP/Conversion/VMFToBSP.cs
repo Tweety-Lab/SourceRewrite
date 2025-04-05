@@ -106,7 +106,7 @@ namespace VBSP.Conversion
                 return;
             }
 
-            List<BSPSide> bspSides = new List<BSPSide>();
+            List<BSPPlane> bspSides = new List<BSPPlane>();
 
             uint indexOffset = 0;
 
@@ -117,7 +117,7 @@ namespace VBSP.Conversion
             }
 
             // Store compiled geometry in BSP lumps
-            bsp.SetLumpData<BSPSide>(BSPLumpType.LUMP_SIDES, bspSides.ToArray());
+            bsp.SetLumpData<BSPPlane>(BSPLumpType.LUMP_PLANES, bspSides.ToArray());
 
             Console.WriteLine($"Compiled {vmf.World.Solids.Count} solids.");
         }
@@ -125,7 +125,7 @@ namespace VBSP.Conversion
         /// <summary>
         /// Processes a single solid and adds its geometry to the vertex and index lumps.
         /// </summary>
-        private static void ProcessSolid(VMFSolid solid, List<BSPSide> bspSides)
+        private static void ProcessSolid(VMFSolid solid, List<BSPPlane> bspSides)
         {
             foreach (VMFSide side in solid.Sides)
             {
@@ -137,7 +137,7 @@ namespace VBSP.Conversion
                 float[] sideVertices = CalculateSideVertices(side);
 
                 // Create the Side struct for BSP
-                BSPSide bspSide = new BSPSide
+                BSPPlane bspSide = new BSPPlane
                 {
                     MaterialName = side.Material,  // Assuming the side has a material property
                     ID = side.ID,

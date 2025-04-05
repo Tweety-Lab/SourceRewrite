@@ -55,7 +55,7 @@ namespace SourceRewrite.Maps
             BSPReader reader = new BSPReader(BSPFilePath);
 
             // Create the map from Lump data
-            CreateGeometry(reader.GetLumpData<BSPSide>(BSPLumpType.LUMP_SIDES));
+            CreateGeometry(reader.GetLumpData<BSPPlane>(BSPLumpType.LUMP_PLANES));
             CreateEntities(reader.GetLumpData<BSPEntity>(BSPLumpType.LUMP_ENTITIES));
 
             // Disable all Entities if EntitiesEnabled is false
@@ -81,9 +81,9 @@ namespace SourceRewrite.Maps
         }
 
         // Create Geometry from Lump data
-        public void CreateGeometry(BSPSide[] sides)
+        public void CreateGeometry(BSPPlane[] sides)
         {
-            foreach (BSPSide side in sides)
+            foreach (BSPPlane side in sides)
             {
                 // Create a Entity to house the MeshEntity
                 MeshEntity sideGeometry = new MeshEntity();

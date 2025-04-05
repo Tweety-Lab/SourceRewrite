@@ -11,15 +11,15 @@ namespace FileFormats.BSP
 {
     public enum BSPLumpType
     {
-        LUMP_SIDES = 0,
-        LUMP_ENTITIES = 1
+        LUMP_ENTITIES = 0,
+        LUMP_PLANES = 1
     }
 
     // Lump-specific structs
 
 
     [MessagePackObject]
-    public struct BSPSide
+    public struct BSPPlane
     {
         [Key(0)] public float[] Vertices;
         [Key(1)] public uint[] Indices;
