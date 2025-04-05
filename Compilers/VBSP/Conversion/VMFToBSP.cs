@@ -150,25 +150,20 @@ namespace VBSP.Conversion
         /// </summary>
         private static float[] CalculateSideVertices(VMFSide side)
         {
-            // Convert the plane points to BSP's Y-up coordinate system
-            Vector3 point1 = ConvertToYUpCoordSystem(side.plane.Point1);
-            Vector3 point2 = ConvertToYUpCoordSystem(side.plane.Point2);
-            Vector3 point3 = ConvertToYUpCoordSystem(side.plane.Point3);
+            Vector3 p1 = ConvertToYUpCoordSystem(side.plane.Point1);
+            Vector3 p2 = ConvertToYUpCoordSystem(side.plane.Point2);
+            Vector3 p3 = ConvertToYUpCoordSystem(side.plane.Point3);
 
-            // Calculate vectors along the sides
-            Vector3 v1 = point2 - point1;
-            Vector3 v2 = point3 - point1;
+            // Calculate fourth point to form a planar quad
+            Vector3 p4 = p3 + (p1 - p2);
 
-            // Make sure the vectors are perpendicular to form a rectangle
-            Vector3 point4 = point2 + v2;  // or equivalently: point3 + v1
-
-            // Return the vertices as a flat array
+            // Populate Vertices
             return new float[]
             {
-                point1.X, point1.Y, point1.Z,
-                point2.X, point2.Y, point2.Z,
-                point3.X, point3.Y, point3.Z,
-                point4.X, point4.Y, point4.Z
+        p1.X, p1.Y, p1.Z,
+        p2.X, p2.Y, p2.Z,
+        p3.X, p3.Y, p3.Z,
+        p4.X, p4.Y, p4.Z
             };
         }
 
