@@ -53,7 +53,7 @@ class Program
         BSPFormat testBSP = new BSPFormat();
         testBSP.Header.Identifier = "VBSP";
         testBSP.Header.Version = 26;
-        testBSP.Header.Lumps = new BSPLump[16];
+        testBSP.Header.Lumps = new BSPLump[64];
 
         testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[2] { new SideData() { ID = 3, MaterialName = "TEST MATERAIL1", X = 0, Y = 0, Z = 0 }, new SideData() { ID = 4, MaterialName = "TEST MATERAIL2", X = 1, Y = 2, Z = 3 } });
 
@@ -69,5 +69,10 @@ class Program
 
         BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
         writer.WriteToFile();
+
+        BSPReader reader = new BSPReader(bspOutputPath);
+        BSPFormat loadedBSP = reader.BSP;
+
+        Console.WriteLine($"Loaded {loadedBSP.Header.Identifier} bsp with version of v{loadedBSP.Header.Version}");
     }
 }

@@ -6,6 +6,7 @@ using FileFormats.KeyValues;
 using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Attributes;
+using FileFormats.BSP.IO;
 
 namespace SourceRewrite.Maps
 {
@@ -52,13 +53,6 @@ namespace SourceRewrite.Maps
         {
             // Read map data
             BSPReader reader = new BSPReader(BSPFilePath);
-
-            // Get map data (Lumps)
-            Lump EntitiesLump = reader.GetLump(LumpType.LUMP_ENTITIES);
-
-            Lump VerticesLump = reader.GetLump(LumpType.LUMP_VERTEXES);
-            Lump IndicesLump = reader.GetLump(LumpType.LUMP_INDICES);
-            Lump MaterialsLump = reader.GetLump(LumpType.LUMP_SOLID_MATERIALS);
 
             // Create the map from Lump data
             CreateGeometry((float[])VerticesLump.Data, (uint[])IndicesLump.Data, (string[])MaterialsLump.Data);
