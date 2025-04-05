@@ -57,7 +57,7 @@ class Program
 
         testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[2] { new SideData() { ID = 3, MaterialName = "TEST MATERAIL1", X = 0, Y = 0, Z = 0 }, new SideData() { ID = 4, MaterialName = "TEST MATERAIL2", X = 1, Y = 2, Z = 3 } });
 
-        testBSP.SetLumpData(BSPLumpType.None, new EntityLumpData[1] { new EntityLumpData() { EntityString = "Test"} });
+        testBSP.SetLumpData(BSPLumpType.LUMP_ENTITIES, new EntityLumpData[1] { new EntityLumpData() { EntityString = "Test"} });
 
         SideData[] lumpData = (SideData[])testBSP.GetLump(BSPLumpType.LUMP_SIDES).Data;
 
@@ -74,5 +74,6 @@ class Program
         BSPFormat loadedBSP = reader.BSP;
 
         Console.WriteLine($"Loaded {loadedBSP.Header.Identifier} bsp with version of v{loadedBSP.Header.Version}");
+        Console.WriteLine($"Loaded Lump of type {loadedBSP.Header.Lumps[0].Type} with length of {loadedBSP.Header.Lumps[0].Length} bytes");
     }
 }

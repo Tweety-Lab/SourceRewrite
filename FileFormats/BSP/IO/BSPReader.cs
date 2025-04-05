@@ -19,6 +19,7 @@ namespace FileFormats.BSP.IO
             using (var reader = new BinaryReader(stream, Encoding.UTF8))
             {
                 BSP.Header = ReadHeader(reader);
+                BSP.Header.Lumps = ReadLumps(reader);
             }
         }
 
@@ -34,6 +35,22 @@ namespace FileFormats.BSP.IO
             header.Version = reader.ReadInt32();
 
             return header;
+        }
+
+        private BSPLump[] ReadLumps(BinaryReader reader)
+        {
+            List<BSPLump> lumps = new List<BSPLump>();
+
+            for (int i = 0; i < 64; i++)
+            {
+                BSPLump lump = new BSPLump();
+                lump.Type = (BSPLumpType)i;
+                lump.Offset = reader.ReadInt32();
+                lump.Length = reader.ReadInt32();
+                lumps.Add(lump);
+            }
+
+            return lumps.ToArray();
         }
     }
 }

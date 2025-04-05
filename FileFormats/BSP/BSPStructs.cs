@@ -9,8 +9,8 @@ namespace FileFormats.BSP
 {
     public enum BSPLumpType
     {
-        None = 0,
-        LUMP_SIDES = 1
+        LUMP_SIDES = 0,
+        LUMP_ENTITIES = 1,
     }
 
     public struct BSPHeader
