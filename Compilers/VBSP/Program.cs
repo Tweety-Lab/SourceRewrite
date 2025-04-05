@@ -1,4 +1,6 @@
 ﻿using FileFormats.BSP;
+using FileFormats.BSP.IO;
+using System.Numerics;
 using VBSP.Conversion;
 class Program
 {
@@ -47,12 +49,14 @@ class Program
         // Compile the BSP
         BSPFormat compiledBSP = VMFToBSP.CompileVMF(contents);
 
-        // Write BSP
-        using (BSPWriter writer = new BSPWriter(bspOutputPath, vmfPath))
-        {
-            writer.WriteToMap(compiledBSP);
-        }
+        BSPFormat testBSP = new BSPFormat();
+        testBSP.Header.Identifier = "VBSP";
+        testBSP.Header.Version = 26;
+        testBSP.Header.Lumps = new BSPLump[16];
 
-        Console.WriteLine($"BSP successfully written to: {bspOutputPath}");
+        testBSP.SetLumpData(BSPLumpType.LUMP_SIDES, new SideData[1] { new() {FaceVertices = new(1,2,3), ID=1, MaterialName="TestSide"  } });
+
+        BSPWriter writer = new BSPWriter(bspOutputPath, testBSP);
+        writer.WriteToFile();
     }
 }

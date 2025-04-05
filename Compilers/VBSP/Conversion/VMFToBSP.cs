@@ -25,13 +25,13 @@ namespace VBSP.Conversion
             BSPFormat outputBsp = new BSPFormat();
 
             // Set the BSP header version from VMF
-            outputBsp.Header.mapRevision = vmf.VersionInfo.MapVersion;
+            outputBsp.Header.MapRevision = vmf.VersionInfo.MapVersion;
 
             // Process entities
-            ProcessEntities(vmf, outputBsp);
+            // ProcessEntities(vmf, outputBsp);
 
             // Process world geometry
-            ProcessWorldGeometry(vmf, outputBsp);
+            // ProcessWorldGeometry(vmf, outputBsp);
 
             return outputBsp;
         }
@@ -54,7 +54,7 @@ namespace VBSP.Conversion
                 entities[i] = ConvertEntityToBspString(vmfEntity);
             }
 
-            bsp.SetLumpData(LumpType.LUMP_ENTITIES, entities);
+            // bsp.SetLumpData(LumpType.LUMP_ENTITIES, entities);
         }
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace VBSP.Conversion
             }
 
             // Store compiled geometry in BSP lumps
-            bsp.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
-            bsp.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
-            bsp.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
+            // bsp.SetLumpData(LumpType.LUMP_VERTEXES, vertices.ToArray());
+            // bsp.SetLumpData(LumpType.LUMP_INDICES, indices.ToArray());
+            // bsp.SetLumpData(LumpType.LUMP_SOLID_MATERIALS, materials.ToArray());
 
             Console.WriteLine($"Compiled {vmf.World.Solids.Count} solids.");
         }
