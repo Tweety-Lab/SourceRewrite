@@ -55,8 +55,8 @@ namespace SourceRewrite.Maps
             BSPReader reader = new BSPReader(BSPFilePath);
 
             // Create the map from Lump data
-            CreateGeometry((float[])VerticesLump.Data, (uint[])IndicesLump.Data, (string[])MaterialsLump.Data);
-            CreateEntities((string[])EntitiesLump.Data);
+            CreateGeometry(reader.GetLumpData<BSPSide>(BSPLumpType.LUMP_SIDES));
+            // CreateEntities((string[])EntitiesLump.Data);
 
             // Disable all Entities if EntitiesEnabled is false
             if (EntitiesEnabled == false)
@@ -78,36 +78,46 @@ namespace SourceRewrite.Maps
 
             // Start all Entities (Global and Map)
             EntityManager.StartAllEntities();
-
-            // Free the BSP
-            reader.Dispose();
         }
 
         // Create Geometry from Lump data
-        public void CreateGeometry(float[] verticesData, uint[] indicesData, string[] materialsData)
+        public void CreateGeometry(BSPSide[] sides)
         {
-            // Create a Entity to house the MeshEntity
-            MeshEntity mapGeometry = new MeshEntity();
+            foreach (BSPSide side in sides)
+            {
+                // Create a Entity to house the MeshEntity
+                MeshEntity sideGeometry = new MeshEntity();
 
-            // Assign Entity Name
-            mapGeometry.Name = "MapGeometry";
+                // Assign Entity Name
+                sideGeometry.Name = "MapGeometry";
 
-            // For now, we just use the first material defined in the lump
-            Material placeHolderMaterial = FileSystem.GetMaterial(materialsData[0]);
+                // Create a MeshAsset
+                Mesh sideMesh = new Mesh();
 
-            // Create a MeshAsset
-            Mesh mapGeometryMesh = new Mesh();
+                // Populate the MeshAsset with lump data
+                sideMesh.Vertices = side.Vertices;
+                sideMesh.Indices = side.Indices;
+                sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
 
-            // Populate the MeshAsset with lump data
-            mapGeometryMesh.Vertices = verticesData;
-            mapGeometryMesh.Indices = indicesData;
-            mapGeometryMesh.Material = placeHolderMaterial;
+                Console.WriteLine("Creating side geometry with vertices:");
+                foreach (var vertex in sideMesh.Vertices)
+                {
+                    Console.WriteLine($"Vertex: {vertex}");
+                }
 
-            mapGeometry.Mesh = mapGeometryMesh;
+                Console.WriteLine("And indices:");
+                foreach (var index in sideMesh.Indices)
+                {
+                    Console.WriteLine($"Index: {index}");
+                }
 
-            // Add the Entity to the map's Entities list
-            Entities.Add(mapGeometry);
-            mapGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
+
+                sideGeometry.Mesh = sideMesh;
+
+                // Add the Entity to the map's Entities list
+                Entities.Add(sideGeometry);
+                sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
+            }
         }
 
         // Create Entities from Lump data

@@ -21,8 +21,8 @@ namespace FileFormats.BSP
     [MessagePackObject]
     public struct BSPSide
     {
-        [Key(0)] public List<Vector3> Vertices;
-        [Key(1)] public List<int> Indices;
+        [Key(0)] public float[] Vertices;
+        [Key(1)] public uint[] Indices;
 
         [Key(2)] public string MaterialName;
         [Key(3)] public int ID;

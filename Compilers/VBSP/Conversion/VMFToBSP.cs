@@ -130,7 +130,7 @@ namespace VBSP.Conversion
             foreach (VMFSide side in solid.Sides)
             {
                 // Calculate side geometry
-                List<Vector3> sideVertices = CalculateSideVertices(side);
+                float[] sideVertices = CalculateSideVertices(side);
 
                 // Create the Side struct for BSP
                 BSPSide bspSide = new BSPSide
@@ -138,7 +138,7 @@ namespace VBSP.Conversion
                     MaterialName = side.Material,  // Assuming the side has a material property
                     ID = side.ID,
                     Vertices = sideVertices,  // Store vertices for the side
-                    Indices = new List<int> { 0, 1, 2, 3 }  // Assuming a quad with 4 vertices (change this later)
+                    Indices = new uint[] { 0, 1, 2, 0, 2, 3 },
                 };
 
                 bspSides.Add(bspSide);
@@ -148,17 +148,28 @@ namespace VBSP.Conversion
         /// <summary>
         /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system.
         /// </summary>
-        private static List<Vector3> CalculateSideVertices(VMFSide side)
+        private static float[] CalculateSideVertices(VMFSide side)
         {
-            // Convert from VMF to BSP coordinate system (Y-up)
-            Vector3 corner1 = ConvertToYUpCoordSystem(side.plane.Point1);
-            Vector3 corner2 = ConvertToYUpCoordSystem(side.plane.Point2);
-            Vector3 corner3 = ConvertToYUpCoordSystem(side.plane.Point3);
+            // Convert the plane points to BSP's Y-up coordinate system
+            Vector3 point1 = ConvertToYUpCoordSystem(side.plane.Point1);
+            Vector3 point2 = ConvertToYUpCoordSystem(side.plane.Point2);
+            Vector3 point3 = ConvertToYUpCoordSystem(side.plane.Point3);
 
-            // Calculate the fourth corner to complete the quad
-            Vector3 corner4 = corner1 + (corner3 - corner2);
+            // Calculate vectors along the sides
+            Vector3 v1 = point2 - point1;
+            Vector3 v2 = point3 - point1;
 
-            return new List<Vector3> { corner1, corner2, corner3, corner4 };
+            // Make sure the vectors are perpendicular to form a rectangle
+            Vector3 point4 = point2 + v2;  // or equivalently: point3 + v1
+
+            // Return the vertices as a flat array
+            return new float[]
+            {
+                point1.X, point1.Y, point1.Z,
+                point2.X, point2.Y, point2.Z,
+                point3.X, point3.Y, point3.Z,
+                point4.X, point4.Y, point4.Z
+            };
         }
 
         /// <summary>
