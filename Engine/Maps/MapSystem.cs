@@ -56,7 +56,7 @@ namespace SourceRewrite.Maps
 
             // Create the map from Lump data
             CreateGeometry(reader.GetLumpData<BSPSide>(BSPLumpType.LUMP_SIDES));
-            // CreateEntities((string[])EntitiesLump.Data);
+            CreateEntities(reader.GetLumpData<BSPEntity>(BSPLumpType.LUMP_ENTITIES));
 
             // Disable all Entities if EntitiesEnabled is false
             if (EntitiesEnabled == false)
@@ -121,16 +121,15 @@ namespace SourceRewrite.Maps
         }
 
         // Create Entities from Lump data
-        public void CreateEntities(string[] entitiesData)
+        public void CreateEntities(BSPEntity[] entitiesData)
         {
             if (entitiesData == null)
                 return;
 
-            // We store Entities in a KeyValues format
-            foreach (string entityString in entitiesData)
+            foreach (BSPEntity bspEntity in entitiesData)
             {
                 // Create Entity from KeyValues
-                KeyValuesFormat entityKeyValues = new KeyValuesFormat(entityString);
+                KeyValuesFormat entityKeyValues = new KeyValuesFormat(bspEntity.KeyValuesString);
 
                 // Create Entity with correct class
                 string entityNamespace = (string)entityKeyValues.GetKeyValue("classname").Value;
@@ -187,6 +186,7 @@ namespace SourceRewrite.Maps
 
                 Entities.Add(entity);
                 entity.Parent = MapRootEntity; // Ensure parent is set correctly
+
             }
         }
 
