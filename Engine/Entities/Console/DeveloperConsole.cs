@@ -11,24 +11,6 @@ namespace SourceRewrite
     {
         public static DeveloperConsoleCanvas ConsoleCanvas { get; set; }
 
-        static DeveloperConsole()
-        {
-            GameWindow.CurrentWindow.OnLoadAction += () =>
-            {
-                // Load config.cfg
-                LoadConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
-                
-                // Load autoexec.cfg
-                LoadConfig(FileSystem.GamePath.BasePath + "cfg/autoexec.cfg");
-            };
-
-            GameWindow.CurrentWindow.OnUnloadAction += () =>
-            {
-                // Write config.cfg
-                WriteConfig(FileSystem.GamePath.BasePath + "cfg/config.cfg");
-            };
-        }
-
         public static void Msg(string message)
         {
             ConsoleCanvas.Msg(message);

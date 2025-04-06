@@ -84,7 +84,7 @@ namespace SourceRewrite.Windowing
             Modules.RegisterModule(new GameInfoModule());
             Modules.RegisterModule(new RenderModule());
             Modules.RegisterModule(new InputModule());
-            Modules.RegisterModule(new EntityModule());
+            Modules.RegisterModule(new ConsoleModule());
             Modules.RegisterModule(new MapModule());
 
             // Invoke OnLoadAction
