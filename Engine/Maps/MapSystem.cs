@@ -115,7 +115,7 @@ namespace SourceRewrite.Maps
             Model model = new Model(FileSystem.GetModelPath("skydome.model"), skyMaterial);
 
             skyDome.Mesh = model;
-            skyDome.Transform.Scale -= new Vector3(0.5f, 0.5f, 0.5f); // Adjust scale to fit the map
+            skyDome.Transform.Scale = new Vector3(5, 5, 5); // Scale the sky dome
             Entities.Add(skyDome);
         }
 

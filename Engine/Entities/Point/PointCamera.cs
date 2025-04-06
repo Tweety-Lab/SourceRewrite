@@ -21,7 +21,7 @@ namespace SourceRewrite.Entities.Point
 
         public float AspectRatio { get; set; } = 16f / 9f; // Default 16:9 aspect ratio
         public float NearPlane { get; set; } = 0.1f; // Default near plane
-        public float FarPlane { get; set; } = 99999f; // Default far plane
+        public float FarPlane { get; set; } = 999999f; // Default far plane
 
         /// <summary>
         /// Currently active Camera Component.
