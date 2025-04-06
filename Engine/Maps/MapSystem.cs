@@ -99,6 +99,17 @@ namespace SourceRewrite.Maps
                 sideMesh.Indices = side.Indices;
                 sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
 
+                // Calculate Normals
+                sideMesh.CalculateNormals();
+
+                // Flip Normals
+                for (int i = 0; i < sideMesh.Normals.Length; i += 3)
+                {
+                    sideMesh.Normals[i] *= -1;
+                    sideMesh.Normals[i + 1] *= -1;
+                    sideMesh.Normals[i + 2] *= -1;
+                }
+
                 Console.WriteLine("Creating side geometry with vertices:");
                 foreach (var vertex in sideMesh.Vertices)
                 {

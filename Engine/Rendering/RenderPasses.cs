@@ -29,7 +29,9 @@ namespace SourceRewrite.Rendering
     public enum RenderFlag
     {
         DepthTest,
-        Blend
+        Blend,
+        CullFrontFaces,
+        CullBackFaces
     }
 
     /// <summary>
@@ -129,7 +131,7 @@ namespace SourceRewrite.Rendering
     public class OpaquePass : BaseRenderPass
     {
         // Enable Depth-Testing
-        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullFrontFaces };
 
         public override void OnRender() => RenderEntities<MeshEntity>(EntityManager.Root);
 

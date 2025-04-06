@@ -48,19 +48,29 @@ namespace SourceRewrite.Rendering.OpenGL
 
         // Define logic for enabling and disabling render flags
         private readonly Dictionary<RenderFlag, Action<GL>> _renderFlagEnableMap = new()
-{
-    { RenderFlag.DepthTest, gl => gl.Enable(EnableCap.DepthTest) },
-    { RenderFlag.Blend, gl => {
-        gl.Enable(EnableCap.Blend);
-        gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-    }}
-};
+        {
+            { RenderFlag.DepthTest, gl => gl.Enable(EnableCap.DepthTest) },
+            { RenderFlag.Blend, gl => {
+                gl.Enable(EnableCap.Blend);
+                gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            }},
+            { RenderFlag.CullFrontFaces, gl => { 
+                gl.Enable(EnableCap.CullFace);
+                gl.CullFace(GLEnum.Front);
+            }},
+            { RenderFlag.CullBackFaces, gl => {
+                gl.Enable(EnableCap.CullFace);
+                gl.CullFace(GLEnum.Back);
+            }}
+        };
 
         private readonly Dictionary<RenderFlag, Action<GL>> _renderFlagDisableMap = new()
-{
-    { RenderFlag.DepthTest, gl => gl.Disable(EnableCap.DepthTest) },
-    { RenderFlag.Blend, gl => gl.Disable(EnableCap.Blend) }
-};
+        {
+            { RenderFlag.DepthTest, gl => gl.Disable(EnableCap.DepthTest) },
+            { RenderFlag.Blend, gl => gl.Disable(EnableCap.Blend) },
+            { RenderFlag.CullFrontFaces, gl => gl.Disable(EnableCap.CullFace) },
+            { RenderFlag.CullBackFaces, gl => gl.Disable(EnableCap.CullFace) }
+        };
 
         public void EnableFlag(RenderFlag renderFlag)
         {
