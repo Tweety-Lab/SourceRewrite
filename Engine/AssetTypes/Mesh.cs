@@ -81,16 +81,19 @@ namespace SourceRewrite.AssetTypes
                 AddNormalToVertex(vertexNormals, indexC, faceNormal);
             }
 
-            // Normalize accumulated normals and store in the Normals array
+            // After processing all triangles, normalize all vertex normals
+            Vector3[] finalNormals = new Vector3[Vertices.Length / 3];
             foreach (var kvp in vertexNormals)
             {
-                int vertexIndex = kvp.Key;
-                Vector3 normalizedVector = Vector3.Normalize(kvp.Value);
+                finalNormals[kvp.Key] = Vector3.Normalize(kvp.Value);
+            }
 
-                // Store the normalized normal in the Normals array
-                Normals[vertexIndex * 3] = normalizedVector.X;
-                Normals[vertexIndex * 3 + 1] = normalizedVector.Y;
-                Normals[vertexIndex * 3 + 2] = normalizedVector.Z;
+            // Then assign back
+            for (int i = 0; i < finalNormals.Length; i++)
+            {
+                Normals[i * 3] = finalNormals[i].X;
+                Normals[i * 3 + 1] = finalNormals[i].Y;
+                Normals[i * 3 + 2] = finalNormals[i].Z;
             }
         }
 

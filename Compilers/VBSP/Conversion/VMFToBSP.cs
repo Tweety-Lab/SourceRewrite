@@ -164,10 +164,10 @@ namespace VBSP.Conversion
             // Populate Vertices
             return new float[]
             {
-        p1.X, p1.Y, p1.Z,
-        p2.X, p2.Y, p2.Z,
-        p3.X, p3.Y, p3.Z,
-        p4.X, p4.Y, p4.Z
+    p4.X, p4.Y, p4.Z,
+    p3.X, p3.Y, p3.Z,
+    p2.X, p2.Y, p2.Z,
+    p1.X, p1.Y, p1.Z
             };
         }
 
