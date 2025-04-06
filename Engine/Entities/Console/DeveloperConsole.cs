@@ -14,7 +14,10 @@ namespace SourceRewrite
         public static void Msg(string message)
         {
             if (ConsoleCanvas == null)
+            {
+                Console.WriteLine(message);
                 return;
+            }
 
             ConsoleCanvas.Msg(message);
         }
@@ -22,7 +25,10 @@ namespace SourceRewrite
         public static void Warning(string message)
         {
             if (ConsoleCanvas == null)
+            {
+                Console.WriteLine(message);
                 return;
+            }
 
             ConsoleCanvas.Warning(message);
         }
@@ -30,7 +36,10 @@ namespace SourceRewrite
         public static void Error(string message)
         {
             if (ConsoleCanvas == null)
+            {
+                Console.WriteLine(message);
                 return;
+            }
 
             ConsoleCanvas.Error(message);
         }

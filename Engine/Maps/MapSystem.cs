@@ -85,31 +85,6 @@ namespace SourceRewrite.Maps
         {
             foreach (BSPPlane side in sides)
             {
-                // Handle Source-Like Skyboxes
-                if (side.MaterialName == "TOOLS/TOOLSSKYBOX")
-                {
-                    // Create a Entity to house the MeshEntity
-                    MeshEntity skyboxGeometry = new MeshEntity();
-
-                    // Assign Entity Name
-                    skyboxGeometry.Name = "MapGeometry";
-
-                    // Create a MeshAsset
-                    Mesh skyboxMesh = new Mesh();
-
-                    // Populate the MeshAsset with lump data
-                    skyboxMesh.Vertices = side.Vertices;
-                    skyboxMesh.Indices = side.Indices;
-                    skyboxMesh.Material = FileSystem.GetMaterial("skybox01");
-
-                    skyboxGeometry.Mesh = skyboxMesh;
-
-                    // Add the Entity to the map's Entities list
-                    Entities.Add(skyboxGeometry);
-
-                    continue;
-                }
-
                 // Create a Entity to house the MeshEntity
                 MeshEntity sideGeometry = new MeshEntity();
 
@@ -130,6 +105,18 @@ namespace SourceRewrite.Maps
                 Entities.Add(sideGeometry);
                 sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
             }
+
+            MeshEntity skyDome = new MeshEntity();
+
+            skyDome.Name = "SkyDome";
+
+            // Create Sky
+            Material skyMaterial = FileSystem.GetMaterial("skybox01");
+            Model model = new Model(FileSystem.GetModelPath("skydome.model"), skyMaterial);
+
+            skyDome.Mesh = model;
+            skyDome.Transform.Scale -= new Vector3(0.5f, 0.5f, 0.5f); // Adjust scale to fit the map
+            Entities.Add(skyDome);
         }
 
         // Create Entities from Lump data
