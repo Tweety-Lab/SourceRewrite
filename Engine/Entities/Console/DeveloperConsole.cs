@@ -13,16 +13,25 @@ namespace SourceRewrite
 
         public static void Msg(string message)
         {
+            if (ConsoleCanvas == null)
+                return;
+
             ConsoleCanvas.Msg(message);
         }
 
         public static void Warning(string message)
         {
+            if (ConsoleCanvas == null)
+                return;
+
             ConsoleCanvas.Warning(message);
         }
 
         public static void Error(string message)
         {
+            if (ConsoleCanvas == null)
+                return;
+
             ConsoleCanvas.Error(message);
         }
 

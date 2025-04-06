@@ -85,6 +85,31 @@ namespace SourceRewrite.Maps
         {
             foreach (BSPPlane side in sides)
             {
+                // Handle Source-Like Skyboxes
+                if (side.MaterialName == "TOOLS/TOOLSSKYBOX")
+                {
+                    // Create a Entity to house the MeshEntity
+                    MeshEntity skyboxGeometry = new MeshEntity();
+
+                    // Assign Entity Name
+                    skyboxGeometry.Name = "MapGeometry";
+
+                    // Create a MeshAsset
+                    Mesh skyboxMesh = new Mesh();
+
+                    // Populate the MeshAsset with lump data
+                    skyboxMesh.Vertices = side.Vertices;
+                    skyboxMesh.Indices = side.Indices;
+                    skyboxMesh.Material = FileSystem.GetMaterial("skybox01");
+
+                    skyboxGeometry.Mesh = skyboxMesh;
+
+                    // Add the Entity to the map's Entities list
+                    Entities.Add(skyboxGeometry);
+
+                    continue;
+                }
+
                 // Create a Entity to house the MeshEntity
                 MeshEntity sideGeometry = new MeshEntity();
 
@@ -98,19 +123,6 @@ namespace SourceRewrite.Maps
                 sideMesh.Vertices = side.Vertices;
                 sideMesh.Indices = side.Indices;
                 sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
-
-                Console.WriteLine("Creating side geometry with vertices:");
-                foreach (var vertex in sideMesh.Vertices)
-                {
-                    Console.WriteLine($"Vertex: {vertex}");
-                }
-
-                Console.WriteLine("And indices:");
-                foreach (var index in sideMesh.Indices)
-                {
-                    Console.WriteLine($"Index: {index}");
-                }
-
 
                 sideGeometry.Mesh = sideMesh;
 
