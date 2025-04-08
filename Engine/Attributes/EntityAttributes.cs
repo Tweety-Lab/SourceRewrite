@@ -19,7 +19,7 @@
     /// <summary>
     /// Entity Properties are variables that are defined in the BSP (map) file.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class EntityPropertyAttribute : Attribute
     {
         /// <summary>

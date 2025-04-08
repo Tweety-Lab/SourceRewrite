@@ -69,7 +69,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static string GetModelPath(string name)
         {
-            string path = $"{GamePath.ModelsPath}/{name}";
+            string path = $"{GamePath.ModelsPath}/{name}.model";
             if (File.Exists(path)) return path;
 
             // Search through mounted game paths
