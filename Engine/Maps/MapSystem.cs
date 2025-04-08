@@ -101,6 +101,11 @@ namespace SourceRewrite.Maps
 
                 sideGeometry.Mesh = sideMesh;
 
+                // Register Physics for Geometry
+                sideGeometry.PhysicsBody = new Physics.PhysicsBody();
+                sideGeometry.PhysicsBody.IsStatic = true; // Set to static for map geometry
+                sideGeometry.PhysicsInitNormal();
+
                 // Add the Entity to the map's Entities list
                 Entities.Add(sideGeometry);
                 sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
