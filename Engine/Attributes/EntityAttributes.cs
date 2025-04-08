@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the Class Name of the Entity for use in Hammer.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class EntityAttribute : Attribute
     {
         public string ClassName { get; set; }
