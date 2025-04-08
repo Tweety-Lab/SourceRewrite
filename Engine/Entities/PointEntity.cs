@@ -27,6 +27,7 @@ namespace SourceRewrite.Entities
         {
             // Create a new rigid body
             PhysicsBody = new PhysicsBody();
+            PhysicsBody.IsStatic = false;
 
             // Register this entity with the physics context
             GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this);

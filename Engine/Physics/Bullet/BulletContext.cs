@@ -76,6 +76,17 @@ namespace SourceRewrite.Physics.Bullet
 
             // Set PhysicsBody properties
             body.SetMassProps(entity.PhysicsBody.Mass, new BulletSharp.Math.Vector3(0, 0, 0));
+            body.Friction = entity.PhysicsBody.Friction;
+            body.Restitution = entity.PhysicsBody.Restitution;
+            body.UpdateInertiaTensor();
+
+            // Set Object Static
+            if (entity.PhysicsBody.IsStatic)
+            {
+                body.CollisionFlags |= CollisionFlags.StaticObject;
+                body.SetMassProps(0, new BulletSharp.Math.Vector3(0, 0, 0));
+                body.UpdateInertiaTensor();
+            }
 
 
             // Add the body to the dynamics world
