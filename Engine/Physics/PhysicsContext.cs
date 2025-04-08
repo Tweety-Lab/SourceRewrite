@@ -58,6 +58,11 @@ namespace SourceRewrite.Physics
         {
             _apiInterface.InitPhysicsEntity(physEntity);
         }
+
+        public void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity)
+        {
+            _apiInterface.SetEntityAbsVelocity(entity, velocity);
+        }
     }
 
     public interface IPhysicsAPI
@@ -79,6 +84,13 @@ namespace SourceRewrite.Physics
         /// <param name="max"></param>
         /// <param name="kinematic"></param>
         void InitPhysicsEntity(PointEntity physEntity);
+
+        /// <summary>
+        /// Set the absolute velocity of an entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="velocity"></param>
+        void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity);
     }
 
     /// <summary>

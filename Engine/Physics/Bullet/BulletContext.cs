@@ -74,7 +74,8 @@ namespace SourceRewrite.Physics.Bullet
 
                 // Create a rigid body construction info
                 bodyInfo = new RigidBodyConstructionInfo(entity.PhysicsBody.Mass, null, meshShape, BulletSharp.Math.Vector3.Zero);
-            } else
+            }
+            else
             {
                 // Create a collision shape from the bounding box
                 var boxShape = new BoxShape(new BulletSharp.Math.Vector3(entity.PhysicsBody.BoundingBox.X, entity.PhysicsBody.BoundingBox.Y, entity.PhysicsBody.BoundingBox.Z));
@@ -115,6 +116,15 @@ namespace SourceRewrite.Physics.Bullet
 
             // Store the entity and its corresponding rigid body
             entities.Add(entity, body);
+        }
+
+        public void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity)
+        {
+            if (entities.TryGetValue(entity, out RigidBody body))
+            {
+                body.Activate();
+                body.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
+            }
         }
     }
 }

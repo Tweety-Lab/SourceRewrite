@@ -4,6 +4,7 @@ using SourceRewrite.Windowing.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,11 @@ namespace SourceRewrite.Entities
 
             // Register this entity with the physics context
             GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this);
+        }
+
+        public void SetAbsVelocity(Vector3 velocity)
+        {
+            GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.SetEntityAbsVelocity(this, velocity);
         }
     }
 }
