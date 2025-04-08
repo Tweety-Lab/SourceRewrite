@@ -43,12 +43,12 @@ namespace SourceRewrite.Physics
 
         public void OnLoad()
         {
-
+            _apiInterface.OnLoad();
         }
 
         public void Update()
         {
-
+            _apiInterface.Update();
         }
     }
 

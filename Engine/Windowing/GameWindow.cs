@@ -85,6 +85,8 @@ namespace SourceRewrite.Windowing
             Modules.RegisterModule(new RenderModule());
             Modules.RegisterModule(new InputModule());
             Modules.RegisterModule(new ConsoleModule());
+            Modules.RegisterModule(new PhysicsModule());
+
             Modules.RegisterModule(new MapModule());
 
             // Invoke OnLoadAction
