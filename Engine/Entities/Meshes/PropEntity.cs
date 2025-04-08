@@ -6,6 +6,7 @@ using SourceRewrite.Windowing.Modules;
 namespace SourceRewrite.Entities
 {
     [Entity("prop_static")]
+    [AlwaysExecute]
     public class PropEntity : MeshEntity
     {
         /// <summary>

@@ -37,7 +37,7 @@
     /// <summary>
     /// Allows the Entity to run no matter what. Will Run in Editor, Play Mode, etc.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class AlwaysExecuteAttribute : Attribute { }
 
     /// <summary>
