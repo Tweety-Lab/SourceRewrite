@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BulletSharp;
 using SourceRewrite.Entities;
+using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Physics.Bullet
 {
@@ -28,12 +30,14 @@ namespace SourceRewrite.Physics.Bullet
             broadphase = new DbvtBroadphase();
 
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, null, collisionConfiguration);
+
+            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0); // Set gravity
         }
 
         public void Update()
         {
             // Update Bullet Physics
-            dynamicsWorld.StepSimulation(1.0f / 60.0f, 10);
+            dynamicsWorld.StepSimulation(1.0f / 66.6f, 10);
 
             // Update the entities
             foreach (var entity in entities)
@@ -105,6 +109,9 @@ namespace SourceRewrite.Physics.Bullet
 
             // Add the body to the dynamics world
             dynamicsWorld.AddRigidBody(body);
+
+            // Activate the body
+            body.Activate();
 
             // Store the entity and its corresponding rigid body
             entities.Add(entity, body);
