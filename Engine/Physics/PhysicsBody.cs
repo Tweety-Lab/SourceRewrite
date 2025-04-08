@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace SourceRewrite.Physics
 {
     public class PhysicsBody
-
     {
         public float Mass { get; set; } = 1.0f;
         public float Friction { get; set; } = 0.5f;

@@ -37,7 +37,7 @@ namespace SourceRewrite.Physics.Bullet
         public void Update()
         {
             // Update Bullet Physics
-            dynamicsWorld.StepSimulation(1.0f / 66.6f, 10);
+            dynamicsWorld.StepSimulation(1.0f / 22.2f, 10);
 
             // Update the entities
             foreach (var entity in entities)

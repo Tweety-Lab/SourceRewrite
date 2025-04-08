@@ -16,7 +16,7 @@ namespace SourceRewrite.Entities.Meshes
 
             PhysicsBody = new Physics.PhysicsBody();
             PhysicsBody.CollisionMesh = Mesh;
-            PhysicsBody.Mass = 100f;
+            PhysicsBody.Mass = 1f;
             PhysicsInitNormal();
         }
 
