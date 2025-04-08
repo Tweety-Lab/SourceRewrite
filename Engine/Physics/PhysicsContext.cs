@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SourceRewrite.Physics.Bullet;
 using SourceRewrite.TimeSystem;
+using System.Numerics;
 
 namespace SourceRewrite.Physics
 {
@@ -22,20 +23,6 @@ namespace SourceRewrite.Physics
         {
             { PhysicsAPI.Bullet, typeof(BulletContext) }
         };
-
-        // Physics timing variables
-        private double _physicsAccumulator = 0.0;
-        private double _physicsTimeStep = 1.0 / 60.0; // Default to 60 Tick-Rate
-
-
-        /// <summary>
-        /// The physics tick rate in updates per second.
-        /// </summary>
-        public double PhysicsTickRate
-        {
-            get => 1.0 / _physicsTimeStep;
-            set => _physicsTimeStep = 1.0 / Math.Max(value, 1.0); // Ensure at least 1Hz
-        }
 
         private readonly IPhysicsAPI _apiInterface; // Use an interface for better abstraction
         public PhysicsContext(PhysicsAPI chosenPhysics)
@@ -63,18 +50,12 @@ namespace SourceRewrite.Physics
 
         public void Update()
         {
-            // Get delta time
-            double deltaTime = Time.DeltaTime;
+            _apiInterface.Update();
+        }
 
-            // Add to accumulator
-            _physicsAccumulator += deltaTime;
-
-            // Fixed timestep physics updates
-            while (_physicsAccumulator >= _physicsTimeStep)
-            {
-                _apiInterface.Update();
-                _physicsAccumulator -= _physicsTimeStep;
-            }
+        public void BBoxToCollideable(Vector3 min, Vector3 max, bool kinematic)
+        {
+            _apiInterface.BBoxToCollideable(min, max, kinematic);
         }
     }
 
@@ -89,6 +70,14 @@ namespace SourceRewrite.Physics
         /// Called once per physics tick.
         /// </summary>
         void Update();
+
+        /// <summary>
+        /// Convert a bounding box to a collidable object.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="kinematic"></param>
+        void BBoxToCollideable(Vector3 min, Vector3 max, bool kinematic);
     }
 
     /// <summary>
