@@ -1,5 +1,5 @@
 ﻿using SourceRewrite.Attributes;
-using SourceRewrite.Entities.Console;
+using SourceRewrite.Entities;
 using SourceRewrite.Files;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Windowing;

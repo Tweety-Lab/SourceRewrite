@@ -70,6 +70,10 @@ namespace SourceRewrite.Physics.Bullet
             // Create a rigid body
             var body = new RigidBody(bodyInfo);
 
+            // Set the rigid body's position and orientation
+            var transform = BulletSharp.Math.Matrix.Translation(new BulletSharp.Math.Vector3(entity.Transform.Position.X, entity.Transform.Position.Y, entity.Transform.Position.Z)) * BulletSharp.Math.Matrix.RotationQuaternion(new BulletSharp.Math.Quaternion(entity.Transform.Rotation.X, entity.Transform.Rotation.Y, entity.Transform.Rotation.Z, entity.Transform.Rotation.W));
+            body.WorldTransform = transform;
+
             // Add the body to the dynamics world
             dynamicsWorld.AddRigidBody(body);
 

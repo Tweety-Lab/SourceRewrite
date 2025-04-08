@@ -1,7 +1,7 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.Windowing;
 
-namespace SourceRewrite.Entities.Console
+namespace SourceRewrite.Entities
 {
     public static class ConVars
     {

@@ -19,7 +19,7 @@ namespace SourceRewrite.Entities
         // Nameless Constructor
         public PointEntity() : base() { }
 
-        public void RegisterPhysics()
+        public void PhysicsInitNormal()
         {
             // Register this entity with the physics context
             GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this);

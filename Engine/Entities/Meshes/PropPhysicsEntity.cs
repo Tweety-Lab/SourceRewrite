@@ -12,8 +12,13 @@ namespace SourceRewrite.Entities.Meshes
     {
         public override void Start()
         {
-            RegisterPhysics();
+            PhysicsInitNormal();
             base.Start();
+        }
+
+        public override void Update()
+        {
+            base.Update();
         }
     }
 }
