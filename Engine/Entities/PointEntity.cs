@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +18,11 @@ namespace SourceRewrite.Entities
 
         // Nameless Constructor
         public PointEntity() : base() { }
+
+        public void RegisterPhysics()
+        {
+            // Register this entity with the physics context
+            GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this);
+        }
     }
 }

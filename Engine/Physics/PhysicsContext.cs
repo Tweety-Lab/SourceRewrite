@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SourceRewrite.Physics.Bullet;
 using SourceRewrite.TimeSystem;
 using System.Numerics;
+using SourceRewrite.Entities;
 
 namespace SourceRewrite.Physics
 {
@@ -53,9 +54,9 @@ namespace SourceRewrite.Physics
             _apiInterface.Update();
         }
 
-        public void BBoxToCollideable(Vector3 min, Vector3 max, bool kinematic)
+        public void InitPhysicsEntity(PointEntity physEntity)
         {
-            _apiInterface.BBoxToCollideable(min, max, kinematic);
+            _apiInterface.InitPhysicsEntity(physEntity);
         }
     }
 
@@ -77,7 +78,7 @@ namespace SourceRewrite.Physics
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <param name="kinematic"></param>
-        void BBoxToCollideable(Vector3 min, Vector3 max, bool kinematic);
+        void InitPhysicsEntity(PointEntity physEntity);
     }
 
     /// <summary>
