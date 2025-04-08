@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Windowing;
+﻿using SourceRewrite.Physics;
+using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ namespace SourceRewrite.Entities
         // Entity Transform
         public Transform Transform { get; set; } = new Transform();
 
+        // Entity Rigid Body
+        public PhysicsBody PhysicsBody { get; set; } = null;
+
         // Name Constructor
         public PointEntity(string name) : base(name) { }
 
@@ -21,6 +25,9 @@ namespace SourceRewrite.Entities
 
         public void PhysicsInitNormal()
         {
+            // Create a new rigid body
+            PhysicsBody = new PhysicsBody();
+
             // Register this entity with the physics context
             GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this);
         }
