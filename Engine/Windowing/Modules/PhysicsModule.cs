@@ -22,14 +22,11 @@ namespace SourceRewrite.Windowing.Modules
         {
             Context.Update();
         }
-        public void OnRender(double deltaTime)
-        {
-        }
-        public void OnShutdown()
-        {
-        }
-        public void OnFramebufferResize(Silk.NET.Maths.Vector2D<int> newSize)
-        {
-        }
+
+        public void OnRender(double deltaTime) { }
+
+        public void OnShutdown() { }
+
+        public void OnFramebufferResize(Silk.NET.Maths.Vector2D<int> newSize) { }
     }
 }

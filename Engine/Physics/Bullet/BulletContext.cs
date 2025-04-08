@@ -13,6 +13,7 @@ namespace SourceRewrite.Physics.Bullet
             // Initialize Bullet Physics
             Console.WriteLine("Bullet Physics Loaded");
         }
+
         public void Update()
         {
             // Update Bullet Physics
