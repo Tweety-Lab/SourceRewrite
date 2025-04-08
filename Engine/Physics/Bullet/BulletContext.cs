@@ -61,11 +61,23 @@ namespace SourceRewrite.Physics.Bullet
 
         public void InitPhysicsEntity(PointEntity entity)
         {
-            // Create a collision shape from the bounding box
-            var boxShape = new BoxShape(new BulletSharp.Math.Vector3(entity.PhysicsBody.BoundingBox.X, entity.PhysicsBody.BoundingBox.Y, entity.PhysicsBody.BoundingBox.Z));
+            RigidBodyConstructionInfo bodyInfo;
 
-            // Create a rigid body construction info
-            var bodyInfo = new RigidBodyConstructionInfo(1, null, boxShape, BulletSharp.Math.Vector3.Zero);
+            if (entity.PhysicsBody.CollisionMesh != null)
+            {
+                // Create a collision shape from the mesh
+                var meshShape = new ConvexHullShape(entity.PhysicsBody.CollisionMesh.Vertices);
+
+                // Create a rigid body construction info
+                bodyInfo = new RigidBodyConstructionInfo(entity.PhysicsBody.Mass, null, meshShape, BulletSharp.Math.Vector3.Zero);
+            } else
+            {
+                // Create a collision shape from the bounding box
+                var boxShape = new BoxShape(new BulletSharp.Math.Vector3(entity.PhysicsBody.BoundingBox.X, entity.PhysicsBody.BoundingBox.Y, entity.PhysicsBody.BoundingBox.Z));
+
+                // Create a rigid body construction info
+                bodyInfo = new RigidBodyConstructionInfo(1, null, boxShape, BulletSharp.Math.Vector3.Zero);
+            }
 
             // Create a rigid body
             var body = new RigidBody(bodyInfo);

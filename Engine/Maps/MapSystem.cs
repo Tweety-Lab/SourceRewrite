@@ -104,6 +104,8 @@ namespace SourceRewrite.Maps
                 // Register Physics for Geometry
                 sideGeometry.PhysicsBody = new Physics.PhysicsBody();
                 sideGeometry.PhysicsBody.IsStatic = true; // Set to static for map geometry
+                sideGeometry.PhysicsBody.CollisionMesh = sideMesh;
+
                 sideGeometry.PhysicsInitNormal();
 
                 // Add the Entity to the map's Entities list
