@@ -12,10 +12,11 @@ namespace SourceRewrite.Entities.Meshes
     {
         public override void Start()
         {
-            PhysicsBody = new Physics.PhysicsBody();
-            PhysicsBody.BoundingBox = new System.Numerics.Vector3(128, 64, 128);
-            PhysicsInitNormal();
             base.Start();
+
+            PhysicsBody = new Physics.PhysicsBody();
+            PhysicsBody.CollisionMesh = Mesh;
+            PhysicsInitNormal();
         }
 
         public override void Update()
