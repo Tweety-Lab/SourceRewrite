@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "268"
+	"mapversion" "273"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "268"
+	"mapversion" "273"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -878,7 +878,7 @@ entity
 	"mincpulevel" "0"
 	"mingpulevel" "0"
 	"minhealthdmg" "0"
-	"model" "primitives/cube"
+	"model" "primitives/sphere.model"
 	"nodamageforces" "0"
 	"PerformanceMode" "0"
 	"physdamagescale" "0.1"

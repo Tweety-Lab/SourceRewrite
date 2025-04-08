@@ -25,7 +25,7 @@ namespace SourceRewrite.AssetTypes
             Material = material;
             Shader = Material.Shader;
 
-            // PLACEHOLDER: Use Assimp to load OBJ
+            // PLACEHOLDER: Use Assimp to load generic mesh types
             var assimp = Assimp.GetApi();
             Scene* scene = assimp.ImportFile(filePath, (uint)PostProcessSteps.Triangulate);
             if (scene == null || scene->MFlags == Silk.NET.Assimp.Assimp.SceneFlagsIncomplete || scene->MRootNode == null)

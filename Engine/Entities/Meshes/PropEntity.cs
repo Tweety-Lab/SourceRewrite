@@ -24,7 +24,7 @@ namespace SourceRewrite.Entities
         public override void Start()
         {
             Material material = FileSystem.GetMaterial(MaterialPath);
-            Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace(".model", "")), material);
+            Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace("models/", "")), material);
 
             GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
         }
