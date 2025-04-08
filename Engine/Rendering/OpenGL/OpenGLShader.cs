@@ -48,7 +48,6 @@ namespace SourceRewrite.Rendering.OpenGL
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1) // If GetUniformLocation returns -1 the uniform is not found.
             {
-                // Console.WriteLine($"Uniform {name} not found in shader");
                 return;
             }
 
@@ -72,6 +71,18 @@ namespace SourceRewrite.Rendering.OpenGL
                 case Vector3 vector3:
                     _gl.Uniform3(location, 1, (float*)&vector3);
                     break;
+                case AssetTypes.Texture texture:
+                    OpenGLTexture glTexture = (OpenGLTexture)texture.GetTextureInterface();
+
+                    // Get the next available texture unit
+                    TextureUnit unit = GetNextAvailableTextureUnit();
+                    int unitIndex = (int)unit - (int)TextureUnit.Texture0;
+
+                    // Activate, bind, and set uniform
+                    glTexture.Bind(unit);
+                    _gl.Uniform1(location, unitIndex);
+
+                    break;
             }
         }
 
@@ -90,7 +101,6 @@ namespace SourceRewrite.Rendering.OpenGL
             _gl.GetUniform(_handle, location, output);
             return output[0];
         }
-
 
         public void Dispose()
         {
@@ -144,6 +154,14 @@ namespace SourceRewrite.Rendering.OpenGL
                 _gl.DeleteShader(fragment); // Cleanup on error
                 throw new Exception($"Program failed to relink after updating fragment shader: {_gl.GetProgramInfoLog(_handle)}");
             }
+        }
+
+        static int currentUnit = 0;
+        private TextureUnit GetNextAvailableTextureUnit()
+        {
+            // Simple implementation - just cycle through units (replace this)
+            currentUnit = (currentUnit + 1) % 128; // Assuming 128 texture units available
+            return TextureUnit.Texture0 + currentUnit;
         }
     }
 }

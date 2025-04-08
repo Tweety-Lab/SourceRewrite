@@ -1,7 +1,7 @@
 // Lit Brush Shader
 
 // Global Uniforms
-uniform sampler2D uTexture0;
+uniform sampler2D basetexture;
 
 struct Light {
     vec3 position;
@@ -68,9 +68,9 @@ void fragment()
         vec2 uvZ = worldPos.xy * worldUvScale; // Projection onto XY plane
 
         // Sample each projection
-        vec4 texX = texture(uTexture0, uvX);
-        vec4 texY = texture(uTexture0, uvY);
-        vec4 texZ = texture(uTexture0, uvZ);
+        vec4 texX = texture(basetexture, uvX);
+        vec4 texY = texture(basetexture, uvY);
+        vec4 texZ = texture(basetexture, uvZ);
 
         // Blend the projections by surface normal
         vec4 texColor = texX * blend.x + texY * blend.y + texZ * blend.z;

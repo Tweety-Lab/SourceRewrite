@@ -9,7 +9,6 @@ namespace SourceRewrite.AssetTypes
     public class Material
     {
         public Shader Shader;
-        public Texture[] Textures = new Texture[4]; // Allows up to 4 texture maps in a Material (Change this eventually)
 
         // File-Path Constructor
         public Material(string filePath = "")
@@ -39,7 +38,7 @@ namespace SourceRewrite.AssetTypes
                     // Special logic for base texture paths (REPLACE THIS)
                     if (keyValue.Key == "$basetexture")
                     {
-                        Textures[0] = new Texture(FileSystem.GetTexturePath((string)keyValue.Value)); // Set the Texture
+                        Shader.SetParameter("basetexture", new Texture(FileSystem.GetTexturePath((string)keyValue.Value))); // Set the Texture
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))

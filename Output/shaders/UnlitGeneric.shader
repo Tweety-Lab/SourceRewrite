@@ -1,6 +1,6 @@
 // Unlit Object Shader
 
-uniform sampler2D uTexture0;
+uniform sampler2D basetexture;
 uniform vec4 color; // Color to multiply with the texture
 
 // Vertex Code
@@ -36,7 +36,7 @@ void fragment()
     {
         // Default fallback values in case the uniforms are not set
         vec4 defaultColor = vec4(1.0, 1.0, 1.0, 1.0); // White color by default
-        vec4 texColor = texture(uTexture0, Uv);
+        vec4 texColor = texture(basetexture, Uv);
 
         // Check if the color uniform is set, and use it. If not, fallback to a default color
         vec4 finalColor = texColor * (color.a > 0.0 ? color : defaultColor);

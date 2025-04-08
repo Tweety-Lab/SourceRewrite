@@ -1,6 +1,6 @@
 // Screenspace GUI Shader
 
-uniform sampler2D uTexture0;
+uniform sampler2D basetexture;
 uniform vec4 tint; // Color to multiply with the texture
 
 // Vertex Code
@@ -30,7 +30,7 @@ void fragment()
     void main()
     {
         // Sample the texture using the UV coordinates
-        vec4 texColor = texture(uTexture0, Uv);
+        vec4 texColor = texture(basetexture, Uv);
     
         // Apply tint by multiplying the texture color by the tint color
         vec4 finalColor = texColor * tint / 255.0;

@@ -181,17 +181,6 @@ namespace SourceRewrite.Rendering.OpenGL
             OpenGLShader openglShader = (OpenGLShader)meshObject.Material.Shader?.GetShaderInterface();
             openglShader.Use();
 
-            // Bind the textures if they exist
-            if (meshObject.Material.Textures?.Any(texture => texture != null) == true)
-            {
-                // Check if texture exists before binding
-                OpenGLTexture openglTexture = (OpenGLTexture)meshObject.Material.Textures[0]?.GetTextureInterface();
-                if (openglTexture != null)
-                {
-                    openglTexture.Bind(TextureUnit.Texture0);
-                }
-            }
-
             // Projection matrix
             var windowSize = GameWindow.CurrentWindow.GetSilkWindow().Size;
             float aspectRatio = windowSize.X / (float)windowSize.Y;
