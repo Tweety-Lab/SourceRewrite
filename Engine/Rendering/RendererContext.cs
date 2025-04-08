@@ -194,7 +194,7 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Enumeration of supported Renderer APIs.
+    /// Supported Renderer APIs.
     /// </summary>
     public enum RendererAPI
     {
