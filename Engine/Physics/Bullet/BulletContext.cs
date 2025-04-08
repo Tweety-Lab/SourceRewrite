@@ -87,7 +87,9 @@ namespace SourceRewrite.Physics.Bullet
             body.WorldTransform = transform;
 
             // Set PhysicsBody properties
-            body.SetMassProps(entity.PhysicsBody.Mass, new BulletSharp.Math.Vector3(0, 0, 0));
+            BulletSharp.Math.Vector3 localInertia;
+            bodyInfo.CollisionShape.CalculateLocalInertia(entity.PhysicsBody.Mass, out localInertia);
+            body.SetMassProps(entity.PhysicsBody.Mass, localInertia);
             body.Friction = entity.PhysicsBody.Friction;
             body.Restitution = entity.PhysicsBody.Restitution;
             body.UpdateInertiaTensor();
