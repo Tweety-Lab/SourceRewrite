@@ -105,18 +105,6 @@ namespace SourceRewrite.Maps
                 Entities.Add(sideGeometry);
                 sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
             }
-
-            MeshEntity skyDome = new MeshEntity();
-
-            skyDome.Name = "SkyDome";
-
-            // Create Sky
-            Material skyMaterial = FileSystem.GetMaterial("skybox01");
-            Model model = new Model(FileSystem.GetModelPath("skydome.model"), skyMaterial);
-
-            skyDome.Mesh = model;
-            skyDome.Transform.Scale = new Vector3(5, 5, 5); // Scale the sky dome
-            Entities.Add(skyDome);
         }
 
         // Create Entities from Lump data
