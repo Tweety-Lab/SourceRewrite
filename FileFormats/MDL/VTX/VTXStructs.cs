@@ -25,9 +25,50 @@ namespace FileFormats.MDL.VTX
         public int BodyPartOffset;
     }
 
-    public struct VTXBodyPart
+
+    public struct VTXBodyPartHeader
     {
         public int NumModels;
         public int ModelOffset;
+    }
+
+    public struct VTXModelHeader
+    {
+        public int NumLODs;
+        public int LodOffset;
+    }
+
+    public struct VTXModelLODHeader
+    {
+        public int NumMeshes;
+        public int MeshOffset;
+
+        public float SwitchPoint;
+    }
+
+    public struct VTXMeshHeader
+    {
+        public int NumStripGroups;
+        public int StripGroupHeaderOffset;
+
+        public byte Flags;
+    }
+
+    public struct VTXStripGroupHeader
+    {
+        public int NumVerts;
+        public int VertOffset;
+
+        public int NumIndices;
+        public int IndexOffset;
+
+        public int NumStrips;
+        public int StripOffset;
+
+        public byte Flags;
+
+        // V49 stuff
+        public int NumTopologyIndices;
+        public int TopologyOffset;
     }
 }
