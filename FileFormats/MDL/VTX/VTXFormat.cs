@@ -22,6 +22,20 @@ namespace FileFormats.MDL.VTX
             {
                 // Read the header
                 Header.Version = reader.ReadInt32();
+
+                Header.VertCacheSize = reader.ReadInt32();
+                Header.MaxBonesPerStrip = reader.ReadInt16();
+                Header.MaxBonesPerTri = reader.ReadInt16();
+                Header.MaxBonesPerVert = reader.ReadInt32();
+
+                Header.Checksum = reader.ReadInt32();
+
+                Header.NumLODs = reader.ReadInt32();
+
+                Header.MaterialReplacementListOffset = reader.ReadInt32();
+
+                Header.NumBodyParts = reader.ReadInt32();
+                Header.BodyPartOffset = reader.ReadInt32();
             }
         }
     }
