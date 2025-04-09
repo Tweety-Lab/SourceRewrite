@@ -24,4 +24,10 @@ namespace FileFormats.MDL.VTX
         public int NumBodyParts;
         public int BodyPartOffset;
     }
+
+    public struct VTXBodyPart
+    {
+        public int NumModels;
+        public int ModelOffset;
+    }
 }
