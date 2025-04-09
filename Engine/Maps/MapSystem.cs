@@ -7,6 +7,7 @@ using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Attributes;
 using FileFormats.BSP.IO;
+using SourceRewrite.Physics;
 
 namespace SourceRewrite.Maps
 {
@@ -102,11 +103,11 @@ namespace SourceRewrite.Maps
                 sideGeometry.Mesh = sideMesh;
 
                 // Register Physics for Geometry
-                sideGeometry.PhysicsBody = new Physics.PhysicsBody();
-                sideGeometry.PhysicsBody.IsStatic = true; // Set to static for map geometry
-                sideGeometry.PhysicsBody.CollisionMesh = sideMesh;
+                PhysicsBody body = new Physics.PhysicsBody();
+                body.IsStatic = true; // Set to static for map geometry
+                body.CollisionMesh = sideMesh;
 
-                sideGeometry.PhysicsInitNormal();
+                sideGeometry.PhysicsInitNormal(body);
 
                 // Add the Entity to the map's Entities list
                 Entities.Add(sideGeometry);

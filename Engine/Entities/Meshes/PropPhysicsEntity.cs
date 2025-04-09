@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.InputSystem;
+using SourceRewrite.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace SourceRewrite.Entities.Meshes
         {
             base.Start();
 
-            PhysicsBody = new Physics.PhysicsBody();
-            PhysicsBody.CollisionMesh = Mesh;
-            PhysicsBody.Mass = 1f;
-            PhysicsInitNormal();
+            PhysicsBody body = new Physics.PhysicsBody();
+            body.CollisionMesh = Mesh;
+            body.Mass = 1f;
+            PhysicsInitNormal(body);
         }
 
         public override void Update()

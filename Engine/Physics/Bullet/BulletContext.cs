@@ -63,22 +63,22 @@ namespace SourceRewrite.Physics.Bullet
             }
         }
 
-        public void InitPhysicsEntity(PointEntity entity)
+        public void InitPhysicsEntity(PointEntity entity, PhysicsBody physBody)
         {
             RigidBodyConstructionInfo bodyInfo;
 
-            if (entity.PhysicsBody.CollisionMesh != null)
+            if (physBody.CollisionMesh != null)
             {
                 // Create a collision shape from the mesh
-                var meshShape = new ConvexHullShape(entity.PhysicsBody.CollisionMesh.Vertices);
+                var meshShape = new ConvexHullShape(physBody.CollisionMesh.Vertices);
 
                 // Create a rigid body construction info
-                bodyInfo = new RigidBodyConstructionInfo(entity.PhysicsBody.Mass, null, meshShape, BulletSharp.Math.Vector3.Zero);
+                bodyInfo = new RigidBodyConstructionInfo(physBody.Mass, null, meshShape, BulletSharp.Math.Vector3.Zero);
             }
             else
             {
                 // Create a collision shape from the bounding box
-                var boxShape = new BoxShape(new BulletSharp.Math.Vector3(entity.PhysicsBody.BoundingBox.X, entity.PhysicsBody.BoundingBox.Y, entity.PhysicsBody.BoundingBox.Z));
+                var boxShape = new BoxShape(new BulletSharp.Math.Vector3(physBody.BoundingBox.X, physBody.BoundingBox.X, physBody.BoundingBox.Z));
 
                 // Create a rigid body construction info
                 bodyInfo = new RigidBodyConstructionInfo(1, null, boxShape, BulletSharp.Math.Vector3.Zero);
@@ -93,14 +93,14 @@ namespace SourceRewrite.Physics.Bullet
 
             // Set PhysicsBody properties
             BulletSharp.Math.Vector3 localInertia;
-            bodyInfo.CollisionShape.CalculateLocalInertia(entity.PhysicsBody.Mass, out localInertia);
-            body.SetMassProps(entity.PhysicsBody.Mass, localInertia);
-            body.Friction = entity.PhysicsBody.Friction;
-            body.Restitution = entity.PhysicsBody.Restitution;
+            bodyInfo.CollisionShape.CalculateLocalInertia(physBody.Mass, out localInertia);
+            body.SetMassProps(physBody.Mass, localInertia);
+            body.Friction = physBody.Friction;
+            body.Restitution = physBody.Restitution;
             body.UpdateInertiaTensor();
 
             // Set Object Static
-            if (entity.PhysicsBody.IsStatic)
+            if (physBody.IsStatic)
             {
                 body.CollisionFlags |= CollisionFlags.StaticObject;
                 body.SetMassProps(0, new BulletSharp.Math.Vector3(0, 0, 0));
