@@ -1,4 +1,5 @@
-﻿using FileFormats.MDL.VVD;
+﻿using FileFormats.MDL.VTX;
+using FileFormats.MDL.VVD;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace FileFormats.MDL
     {
         public MDLHeader Header;
 
+        public VTXFormat VTX;
         public VVDFormat VVD;
 
         public MDLFormat(string path)
@@ -36,6 +38,9 @@ namespace FileFormats.MDL
             // Load other Files
             string vvdPath = path.Replace(".mdl", ".vvd");
             VVD = new VVDFormat(vvdPath);
+
+            string vtxPath = path.Replace(".mdl", ".vtx");
+            VTX = new VTXFormat(vtxPath);
         }
     }
 }
