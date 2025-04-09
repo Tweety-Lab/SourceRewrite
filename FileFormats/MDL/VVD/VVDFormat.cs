@@ -30,13 +30,23 @@ namespace FileFormats.MDL.VVD
                 Header.Version = reader.ReadInt32();
                 Header.Checksum = reader.ReadInt32();
 
+                Console.WriteLine($"Checksum: {Header.Checksum}");
+
                 Header.NumLOD = reader.ReadInt32();
                 Header.NumLODVertices = reader.ReadInt32();
                 Header.NumFixups = reader.ReadInt32();
 
+                Console.WriteLine($"NumLOD: {Header.NumLOD}");
+                Console.WriteLine($"NumLODVertices: {Header.NumLODVertices}");
+                Console.WriteLine($"NumFixups: {Header.NumFixups}");
+
                 Header.FixupTableStart = reader.ReadInt32();
                 Header.VertexDataStart = reader.ReadInt32();
                 Header.TangentDataStart = reader.ReadInt32();
+
+                Console.WriteLine($"FixupTableStart: {Header.FixupTableStart}");
+                Console.WriteLine($"VertexDataStart: {Header.VertexDataStart}");
+                Console.WriteLine($"TangentDataStart: {Header.TangentDataStart}");
 
                 // ====== FIXUP TABLE ======= //
 
@@ -60,9 +70,13 @@ namespace FileFormats.MDL.VVD
                 // Read the vertices for the top level LOD
                 Vertices = new VVDVertex[VVDFixupTables[0].NumVertices];
 
+                // Move the reader to the vertex data start
+                reader.BaseStream.Seek(64, SeekOrigin.Begin);
+
                 for (int i = 0; i < VVDFixupTables[0].NumVertices; i++)
                 {
                     VVDVertex vertex = new VVDVertex();
+                    Console.WriteLine($"Processing Vertex {i}");
 
                     // Skip Bone Weights
                     vertex.BoneWeights.Weight = new float[3];
@@ -80,6 +94,8 @@ namespace FileFormats.MDL.VVD
                     vertex.Position.X = reader.ReadSingle();
                     vertex.Position.Y = reader.ReadSingle();
                     vertex.Position.Z = reader.ReadSingle();
+
+                    Console.WriteLine($"Position: {vertex.Position.X}, {vertex.Position.Y}, {vertex.Position.Z}");
 
                     // Read the normal
                     vertex.Normal.X = reader.ReadSingle();

@@ -46,32 +46,33 @@ namespace SourceRewrite.AssetTypes
                 Console.WriteLine(MDL.VVD.Header.ID);
                 Console.WriteLine(MDL.VVD.Header.Checksum);
 
+                // For an MDL quad, ensure consistent coordinate system and proper winding
                 foreach (VVDVertex vertex in MDL.VVD.Vertices)
                 {
-                    // Add X, Y, Z components for position
-                    vertexData.Add(vertex.Position.X * 50);
-                    vertexData.Add(vertex.Position.Y * 50);
-                    vertexData.Add(vertex.Position.Z * 50);
+                    // Add position
+                    vertexData.Add(vertex.Position.X);
+                    vertexData.Add(vertex.Position.Z); // Y up to Z up conversion
+                    vertexData.Add(-vertex.Position.Y); // Negate Y for correct handedness
 
-                    // Add X, Y, Z components for normal
+                    // normals
                     normalData.Add(vertex.Normal.X);
-                    normalData.Add(vertex.Normal.Y);
                     normalData.Add(vertex.Normal.Z);
+                    normalData.Add(-vertex.Normal.Y);
                 }
 
+                // Set all the data
                 Vertices = vertexData.ToArray();
                 Normals = normalData.ToArray();
+                UVs = uvData.ToArray();
 
-                int triangleCount = vertexData.Count / 9; // 3 vertices per triangle, 3 floats per vertex
-                Indices = new uint[triangleCount * 3];
-
-                for (int i = 0; i < triangleCount * 3; i++)
+                // EXAMPLE INDICES
+                Indices = new uint[]
                 {
-                    Indices[i] = (uint)i;
-                }
-
-
-            } else
+                    0, 2, 1,  // First triangle (top-right, top-left, bottom-right)
+                    1, 2, 3   // Second triangle (bottom-right, top-left, bottom-left)
+                };
+            }
+            else
             {
                 // Use Assimp to load generic mesh types
                 var assimp = Assimp.GetApi();
