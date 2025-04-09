@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceRewrite.Physics
+namespace SourceRewrite.PhysicsSystem
 {
     public class PhysicsBody
     {

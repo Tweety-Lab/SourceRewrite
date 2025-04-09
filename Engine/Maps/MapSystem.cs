@@ -7,7 +7,7 @@ using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Attributes;
 using FileFormats.BSP.IO;
-using SourceRewrite.Physics;
+using SourceRewrite.PhysicsSystem;
 
 namespace SourceRewrite.Maps
 {

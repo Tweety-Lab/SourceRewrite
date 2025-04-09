@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SourceRewrite.Physics.Bullet;
+using SourceRewrite.PhysicsSystem.Bullet;
 using SourceRewrite.TimeSystem;
 using System.Numerics;
 using SourceRewrite.Entities;
 
-namespace SourceRewrite.Physics
+namespace SourceRewrite.PhysicsSystem
 {
     public class PhysicsContext
     {
@@ -25,7 +25,7 @@ namespace SourceRewrite.Physics
             { PhysicsAPI.Bullet, typeof(BulletContext) }
         };
 
-        private readonly IPhysicsAPI _apiInterface; // Use an interface for better abstraction
+        public readonly IPhysicsAPI APIInterface; // Use an interface for better abstraction
         public PhysicsContext(PhysicsAPI chosenPhysics)
         {
             API = chosenPhysics; // Pass chosen renderer to our API variable
@@ -36,7 +36,7 @@ namespace SourceRewrite.Physics
             // Create the Physics Context
             if (physicsType != null)
             {
-                _apiInterface = (IPhysicsAPI)Activator.CreateInstance(physicsType);
+                APIInterface = (IPhysicsAPI)Activator.CreateInstance(physicsType);
             }
             else
             {
@@ -46,27 +46,12 @@ namespace SourceRewrite.Physics
 
         public void OnLoad()
         {
-            _apiInterface.OnLoad();
+            APIInterface.OnLoad();
         }
 
         public void Update()
         {
-            _apiInterface.Update();
-        }
-
-        public void InitPhysicsEntity(PointEntity physEntity, PhysicsBody body)
-        {
-            _apiInterface.InitPhysicsEntity(physEntity, body);
-        }
-
-        public void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity)
-        {
-            _apiInterface.SetEntityAbsVelocity(entity, velocity);
-        }
-
-        public BaseEntity RayCast(PhysicsRay ray)
-        {
-            return _apiInterface.RayCast(ray);
+            APIInterface.Update();
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using SourceRewrite.Attributes;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Physics;
+using SourceRewrite.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace SourceRewrite.Entities.Meshes
         {
             base.Start();
 
-            PhysicsBody body = new Physics.PhysicsBody();
+            PhysicsBody body = new PhysicsSystem.PhysicsBody();
             body.CollisionMesh = Mesh;
             body.Mass = 1f;
             PhysicsInitNormal(body);

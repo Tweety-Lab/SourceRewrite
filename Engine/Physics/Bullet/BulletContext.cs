@@ -9,7 +9,7 @@ using SourceRewrite.Entities;
 using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 
-namespace SourceRewrite.Physics.Bullet
+namespace SourceRewrite.PhysicsSystem.Bullet
 {
     public class BulletContext : IPhysicsAPI
     {

@@ -5,7 +5,7 @@ using SourceRewrite.Entities;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
-using SourceRewrite.Physics;
+using SourceRewrite.PhysicsSystem;
 using SourceRewrite.TimeSystem;
 using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
@@ -117,7 +117,7 @@ namespace Game.Entities
             if (Input.GetMouseButtonDown(0))
             {
                 // Get the mouse position
-                BaseEntity hitEnt = GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.RayCast(new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward));
+                BaseEntity hitEnt = Physics.RayCast(new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward));
 
                 if (hitEnt != null)
                     hitEnt.DestroyDeferred();

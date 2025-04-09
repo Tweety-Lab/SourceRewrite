@@ -1,4 +1,4 @@
-﻿using SourceRewrite.Physics;
+﻿using SourceRewrite.PhysicsSystem;
 using SourceRewrite.Windowing;
 using SourceRewrite.Windowing.Modules;
 using System;
@@ -24,12 +24,12 @@ namespace SourceRewrite.Entities
         public void PhysicsInitNormal(PhysicsBody body)
         {
             // Register this entity with the physics context
-            GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.InitPhysicsEntity(this, body);
+            Physics.InitPhysicsEntity(this, body);
         }
 
         public void SetAbsVelocity(Vector3 velocity)
         {
-            GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.SetEntityAbsVelocity(this, velocity);
+            Physics.SetEntityAbsVelocity(this, velocity);
         }
     }
 }

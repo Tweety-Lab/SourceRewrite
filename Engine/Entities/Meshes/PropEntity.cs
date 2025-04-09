@@ -2,7 +2,7 @@
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
 using SourceRewrite.Files;
-using SourceRewrite.Physics;
+using SourceRewrite.PhysicsSystem;
 using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Entities
