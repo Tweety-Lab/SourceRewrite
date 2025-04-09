@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "273"
+	"mapversion" "279"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "273"
+	"mapversion" "279"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -878,7 +878,7 @@ entity
 	"mincpulevel" "0"
 	"mingpulevel" "0"
 	"minhealthdmg" "0"
-	"model" "primitives/sphere.model"
+	"model" "models/props_underground/underground_weighted_cube.mdl"
 	"nodamageforces" "0"
 	"PerformanceMode" "0"
 	"physdamagescale" "0.1"
@@ -889,7 +889,7 @@ entity
 	"rendermode" "0"
 	"shadowcastdist" "0"
 	"shadowdepthnocache" "0"
-	"skin" "white"
+	"skin" "0"
 	"spawnflags" "256"
 	"origin" "32 0 128"
 	editor
