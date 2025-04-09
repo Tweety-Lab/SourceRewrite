@@ -103,7 +103,7 @@ namespace SourceRewrite.Maps
                 sideGeometry.Mesh = sideMesh;
 
                 // Register Physics for Geometry
-                PhysicsBody body = new Physics.PhysicsBody();
+                PhysicsBody body = new PhysicsBody();
                 body.IsStatic = true; // Set to static for map geometry
                 body.CollisionMesh = sideMesh;
 

@@ -1,11 +1,15 @@
-﻿using SourceRewrite.AssetTypes;
+﻿using BulletSharp;
+using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
 using SourceRewrite.Files;
+using SourceRewrite.Physics;
 using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.Entities
 {
-    [Entity("prop_static")]
+    /// <summary>
+    /// Base Entity for all Prop Entities.
+    /// </summary>
     [AlwaysExecute]
     public class PropEntity : MeshEntity
     {
