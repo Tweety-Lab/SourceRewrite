@@ -1,4 +1,5 @@
-﻿using FileFormats.MDL.VTX;
+﻿using FileFormats.MDL.PHY;
+using FileFormats.MDL.VTX;
 using FileFormats.MDL.VVD;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace FileFormats.MDL
 
         public VTXFormat VTX;
         public VVDFormat VVD;
+        public PHYFormat PHY;
 
         public MDLFormat(string path)
         {
@@ -41,6 +43,9 @@ namespace FileFormats.MDL
 
             string vtxPath = path.Replace(".mdl", ".vtx");
             VTX = new VTXFormat(vtxPath);
+
+            string phyPath = path.Replace(".mdl", ".phy");
+            PHY = new PHYFormat(phyPath);
         }
     }
 }
