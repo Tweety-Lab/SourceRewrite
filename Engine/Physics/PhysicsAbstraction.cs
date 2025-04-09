@@ -27,5 +27,10 @@ namespace SourceRewrite.PhysicsSystem
         {
             return Context.APIInterface.RayCast(ray);
         }
+
+        public static void DestroyPhysicsEntity(PointEntity physEntity)
+        {
+            Context.APIInterface.DestroyPhysicsEntity(physEntity);
+        }
     }
 }

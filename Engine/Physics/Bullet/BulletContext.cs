@@ -118,6 +118,16 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             entities.Add(entity, body);
         }
 
+        public void DestroyPhysicsEntity(PointEntity entity)
+        {
+            if (entities.TryGetValue(entity, out RigidBody body))
+            {
+                dynamicsWorld.RemoveRigidBody(body);
+                entities.Remove(entity);
+                body.Dispose();
+            }
+        }
+
         public void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity)
         {
             if (entities.TryGetValue(entity, out RigidBody body))
@@ -131,7 +141,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         {
             // Perform a raycast
             var rayFrom = new BulletSharp.Math.Vector3(ray.Origin.X, ray.Origin.Y, ray.Origin.Z);
-            var rayTo = new BulletSharp.Math.Vector3(ray.Direction.X * 9999999f, ray.Direction.Y * 9999999f, ray.Direction.Z * 9999999f);
+            var rayTo = new BulletSharp.Math.Vector3(ray.Direction.X * 999999f, ray.Direction.Y * 999999f, ray.Direction.Z * 999999f);
             var rayResult = new ClosestRayResultCallback(ref rayFrom, ref rayTo);
             dynamicsWorld.RayTest(rayFrom, rayTo, rayResult);
 

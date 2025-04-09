@@ -1,4 +1,5 @@
 ﻿using Silk.NET.Input;
+using Silk.NET.Windowing;
 using SourceRewrite;
 using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
@@ -116,11 +117,12 @@ namespace Game.Entities
 
             if (Input.GetMouseButtonDown(0))
             {
-                // Get the mouse position
-                BaseEntity hitEnt = Physics.RayCast(new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward));
-
+                PhysicsRay physicsRay = new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward);
+                BaseEntity hitEnt = Physics.RayCast(physicsRay);
                 if (hitEnt != null)
+                {
                     hitEnt.DestroyDeferred();
+                }
             }
         }
     }

@@ -68,12 +68,18 @@ namespace SourceRewrite.PhysicsSystem
         void Update();
 
         /// <summary>
-        /// Convert a bounding box to a collidable object.
+        /// Allows an Entity to have Physics.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <param name="kinematic"></param>
         void InitPhysicsEntity(PointEntity physEntity, PhysicsBody body);
+
+        /// <summary>
+        /// Destroy a Physics for an Entity.
+        /// </summary>
+        /// <param name="physEntity"></param>
+        void DestroyPhysicsEntity(PointEntity physEntity);
 
         /// <summary>
         /// Set the absolute velocity of an entity.

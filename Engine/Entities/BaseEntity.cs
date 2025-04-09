@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.Attributes;
+using SourceRewrite.PhysicsSystem;
 using System.Numerics;
 using System.Reflection;
 
@@ -101,6 +102,12 @@ namespace SourceRewrite.Entities
 
             // Run Entity destroy logic
             OnDestroy();
+
+            // Remove any physics
+            if (this is PointEntity)
+            {
+                Physics.DestroyPhysicsEntity(this as PointEntity);
+            }
 
             // Prevent enumeration issues
             List<BaseEntity> childrenToDestroy = new List<BaseEntity>(Children);
