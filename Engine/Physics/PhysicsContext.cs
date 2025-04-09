@@ -63,6 +63,11 @@ namespace SourceRewrite.Physics
         {
             _apiInterface.SetEntityAbsVelocity(entity, velocity);
         }
+
+        public BaseEntity RayCast(PhysicsRay ray)
+        {
+            return _apiInterface.RayCast(ray);
+        }
     }
 
     public interface IPhysicsAPI
@@ -91,6 +96,14 @@ namespace SourceRewrite.Physics
         /// <param name="entity"></param>
         /// <param name="velocity"></param>
         void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity);
+
+        /// <summary>
+        /// Raycast from the origin to the direction.
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="direction"></param>
+        /// <returns>Hit Entity</returns>
+        BaseEntity RayCast(PhysicsRay ray);
     }
 
     /// <summary>

@@ -5,7 +5,10 @@ using SourceRewrite.Entities;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.InputSystem;
 using SourceRewrite.Maths;
+using SourceRewrite.Physics;
 using SourceRewrite.TimeSystem;
+using SourceRewrite.Windowing;
+using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
 namespace Game.Entities
@@ -109,6 +112,15 @@ namespace Game.Entities
             else
             {
                 Input.UnlockCursor();
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                // Get the mouse position
+                BaseEntity hitEnt = GameWindow.CurrentWindow.Modules.GetModule<PhysicsModule>().Context.RayCast(new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward));
+
+                if (hitEnt != null)
+                    hitEnt.DestroyDeferred();
             }
         }
     }

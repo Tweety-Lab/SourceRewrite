@@ -126,5 +126,28 @@ namespace SourceRewrite.Physics.Bullet
                 body.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
             }
         }
+
+        public BaseEntity RayCast(PhysicsRay ray)
+        {
+            // Perform a raycast
+            var rayFrom = new BulletSharp.Math.Vector3(ray.Origin.X, ray.Origin.Y, ray.Origin.Z);
+            var rayTo = new BulletSharp.Math.Vector3(ray.Direction.X * 9999999f, ray.Direction.Y * 9999999f, ray.Direction.Z * 9999999f);
+            var rayResult = new ClosestRayResultCallback(ref rayFrom, ref rayTo);
+            dynamicsWorld.RayTest(rayFrom, rayTo, rayResult);
+
+            if (rayResult.HasHit)
+            {
+                // Get the entity that was hit
+                foreach (var entity in entities)
+                {
+                    if (entity.Value == rayResult.CollisionObject)
+                    {
+                        return entity.Key;
+                    }
+                }
+            }
+
+            return null; // No entity hit
+        }
     }
 }
