@@ -105,6 +105,8 @@ namespace FileFormats.MDL
     // 64 Bytes Long
     public struct MDLTexture
     {
+        // Number of bytes past the beginning of this structure
+        // where the first character of the texture name can be found
         public int NameOffset;
         public int Flags;
 

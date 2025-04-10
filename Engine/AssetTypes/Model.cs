@@ -10,9 +10,6 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Model : Mesh
     {
-        public Texture Texture;
-        public Shader Shader;
-
         // Create a Model from file path
         public unsafe Model(string filePath, Material material)
         {
@@ -25,7 +22,7 @@ namespace SourceRewrite.AssetTypes
             }
 
             Material = material;
-            Shader = Material.Shader;
+            Material.Shader = material.Shader;
 
             if (filePath.EndsWith(".mdl"))
             {
@@ -35,16 +32,6 @@ namespace SourceRewrite.AssetTypes
                 List<float> uvData = new();
 
                 MDLFormat MDL = new MDLFormat(filePath);
-                Console.WriteLine("MDL Data:");
-                Console.WriteLine(MDL.Header.Version);
-                Console.WriteLine(MDL.Header.Name);
-                Console.WriteLine(MDL.Header.ID);
-                Console.WriteLine(MDL.Header.Checksum);
-
-                Console.WriteLine("VVD Data:");
-                Console.WriteLine(MDL.VVD.Header.Version);
-                Console.WriteLine(MDL.VVD.Header.ID);
-                Console.WriteLine(MDL.VVD.Header.Checksum);
 
                 // For an MDL quad, ensure consistent coordinate system and proper winding
                 foreach (VVDVertex vertex in MDL.VVD.Vertices)
@@ -71,6 +58,8 @@ namespace SourceRewrite.AssetTypes
                     0, 2, 1,  // First triangle (top-right, top-left, bottom-right)
                     1, 2, 3   // Second triangle (bottom-right, top-left, bottom-left)
                 };
+
+                Material = FileSystem.GetMaterial(MDL.Textures[0]);
             }
             else
             {

@@ -15,9 +15,17 @@ namespace FileFormats.MDL
     /// </summary>
     public class MDLFormat
     {
-        public List<string> TextureNames = new List<string>();
+        /// <summary>
+        /// Path of requested .VMT Textures
+        /// </summary>
+        public List<string> Textures = new List<string>();
+
+        /// <summary>
+        /// Model Header.
+        /// </summary>
         public MDLHeader Header;
 
+        // Other Files
         public VTXFormat VTX;
         public VVDFormat VVD;
         public PHYFormat PHY;
@@ -72,6 +80,9 @@ namespace FileFormats.MDL
                 Header.TextureCount = reader.ReadInt32();
                 Header.TextureOffset = reader.ReadInt32();
 
+                // Set Texture Names
+                Textures = GetTextureNames(reader);
+
                 // This Offset Points to a series of ints
                 // Each int value, in turn, is an offset relative to the start of the file
                 // at which there is a null-terminated string
@@ -102,5 +113,64 @@ namespace FileFormats.MDL
             if (File.Exists(phyPath))
                 PHY = new PHYFormat(phyPath);
         }
+
+        private List<string> GetTextureNames(BinaryReader reader)
+        {
+            List<string> textureNames = new List<string>();
+
+            // Go to offset
+            int currentOffset = (int)reader.BaseStream.Position;
+            reader.BaseStream.Seek(Header.TextureOffset, SeekOrigin.Begin);
+
+            // Read the texture offset
+            int textureOffset = reader.ReadInt32();
+
+            // Goto the texture offset accounting for the extra 4 bytes
+            reader.BaseStream.Seek(textureOffset - 4, SeekOrigin.Current);
+
+            // Read texture Name
+            string textureName = MDLHelper.ReadNullTerminatedString(reader, ASCIIEncoding.ASCII);
+            textureNames.Add(textureName);
+
+            // Return to original position
+            reader.BaseStream.Seek(currentOffset, SeekOrigin.Begin);
+
+            return textureNames;
+        }
+    }
+
+    public static class MDLHelper
+    {
+        public static string ReadNullTerminatedString(BinaryReader reader, Encoding encoding)
+        {
+            List<byte> bytes = new List<byte>();
+            bool started = false;
+            byte b;
+
+            while (true)
+            {
+                b = reader.ReadByte();
+
+                if (b == 0)
+                {
+                    if (!started)
+                    {
+                        // First byte is null, ignore and continue
+                        continue;
+                    }
+                    else
+                    {
+                        // Reached end of string
+                        break;
+                    }
+                }
+
+                started = true;
+                bytes.Add(b);
+            }
+
+            return encoding.GetString(bytes.ToArray());
+        }
+
     }
 }

@@ -98,7 +98,6 @@ namespace FileFormats.MDL.VVD
                 for (int i = 0; i < vertexCount; i++)
                 {
                     VVDVertex vertex = new VVDVertex();
-                    Console.WriteLine($"Processing Vertex {i}");
 
                     // Skip Bone Weights
                     vertex.BoneWeights.Weight = new float[3];
@@ -116,8 +115,6 @@ namespace FileFormats.MDL.VVD
                     vertex.Position.X = reader.ReadSingle();
                     vertex.Position.Y = reader.ReadSingle();
                     vertex.Position.Z = reader.ReadSingle();
-
-                    Console.WriteLine($"Position: {vertex.Position.X}, {vertex.Position.Y}, {vertex.Position.Z}");
 
                     // Read the normal
                     vertex.Normal.X = reader.ReadSingle();

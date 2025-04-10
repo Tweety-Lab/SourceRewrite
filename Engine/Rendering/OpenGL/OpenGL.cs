@@ -170,7 +170,7 @@ namespace SourceRewrite.Rendering.OpenGL
         {
             if (meshObject == null)
                 throw new ArgumentNullException(nameof(meshObject));
-
+            
             if (!meshBufferMap.ContainsKey(meshObject))
                 throw new InvalidOperationException("Mesh has not been initialized.");
 
