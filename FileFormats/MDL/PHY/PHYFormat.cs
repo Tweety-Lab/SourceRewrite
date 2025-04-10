@@ -17,10 +17,6 @@ namespace FileFormats.MDL.PHY
         {
             Header = new PHYHeader();
 
-            // Check if the file exists
-            if (!File.Exists(path))
-                return;
-
             // Start reading the file
             using (var reader = new BinaryReader(File.Open(path, FileMode.Open)))
             {

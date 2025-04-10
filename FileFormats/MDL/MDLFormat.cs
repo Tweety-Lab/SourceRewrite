@@ -45,7 +45,10 @@ namespace FileFormats.MDL
             VTX = new VTXFormat(vtxPath);
 
             string phyPath = path.Replace(".mdl", ".phy");
-            PHY = new PHYFormat(phyPath);
+
+            // Only read .PHY if the file exists
+            if (File.Exists(phyPath))
+                PHY = new PHYFormat(phyPath);
         }
     }
 }
