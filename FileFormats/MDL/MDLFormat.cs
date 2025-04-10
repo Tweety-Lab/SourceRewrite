@@ -15,6 +15,7 @@ namespace FileFormats.MDL
     /// </summary>
     public class MDLFormat
     {
+        public List<string> TextureNames = new List<string>();
         public MDLHeader Header;
 
         public VTXFormat VTX;
@@ -70,6 +71,22 @@ namespace FileFormats.MDL
 
                 Header.TextureCount = reader.ReadInt32();
                 Header.TextureOffset = reader.ReadInt32();
+
+                // This Offset Points to a series of ints
+                // Each int value, in turn, is an offset relative to the start of the file
+                // at which there is a null-terminated string
+                Header.TextureDirCount = reader.ReadInt32();
+                Header.TextureDirOffset = reader.ReadInt32();
+
+                Header.SkinReferenceCount = reader.ReadInt32();
+                Header.SkinFamilyCount = reader.ReadInt32();
+                Header.SkinReferenceIndex = reader.ReadInt32();
+
+                Header.BodyPartCount = reader.ReadInt32();
+                Header.BodyPartOffset = reader.ReadInt32();
+
+                Header.AttachmentCount = reader.ReadInt32();
+                Header.AttachmentOffset = reader.ReadInt32();
             }
 
             // Load other Files

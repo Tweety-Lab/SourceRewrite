@@ -83,5 +83,37 @@ namespace FileFormats.MDL
         // Texture Data
         public int TextureCount;
         public int TextureOffset;
+
+        public int TextureDirCount;
+        public int TextureDirOffset;
+
+        // Skins
+        public int SkinReferenceCount;
+        public int SkinFamilyCount;
+        public int SkinReferenceIndex;
+
+        // Body Parts
+        public int BodyPartCount;
+        public int BodyPartOffset;
+
+        // Attatchment Points
+        public int AttachmentCount;
+        public int AttachmentOffset;
+
+    }
+
+    // 64 Bytes Long
+    public struct MDLTexture
+    {
+        public int NameOffset;
+        public int Flags;
+
+        public int Used; // Padding
+        public int Unused; // Padding
+
+        public int Material;
+        public int ClientMaterial;
+
+        public int[] unused2; // Final Padding
     }
 }
