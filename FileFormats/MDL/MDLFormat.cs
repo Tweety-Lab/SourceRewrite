@@ -4,6 +4,7 @@ using FileFormats.MDL.VVD;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,6 @@ namespace FileFormats.MDL
     /// </summary>
     public class MDLFormat
     {
-
         public MDLHeader Header;
 
         public VTXFormat VTX;
@@ -36,6 +36,19 @@ namespace FileFormats.MDL
 
                 // Read the name
                 Header.Name = new string(reader.ReadChars(64)).Trim('\0');
+                Header.DataLength = reader.ReadInt32();
+
+                // Read Vectors, three 4-byte floats in a row
+                Header.EyePosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Header.IllumPosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Header.HullMin = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Header.HullMax = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Header.ViewBBMin = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                Header.ViewBBMax = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+
+                // Binary flags in little-endian order
+                // ex (0x010000C0) means flags for position 0, 30, and 31 are set
+                Header.Flags = (MDLFlags)reader.ReadUInt32();
             }
 
             // Load other Files
