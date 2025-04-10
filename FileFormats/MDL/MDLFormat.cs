@@ -46,9 +46,30 @@ namespace FileFormats.MDL
                 Header.ViewBBMin = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
                 Header.ViewBBMax = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
-                // Binary flags in little-endian order
-                // ex (0x010000C0) means flags for position 0, 30, and 31 are set
+                // Read Model Flags
                 Header.Flags = (MDLFlags)reader.ReadUInt32();
+
+                // Read Offsets
+                Header.BoneCount = reader.ReadInt32();
+                Header.BoneOffset = reader.ReadInt32();
+
+                Header.BoneControllerCount = reader.ReadInt32();
+                Header.BoneControllerOffset = reader.ReadInt32();
+
+                Header.HitboxCount = reader.ReadInt32();
+                Header.HitboxOffset = reader.ReadInt32();
+
+                Header.LocalAnimCount = reader.ReadInt32();
+                Header.LocalAnimOffset = reader.ReadInt32();
+
+                Header.LocalSequenceCount = reader.ReadInt32();
+                Header.LocalSequenceOffset = reader.ReadInt32();
+
+                Header.ActivityListVersion = reader.ReadInt32();
+                Header.EventsIndexed = reader.ReadInt32();
+
+                Header.TextureCount = reader.ReadInt32();
+                Header.TextureOffset = reader.ReadInt32();
             }
 
             // Load other Files

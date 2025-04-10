@@ -52,5 +52,36 @@ namespace FileFormats.MDL
         public Vector3 ViewBBMax; // Maximum bounding box of model
 
         public MDLFlags Flags; // Flags for the model
+
+        // OFFSETS
+        // Offsets are from the start of the file
+
+        // Bone Data
+        public int BoneCount;
+        public int BoneOffset;
+
+        // Bone Controller Data
+        public int BoneControllerCount;
+        public int BoneControllerOffset;
+
+        // Hitbox Data
+        public int HitboxCount;
+        public int HitboxOffset;
+
+        // Animation Data
+        public int LocalAnimCount;
+        public int LocalAnimOffset;
+
+        // Sequence Data
+        public int LocalSequenceCount;
+        public int LocalSequenceOffset;
+
+        public int ActivityListVersion; // ??
+        public int EventsIndexed; // ??
+
+        // VMT Materials
+        // Texture Data
+        public int TextureCount;
+        public int TextureOffset;
     }
 }
