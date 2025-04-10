@@ -14,6 +14,7 @@ namespace FileFormats.MDL
     /// </summary>
     public class MDLFormat
     {
+
         public MDLHeader Header;
 
         public VTXFormat VTX;

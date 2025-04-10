@@ -11,11 +11,13 @@ namespace FileFormats.MDL.VVD
     /// </summary>
     public class VVDFormat
     {
+        // Determine how many LODs are expected to be in the vvd
+        public const int MAX_NUM_LODS = 8;
+
         public VVDHeader Header;
         public VVDVertex[] Vertices;
 
         private List<VVDFixupTable> VVDFixupTables;
-
 
         public VVDFormat(string filePath)
         {
@@ -33,7 +35,14 @@ namespace FileFormats.MDL.VVD
                 Console.WriteLine($"Checksum: {Header.Checksum}");
 
                 Header.NumLOD = reader.ReadInt32();
-                Header.NumLODVertices = reader.ReadInt32();
+
+                // Read LOD Vertices for every potential LOD
+                Header.NumLODVertices = new int[MAX_NUM_LODS];
+                for (int i = 0; i < MAX_NUM_LODS; i++)
+                {
+                    Header.NumLODVertices[i] = reader.ReadInt32();
+                }
+
                 Header.NumFixups = reader.ReadInt32();
 
                 Console.WriteLine($"NumLOD: {Header.NumLOD}");
@@ -67,13 +76,26 @@ namespace FileFormats.MDL.VVD
 
                 // ====== VERTEX DATA ======= //
 
+                int vertexCount;
+
+                // Check if we have any Fixup Tables
+                if (VVDFixupTables.Count == 0)
+                {
+                    // If we don't have any fixup tables, use the first LOD vertex count
+                    vertexCount = Header.NumLODVertices[0];
+                } else
+                {
+                    // If we have fixup tables, use the first fixup table vertex count (for now)
+                    vertexCount = VVDFixupTables[0].NumVertices;
+                }
+
                 // Read the vertices for the top level LOD
-                Vertices = new VVDVertex[VVDFixupTables[0].NumVertices];
+                Vertices = new VVDVertex[vertexCount];
 
                 // Move the reader to the vertex data start
-                reader.BaseStream.Seek(64, SeekOrigin.Begin);
+                reader.BaseStream.Seek(Header.VertexDataStart, SeekOrigin.Begin);
 
-                for (int i = 0; i < VVDFixupTables[0].NumVertices; i++)
+                for (int i = 0; i < vertexCount; i++)
                 {
                     VVDVertex vertex = new VVDVertex();
                     Console.WriteLine($"Processing Vertex {i}");

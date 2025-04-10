@@ -14,7 +14,7 @@ namespace FileFormats.MDL.VVD
         public int Checksum;
 
         public int NumLOD; // Number of Valid LOD Models
-        public int NumLODVertices; // Number of Vertices in the LOD
+        public int[] NumLODVertices; // Number of Vertices in the LOD
         public int NumFixups; // Number of Fixup tables
 
         public int FixupTableStart; // Offset to the Fixup table
