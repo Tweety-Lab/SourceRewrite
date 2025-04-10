@@ -59,7 +59,8 @@ namespace SourceRewrite.AssetTypes
                     1, 2, 3   // Second triangle (bottom-right, top-left, bottom-left)
                 };
 
-                Material = FileSystem.GetMaterial(MDL.Textures[0]);
+                // MDL Models define their own materials
+                Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
             }
             else
             {

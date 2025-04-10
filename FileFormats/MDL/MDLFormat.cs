@@ -18,7 +18,7 @@ namespace FileFormats.MDL
         /// <summary>
         /// Path of requested .VMT Textures
         /// </summary>
-        public List<string> Textures = new List<string>();
+        public List<string> TexturePaths = new List<string>();
 
         /// <summary>
         /// Model Header.
@@ -81,7 +81,7 @@ namespace FileFormats.MDL
                 Header.TextureOffset = reader.ReadInt32();
 
                 // Set Texture Names
-                Textures = GetTextureNames(reader);
+                TexturePaths = GetTextureNames(reader);
 
                 // This Offset Points to a series of ints
                 // Each int value, in turn, is an offset relative to the start of the file
