@@ -36,7 +36,7 @@ namespace SourceRewrite.AssetTypes
                 foreach (KeyValue keyValue in keyValues.ParentKeys[0].ChildKeyValues)
                 {
                     // Special logic for base texture paths (REPLACE THIS)
-                    if (keyValue.Key == "$basetexture")
+                    if (keyValue.Key.ToLower() == "$basetexture")
                     {
                         Shader.SetParameter("basetexture", new Texture(FileSystem.GetTexturePath((string)keyValue.Value))); // Set the Texture
                     }
