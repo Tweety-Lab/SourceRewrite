@@ -54,6 +54,7 @@ namespace FileFormats.MDL.VTX
                 MeshHeaders = ReadMeshes(reader);
                 StripGroupHeaders = ReadStripGroups(reader);
                 StripHeaders = ReadStrips(reader);
+                MeshIndices = ReadIndices(reader);
 
             }
         }
@@ -243,6 +244,62 @@ namespace FileFormats.MDL.VTX
 
             reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
             return strips;
+        }
+
+        public List<uint> ReadIndices(BinaryReader reader)
+        {
+            List<uint> indices = new List<uint>();
+            int stripHeaderIndex = 0;
+
+            // Loop through each strip group to find its strips and read their indices
+            for (int sg = 0; sg < StripGroupHeaders.Count; sg++)
+            {
+                var stripGroup = StripGroupHeaders[sg];
+                if (stripGroup.NumIndices <= 0)
+                    continue;
+
+                // Calculate the absolute position of the strip group's index data:
+                long stripGroupStart =
+                    Header.BodyPartOffset
+                    + BodyPartHeaders[sg].ModelOffset
+                    + ModelHeaders[sg].LodOffset
+                    + ModelLODHeaders[sg].MeshOffset
+                    + MeshHeaders[sg].StripGroupHeaderOffset;
+
+                // Seek to the strip group's index buffer
+                reader.BaseStream.Seek(stripGroupStart + stripGroup.IndexOffset, SeekOrigin.Begin);
+
+                // Read all indices in this strip group's buffer
+                uint[] stripGroupIndices = new uint[stripGroup.NumIndices];
+                for (int i = 0; i < stripGroup.NumIndices; i++)
+                {
+                    stripGroupIndices[i] = reader.ReadUInt16();
+                }
+
+                // Now, process all strips in this strip group
+                for (int s = 0; s < stripGroup.NumStrips; s++)
+                {
+                    if (stripHeaderIndex >= StripHeaders.Count)
+                        break;
+
+                    var strip = StripHeaders[stripHeaderIndex++];
+                    if (strip.NumIndices <= 0)
+                        continue;
+
+                    // Extract the indices referenced by this strip
+                    for (int i = 0; i < strip.NumIndices; i++)
+                    {
+                        int indexPos = strip.IndexOffset + i;
+                        if (indexPos < stripGroupIndices.Length)
+                        {
+                            indices.Add(stripGroupIndices[indexPos]);
+                            Console.WriteLine($"Index {indices.Count - 1}: {indices[indices.Count - 1]}");
+                        }
+                    }
+                }
+            }
+
+            return indices;
         }
     }
 }

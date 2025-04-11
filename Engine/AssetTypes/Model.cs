@@ -41,6 +41,8 @@ namespace SourceRewrite.AssetTypes
                     vertexData.Add(vertex.Position.Z); // Y up to Z up conversion
                     vertexData.Add(-vertex.Position.Y); // Negate Y for correct handedness
 
+                    Console.WriteLine($"Processed Vertex: {vertex.Position.X}, {vertex.Position.Z}, {vertex.Position.Y}");
+
                     // normals
                     normalData.Add(vertex.Normal.X);
                     normalData.Add(vertex.Normal.Z);
@@ -58,6 +60,14 @@ namespace SourceRewrite.AssetTypes
                     0, 2, 1,  // First triangle (top-right, top-left, bottom-right)
                     1, 2, 3   // Second triangle (bottom-right, top-left, bottom-left)
                 };
+
+                Indices = MDL.VTX.MeshIndices.ToArray();
+
+                foreach (uint index in Indices)
+                {
+                    Console.WriteLine($"Processed Index: {index}");
+                }
+
 
                 // MDL Models define their own materials
                 Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
