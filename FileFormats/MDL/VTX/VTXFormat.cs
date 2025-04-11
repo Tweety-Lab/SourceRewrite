@@ -56,6 +56,8 @@ namespace FileFormats.MDL.VTX
                 StripHeaders = ReadStrips(reader);
                 MeshIndices = ReadIndices(reader);
 
+                ReverseWindingOrder();
+
             }
         }
 
@@ -286,20 +288,59 @@ namespace FileFormats.MDL.VTX
                     if (strip.NumIndices <= 0)
                         continue;
 
-                    // Extract the indices referenced by this strip
-                    for (int i = 0; i < strip.NumIndices; i++)
+                    if ((strip.Flags & StripFlags.IS_TRILIST) != 0)
                     {
-                        int indexPos = strip.IndexOffset + i;
-                        if (indexPos < stripGroupIndices.Length)
+                        // Already a triangle list - add indices directly
+                        for (int i = 0; i < strip.NumIndices; i++)
                         {
-                            indices.Add(stripGroupIndices[indexPos]);
-                            Console.WriteLine($"Index {indices.Count - 1}: {indices[indices.Count - 1]}");
+                            int indexPos = strip.IndexOffset + i;
+                            if (indexPos < stripGroupIndices.Length)
+                            {
+                                indices.Add(stripGroupIndices[indexPos]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Convert triangle strip to triangle list
+                        for (int i = 2; i < strip.NumIndices; i++)
+                        {
+                            int indexPos = strip.IndexOffset + i;
+                            if (indexPos >= stripGroupIndices.Length)
+                                continue;
+
+                            // Determine winding order (even/odd rule for strip triangles)
+                            if (i % 2 == 0)
+                            {
+                                // Even triangle (clockwise)
+                                indices.Add(stripGroupIndices[indexPos - 2]);
+                                indices.Add(stripGroupIndices[indexPos - 1]);
+                                indices.Add(stripGroupIndices[indexPos]);
+                            }
+                            else
+                            {
+                                // Odd triangle (counter-clockwise)
+                                indices.Add(stripGroupIndices[indexPos - 1]);
+                                indices.Add(stripGroupIndices[indexPos - 2]);
+                                indices.Add(stripGroupIndices[indexPos]);
+                            }
                         }
                     }
                 }
             }
 
             return indices;
+        }
+
+        public void ReverseWindingOrder()
+        {
+            for (int i = 0; i < MeshIndices.Count; i += 3)
+            {
+                // Swap the second and third index to reverse the triangle winding
+                uint temp = MeshIndices[i + 1];
+                MeshIndices[i + 1] = MeshIndices[i + 2];
+                MeshIndices[i + 2] = temp;
+            }
         }
     }
 }

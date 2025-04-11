@@ -109,4 +109,6 @@ namespace FileFormats.MDL.VTX
         public int NumTopologyIndices;
         public int TopologyOffset;
     }
+
+
 }

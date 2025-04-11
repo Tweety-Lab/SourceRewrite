@@ -47,6 +47,9 @@ namespace SourceRewrite.AssetTypes
                     normalData.Add(vertex.Normal.X);
                     normalData.Add(vertex.Normal.Y);
                     normalData.Add(vertex.Normal.Z);
+
+                    uvData.Add(vertex.TextureCoordinate.X);
+                    uvData.Add(vertex.TextureCoordinate.Y);
                 }
 
                 // Set all the data
@@ -57,8 +60,8 @@ namespace SourceRewrite.AssetTypes
                 // EXAMPLE INDICES
                 Indices = new uint[]
                 {
-                    0, 2, 1,  // First triangle (top-right, top-left, bottom-right)
-                    1, 2, 3   // Second triangle (bottom-right, top-left, bottom-left)
+                    0, 2, 1,
+                    1, 2, 3
                 };
 
                 Indices = MDL.VTX.MeshIndices.ToArray();
@@ -141,6 +144,7 @@ namespace SourceRewrite.AssetTypes
 
                 assimp.FreeScene(scene); // Cleanup
             }
+
         }
     }
 }
