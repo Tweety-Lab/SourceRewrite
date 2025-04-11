@@ -82,4 +82,31 @@ namespace FileFormats.MDL.VTX
         public int NumTopologyIndices;
         public int TopologyOffset;
     }
+
+    [Flags]
+    public enum StripFlags
+    {
+        IS_TRILIST = 0x01,
+        IS_TRISTRIP = 0x02
+    }
+
+    public struct VTXStripHeader
+    {
+        public int NumIndices;
+        public int IndexOffset;
+
+        public int NumVerts;
+        public int VertOffset;
+
+        public short NumBones;
+
+        public StripFlags Flags;
+
+        public int NumBoneStateChanges;
+        public int BoneStateChangeOffset;
+
+        // V49 stuff
+        public int NumTopologyIndices;
+        public int TopologyOffset;
+    }
 }

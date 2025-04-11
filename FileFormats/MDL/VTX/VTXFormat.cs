@@ -17,11 +17,13 @@ namespace FileFormats.MDL.VTX
         public List<VTXModelLODHeader> ModelLODHeaders;
         public List<VTXMeshHeader> MeshHeaders;
 
-        // Mesh Indices
-        public List<int> MeshIndices;
-
         // This is where the core of the index data is kept
         public List<VTXStripGroupHeader> StripGroupHeaders;
+        public List<VTXStripHeader> StripHeaders;
+
+        // Mesh Indices
+        public List<uint> MeshIndices;
+
 
         public VTXFormat(string path)
         {
@@ -51,6 +53,8 @@ namespace FileFormats.MDL.VTX
                 ModelLODHeaders = ReadModelLODs(reader);
                 MeshHeaders = ReadMeshes(reader);
                 StripGroupHeaders = ReadStripGroups(reader);
+                StripHeaders = ReadStrips(reader);
+
             }
         }
 
@@ -158,8 +162,13 @@ namespace FileFormats.MDL.VTX
 
             for (int i = 0; i < MeshHeaders.Count; i++)
             {
-                // Compute absolute offset: BodyPartOffset + ModelOffset + LodOffset + MeshOffset + StripGroupHeaderOffset
-                long absoluteStripGroupOffset = Header.BodyPartOffset + BodyPartHeaders[i].ModelOffset + ModelHeaders[i].LodOffset + ModelLODHeaders[i].MeshOffset + MeshHeaders[i].StripGroupHeaderOffset;
+                // Calculate the absolute position of the strip group in the file:
+                long absoluteStripGroupOffset = Header.BodyPartOffset
+                             + BodyPartHeaders[i].ModelOffset
+                             + ModelHeaders[i].LodOffset
+                             + ModelLODHeaders[i].MeshOffset
+                             + MeshHeaders[i].StripGroupHeaderOffset;
+
                 reader.BaseStream.Seek(absoluteStripGroupOffset, SeekOrigin.Begin);
 
                 VTXStripGroupHeader stripGroup = new VTXStripGroupHeader();
@@ -181,6 +190,59 @@ namespace FileFormats.MDL.VTX
 
             reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
             return VTXStripGroups;
+        }
+
+        // Read Strips
+        public List<VTXStripHeader> ReadStrips(BinaryReader reader)
+        {
+            int originalPos = (int)reader.BaseStream.Position;
+            List<VTXStripHeader> strips = new List<VTXStripHeader>();
+
+            for (int i = 0; i < StripGroupHeaders.Count; i++)
+            {
+                var stripGroup = StripGroupHeaders[i];
+                if (stripGroup.NumStrips <= 0)
+                    continue;
+
+                // Calculate the absolute position of the strip in the file:
+                // BodyPartOffset + ModelOffset + LODOffset + MeshOffset + StripGroupHeaderOffset
+                long stripGroupStart =
+                    Header.BodyPartOffset
+                    + BodyPartHeaders[i].ModelOffset
+                    + ModelHeaders[i].LodOffset
+                    + ModelLODHeaders[i].MeshOffset
+                    + MeshHeaders[i].StripGroupHeaderOffset;
+
+                // Seek to the strip data
+                reader.BaseStream.Seek(stripGroupStart + stripGroup.StripOffset, SeekOrigin.Begin);
+
+                for (int j = 0; j < stripGroup.NumStrips; j++)
+                {
+                    VTXStripHeader strip = new VTXStripHeader();
+
+                    strip.NumIndices = reader.ReadInt32();
+                    strip.IndexOffset = reader.ReadInt32();
+
+                    strip.NumVerts = reader.ReadInt32();
+                    strip.VertOffset = reader.ReadInt32();
+
+                    strip.NumBones = reader.ReadInt16();
+                    strip.Flags = (StripFlags)reader.ReadByte();
+
+                    strip.NumBoneStateChanges = reader.ReadInt32();
+                    strip.BoneStateChangeOffset = reader.ReadInt32();
+
+                    // v49 stuff
+                    strip.NumTopologyIndices = reader.ReadInt32();
+                    strip.TopologyOffset = reader.ReadInt32();
+
+                    Console.WriteLine($"Strip {j}: NumIndices={strip.NumIndices}, Flags={strip.Flags}, NumBones={strip.NumBones}");
+                    strips.Add(strip);
+                }
+            }
+
+            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
+            return strips;
         }
     }
 }
