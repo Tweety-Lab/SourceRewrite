@@ -56,8 +56,6 @@ namespace FileFormats.MDL.VTX
                 StripHeaders = ReadStrips(reader);
                 MeshIndices = ReadIndices(reader);
 
-                ReverseWindingOrder();
-
             }
         }
 

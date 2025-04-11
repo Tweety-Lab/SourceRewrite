@@ -36,10 +36,9 @@ namespace SourceRewrite.AssetTypes
                 // For an MDL quad, ensure consistent coordinate system and proper winding
                 foreach (VVDVertex vertex in MDL.VVD.Vertices)
                 {
-                    // Add position
                     vertexData.Add(vertex.Position.X);
-                    vertexData.Add(vertex.Position.Y); // Y up to Z up conversion
-                    vertexData.Add(vertex.Position.Z); // Negate Y for correct handedness
+                    vertexData.Add(vertex.Position.Z); // Y = original Z
+                    vertexData.Add(vertex.Position.Y); // Z = original Y
 
                     Console.WriteLine($"Processed Vertex: {vertex.Position.X}, {vertex.Position.Z}, {vertex.Position.Y}");
 
@@ -65,6 +64,8 @@ namespace SourceRewrite.AssetTypes
                 };
 
                 Indices = MDL.VTX.MeshIndices.ToArray();
+
+                UVs = uvData.ToArray();
 
                 foreach (uint index in Indices)
                 {
