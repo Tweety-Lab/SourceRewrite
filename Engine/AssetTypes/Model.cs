@@ -57,13 +57,6 @@ namespace SourceRewrite.AssetTypes
 
                 Normals = normalData.ToArray();
 
-                // EXAMPLE INDICES
-                Indices = new uint[]
-                {
-                    0, 2, 1,
-                    1, 2, 3
-                };
-
                 uint[] uintIndices = MDL.VTX.BodyParts[0].Models[0].LODs[0].Meshes[0].StripGroups[0]
     .Indices.Select(x => (uint)x).ToArray();
 
