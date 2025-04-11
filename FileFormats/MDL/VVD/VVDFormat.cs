@@ -78,15 +78,18 @@ namespace FileFormats.MDL.VVD
 
                 int vertexCount;
 
-                // Check if we have any Fixup Tables
-                if (VVDFixupTables.Count == 0)
+                // Calculate total vertex count from all fixup tables
+                if (Header.NumFixups > 0)
                 {
-                    // If we don't have any fixup tables, use the first LOD vertex count
+                    vertexCount = 0;
+                    foreach (var fixup in VVDFixupTables)
+                    {
+                        vertexCount += fixup.NumVertices;
+                    }
+                }
+                else
+                {
                     vertexCount = Header.NumLODVertices[0];
-                } else
-                {
-                    // If we have fixup tables, use the first fixup table vertex count (for now)
-                    vertexCount = VVDFixupTables[0].NumVertices;
                 }
 
                 // Read the vertices for the top level LOD
@@ -99,7 +102,7 @@ namespace FileFormats.MDL.VVD
                 {
                     VVDVertex vertex = new VVDVertex();
 
-                    // Skip Bone Weights
+                    // Bone Weights
                     vertex.BoneWeights.Weight = new float[3];
                     vertex.BoneWeights.Bone = new byte[3];
 

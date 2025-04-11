@@ -38,21 +38,21 @@ namespace SourceRewrite.AssetTypes
                 {
                     // Add position
                     vertexData.Add(vertex.Position.X);
-                    vertexData.Add(vertex.Position.Z); // Y up to Z up conversion
-                    vertexData.Add(-vertex.Position.Y); // Negate Y for correct handedness
+                    vertexData.Add(vertex.Position.Y); // Y up to Z up conversion
+                    vertexData.Add(vertex.Position.Z); // Negate Y for correct handedness
 
                     Console.WriteLine($"Processed Vertex: {vertex.Position.X}, {vertex.Position.Z}, {vertex.Position.Y}");
 
                     // normals
                     normalData.Add(vertex.Normal.X);
+                    normalData.Add(vertex.Normal.Y);
                     normalData.Add(vertex.Normal.Z);
-                    normalData.Add(-vertex.Normal.Y);
                 }
 
                 // Set all the data
                 Vertices = vertexData.ToArray();
+
                 Normals = normalData.ToArray();
-                UVs = uvData.ToArray();
 
                 // EXAMPLE INDICES
                 Indices = new uint[]
