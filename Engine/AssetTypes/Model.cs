@@ -2,6 +2,7 @@
 using FileFormats.MDL.VVD;
 using Silk.NET.Assimp;
 using SourceRewrite.Files;
+using System.Numerics;
 
 namespace SourceRewrite.AssetTypes
 {
@@ -63,7 +64,10 @@ namespace SourceRewrite.AssetTypes
                     1, 2, 3
                 };
 
-                Indices = MDL.VTX.MeshIndices.ToArray();
+                uint[] uintIndices = MDL.VTX.BodyParts[0].Models[0].LODs[0].Meshes[0].StripGroups[0]
+    .Indices.Select(x => (uint)x).ToArray();
+
+                Indices = uintIndices;
 
                 UVs = uvData.ToArray();
 
@@ -71,7 +75,6 @@ namespace SourceRewrite.AssetTypes
                 {
                     Console.WriteLine($"Processed Index: {index}");
                 }
-
 
                 // MDL Models define their own materials
                 Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
@@ -147,5 +150,6 @@ namespace SourceRewrite.AssetTypes
             }
 
         }
+
     }
 }

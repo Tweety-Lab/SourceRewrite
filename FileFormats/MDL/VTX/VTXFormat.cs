@@ -1,343 +1,225 @@
-﻿using System;
+﻿using FileFormats.MDL.VVD;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace FileFormats.MDL.VTX
 {
-    /// <summary>
-    /// Valve's Source 1 .vtx mesh strip format.
-    /// </summary>
     public class VTXFormat
     {
         public VTXHeader Header;
-
-        // Body Parts
-        public List<VTXBodyPartHeader> BodyPartHeaders;
-        public List<VTXModelHeader> ModelHeaders;
-        public List<VTXModelLODHeader> ModelLODHeaders;
-        public List<VTXMeshHeader> MeshHeaders;
-
-        // This is where the core of the index data is kept
-        public List<VTXStripGroupHeader> StripGroupHeaders;
-        public List<VTXStripHeader> StripHeaders;
-
-        // Mesh Indices
-        public List<uint> MeshIndices;
-
+        public List<VTXBodyPart> BodyParts = new List<VTXBodyPart>();
 
         public VTXFormat(string path)
         {
-            // Load the VTX
-            Header = new VTXHeader();
-
-            // Start reading the file
             using (var reader = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                // Read the header
-                Header.Version = reader.ReadInt32();
-                Header.VertCacheSize = reader.ReadInt32();
-                Header.MaxBonesPerStrip = reader.ReadInt16();
-                Header.MaxBonesPerTri = reader.ReadInt16();
-                Header.MaxBonesPerVert = reader.ReadInt32();
-                Header.Checksum = reader.ReadInt32();
-                Header.NumLODs = reader.ReadInt32();
-                Header.MaterialReplacementListOffset = reader.ReadInt32();
-                Header.NumBodyParts = reader.ReadInt32();
-                Header.BodyPartOffset = reader.ReadInt32();
-
-                Console.WriteLine($"BodyPartOffset: {Header.BodyPartOffset}");
-
-                // Order here DOES matter
-                BodyPartHeaders = ReadBodyParts(reader);
-                ModelHeaders = ReadModels(reader);
-                ModelLODHeaders = ReadModelLODs(reader);
-                MeshHeaders = ReadMeshes(reader);
-                StripGroupHeaders = ReadStripGroups(reader);
-                StripHeaders = ReadStrips(reader);
-                MeshIndices = ReadIndices(reader);
-
-            }
-        }
-
-        // Read BodyPartHeaders
-        public List<VTXBodyPartHeader> ReadBodyParts(BinaryReader reader)
-        {
-            List<VTXBodyPartHeader> VTXBodyParts = new List<VTXBodyPartHeader>();
-
-            int originalPos = (int)reader.BaseStream.Position;
-            reader.BaseStream.Seek(Header.BodyPartOffset, SeekOrigin.Begin);
-
-            for (int i = 0; i < Header.NumBodyParts; i++)
-            {
-                VTXBodyPartHeader bodyPart = new VTXBodyPartHeader();
-                bodyPart.NumModels = reader.ReadInt32();
-                bodyPart.ModelOffset = reader.ReadInt32();
-
-                Console.WriteLine($"Body Part {i}: NumModels = {bodyPart.NumModels}, ModelOffset = {bodyPart.ModelOffset}");
-                VTXBodyParts.Add(bodyPart);
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return VTXBodyParts;
-        }
-
-        // Read ModelHeaders
-        public List<VTXModelHeader> ReadModels(BinaryReader reader)
-        {
-            int originalPos = (int)reader.BaseStream.Position;
-            List<VTXModelHeader> VTXModels = new List<VTXModelHeader>();
-
-            for (int i = 0; i < BodyPartHeaders.Count; i++)
-            {
-                // Compute absolute offset: BodyPartOffset + ModelOffset
-                long absoluteModelOffset = Header.BodyPartOffset + BodyPartHeaders[i].ModelOffset;
-                reader.BaseStream.Seek(absoluteModelOffset, SeekOrigin.Begin);
-
-                VTXModelHeader model = new VTXModelHeader();
-                model.NumLODs = reader.ReadInt32();
-                model.LodOffset = reader.ReadInt32();
-
-                Console.WriteLine($"Model Header {i}: NumLODs = {model.NumLODs}, LodOffset = {model.LodOffset}");
-                VTXModels.Add(model);
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return VTXModels;
-        }
-
-        // Read Model LODs
-        public List<VTXModelLODHeader> ReadModelLODs(BinaryReader reader)
-        {
-            int originalPos = (int)reader.BaseStream.Position;
-            List<VTXModelLODHeader> VTXModelLODs = new List<VTXModelLODHeader>();
-
-            for (int i = 0; i < ModelHeaders.Count; i++)
-            {
-                // Compute absolute offset: BodyPartOffset + ModelOffset + LodOffset
-                long absoluteLodOffset = Header.BodyPartOffset + BodyPartHeaders[i].ModelOffset + ModelHeaders[i].LodOffset;
-                reader.BaseStream.Seek(absoluteLodOffset, SeekOrigin.Begin);
-
-                VTXModelLODHeader modelLOD = new VTXModelLODHeader();
-                modelLOD.NumMeshes = reader.ReadInt32();
-                modelLOD.MeshOffset = reader.ReadInt32();
-                modelLOD.SwitchPoint = reader.ReadSingle();
-
-                Console.WriteLine($"Model LOD {i}: NumMeshes = {modelLOD.NumMeshes}, MeshOffset = {modelLOD.MeshOffset}, SwitchPoint = {modelLOD.SwitchPoint}");
-                VTXModelLODs.Add(modelLOD);
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return VTXModelLODs;
-        }
-
-        // Read Mesh Headers
-        public List<VTXMeshHeader> ReadMeshes(BinaryReader reader)
-        {
-            int originalPos = (int)reader.BaseStream.Position;
-            List<VTXMeshHeader> VTXMeshes = new List<VTXMeshHeader>();
-
-            for (int i = 0; i < ModelLODHeaders.Count; i++)
-            {
-                // Compute absolute offset: BodyPartOffset + ModelOffset + LodOffset + MeshOffset
-                long absoluteMeshOffset = Header.BodyPartOffset + BodyPartHeaders[i].ModelOffset + ModelHeaders[i].LodOffset + ModelLODHeaders[i].MeshOffset;
-                reader.BaseStream.Seek(absoluteMeshOffset, SeekOrigin.Begin);
-
-                VTXMeshHeader mesh = new VTXMeshHeader();
-                mesh.NumStripGroups = reader.ReadInt32();
-                mesh.StripGroupHeaderOffset = reader.ReadInt32();
-                mesh.Flags = (StripGroupFlags)reader.ReadByte();
-
-                Console.WriteLine($"Mesh Header {i}: NumStripGroups = {mesh.NumStripGroups}, StripGroupHeaderOffset = {mesh.StripGroupHeaderOffset}, Flags = {mesh.Flags}");
-                VTXMeshes.Add(mesh);
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return VTXMeshes;
-        }
-
-        // Read Strip Group Headers
-        public List<VTXStripGroupHeader> ReadStripGroups(BinaryReader reader)
-        {
-            int originalPos = (int)reader.BaseStream.Position;
-            List<VTXStripGroupHeader> VTXStripGroups = new List<VTXStripGroupHeader>();
-
-            for (int i = 0; i < MeshHeaders.Count; i++)
-            {
-                // Calculate the absolute position of the strip group in the file:
-                long absoluteStripGroupOffset = Header.BodyPartOffset
-                             + BodyPartHeaders[i].ModelOffset
-                             + ModelHeaders[i].LodOffset
-                             + ModelLODHeaders[i].MeshOffset
-                             + MeshHeaders[i].StripGroupHeaderOffset;
-
-                reader.BaseStream.Seek(absoluteStripGroupOffset, SeekOrigin.Begin);
-
-                VTXStripGroupHeader stripGroup = new VTXStripGroupHeader();
-                stripGroup.NumVerts = reader.ReadInt32();
-                stripGroup.VertOffset = reader.ReadInt32();
-                stripGroup.NumIndices = reader.ReadInt32();
-                stripGroup.IndexOffset = reader.ReadInt32();
-                stripGroup.NumStrips = reader.ReadInt32();
-                stripGroup.StripOffset = reader.ReadInt32();
-                stripGroup.Flags = (StripGroupFlags)reader.ReadByte();
-
-                // V49 Stuff
-                stripGroup.NumTopologyIndices = reader.ReadInt32();
-                stripGroup.TopologyOffset = reader.ReadInt32();
-
-                Console.WriteLine($"Strip Group {i}: NumVerts = {stripGroup.NumVerts}, VertOffset = {stripGroup.VertOffset}, NumIndices = {stripGroup.NumIndices}, IndexOffset = {stripGroup.IndexOffset}, NumStrips = {stripGroup.NumStrips}, StripOffset = {stripGroup.StripOffset}, Flags = {stripGroup.Flags}");
-                VTXStripGroups.Add(stripGroup);
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return VTXStripGroups;
-        }
-
-        // Read Strips
-        public List<VTXStripHeader> ReadStrips(BinaryReader reader)
-        {
-            int originalPos = (int)reader.BaseStream.Position;
-            List<VTXStripHeader> strips = new List<VTXStripHeader>();
-
-            for (int i = 0; i < StripGroupHeaders.Count; i++)
-            {
-                var stripGroup = StripGroupHeaders[i];
-                if (stripGroup.NumStrips <= 0)
-                    continue;
-
-                // Calculate the absolute position of the strip in the file:
-                // BodyPartOffset + ModelOffset + LODOffset + MeshOffset + StripGroupHeaderOffset
-                long stripGroupStart =
-                    Header.BodyPartOffset
-                    + BodyPartHeaders[i].ModelOffset
-                    + ModelHeaders[i].LodOffset
-                    + ModelLODHeaders[i].MeshOffset
-                    + MeshHeaders[i].StripGroupHeaderOffset;
-
-                // Seek to the strip data
-                reader.BaseStream.Seek(stripGroupStart + stripGroup.StripOffset, SeekOrigin.Begin);
-
-                for (int j = 0; j < stripGroup.NumStrips; j++)
+                // Read header
+                Header = new VTXHeader
                 {
-                    VTXStripHeader strip = new VTXStripHeader();
+                    Version = reader.ReadInt32(),
+                    VertCacheSize = reader.ReadInt32(),
+                    MaxBonesPerStrip = reader.ReadInt16(),
+                    MaxBonesPerTri = reader.ReadInt16(),
+                    MaxBonesPerVert = reader.ReadInt32(),
+                    Checksum = reader.ReadInt32(),
+                    NumLODs = reader.ReadInt32(),
+                    MaterialReplacementListOffset = reader.ReadInt32(),
+                    NumBodyParts = reader.ReadInt32(),
+                    BodyPartOffset = reader.ReadInt32()
+                };
 
-                    strip.NumIndices = reader.ReadInt32();
-                    strip.IndexOffset = reader.ReadInt32();
-
-                    strip.NumVerts = reader.ReadInt32();
-                    strip.VertOffset = reader.ReadInt32();
-
-                    strip.NumBones = reader.ReadInt16();
-                    strip.Flags = (StripFlags)reader.ReadByte();
-
-                    strip.NumBoneStateChanges = reader.ReadInt32();
-                    strip.BoneStateChangeOffset = reader.ReadInt32();
-
-                    // v49 stuff
-                    strip.NumTopologyIndices = reader.ReadInt32();
-                    strip.TopologyOffset = reader.ReadInt32();
-
-                    Console.WriteLine($"Strip {j}: NumIndices={strip.NumIndices}, Flags={strip.Flags}, NumBones={strip.NumBones}");
-                    strips.Add(strip);
-                }
-            }
-
-            reader.BaseStream.Seek(originalPos, SeekOrigin.Begin);
-            return strips;
-        }
-
-        public List<uint> ReadIndices(BinaryReader reader)
-        {
-            List<uint> indices = new List<uint>();
-            int stripHeaderIndex = 0;
-
-            // Loop through each strip group to find its strips and read their indices
-            for (int sg = 0; sg < StripGroupHeaders.Count; sg++)
-            {
-                var stripGroup = StripGroupHeaders[sg];
-                if (stripGroup.NumIndices <= 0)
-                    continue;
-
-                // Calculate the absolute position of the strip group's index data:
-                long stripGroupStart =
-                    Header.BodyPartOffset
-                    + BodyPartHeaders[sg].ModelOffset
-                    + ModelHeaders[sg].LodOffset
-                    + ModelLODHeaders[sg].MeshOffset
-                    + MeshHeaders[sg].StripGroupHeaderOffset;
-
-                // Seek to the strip group's index buffer
-                reader.BaseStream.Seek(stripGroupStart + stripGroup.IndexOffset, SeekOrigin.Begin);
-
-                // Read all indices in this strip group's buffer
-                uint[] stripGroupIndices = new uint[stripGroup.NumIndices];
-                for (int i = 0; i < stripGroup.NumIndices; i++)
+                // Read body parts
+                reader.BaseStream.Seek(Header.BodyPartOffset, SeekOrigin.Begin);
+                for (int i = 0; i < Header.NumBodyParts; i++)
                 {
-                    stripGroupIndices[i] = reader.ReadUInt16();
-                }
-
-                // Now, process all strips in this strip group
-                for (int s = 0; s < stripGroup.NumStrips; s++)
-                {
-                    if (stripHeaderIndex >= StripHeaders.Count)
-                        break;
-
-                    var strip = StripHeaders[stripHeaderIndex++];
-                    if (strip.NumIndices <= 0)
-                        continue;
-
-                    if ((strip.Flags & StripFlags.IS_TRILIST) != 0)
+                    var bodyPart = new VTXBodyPart
                     {
-                        // Already a triangle list - add indices directly
-                        for (int i = 0; i < strip.NumIndices; i++)
+                        NumModels = reader.ReadInt32(),
+                        ModelOffset = reader.ReadInt32()
+                    };
+                    BodyParts.Add(bodyPart);
+                }
+
+                // Read models for each body part
+                foreach (var bodyPart in BodyParts)
+                {
+                    reader.BaseStream.Seek(Header.BodyPartOffset + bodyPart.ModelOffset, SeekOrigin.Begin);
+                    for (int i = 0; i < bodyPart.NumModels; i++)
+                    {
+                        var model = new VTXModel
                         {
-                            int indexPos = strip.IndexOffset + i;
-                            if (indexPos < stripGroupIndices.Length)
+                            NumLODs = reader.ReadInt32(),
+                            LodOffset = reader.ReadInt32()
+                        };
+                        bodyPart.Models.Add(model);
+                    }
+                }
+
+                // Read LODs for each model
+                foreach (var bodyPart in BodyParts)
+                {
+                    foreach (var model in bodyPart.Models)
+                    {
+                        reader.BaseStream.Seek(Header.BodyPartOffset + bodyPart.ModelOffset + model.LodOffset, SeekOrigin.Begin);
+                        for (int i = 0; i < model.NumLODs; i++)
+                        {
+                            var lod = new VTXModelLOD
                             {
-                                indices.Add(stripGroupIndices[indexPos]);
-                            }
+                                NumMeshes = reader.ReadInt32(),
+                                MeshOffset = reader.ReadInt32(),
+                                SwitchPoint = reader.ReadSingle()
+                            };
+                            model.LODs.Add(lod);
                         }
                     }
-                    else
-                    {
-                        // Convert triangle strip to triangle list
-                        for (int i = 2; i < strip.NumIndices; i++)
-                        {
-                            int indexPos = strip.IndexOffset + i;
-                            if (indexPos >= stripGroupIndices.Length)
-                                continue;
+                }
 
-                            // Determine winding order (even/odd rule for strip triangles)
-                            if (i % 2 == 0)
+                // Read meshes for each LOD
+                foreach (var bodyPart in BodyParts)
+                {
+                    foreach (var model in bodyPart.Models)
+                    {
+                        foreach (var lod in model.LODs)
+                        {
+                            reader.BaseStream.Seek(Header.BodyPartOffset + bodyPart.ModelOffset + model.LodOffset + lod.MeshOffset, SeekOrigin.Begin);
+                            for (int i = 0; i < lod.NumMeshes; i++)
                             {
-                                // Even triangle (clockwise)
-                                indices.Add(stripGroupIndices[indexPos - 2]);
-                                indices.Add(stripGroupIndices[indexPos - 1]);
-                                indices.Add(stripGroupIndices[indexPos]);
-                            }
-                            else
-                            {
-                                // Odd triangle (counter-clockwise)
-                                indices.Add(stripGroupIndices[indexPos - 1]);
-                                indices.Add(stripGroupIndices[indexPos - 2]);
-                                indices.Add(stripGroupIndices[indexPos]);
+                                var mesh = new VTXMesh
+                                {
+                                    NumStripGroups = reader.ReadInt32(),
+                                    StripGroupHeaderOffset = reader.ReadInt32(),
+                                    Flags = (StripGroupFlags)reader.ReadByte()
+                                };
+                                lod.Meshes.Add(mesh);
                             }
                         }
                     }
                 }
-            }
 
-            return indices;
-        }
+                // Read strip groups for each mesh
+                foreach (var bodyPart in BodyParts)
+                {
+                    foreach (var model in bodyPart.Models)
+                    {
+                        foreach (var lod in model.LODs)
+                        {
+                            foreach (var mesh in lod.Meshes)
+                            {
+                                reader.BaseStream.Seek(
+                                    Header.BodyPartOffset +
+                                    bodyPart.ModelOffset +
+                                    model.LodOffset +
+                                    lod.MeshOffset +
+                                    mesh.StripGroupHeaderOffset,
+                                    SeekOrigin.Begin);
 
-        public void ReverseWindingOrder()
-        {
-            for (int i = 0; i < MeshIndices.Count; i += 3)
-            {
-                // Swap the second and third index to reverse the triangle winding
-                uint temp = MeshIndices[i + 1];
-                MeshIndices[i + 1] = MeshIndices[i + 2];
-                MeshIndices[i + 2] = temp;
+                                for (int i = 0; i < mesh.NumStripGroups; i++)
+                                {
+                                    var stripGroup = new VTXStripGroup
+                                    {
+                                        NumVerts = reader.ReadInt32(),
+                                        VertOffset = reader.ReadInt32(),
+                                        NumIndices = reader.ReadInt32(),
+                                        IndexOffset = reader.ReadInt32(),
+                                        NumStrips = reader.ReadInt32(),
+                                        StripOffset = reader.ReadInt32(),
+                                        Flags = (StripGroupFlags)reader.ReadByte(),
+                                        NumTopologyIndices = reader.ReadInt32(),
+                                        TopologyOffset = reader.ReadInt32()
+                                    };
+                                    mesh.StripGroups.Add(stripGroup);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Read vertices, indices and strips for each strip group
+                foreach (var bodyPart in BodyParts)
+                {
+                    foreach (var model in bodyPart.Models)
+                    {
+                        foreach (var lod in model.LODs)
+                        {
+                            foreach (var mesh in lod.Meshes)
+                            {
+                                foreach (var stripGroup in mesh.StripGroups)
+                                {
+                                    // Read vertices
+                                    reader.BaseStream.Seek(
+                                        Header.BodyPartOffset +
+                                        bodyPart.ModelOffset +
+                                        model.LodOffset +
+                                        lod.MeshOffset +
+                                        mesh.StripGroupHeaderOffset +
+                                        stripGroup.VertOffset,
+                                    SeekOrigin.Begin);
+
+                                    stripGroup.Vertices = new List<VTXVertex>();
+                                    for (int i = 0; i < stripGroup.NumVerts; i++)
+                                    {
+                                        var vertex = new VTXVertex
+                                        {
+                                            BoneWeightIndex = reader.ReadByte(),
+                                            NumBones = reader.ReadByte(),
+                                            OriginalMeshVertexID = reader.ReadUInt16(),
+                                            BoneID = new byte[3]
+                                        };
+                                        vertex.BoneID[0] = reader.ReadByte();
+                                        vertex.BoneID[1] = reader.ReadByte();
+                                        vertex.BoneID[2] = reader.ReadByte();
+                                        stripGroup.Vertices.Add(vertex);
+                                    }
+
+                                    // Read indices
+                                    reader.BaseStream.Seek(
+                                        Header.BodyPartOffset +
+                                        bodyPart.ModelOffset +
+                                        model.LodOffset +
+                                        lod.MeshOffset +
+                                        mesh.StripGroupHeaderOffset +
+                                        stripGroup.IndexOffset,
+                                        SeekOrigin.Begin);
+
+                                    stripGroup.Indices = new List<ushort>();
+                                    for (int i = 0; i < stripGroup.NumIndices; i++)
+                                    {
+                                        stripGroup.Indices.Add(reader.ReadUInt16());
+                                    }
+
+                                    // Read strips
+                                    reader.BaseStream.Seek(
+                                        Header.BodyPartOffset +
+                                        bodyPart.ModelOffset +
+                                        model.LodOffset +
+                                        lod.MeshOffset +
+                                        mesh.StripGroupHeaderOffset +
+                                        stripGroup.StripOffset,
+                                        SeekOrigin.Begin);
+
+                                    for (int i = 0; i < stripGroup.NumStrips; i++)
+                                    {
+                                        var strip = new VTXStrip
+                                        {
+                                            NumIndices = reader.ReadInt32(),
+                                            IndexOffset = reader.ReadInt32(),
+                                            NumVerts = reader.ReadInt32(),
+                                            VertOffset = reader.ReadInt32(),
+                                            NumBones = reader.ReadInt16(),
+                                            Flags = (StripFlags)reader.ReadByte(),
+                                            NumBoneStateChanges = reader.ReadInt32(),
+                                            BoneStateChangeOffset = reader.ReadInt32(),
+                                            NumTopologyIndices = reader.ReadInt32(),
+                                            TopologyOffset = reader.ReadInt32()
+                                        };
+                                        stripGroup.Strips.Add(strip);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

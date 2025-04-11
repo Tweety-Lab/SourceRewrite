@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace FileFormats.MDL.VTX
 {
@@ -10,44 +8,38 @@ namespace FileFormats.MDL.VTX
     {
         public int Version;
         public int VertCacheSize;
-
         public short MaxBonesPerStrip;
         public short MaxBonesPerTri;
         public int MaxBonesPerVert;
-
         public int Checksum;
-
         public int NumLODs;
-
         public int MaterialReplacementListOffset;
-
         public int NumBodyParts;
         public int BodyPartOffset;
     }
 
-
-    public struct VTXBodyPartHeader
+    public class VTXBodyPart
     {
         public int NumModels;
         public int ModelOffset;
+        public List<VTXModel> Models = new List<VTXModel>();
     }
 
-    public struct VTXModelHeader
+    public class VTXModel
     {
         public int NumLODs;
         public int LodOffset;
+        public List<VTXModelLOD> LODs = new List<VTXModelLOD>();
     }
 
-    public struct VTXModelLODHeader
+    public class VTXModelLOD
     {
         public int NumMeshes;
         public int MeshOffset;
-
         public float SwitchPoint;
+        public List<VTXMesh> Meshes = new List<VTXMesh>();
     }
 
-    // Strip Group Flags Flags
-    // We map these to the bits that define them in the .VTX File.
     [Flags]
     public enum StripGroupFlags
     {
@@ -57,58 +49,65 @@ namespace FileFormats.MDL.VTX
         STRIPGROUP_SUPPRESS_HW_MORPH = 0x08
     }
 
-    public struct VTXMeshHeader
+    public class VTXMesh
     {
         public int NumStripGroups;
         public int StripGroupHeaderOffset;
-
         public StripGroupFlags Flags;
+        public List<VTXStripGroup> StripGroups = new List<VTXStripGroup>();
     }
 
-    public struct VTXStripGroupHeader
+    public class VTXStripGroup
     {
         public int NumVerts;
         public int VertOffset;
-
         public int NumIndices;
         public int IndexOffset;
-
         public int NumStrips;
         public int StripOffset;
-
         public StripGroupFlags Flags;
-
-        // V49 stuff
         public int NumTopologyIndices;
         public int TopologyOffset;
+
+        public List<VTXVertex> Vertices = new List<VTXVertex>();
+        public List<ushort> Indices = new List<ushort>();
+        public List<VTXStrip> Strips = new List<VTXStrip>();
     }
 
     [Flags]
     public enum StripFlags
     {
-        IS_TRILIST = 0x01,
+        IS_TRIFAN = 0x01,
         IS_TRISTRIP = 0x02
     }
 
-    public struct VTXStripHeader
+    public class VTXStrip
     {
         public int NumIndices;
         public int IndexOffset;
-
         public int NumVerts;
         public int VertOffset;
-
         public short NumBones;
-
         public StripFlags Flags;
-
         public int NumBoneStateChanges;
         public int BoneStateChangeOffset;
-
-        // V49 stuff
         public int NumTopologyIndices;
         public int TopologyOffset;
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct VTXVertex
+    {
+        public byte BoneWeightIndex;
+        public byte NumBones;
+        public ushort OriginalMeshVertexID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        public byte[] BoneID;
+    }
 
+    public class VTXFile
+    {
+        public VTXHeader Header;
+        public List<VTXBodyPart> BodyParts = new List<VTXBodyPart>();
+    }
 }
