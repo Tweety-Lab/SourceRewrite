@@ -46,12 +46,23 @@ namespace FileFormats.MDL.VTX
         public float SwitchPoint;
     }
 
+    // Strip Group Flags Flags
+    // We map these to the bits that define them in the .VTX File.
+    [Flags]
+    public enum StripGroupFlags
+    {
+        STRIPGROUP_IS_FLEXED = 0x01,
+        STRIPGROUP_IS_HWSKINNED = 0x02,
+        STRIPGROUP_IS_DELTA_FLEXED = 0x04,
+        STRIPGROUP_SUPPRESS_HW_MORPH = 0x08
+    }
+
     public struct VTXMeshHeader
     {
         public int NumStripGroups;
         public int StripGroupHeaderOffset;
 
-        public byte Flags;
+        public StripGroupFlags Flags;
     }
 
     public struct VTXStripGroupHeader
@@ -65,7 +76,7 @@ namespace FileFormats.MDL.VTX
         public int NumStrips;
         public int StripOffset;
 
-        public byte Flags;
+        public StripGroupFlags Flags;
 
         // V49 stuff
         public int NumTopologyIndices;
