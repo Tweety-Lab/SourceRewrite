@@ -57,10 +57,7 @@ namespace SourceRewrite.AssetTypes
 
                 Normals = normalData.ToArray();
 
-                uint[] uintIndices = MDL.VTX.BodyParts[0].Models[0].LODs[0].Meshes[0].StripGroups[0]
-    .Indices.Select(x => (uint)x).ToArray();
-
-                Indices = uintIndices;
+                Indices = MDL.VTX.MeshIndices;
 
                 UVs = uvData.ToArray();
 
