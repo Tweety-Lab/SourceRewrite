@@ -129,8 +129,6 @@ namespace FileFormats.MDL.VTX
                 {
                     MeshIndices[i] = reader.ReadUInt16();
                 }
-
-                Console.WriteLine($"StripGroup.IndexOffset: {StripGroup.IndexOffset}");
             };
         }
 

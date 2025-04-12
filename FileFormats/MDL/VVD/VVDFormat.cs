@@ -32,7 +32,6 @@ namespace FileFormats.MDL.VVD
                 Header.Version = reader.ReadInt32();
                 Header.Checksum = reader.ReadInt32();
 
-                Console.WriteLine($"Checksum: {Header.Checksum}");
 
                 Header.NumLOD = reader.ReadInt32();
 
@@ -45,17 +44,9 @@ namespace FileFormats.MDL.VVD
 
                 Header.NumFixups = reader.ReadInt32();
 
-                Console.WriteLine($"NumLOD: {Header.NumLOD}");
-                Console.WriteLine($"NumLODVertices: {Header.NumLODVertices}");
-                Console.WriteLine($"NumFixups: {Header.NumFixups}");
-
                 Header.FixupTableStart = reader.ReadInt32();
                 Header.VertexDataStart = reader.ReadInt32();
                 Header.TangentDataStart = reader.ReadInt32();
-
-                Console.WriteLine($"FixupTableStart: {Header.FixupTableStart}");
-                Console.WriteLine($"VertexDataStart: {Header.VertexDataStart}");
-                Console.WriteLine($"TangentDataStart: {Header.TangentDataStart}");
 
                 // ====== FIXUP TABLE ======= //
 
