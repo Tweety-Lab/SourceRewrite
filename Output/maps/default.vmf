@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "365"
+	"mapversion" "381"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "365"
+	"mapversion" "381"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -1038,7 +1038,7 @@ entity
 {
 	"id" "1013"
 	"classname" "prop_static"
-	"angles" "0 30 0"
+	"angles" "0 270 -90"
 	"disableflashlight" "0"
 	"disableselfshadowing" "0"
 	"disableshadowdepth" "0"
@@ -1061,7 +1061,7 @@ entity
 	"shadowdepthnocache" "0"
 	"skin" "0"
 	"solid" "6"
-	"origin" "560 240 96"
+	"origin" "192 176 96"
 	editor
 	{
 		"color" "255 255 0"
@@ -1507,7 +1507,7 @@ entity
 	"_light" "215 236 236 200"
 	"_lightHDR" "-1 -1 -1 1"
 	"_lightscaleHDR" "0.7"
-	"angles" "240 0 0"
+	"angles" "0 0 -45"
 	"pitch" "0"
 	"SunSpreadAngle" "0"
 	"origin" "64 -192 128"
