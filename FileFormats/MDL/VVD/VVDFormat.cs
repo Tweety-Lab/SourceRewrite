@@ -17,7 +17,7 @@ namespace FileFormats.MDL.VVD
         public VVDHeader Header;
         public VVDVertex[] Vertices;
 
-        private List<VVDFixupTable> VVDFixupTables;
+        public List<VVDFixupTable> VVDFixupTables;
 
         public VVDFormat(string filePath)
         {

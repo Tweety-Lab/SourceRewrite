@@ -17,7 +17,7 @@ namespace FileFormats.MDL.VTX
         public VTXStripGroup StripGroup;
         public VTXStrip Strip;
 
-        public uint[] MeshIndices;
+        public ushort[] MeshIndices;
 
         public VTXFormat(string filePath)
         {
@@ -98,6 +98,13 @@ namespace FileFormats.MDL.VTX
                 };
                 long stripGroupOffset = meshOffset + Mesh.StripGroupHeaderOffset;
 
+                // After reading StripGroup, load the index and vertex data
+                reader.BaseStream.Seek(stripGroupOffset + StripGroup.IndexOffset, SeekOrigin.Begin);
+                StripGroup.IndexData = reader.ReadBytes(StripGroup.NumIndices * 2); // 2 bytes per UInt16
+
+                reader.BaseStream.Seek(stripGroupOffset + StripGroup.VertOffset, SeekOrigin.Begin);
+                StripGroup.VertexData = reader.ReadBytes(StripGroup.NumVerts * 9); // 9 bytes per vertex (adjust if needed)
+
                 // Navigate to the Strip Array
                 reader.BaseStream.Seek(stripGroupOffset + StripGroup.StripOffset, SeekOrigin.Begin);
                 Strip = new VTXStrip()
@@ -117,7 +124,7 @@ namespace FileFormats.MDL.VTX
 
                 // Navigate to indices
                 reader.BaseStream.Seek(stripGroupOffset + StripGroup.IndexOffset + Strip.IndexOffset, SeekOrigin.Begin);
-                MeshIndices = new uint[Strip.NumIndices];
+                MeshIndices = new ushort[Strip.NumIndices];
                 for (int i = 0; i < Strip.NumIndices; i++)
                 {
                     MeshIndices[i] = reader.ReadUInt16();
@@ -126,5 +133,6 @@ namespace FileFormats.MDL.VTX
                 Console.WriteLine($"StripGroup.IndexOffset: {StripGroup.IndexOffset}");
             };
         }
+
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FileFormats.MDL
 {
@@ -114,6 +115,50 @@ namespace FileFormats.MDL
                 PHY = new PHYFormat(phyPath);
         }
 
+        public uint[] GetMeshIndices()
+        {
+            if (VTX == null)
+                return new uint[0];
+
+            // Get the strip group and strip data
+            var stripGroup = VTX.StripGroup;
+            var strip = VTX.Strip;
+
+            // Create an array to store the final indices
+            uint[] meshIndices = new uint[strip.NumIndices];
+
+            // Read the vertex data from the strip group
+            // (Assuming vertex data is stored in a way similar to the Three.js loader)
+            for (int i = 0; i < strip.NumIndices; i++)
+            {
+                // Step 1: Get the raw index from the strip
+                int rawIndex = strip.IndexOffset + i;
+
+                // Step 2: Read the index from the strip group's index data
+                // (Assuming stripGroup.IndexData is a byte array containing UInt16 indices)
+                int index2 = BitConverter.ToUInt16(stripGroup.IndexData, rawIndex * 2);
+
+                // Step 3: Read the vertex index from the strip group's vertex data
+                // (Assuming vertex data is structured as [position, normal, texcoord, bone weights, etc.])
+                // The Three.js loader uses an offset of +4 bytes to read the vertex index
+                int index3 = BitConverter.ToUInt16(stripGroup.VertexData, index2 * 9 + 4);
+
+                // Step 4: Apply mesh vertex offset (if available)
+                int index4 = VTX.Strip.VertOffset + index3;
+
+                // Step 5: Apply model vertex offset (if available)
+                // (Assuming Header.VertexIndex is in bytes, divide by 48 to get vertex count)
+                int index5 = index4 + (int)(VTX.Strip.VertOffset / 48);
+
+                meshIndices[i] = (uint)index5;
+            }
+
+            // Reverse the indices to fix winding order (like Three.js does)
+            MDLHelper.ReverseInPlace(meshIndices);
+
+            return meshIndices;
+        }
+
         private List<string> GetTextureNames(BinaryReader reader)
         {
             List<string> textureNames = new List<string>();
@@ -137,6 +182,7 @@ namespace FileFormats.MDL
 
             return textureNames;
         }
+
     }
 
     public static class MDLHelper
@@ -170,6 +216,21 @@ namespace FileFormats.MDL
             }
 
             return encoding.GetString(bytes.ToArray());
+        }
+
+        // Reverse an array in-place
+        public static void ReverseInPlace<T>(T[] array)
+        {
+            int i = 0;
+            int j = array.Length - 1;
+            while (i < j)
+            {
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+                i++;
+                j--;
+            }
         }
 
     }

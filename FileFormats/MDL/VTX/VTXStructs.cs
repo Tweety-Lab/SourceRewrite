@@ -88,6 +88,10 @@ namespace FileFormats.MDL.VTX
         // Points to an array of unsigned shorts (16 bits each)
         public int NumTopologyIndices;
         public int TopologyIndexOffset;
+
+        // NEW STUFF:
+        public byte[] IndexData;  // Raw index buffer data
+        public byte[] VertexData; // Raw vertex buffer data
     }
 
     public struct VTXStrip
