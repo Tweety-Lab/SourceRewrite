@@ -17,15 +17,14 @@ namespace Game.Entities
     [Entity("info_player_start")]
     public class CameraController : PointEntity
     {
-
         [ConVar("movement_speed")]
         public static float MovementSpeed { get; set; } = 1512f;
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 20f;
 
-        private float pitch = 0f;
-        private float yaw = 0f;
+        private float pitch = 0f;  // rotation around Right (X)
+        private float yaw = 0f;    // rotation around Up (Z)
 
         public override void Start()
         {
@@ -44,71 +43,73 @@ namespace Game.Entities
             // Initialize rotation angles from current transform
             Vector3 currentEuler = MathsHelper.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
-            yaw = currentEuler.Y;
+            yaw = currentEuler.Z;
         }
 
         public override void Update()
         {
-            // Handle camera movement input (W, A, S, D keys)
             HandleMovementInput(Time.DeltaTime);
-
-            // Handle mouse input for camera rotation
             HandleMouseInput(Time.DeltaTime);
         }
 
-        // Movement input
         private void HandleMovementInput(float deltaTime)
         {
             Vector3 movement = Vector3.Zero;
 
-            // Forward Movement
+            // Forward/Backward
             if (Input.GetDown("forward"))
             {
                 movement += PointCamera.ActiveCamera.Transform.Forward;
             }
 
-            // Backward Movement
             if (Input.GetDown("back"))
             {
                 movement -= PointCamera.ActiveCamera.Transform.Forward;
             }
 
-            // Left Movement
+            // Left/Right
             if (Input.GetDown("left"))
             {
                 movement -= PointCamera.ActiveCamera.Transform.Right;
             }
 
-            // Right Movement
             if (Input.GetDown("right"))
             {
                 movement += PointCamera.ActiveCamera.Transform.Right;
+            }
+
+            // Up/Down (optional — jump or fly cam)
+            if (Input.GetDown("up"))
+            {
+                movement += PointCamera.ActiveCamera.Transform.Up;
+            }
+
+            if (Input.GetDown("down"))
+            {
+                movement -= PointCamera.ActiveCamera.Transform.Up;
             }
 
             // Apply movement
             PointCamera.ActiveCamera.Transform.Position += movement * MovementSpeed * deltaTime;
         }
 
-        // Mouse input for camera rotation
         private void HandleMouseInput(float deltaTime)
         {
-            if (Input.GetMouseButtonDown(1)) // Right Mouse Button held down
+            if (Input.GetMouseButtonDown(1)) // RMB held
             {
                 Input.LockCursor();
 
-                // Mouse Movement (X and Y)
                 float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
                 float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
 
-                // Add to Yaw and Pitch
-                yaw += mouseX;
-                pitch += mouseY;
+                yaw += mouseX;    // Horizontal rotation around Z (yaw)
+                pitch += mouseY;  // Vertical rotation around Right (pitch)
 
-                // Clamp pitch to prevent camera flipping
+                // Clamp pitch to avoid flipping
                 pitch = Math.Clamp(pitch, -89f, 89f);
 
-                // Update the rotation based on yaw and pitch (roll remains 0)
-                PointCamera.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                // Convert euler angles (pitch X, yaw Z, roll Y stays zero)
+                PointCamera.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
             }
             else
             {

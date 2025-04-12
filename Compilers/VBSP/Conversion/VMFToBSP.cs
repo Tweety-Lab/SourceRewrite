@@ -62,8 +62,7 @@ namespace VBSP.Conversion
         /// </summary>
         private static string ConvertEntityToBspString(VMFEntity vmfEntity)
         {
-            // Convert coordinate system: Source uses Y-forward, Z-up, but BSP uses different convention
-            string position = $"\"{-vmfEntity.Origin.Y} {vmfEntity.Origin.Z} {-vmfEntity.Origin.X}\"";
+            string position = $"\"{vmfEntity.Origin.X} {vmfEntity.Origin.Y} {vmfEntity.Origin.Z}\"";
             string rotation = $"\"{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}\"";
 
             // Build properties string using StringBuilder
@@ -150,13 +149,13 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Calculates the vertices for a brush side, converting from VMF to BSP coordinate system.
+        /// Calculates the vertices for a brush side.
         /// </summary>
         private static float[] CalculateSideVertices(VMFSide side)
         {
-            Vector3 p1 = ConvertToYUpCoordSystem(side.plane.Point1);
-            Vector3 p2 = ConvertToYUpCoordSystem(side.plane.Point2);
-            Vector3 p3 = ConvertToYUpCoordSystem(side.plane.Point3);
+            Vector3 p1 = side.plane.Point1;
+            Vector3 p2 = side.plane.Point2;
+            Vector3 p3 = side.plane.Point3;
 
             // Calculate fourth point to form a planar quad
             Vector3 p4 = p3 + (p1 - p2);
@@ -169,14 +168,6 @@ namespace VBSP.Conversion
     p2.X, p2.Y, p2.Z,
     p1.X, p1.Y, p1.Z
             };
-        }
-
-        /// <summary>
-        /// Converts a point from VMF coordinate system to BSP's Y-up coordinate system.
-        /// </summary>
-        private static Vector3 ConvertToYUpCoordSystem(Vector3 point)
-        {
-            return new Vector3(-point.Y, point.Z, -point.X);
         }
     }
 }

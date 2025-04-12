@@ -20,7 +20,7 @@ namespace SourceRewrite.Entities
         public string MeshPath { get; set; }
 
         /// <summary>
-        /// Get Material from this path.
+        /// Selected Skin.
         /// </summary>
         [EntityProperty("skin")]
         public string Skin { get; set; }

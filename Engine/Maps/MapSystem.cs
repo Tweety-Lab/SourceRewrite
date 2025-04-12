@@ -171,11 +171,10 @@ namespace SourceRewrite.Maps
                 KeyValue rotationKeyValue = entityKeyValues.GetKeyValue("rotation");
                 KeyValue scaleKeyValue = entityKeyValues.GetKeyValue("scale");
 
-                // Adjust position relative to the WorldTransform's Position
-                Vector3 adjustedPosition = (Vector3)positionKeyValue.Value;
-                entity.Transform.Position = adjustedPosition;
+                // Set Position
+                entity.Transform.Position = (Vector3)positionKeyValue.Value;
 
-                // Adjust rotation relative to WorldTransform's Rotation
+                // Set Rotation
                 Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
                 entity.Transform.Rotation = adjustedRotation;
 

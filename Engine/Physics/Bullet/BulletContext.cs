@@ -31,7 +31,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
 
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, null, collisionConfiguration);
 
-            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0); // Set gravity
+            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, 0, -9.81f); // Set gravity
         }
 
         public void Update()
