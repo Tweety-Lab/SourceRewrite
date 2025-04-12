@@ -115,6 +115,8 @@ namespace FileFormats.MDL
                 PHY = new PHYFormat(phyPath);
         }
 
+        // Convert The indices to be usable geometry
+        // Help from: https://github.com/gkjohnson/source-engine-model-loader/
         public uint[] GetMeshIndices()
         {
             if (VTX == null)
@@ -128,32 +130,27 @@ namespace FileFormats.MDL
             uint[] meshIndices = new uint[strip.NumIndices];
 
             // Read the vertex data from the strip group
-            // (Assuming vertex data is stored in a way similar to the Three.js loader)
             for (int i = 0; i < strip.NumIndices; i++)
             {
                 // Step 1: Get the raw index from the strip
                 int rawIndex = strip.IndexOffset + i;
 
                 // Step 2: Read the index from the strip group's index data
-                // (Assuming stripGroup.IndexData is a byte array containing UInt16 indices)
                 int index2 = BitConverter.ToUInt16(stripGroup.IndexData, rawIndex * 2);
 
                 // Step 3: Read the vertex index from the strip group's vertex data
-                // (Assuming vertex data is structured as [position, normal, texcoord, bone weights, etc.])
-                // The Three.js loader uses an offset of +4 bytes to read the vertex index
                 int index3 = BitConverter.ToUInt16(stripGroup.VertexData, index2 * 9 + 4);
 
-                // Step 4: Apply mesh vertex offset (if available)
+                // Step 4: Apply mesh vertex offset
                 int index4 = VTX.Strip.VertOffset + index3;
 
-                // Step 5: Apply model vertex offset (if available)
-                // (Assuming Header.VertexIndex is in bytes, divide by 48 to get vertex count)
+                // Step 5: Apply model vertex offset
                 int index5 = index4 + (int)(VTX.Strip.VertOffset / 48);
 
                 meshIndices[i] = (uint)index5;
             }
 
-            // Reverse the indices to fix winding order (like Three.js does)
+            // Reverse the indices to fix winding order
             MDLHelper.ReverseInPlace(meshIndices);
 
             return meshIndices;
