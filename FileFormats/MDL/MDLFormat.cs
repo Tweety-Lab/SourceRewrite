@@ -150,9 +150,6 @@ namespace FileFormats.MDL
                 meshIndices[i] = (uint)index5;
             }
 
-            // Reverse the indices to fix winding order
-            MDLHelper.ReverseInPlace(meshIndices);
-
             return meshIndices;
         }
 
@@ -214,21 +211,5 @@ namespace FileFormats.MDL
 
             return encoding.GetString(bytes.ToArray());
         }
-
-        // Reverse an array in-place
-        public static void ReverseInPlace<T>(T[] array)
-        {
-            int i = 0;
-            int j = array.Length - 1;
-            while (i < j)
-            {
-                T temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-                i++;
-                j--;
-            }
-        }
-
     }
 }

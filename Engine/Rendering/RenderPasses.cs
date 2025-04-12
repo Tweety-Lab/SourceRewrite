@@ -131,7 +131,7 @@ namespace SourceRewrite.Rendering
     public class OpaquePass : BaseRenderPass
     {
         // Enable Depth-Testing and Culling
-        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest };
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullBackFaces };
 
         public override void OnRender() => RenderEntities<MeshEntity>(EntityManager.Root);
 
