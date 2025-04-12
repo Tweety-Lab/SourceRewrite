@@ -150,6 +150,9 @@ namespace FileFormats.MDL
                 meshIndices[i] = (uint)index5;
             }
 
+            // Reverse the array for winding order
+            Array.Reverse(meshIndices);
+
             return meshIndices;
         }
 

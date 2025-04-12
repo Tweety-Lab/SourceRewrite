@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "344"
+	"mapversion" "348"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "344"
+	"mapversion" "348"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -982,7 +982,7 @@ entity
 	"maxgpulevel" "0"
 	"mincpulevel" "0"
 	"mingpulevel" "0"
-	"model" "models/props_underground/underground_testchamber_button.mdl"
+	"model" "models/props_underground/underground_floor_button.mdl"
 	"renderamt" "255"
 	"rendercolor" "255 255 255"
 	"screenspacefade" "0"
@@ -1183,7 +1183,7 @@ entity
 	"id" "622"
 	"classname" "prop_physics"
 	"allowfunnel" "1"
-	"angles" "0 45 0"
+	"angles" "0 0 0"
 	"damagetoenablemotion" "0"
 	"Damagetype" "0"
 	"disableflashlight" "0"
