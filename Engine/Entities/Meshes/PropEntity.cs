@@ -23,12 +23,11 @@ namespace SourceRewrite.Entities
         /// Get Material from this path.
         /// </summary>
         [EntityProperty("skin")]
-        public string MaterialPath { get; set; }
+        public string Skin { get; set; }
 
         public override void Start()
         {
-            Material material = FileSystem.GetMaterial(MaterialPath);
-            Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace("models/", "")), material);
+            Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace("models/", "")));
 
             GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
         }

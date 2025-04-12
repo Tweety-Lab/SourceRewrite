@@ -3,6 +3,7 @@ using FileFormats.MDL.VVD;
 using Silk.NET.Assimp;
 using SourceRewrite.Files;
 using System.Numerics;
+using System.Security.Cryptography;
 
 namespace SourceRewrite.AssetTypes
 {
@@ -12,7 +13,12 @@ namespace SourceRewrite.AssetTypes
     public class Model : Mesh
     {
         // Create a Model from file path
-        public unsafe Model(string filePath, Material material)
+        public Model(string filePath, Material material = null)
+        {
+            CreateModel(filePath, material);
+        }
+
+        private void CreateModel(string filePath, Material material)
         {
             // If Mesh cant be found, set it to ERROR
             if (!System.IO.File.Exists(filePath))
@@ -21,9 +27,6 @@ namespace SourceRewrite.AssetTypes
                 filePath = FileSystem.GetModelPath("dev/error.model");
                 material = FileSystem.GetMaterial("dev/error");
             }
-
-            Material = material;
-            Material.Shader = material.Shader;
 
             if (filePath.EndsWith(".mdl"))
             {
@@ -59,8 +62,15 @@ namespace SourceRewrite.AssetTypes
 
                 UVs = uvData.ToArray();
 
-                // MDL Models define their own materials
-                Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
+                if (material != null)
+                {
+                    Material = material;
+                }
+                else
+                {
+                    // MDL Models define their own materials
+                    Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
+                }
             }
             else
             {
