@@ -174,8 +174,13 @@ namespace SourceRewrite.Maps
                 // Set Position
                 entity.Transform.Position = (Vector3)positionKeyValue.Value;
 
-                // Set Rotation
+                // Get Entity position
+                Vector3 position = entity.Transform.Position;
+
+                // Convert the rotation to a quaternion (adjust rotation if necessary)
                 Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
+
+                // Rotate the entity around its own position, not the world origin
                 entity.Transform.Rotation = adjustedRotation;
 
                 Entities.Add(entity);

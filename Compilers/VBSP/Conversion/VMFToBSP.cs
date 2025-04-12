@@ -63,7 +63,7 @@ namespace VBSP.Conversion
         private static string ConvertEntityToBspString(VMFEntity vmfEntity)
         {
             string position = $"\"{vmfEntity.Origin.X} {vmfEntity.Origin.Y} {vmfEntity.Origin.Z}\"";
-            string rotation = $"\"{vmfEntity.Angles.X} {vmfEntity.Angles.Y} {vmfEntity.Angles.Z}\"";
+            string rotation = $"\"{vmfEntity.Angles.X} {vmfEntity.Angles.Z} {vmfEntity.Angles.Y}\"";
 
             // Build properties string using StringBuilder
             StringBuilder propertiesBuilder = new StringBuilder();

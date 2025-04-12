@@ -40,7 +40,6 @@ namespace SourceRewrite.AssetTypes
                 // For an MDL quad, ensure consistent coordinate system and proper winding
                 foreach (VVDVertex vertex in MDL.VVD.Vertices)
                 { 
-                    
                     vertexData.Add(vertex.Position.X);
                     vertexData.Add(vertex.Position.Y);
                     vertexData.Add(vertex.Position.Z);
