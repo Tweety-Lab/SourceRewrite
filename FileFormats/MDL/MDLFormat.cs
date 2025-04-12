@@ -17,7 +17,12 @@ namespace FileFormats.MDL
     public class MDLFormat
     {
         /// <summary>
-        /// Path of requested .VMT Textures
+        /// Names of requested .VMT Textures
+        /// </summary>
+        public List<string> TextureNames = new List<string>();
+
+        /// <summary>
+        /// Paths of requested .VMT Textures
         /// </summary>
         public List<string> TexturePaths = new List<string>();
 
@@ -82,13 +87,16 @@ namespace FileFormats.MDL
                 Header.TextureOffset = reader.ReadInt32();
 
                 // Set Texture Names
-                TexturePaths = GetTextureNames(reader);
+                TextureNames = GetTextureNames(reader);
 
                 // This Offset Points to a series of ints
                 // Each int value, in turn, is an offset relative to the start of the file
                 // at which there is a null-terminated string
                 Header.TextureDirCount = reader.ReadInt32();
                 Header.TextureDirOffset = reader.ReadInt32();
+
+                // Set Texture Dirs
+                TexturePaths = GetTextureDirs(reader);
 
                 Header.SkinReferenceCount = reader.ReadInt32();
                 Header.SkinFamilyCount = reader.ReadInt32();
@@ -178,6 +186,39 @@ namespace FileFormats.MDL
             reader.BaseStream.Seek(currentOffset, SeekOrigin.Begin);
 
             return textureNames;
+        }
+
+        private List<string> GetTextureDirs(BinaryReader reader)
+        {
+            List<string> textureDirs = new List<string>();
+
+            // Go to offset
+            int currentOffset = (int)reader.BaseStream.Position;
+            reader.BaseStream.Seek(Header.TextureDirOffset, SeekOrigin.Begin);
+
+            // Read the texture offset
+            int textureDirOffset = reader.ReadInt32();
+
+            // Goto the texture offset accounting for the extra 4 bytes
+            reader.BaseStream.Seek(textureDirOffset, SeekOrigin.Begin);
+
+            // Read texture dirs
+            string textureDir = MDLHelper.ReadNullTerminatedString(reader, ASCIIEncoding.ASCII);
+
+            if (textureDir.EndsWith(".mdl"))
+            {
+                textureDirs.Add("");
+            } else
+            {
+                textureDirs.Add(textureDir);
+            }
+
+            Console.WriteLine(textureDir);
+
+            // Return to original position
+            reader.BaseStream.Seek(currentOffset, SeekOrigin.Begin);
+
+            return textureDirs;
         }
 
     }

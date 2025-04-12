@@ -68,8 +68,15 @@ namespace SourceRewrite.AssetTypes
                 }
                 else
                 {
+                    // TODO: Figure out all the different material .MDL stuff instead of just brute forcing
                     // MDL Models define their own materials
-                    Material = FileSystem.GetMaterial(MDL.TexturePaths[0]);
+                    if (MDL.TextureNames[0].Contains("models"))
+                    {
+                        Material = FileSystem.GetMaterial(MDL.TextureNames[0]);
+                    } else
+                    {
+                        Material = FileSystem.GetMaterial(MDL.TexturePaths[0] + MDL.TextureNames[0]);
+                    }
                 }
             }
             else
