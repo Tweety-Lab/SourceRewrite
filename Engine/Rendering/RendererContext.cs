@@ -135,33 +135,28 @@ namespace SourceRewrite.Rendering
                 // Initialize UV array with the same length as the vertices
                 meshObject.UVs = new float[meshObject.Vertices.Length / 3 * 2];
 
-                // Apply fixed UVs for each quad/face
-                for (int i = 0; i < meshObject.Vertices.Length; i += 12) // Assuming 4 vertices (12 coordinates) per face
+                // Apply fixed UVs for each triangle
+                for (int i = 0; i < meshObject.Indices.Length; i += 3) // Process each triangle (3 indices)
                 {
-                    // Default UVs
+                    // Default UVs for a triangle
                     Vector2 uv1 = new Vector2(0, 0);
                     Vector2 uv2 = new Vector2(1, 0);
-                    Vector2 uv3 = new Vector2(1, 1);
-                    Vector2 uv4 = new Vector2(0, 1);
+                    Vector2 uv3 = new Vector2(0, 1);
 
-                    // Apply UVs to each vertex in the face
-                    int baseUvIndex = (i / 3) * 2;
+                    // Get the vertex indices for this triangle
+                    uint idx1 = meshObject.Indices[i] * 2;
+                    uint idx2 = meshObject.Indices[i + 1] * 2;
+                    uint idx3 = meshObject.Indices[i + 2] * 2;
 
-                    // First vertex
-                    meshObject.UVs[baseUvIndex] = uv1.X;
-                    meshObject.UVs[baseUvIndex + 1] = uv1.Y;
+                    // Apply UVs to each vertex in the triangle
+                    meshObject.UVs[idx1] = uv1.X;
+                    meshObject.UVs[idx1 + 1] = uv1.Y;
 
-                    // Second vertex
-                    meshObject.UVs[baseUvIndex + 2] = uv2.X;
-                    meshObject.UVs[baseUvIndex + 3] = uv2.Y;
+                    meshObject.UVs[idx2] = uv2.X;
+                    meshObject.UVs[idx2 + 1] = uv2.Y;
 
-                    // Third vertex
-                    meshObject.UVs[baseUvIndex + 4] = uv3.X;
-                    meshObject.UVs[baseUvIndex + 5] = uv3.Y;
-
-                    // Fourth vertex
-                    meshObject.UVs[baseUvIndex + 6] = uv4.X;
-                    meshObject.UVs[baseUvIndex + 7] = uv4.Y;
+                    meshObject.UVs[idx3] = uv3.X;
+                    meshObject.UVs[idx3 + 1] = uv3.Y;
                 }
             }
 
