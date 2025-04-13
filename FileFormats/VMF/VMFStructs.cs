@@ -31,16 +31,25 @@ namespace FileFormats.VMF
     public struct VMFSide
     {
         public int ID;
-        public Plane plane;
+        public VMFPlane Plane;
         public string Material;
+
+        public VMFUVAxis UAxis;
+        public VMFUVAxis VAxis;
     }
 
     // Solid Brush Side Plane
-    public struct Plane
+    public struct VMFPlane
     {
         public Vector3 Point1;
         public Vector3 Point2;
         public Vector3 Point3;
+    }
+
+    public struct VMFUVAxis
+    {
+        public Vector4 Vector;
+        public float Scale;
     }
 
     // Entity

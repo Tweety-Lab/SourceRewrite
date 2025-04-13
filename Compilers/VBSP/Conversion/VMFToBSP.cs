@@ -132,7 +132,7 @@ namespace VBSP.Conversion
             List<Plane> solidPlanes = new List<Plane>();
             foreach (VMFSide side in solid.Sides)
             {
-                solidPlanes.Add(new Plane(side.plane.Point1, side.plane.Point2, side.plane.Point3));
+                solidPlanes.Add(new Plane(side.Plane.Point1, side.Plane.Point2, side.Plane.Point3));
                 Sides.Add(side);
             }
 
@@ -149,6 +149,19 @@ namespace VBSP.Conversion
                 if (sideVertices.Length < 12) // Need at least 4 vertices (3 coordinates each)
                     continue;
 
+                // Get UV Axis
+                BSPUVAxis UAxis = new BSPUVAxis()
+                {
+                    Axis = side.UAxis.Vector,
+                    Scale = side.UAxis.Scale
+                };
+
+                BSPUVAxis VAxis = new BSPUVAxis()
+                {
+                    Axis = side.VAxis.Vector,
+                    Scale = side.VAxis.Scale
+                };
+
                 // Create the Side struct for BSP
                 BSPPlane bspSide = new BSPPlane
                 {
@@ -156,6 +169,9 @@ namespace VBSP.Conversion
                     ID = side.ID,
                     Vertices = sideVertices,
                     Indices = GenerateIndicesForVertices(sideVertices),
+
+                    UAxis = UAxis,
+                    VAxis = VAxis
                 };
 
                 bspSides.Add(bspSide);
@@ -187,7 +203,7 @@ namespace VBSP.Conversion
         private static float[] CalculateSideVertices(VMFSide side, List<Plane> solidPlanes)
         {
             // Create the plane for this side
-            Plane sidePlane = new Plane(side.plane.Point1, side.plane.Point2, side.plane.Point3);
+            Plane sidePlane = new Plane(side.Plane.Point1, side.Plane.Point2, side.Plane.Point3);
 
             // Create a large polygon on this plane
             List<Vector3> polygon = Plane.CreateBasePolygon(sidePlane);

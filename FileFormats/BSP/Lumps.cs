@@ -26,11 +26,21 @@ namespace FileFormats.BSP
 
         [Key(2)] public string MaterialName;
         [Key(3)] public int ID;
+
+        [Key(4)] public BSPUVAxis UAxis;
+        [Key(5)] public BSPUVAxis VAxis;
     }
 
     [MessagePackObject]
     public struct BSPEntity
     {
         [Key(0)] public string KeyValuesString;
+    }
+
+    [MessagePackObject]
+    public struct BSPUVAxis
+    {
+        [Key(0)] public Vector4 Axis; // ??
+        [Key(1)] public float Scale;
     }
 }

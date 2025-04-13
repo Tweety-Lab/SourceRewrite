@@ -7,6 +7,7 @@ using SourceRewrite.Files;
 using SourceRewrite.Attributes;
 using FileFormats.BSP.IO;
 using SourceRewrite.PhysicsSystem;
+using Silk.NET.Input;
 
 namespace SourceRewrite.Maps
 {
@@ -99,6 +100,28 @@ namespace SourceRewrite.Maps
                 sideMesh.Indices = side.Indices;
                 sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
 
+                // --- UV Generation ---
+                sideMesh.UVs = new float[side.Vertices.Length * 2]; // 2 floats per vertex: U, V
+
+                for (int i = 0; i < side.Vertices.Length / 3; i++)
+                {
+                    // Get the 3D position from the float[] vertices
+                    float x = side.Vertices[i * 3 + 0];
+                    float y = side.Vertices[i * 3 + 1];
+                    float z = side.Vertices[i * 3 + 2];
+
+                    Vector2 uv = ComputeUV(
+                        new Vector3(x, y, z),
+                        side.UAxis,
+                        side.VAxis
+                    );
+
+                    // Store into the flat UV array
+                    sideMesh.UVs[i * 2 + 0] = uv.X;  // U
+                    sideMesh.UVs[i * 2 + 1] = uv.Y;  // V
+                }
+
+
                 sideGeometry.Mesh = sideMesh;
 
                 // Register Physics for Geometry
@@ -112,6 +135,17 @@ namespace SourceRewrite.Maps
                 Entities.Add(sideGeometry);
                 sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
             }
+        }
+
+        Vector2 ComputeUV(Vector3 worldPos, BSPUVAxis uaxis, BSPUVAxis vaxis)
+        {
+            // Arbitrary scale
+            const float SCALE = 0.00195f;
+
+            float u = (Vector3.Dot(worldPos, new Vector3(uaxis.Axis.X, uaxis.Axis.Y, uaxis.Axis.Z)) + uaxis.Axis.W) / uaxis.Scale * SCALE;
+            float v = (Vector3.Dot(worldPos, new Vector3(vaxis.Axis.X, vaxis.Axis.Y, vaxis.Axis.Z)) + vaxis.Axis.W) / vaxis.Scale * SCALE;
+
+            return new Vector2(u, v);
         }
 
         // Create Entities from Lump data

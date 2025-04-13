@@ -1,4 +1,5 @@
 ﻿using FileFormats.KeyValues;
+using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 
@@ -100,16 +101,23 @@ namespace FileFormats.VMF
             // Process the plane
             Vector3[] plane = ProcessSidePlane(planeValue);
 
+            // Process UV Axis
+            VMFUVAxis uAxis = ProcessUVAxis((string)pkSide.GetKeyValue("uaxis").Value);
+            VMFUVAxis vAxis = ProcessUVAxis((string)pkSide.GetKeyValue("vaxis").Value);
+
             return new VMFSide()
             {
                 ID = (int)pkSide.GetKeyValue("id").Value,
-                plane = new Plane()
+                Plane = new VMFPlane()
                 {
                     Point1 = plane[0],
                     Point2 = plane[1],
                     Point3 = plane[2]
                 },
-                Material = (string)pkSide.GetKeyValue("material").Value
+                Material = (string)pkSide.GetKeyValue("material").Value,
+
+                UAxis = uAxis,
+                VAxis = vAxis
             };
         }
 
@@ -155,6 +163,59 @@ namespace FileFormats.VMF
             World.ID = (int)pkWorld.GetKeyValue("id").Value; // Set the World ID
             World.MapVersion = (int)pkWorld.GetKeyValue("mapversion").Value; // Set the World Map Version (is this any different from version info?)
             World.Solids = new List<VMFSolid>(); // Init solids for later storage
+        }
+
+        // Convert a keyvalue string to a VMFUVAxis
+        // Format: "[1 0 0 0] 0.25" where:
+        // - [1 0 0 0] is the Vector4 components
+        // - 0.25 is the scale value
+        private VMFUVAxis ProcessUVAxis(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return new VMFUVAxis
+                {
+                    Vector = Vector4.Zero,
+                    Scale = 1.0f
+                };
+            }
+
+            try
+            {
+                // Split into vector and scale parts
+                var parts = input.Split(new[] { ']' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                // Parse vector components (remove the '[' and split components)
+                var vectorComponents = parts[0].TrimStart('[').Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var vector = new Vector4(
+                    float.Parse(vectorComponents[0], CultureInfo.InvariantCulture),
+                    float.Parse(vectorComponents[1], CultureInfo.InvariantCulture),
+                    float.Parse(vectorComponents[2], CultureInfo.InvariantCulture),
+                    float.Parse(vectorComponents[3], CultureInfo.InvariantCulture)
+                );
+
+                // Parse scale value
+                var scale = float.Parse(parts[1].Trim(), CultureInfo.InvariantCulture);
+
+                return new VMFUVAxis
+                {
+                    Vector = vector,
+                    Scale = scale
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log error if needed
+                Console.WriteLine($"Error parsing UV axis '{input}': {ex.Message}");
+
+                // Return default values on failure
+                return new VMFUVAxis
+                {
+                    Vector = Vector4.Zero,
+                    Scale = 1.0f
+                };
+            }
         }
     }
 }
