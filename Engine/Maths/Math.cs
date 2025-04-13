@@ -1,14 +1,12 @@
 ﻿using System.Numerics;
 
-namespace SourceRewrite.Maths
+namespace SourceRewrite
 {
-    public static class MathsHelper
+    public static partial class Math
     {
         /// <summary>
         /// Converts degrees to radians.
         /// </summary>
-        /// <param name="degrees">Angle in degrees</param>
-        /// <returns>Angle in radians</returns>
         public static float DegreesToRadians(float degrees)
         {
             return degrees * (MathF.PI / 180f);
@@ -17,15 +15,13 @@ namespace SourceRewrite.Maths
         /// <summary>
         /// Converts radians to degrees.
         /// </summary>
-        /// <param name="radians">Angle in radians</param>
-        /// <returns>Angle in degrees</returns>
         public static float RadiansToDegrees(float radians)
         {
             return radians * (180f / MathF.PI);
         }
 
         /// <summary>
-        /// Convert Euler degrees to Quaternion.
+        /// Converts Euler degrees to Quaternion.
         /// </summary>
         public static Quaternion EulerToQuaternion(Vector3 euler)
         {
@@ -51,6 +47,9 @@ namespace SourceRewrite.Maths
             return new Quaternion(x, y, z, w);
         }
 
+        /// <summary>
+        /// Converts a Quaternion to Euler degrees.
+        /// </summary>
         public static Vector3 QuaternionToEuler(Quaternion quat)
         {
             // Extract Euler angles (pitch, yaw, roll) in radians
@@ -64,6 +63,14 @@ namespace SourceRewrite.Maths
             roll = RadiansToDegrees(roll);
 
             return new Vector3(pitch, yaw, roll);
+        }
+
+        /// <summary>
+        /// Returns the smaller of two values.
+        /// </summary>
+        public static float Min(float val1, float val2)
+        {
+            return val1 < val2 ? val1 : val2;
         }
     }
 }

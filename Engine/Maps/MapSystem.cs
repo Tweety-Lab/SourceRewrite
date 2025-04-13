@@ -3,7 +3,6 @@ using System.Numerics;
 using SourceRewrite.AssetTypes;
 using SourceRewrite.Entities;
 using FileFormats.KeyValues;
-using SourceRewrite.Maths;
 using SourceRewrite.Files;
 using SourceRewrite.Attributes;
 using FileFormats.BSP.IO;
@@ -178,7 +177,7 @@ namespace SourceRewrite.Maps
                 Vector3 position = entity.Transform.Position;
 
                 // Convert the rotation to a quaternion (adjust rotation if necessary)
-                Quaternion adjustedRotation = MathsHelper.EulerToQuaternion((Vector3)rotationKeyValue.Value);
+                Quaternion adjustedRotation = Math.EulerToQuaternion((Vector3)rotationKeyValue.Value);
 
                 // Rotate the entity around its own position, not the world origin
                 entity.Transform.Rotation = adjustedRotation;

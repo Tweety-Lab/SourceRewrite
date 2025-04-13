@@ -5,7 +5,6 @@ using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Maths;
 using SourceRewrite.PhysicsSystem;
 using SourceRewrite.TimeSystem;
 using SourceRewrite.Windowing;
@@ -41,7 +40,7 @@ namespace Game.Entities
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = MathsHelper.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = SourceRewrite.Math.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Z;
         }
@@ -106,10 +105,10 @@ namespace Game.Entities
                 pitch += mouseY;  // Vertical rotation around Right (pitch)
 
                 // Clamp pitch to avoid flipping
-                pitch = Math.Clamp(pitch, -89f, 89f);
+                pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Convert euler angles (pitch X, yaw Z, roll Y stays zero)
-                PointCamera.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+                PointCamera.ActiveCamera.Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
             }
             else
             {

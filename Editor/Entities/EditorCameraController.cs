@@ -3,7 +3,6 @@ using Silk.NET.Input;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.Point;
 using SourceRewrite.InputSystem;
-using SourceRewrite.Maths;
 using SourceRewrite.TimeSystem;
 
 namespace Editor.Components
@@ -33,7 +32,7 @@ namespace Editor.Components
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = MathsHelper.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = SourceRewrite.Math.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Y;
         }
@@ -96,10 +95,10 @@ namespace Editor.Components
                 pitch += mouseY;
 
                 // Clamp pitch to prevent camera flipping
-                pitch = Math.Clamp(pitch, -89f, 89f);
+                pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Update the rotation based on yaw and pitch (roll remains 0)
-                PointCamera.ActiveCamera.Transform.Rotation = MathsHelper.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                PointCamera.ActiveCamera.Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
             }
             else
             {

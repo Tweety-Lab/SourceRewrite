@@ -4,7 +4,6 @@ using SourceRewrite.Entities.Env;
 using SourceRewrite.Entities.GUI;
 using SourceRewrite.Entities.Lighting;
 using SourceRewrite.Entities.Point;
-using SourceRewrite.Maths;
 using SourceRewrite.Windowing.Modules;
 using System.Numerics;
 
@@ -226,8 +225,8 @@ namespace SourceRewrite.Rendering
                         // Set spotlight specific properties
                         shader.SetParameter($"{lightPrefix}.lightType", 1);
                         shader.SetParameter($"{lightPrefix}.direction", lightSpot.Transform.Forward);
-                        shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.InnerConeAngle)));
-                        shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(MathsHelper.DegreesToRadians(lightSpot.OuterConeAngle)));
+                        shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(Math.DegreesToRadians(lightSpot.InnerConeAngle)));
+                        shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(Math.DegreesToRadians(lightSpot.OuterConeAngle)));
                     }
                     else if (_activeLights[i] is LightDirectional lightDirectional)
                     {
