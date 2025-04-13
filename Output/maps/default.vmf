@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "414"
+	"mapversion" "426"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,106 +14,19 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "16"
+	"nGridSpacing" "8"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "414"
+	"mapversion" "426"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
 	"maxblobcount" "250"
 	"maxpropscreenwidth" "-1"
 	"skyname" "sky_black_nofog"
-	solid
-	{
-		"id" "1800"
-		side
-		{
-			"id" "400"
-			"plane" "(704 448 356) (704 512 356) (768 512 356)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 -1 0 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "399"
-			"plane" "(704 512 320) (704 512 356) (704 448 356)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "398"
-			"plane" "(768 448 320) (768 448 356) (768 512 356)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "397"
-			"plane" "(736 512 256) (768 512 320) (768 512 356)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "396"
-			"plane" "(704 448 320) (704 448 356) (768 448 356)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "395"
-			"plane" "(736 448 256) (768 448 320) (768 512 320)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "394"
-			"plane" "(736 512 256) (704 512 320) (704 448 320)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002B_TOP"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		editor
-		{
-			"color" "0 102 163"
-			"visgroupshown" "1"
-			"visgroupautoshown" "1"
-		}
-	}
 	solid
 	{
 		"id" "954"
@@ -953,7 +866,7 @@ world
 }
 entity
 {
-	"id" "1630"
+	"id" "1958"
 	"classname" "prop_static"
 	"angles" "0 0 0"
 	"disableflashlight" "0"
@@ -971,20 +884,20 @@ entity
 	"maxgpulevel" "0"
 	"mincpulevel" "0"
 	"mingpulevel" "0"
-	"model" "models/props_bts/hanging_walkway_512a.mdl"
+	"model" "models/props/laser_emitter_center.mdl"
 	"renderamt" "255"
 	"rendercolor" "255 255 255"
 	"screenspacefade" "0"
 	"shadowdepthnocache" "0"
 	"skin" "0"
 	"solid" "6"
-	"origin" "127.772 128.974 5"
+	"origin" "107.67 80 40"
 	editor
 	{
 		"color" "255 255 0"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
-		"logicalpos" "[0 0]"
+		"logicalpos" "[0 -13268]"
 	}
 }
 entity
@@ -1112,7 +1025,7 @@ entity
 	"shadowdepthnocache" "0"
 	"skin" "0"
 	"solid" "6"
-	"origin" "329.012 192 128"
+	"origin" "329.012 192 256"
 	editor
 	{
 		"color" "255 255 0"
