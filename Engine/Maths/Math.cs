@@ -2,7 +2,7 @@
 
 namespace SourceRewrite
 {
-    public static partial class Math
+    public static class Math
     {
         /// <summary>
         /// Converts degrees to radians.
