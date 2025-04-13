@@ -13,6 +13,8 @@ namespace VBSP.Conversion
     /// </summary>
     public static class VMFToBSP
     {
+        public static List<VMFSide> Sides = new List<VMFSide>();
+
         /// <summary>
         /// Compiles a VMF file content into a BSP format object.
         /// </summary>
@@ -112,7 +114,7 @@ namespace VBSP.Conversion
             foreach (VMFSolid solid in vmf.World.Solids)
             {
                 Console.WriteLine($"Compiling solid with id of {solid.ID}...");
-                ProcessSolid(solid, bspSides);  // Updated to pass bspSides
+                ProcessSolid(solid, bspSides);
             }
 
             // Store compiled geometry in BSP lumps
@@ -126,22 +128,34 @@ namespace VBSP.Conversion
         /// </summary>
         private static void ProcessSolid(VMFSolid solid, List<BSPPlane> bspSides)
         {
+            // First collect all planes from the solid
+            List<Plane> solidPlanes = new List<Plane>();
+            foreach (VMFSide side in solid.Sides)
+            {
+                solidPlanes.Add(new Plane(side.plane.Point1, side.plane.Point2, side.plane.Point3));
+                Sides.Add(side);
+            }
+
+            // Process each side
             foreach (VMFSide side in solid.Sides)
             {
                 // Skip NODRAW Sides
                 if (side.Material == "TOOLS/TOOLSNODRAW")
                     continue;
 
-                // Calculate side geometry
-                float[] sideVertices = CalculateSideVertices(side);
+                // Calculate side geometry using CSG approach
+                float[] sideVertices = CalculateSideVertices(side, solidPlanes);
+
+                if (sideVertices.Length < 12) // Need at least 4 vertices (3 coordinates each)
+                    continue;
 
                 // Create the Side struct for BSP
                 BSPPlane bspSide = new BSPPlane
                 {
-                    MaterialName = side.Material,  // Assuming the side has a material property
+                    MaterialName = side.Material,
                     ID = side.ID,
-                    Vertices = sideVertices,  // Store vertices for the side
-                    Indices = new uint[] { 0, 1, 2, 0, 2, 3 },
+                    Vertices = sideVertices,
+                    Indices = GenerateIndicesForVertices(sideVertices),
                 };
 
                 bspSides.Add(bspSide);
@@ -149,25 +163,192 @@ namespace VBSP.Conversion
         }
 
         /// <summary>
-        /// Calculates the vertices for a brush side.
+        /// Generates triangle indices for the given vertices (assuming convex).
         /// </summary>
-        private static float[] CalculateSideVertices(VMFSide side)
+        private static uint[] GenerateIndicesForVertices(float[] vertices)
         {
-            Vector3 p1 = side.plane.Point1;
-            Vector3 p2 = side.plane.Point2;
-            Vector3 p3 = side.plane.Point3;
+            int vertexCount = vertices.Length / 3;
+            List<uint> indices = new List<uint>();
 
-            // Calculate fourth point to form a planar quad
-            Vector3 p4 = p3 + (p1 - p2);
-
-            // Populate Vertices
-            return new float[]
+            // Simple fan triangulation
+            for (int i = 1; i < vertexCount - 1; i++)
             {
-    p4.X, p4.Y, p4.Z,
-    p3.X, p3.Y, p3.Z,
-    p2.X, p2.Y, p2.Z,
-    p1.X, p1.Y, p1.Z
+                indices.Add(0);
+                indices.Add((uint)i);
+                indices.Add((uint)i + 1);
+            }
+
+            return indices.ToArray();
+        }
+
+        /// <summary>
+        /// Calculates the vertices for a brush side using CSG plane clipping.
+        /// </summary>
+        private static float[] CalculateSideVertices(VMFSide side, List<Plane> solidPlanes)
+        {
+            // Create the plane for this side
+            Plane sidePlane = new Plane(side.plane.Point1, side.plane.Point2, side.plane.Point3);
+
+            // Create a large polygon on this plane
+            List<Vector3> polygon = CreateBasePolygon(sidePlane);
+
+            // Clip the polygon against all other planes in the solid
+            foreach (Plane clipPlane in solidPlanes)
+            {
+                // Skip the current plane (don't clip against ourselves)
+                if (clipPlane.Equals(sidePlane))
+                    continue;
+
+                polygon = ClipPolygonAgainstPlane(polygon, clipPlane);
+                if (polygon.Count < 3)
+                    break; // Polygon is completely clipped away
+            }
+
+            // Convert the polygon vertices to a flat float array
+            if (polygon.Count < 3)
+                return new float[0];
+
+            float[] vertices = new float[polygon.Count * 3];
+            for (int i = 0; i < polygon.Count; i++)
+            {
+                vertices[i * 3] = polygon[i].X;
+                vertices[i * 3 + 1] = polygon[i].Y;
+                vertices[i * 3 + 2] = polygon[i].Z;
+            }
+
+            return vertices;
+        }
+
+        /// <summary>
+        /// Creates a large initial polygon on the given plane.
+        /// </summary>
+        private static List<Vector3> CreateBasePolygon(Plane plane)
+        {
+            // Find the dominant axis of the plane normal
+            Vector3 normal = plane.Normal;
+            int dominantAxis = 0;
+            float max = Math.Abs(normal.X);
+            if (Math.Abs(normal.Y) > max)
+            {
+                dominantAxis = 1;
+                max = Math.Abs(normal.Y);
+            }
+            if (Math.Abs(normal.Z) > max)
+            {
+                dominantAxis = 2;
+            }
+
+            // Create a large polygon in the plane
+            Vector3 center = -plane.D * plane.Normal;
+            Vector3 v1, v2;
+
+            switch (dominantAxis)
+            {
+                case 0: // X is dominant
+                    v1 = new Vector3(0, 10000, 0);
+                    v2 = new Vector3(0, 0, 10000);
+                    break;
+                case 1: // Y is dominant
+                    v1 = new Vector3(10000, 0, 0);
+                    v2 = new Vector3(0, 0, 10000);
+                    break;
+                default: // Z is dominant
+                    v1 = new Vector3(10000, 0, 0);
+                    v2 = new Vector3(0, 10000, 0);
+                    break;
+            }
+
+            // Make sure v1 and v2 are perpendicular to the normal
+            v1 = Vector3.Cross(plane.Normal, v1);
+            v2 = Vector3.Cross(plane.Normal, v1);
+
+            return new List<Vector3>
+            {
+                center + v1 + v2,
+                center + v1 - v2,
+                center - v1 - v2,
+                center - v1 + v2
             };
+        }
+
+        /// <summary>
+        /// Clips a polygon against a plane using the Sutherland-Hodgman algorithm.
+        /// </summary>
+        private static List<Vector3> ClipPolygonAgainstPlane(List<Vector3> polygon, Plane plane)
+        {
+            List<Vector3> output = new List<Vector3>();
+            if (polygon.Count == 0)
+                return output;
+
+            Vector3 prevVertex = polygon[polygon.Count - 1];
+            float prevDistance = plane.DistanceTo(prevVertex);
+
+            foreach (Vector3 currentVertex in polygon)
+            {
+                float currentDistance = plane.DistanceTo(currentVertex);
+
+                if (currentDistance >= 0)
+                {
+                    if (prevDistance < 0)
+                    {
+                        // Intersection point
+                        Vector3 intersection = plane.LineIntersection(prevVertex, currentVertex);
+                        output.Add(intersection);
+                    }
+                    output.Add(currentVertex);
+                }
+                else if (prevDistance >= 0)
+                {
+                    // Intersection point
+                    Vector3 intersection = plane.LineIntersection(prevVertex, currentVertex);
+                    output.Add(intersection);
+                }
+
+                prevVertex = currentVertex;
+                prevDistance = currentDistance;
+            }
+
+            return output;
+        }
+    }
+
+    /// <summary>
+    /// Plane equation.
+    /// </summary>
+    public class Plane
+    {
+        public Vector3 Normal;
+        public float D;
+
+        public Plane(Vector3 a, Vector3 b, Vector3 c)
+        {
+            Normal = Vector3.Normalize(Vector3.Cross(b - a, c - a));
+            D = -Vector3.Dot(Normal, a);
+        }
+
+        public float DistanceTo(Vector3 point)
+        {
+            return Vector3.Dot(Normal, point) + D;
+        }
+
+        public Vector3 LineIntersection(Vector3 start, Vector3 end)
+        {
+            Vector3 direction = end - start;
+            float denominator = Vector3.Dot(Normal, direction);
+
+            if (Math.Abs(denominator) < float.Epsilon)
+            {
+                // Line is parallel to plane
+                return start;
+            }
+
+            float t = -(Vector3.Dot(Normal, start) + D) / denominator;
+            return start + direction * t;
+        }
+
+        public bool Equals(Plane other)
+        {
+            return Normal.Equals(other.Normal) && Math.Abs(D - other.D) < float.Epsilon;
         }
     }
 }
