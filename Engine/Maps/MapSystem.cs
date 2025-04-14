@@ -190,13 +190,17 @@ namespace SourceRewrite.Maps
         }
         private void CreateBrushEntity(string className, KeyValuesFormat entityKeyValues, BSPPlane[] brushSides)
         {
-            Console.WriteLine($"Creating brush entity of type: {className}");
+            // Find the Type that matches the ClassName
+            Type entityType = AttributeManager.GetTypeByAttributeValue<EntityAttribute, string>("ClassName", className);
 
-            // Create brush entity (mesh only, no transform)
-            BrushEntity brushEntity = new BrushEntity
+            if (entityType == null)
             {
-                Name = entityKeyValues.ParentKeys[0].Name
-            };
+                Console.WriteLine($"Could not find type: '{className}'");
+                return;
+            }
+
+            BrushEntity brushEntity = (BrushEntity)Activator.CreateInstance(entityType);
+            brushEntity.Name = entityKeyValues.ParentKeys[0].Name;
 
             List<Mesh> brushMeshes = new List<Mesh>();
             foreach (BSPPlane side in brushSides)
@@ -268,6 +272,8 @@ namespace SourceRewrite.Maps
             // Add to entity list
             Entities.Add(brushEntity);
             brushEntity.Parent = MapRootEntity;
+
+            Console.WriteLine($"Creating brush entity of type: {className}");
         }
 
         private void CreatePointEntity(string className, KeyValuesFormat entityKeyValues)

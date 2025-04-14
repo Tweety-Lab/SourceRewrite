@@ -73,20 +73,20 @@ namespace SourceRewrite.PhysicsSystem
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <param name="kinematic"></param>
-        void InitPhysicsEntity(PointEntity physEntity, PhysicsBody body);
+        void InitPhysicsEntity(BaseEntity physEntity, PhysicsBody body);
 
         /// <summary>
         /// Destroy a Physics for an Entity.
         /// </summary>
         /// <param name="physEntity"></param>
-        void DestroyPhysicsEntity(PointEntity physEntity);
+        void DestroyPhysicsEntity(BaseEntity physEntity);
 
         /// <summary>
         /// Set the absolute velocity of an entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="velocity"></param>
-        void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity);
+        void SetEntityAbsVelocity(BaseEntity entity, Vector3 velocity);
 
         /// <summary>
         /// Raycast from the origin to the direction.

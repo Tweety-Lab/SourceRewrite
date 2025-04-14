@@ -23,16 +23,5 @@ namespace SourceRewrite.Entities
 
         // Nameless Constructor
         public PointEntity() : base() { }
-
-        public void PhysicsInitNormal(PhysicsBody body)
-        {
-            // Register this entity with the physics context
-            Physics.InitPhysicsEntity(this, body);
-        }
-
-        public void SetAbsVelocity(Vector3 velocity)
-        {
-            Physics.SetEntityAbsVelocity(this, velocity);
-        }
     }
 }

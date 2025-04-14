@@ -13,12 +13,12 @@ namespace SourceRewrite.PhysicsSystem
     {
         public static PhysicsContext Context => GameModules.GetModule<PhysicsModule>().Context;
 
-        public static void InitPhysicsEntity(PointEntity physEntity, PhysicsBody body)
+        public static void InitPhysicsEntity(BaseEntity physEntity, PhysicsBody body)
         {
             Context.APIInterface.InitPhysicsEntity(physEntity, body);
         }
 
-        public static void SetEntityAbsVelocity(PointEntity entity, Vector3 velocity)
+        public static void SetEntityAbsVelocity(BaseEntity entity, Vector3 velocity)
         {
             Context.APIInterface.SetEntityAbsVelocity(entity, velocity);
         }
