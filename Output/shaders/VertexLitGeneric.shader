@@ -52,7 +52,7 @@ void fragment()
     in vec3 FragPos;
 
     uniform float specular = 0.5;
-    uniform float ambientStrength = 0.2;
+    uniform float ambientStrength = 0.4;
 
     void main()
     {

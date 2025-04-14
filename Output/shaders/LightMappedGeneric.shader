@@ -53,7 +53,7 @@ void fragment()
 
     uniform sampler2D basetexture;
     uniform float specular = 0.5;
-    uniform float ambientStrength = 0.2;
+    uniform float ambientStrength = 0.4;
 
 
 

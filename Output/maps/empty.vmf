@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "81"
+	"mapversion" "90"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "16"
+	"nGridSpacing" "32"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "81"
+	"mapversion" "90"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -132,9 +132,9 @@ world
 		{
 			"id" "19"
 			"plane" "(-640 64 120) (-640 -256 120) (-640 -256 112)"
-			"material" "METAL/BLACK_FLOOR_METAL_001C"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"material" "ANIM_WP/FRAMEWORK/SQUAREBEAMS"
+			"uaxis" "[0 0 1 80] 0.25"
+			"vaxis" "[0 1 0 -256] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -143,9 +143,9 @@ world
 		{
 			"id" "20"
 			"plane" "(-256 64 112) (-256 -256 112) (-256 -256 120)"
-			"material" "METAL/BLACK_FLOOR_METAL_001C"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"material" "ANIM_WP/FRAMEWORK/SQUAREBEAMS"
+			"uaxis" "[0 0 1 80] 0.25"
+			"vaxis" "[0 -1 0 -256] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -154,9 +154,9 @@ world
 		{
 			"id" "21"
 			"plane" "(-256 64 120) (-640 64 120) (-640 64 112)"
-			"material" "METAL/BLACK_FLOOR_METAL_001C"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"material" "ANIM_WP/FRAMEWORK/SQUAREBEAMS"
+			"uaxis" "[0 0 1 80] 0.25"
+			"vaxis" "[1 0 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -165,9 +165,9 @@ world
 		{
 			"id" "22"
 			"plane" "(-256 -256 112) (-640 -256 112) (-640 -256 120)"
-			"material" "METAL/BLACK_FLOOR_METAL_001C"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
+			"material" "ANIM_WP/FRAMEWORK/SQUAREBEAMS"
+			"uaxis" "[0 0 1 80] 0.25"
+			"vaxis" "[1 0 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -513,7 +513,7 @@ world
 		{
 			"id" "166"
 			"plane" "(-480 64 -64) (-480 64 112) (-480 -256 112)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002A_NOPORTAL"
+			"material" "TOOLS/TOOLSNODRAW"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
@@ -524,7 +524,7 @@ world
 		{
 			"id" "165"
 			"plane" "(-416 -256 -64) (-416 -256 112) (-416 64 112)"
-			"material" "CONCRETE/CONCRETE_BTS_FLOOR002A_NOPORTAL"
+			"material" "TOOLS/TOOLSNODRAW"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
