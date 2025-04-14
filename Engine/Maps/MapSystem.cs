@@ -113,7 +113,9 @@ namespace SourceRewrite.Maps
                     Vector2 uv = ComputeUV(
                         new Vector3(x, y, z),
                         side.UAxis,
-                        side.VAxis
+                        side.VAxis,
+                        512,
+                        512
                     );
 
                     // Store into the flat UV array
@@ -136,14 +138,14 @@ namespace SourceRewrite.Maps
                 sideGeometry.Parent = MapRootEntity; // Ensure parent is set correctly
             }
         }
-
-        Vector2 ComputeUV(Vector3 worldPos, BSPUVAxis uaxis, BSPUVAxis vaxis)
+        Vector2 ComputeUV(Vector3 worldPos, BSPUVAxis uaxis, BSPUVAxis vaxis, float textureWidth, float textureHeight)
         {
-            // Arbitrary scale
-            const float SCALE = 0.00195f;
+            float u = (Vector3.Dot(worldPos, new Vector3(uaxis.Axis.X, uaxis.Axis.Y, uaxis.Axis.Z)) + uaxis.Axis.W) / uaxis.Scale;
+            float v = (Vector3.Dot(worldPos, new Vector3(vaxis.Axis.X, vaxis.Axis.Y, vaxis.Axis.Z)) + vaxis.Axis.W) / vaxis.Scale;
 
-            float u = (Vector3.Dot(worldPos, new Vector3(uaxis.Axis.X, uaxis.Axis.Y, uaxis.Axis.Z)) + uaxis.Axis.W) / uaxis.Scale * SCALE;
-            float v = (Vector3.Dot(worldPos, new Vector3(vaxis.Axis.X, vaxis.Axis.Y, vaxis.Axis.Z)) + vaxis.Axis.W) / vaxis.Scale * SCALE;
+            // Now normalize texture size
+            u *= 1.0f / textureWidth;
+            v *= 1.0f / textureHeight;
 
             return new Vector2(u, v);
         }
