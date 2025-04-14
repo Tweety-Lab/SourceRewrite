@@ -20,6 +20,7 @@ namespace SourceRewrite.Entities
                 PhysicsBody body = new PhysicsBody();
                 body.IsStatic = true;
                 body.CollisionMesh = mesh;
+                body.CanCollide = false;
                 PhysicsInitNormal(body);
             }
 

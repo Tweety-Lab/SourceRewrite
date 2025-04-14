@@ -14,6 +14,7 @@ namespace SourceRewrite.PhysicsSystem
         public float Friction { get; set; } = 0.5f;
         public float Restitution { get; set; } = 0.5f;
         public bool IsStatic { get; set; } = false;
+        public bool CanCollide { get; set; } = true;
 
         public Mesh CollisionMesh { get; set; } = null;
 

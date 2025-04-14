@@ -142,6 +142,11 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             body.Friction = physBody.Friction;
             body.Restitution = physBody.Restitution;
             body.UpdateInertiaTensor();
+            
+            if (physBody.CanCollide == false)
+            {
+                body.CollisionFlags |= CollisionFlags.NoContactResponse;
+            }
 
             if (physBody.IsStatic)
             {
