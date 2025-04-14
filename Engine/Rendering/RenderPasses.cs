@@ -144,6 +144,27 @@ namespace SourceRewrite.Rendering
         }
     }
 
+    public class OpaqueBrushEntityPass : BaseRenderPass
+    {
+        // Enable Depth-Testing and Culling
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullBackFaces };
+
+        public override void OnRender() => RenderEntities<BrushEntity>(EntityManager.Root);
+
+        protected override void RenderEntity<TEntity>(TEntity entity)
+        {
+            if (entity is BrushEntity brushEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render billboard entities REPLACE THIS
+            {
+                var modelMatrix = Matrix4x4.Identity;
+
+                foreach (Mesh mesh in brushEntity.Brush)
+                {
+                    Renderer.RenderMesh(mesh, modelMatrix);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Manages and applies lighting from all light sources in the scene.
     /// </summary>

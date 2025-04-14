@@ -35,12 +35,14 @@ namespace FileFormats.BSP
     public struct BSPEntity
     {
         [Key(0)] public string KeyValuesString;
+
+        [Key(1)] public BSPPlane[] BrushSides;
     }
 
     [MessagePackObject]
     public struct BSPUVAxis
     {
-        [Key(0)] public Vector4 Axis; // ??
+        [Key(0)] public Vector4 Axis;
         [Key(1)] public float Scale;
     }
 }

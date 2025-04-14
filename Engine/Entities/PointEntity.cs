@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities
 {
+    /// <summary>
+    /// An Entity that is a point in space.
+    /// </summary>
     public class PointEntity : BaseEntity
     {
         // Entity Transform

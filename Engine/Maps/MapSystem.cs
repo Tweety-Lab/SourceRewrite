@@ -106,24 +106,27 @@ namespace SourceRewrite.Maps
                 // Get the base texture of side
                 Texture basetexture = sideMesh.Material.Shader.GetParameter<Texture>("basetexture");
 
-                for (int i = 0; i < side.Vertices.Length / 3; i++)
+                if (basetexture != null)
                 {
-                    // Get the 3D position from the float[] vertices
-                    float x = side.Vertices[i * 3 + 0];
-                    float y = side.Vertices[i * 3 + 1];
-                    float z = side.Vertices[i * 3 + 2];
+                    for (int i = 0; i < side.Vertices.Length / 3; i++)
+                    {
+                        // Get the 3D position from the float[] vertices
+                        float x = side.Vertices[i * 3 + 0];
+                        float y = side.Vertices[i * 3 + 1];
+                        float z = side.Vertices[i * 3 + 2];
 
-                    Vector2 uv = ComputeUV(
-                        new Vector3(x, y, z),
-                        side.UAxis,
-                        side.VAxis,
-                        basetexture.Width,
-                        basetexture.Height
-                    );
+                        Vector2 uv = ComputeUV(
+                            new Vector3(x, y, z),
+                            side.UAxis,
+                            side.VAxis,
+                            basetexture.Width,
+                            basetexture.Height
+                        );
 
-                    // Store into the flat UV array
-                    sideMesh.UVs[i * 2 + 0] = uv.X;  // U
-                    sideMesh.UVs[i * 2 + 1] = uv.Y;  // V
+                        // Store into the flat UV array
+                        sideMesh.UVs[i * 2 + 0] = uv.X;  // U
+                        sideMesh.UVs[i * 2 + 1] = uv.Y;  // V
+                    }
                 }
 
 
@@ -164,71 +167,131 @@ namespace SourceRewrite.Maps
 
             foreach (BSPEntity bspEntity in entitiesData)
             {
-                // Create Entity from KeyValues
+                // Parse entity properties
                 KeyValuesFormat entityKeyValues = new KeyValuesFormat(bspEntity.KeyValuesString);
+                string className = (string)entityKeyValues.GetKeyValue("classname").Value;
 
-                // Create Entity with correct class
-                string entityNamespace = (string)entityKeyValues.GetKeyValue("classname").Value;
+                // Skip worldspawn as it's handled separately
+                if (className == "worldspawn")
+                    continue;
 
-                // Find the Type that matches the ClassName
-                Type entityType = AttributeManager.GetTypeByAttributeValue<EntityAttribute, string>("ClassName", entityNamespace);
+                // Determine if this is a brush entity
+                bool isBrushEntity = bspEntity.BrushSides != null && bspEntity.BrushSides.Length > 0;
 
-                if (entityType == null)
+                if (isBrushEntity)
                 {
-                    Console.WriteLine($"Could not find type: '{entityNamespace}' ");
+                    CreateBrushEntity(className, entityKeyValues, bspEntity.BrushSides);
+                }
+                else
+                {
+                    CreatePointEntity(className, entityKeyValues);
+                }
+            }
+        }
+        private void CreateBrushEntity(string className, KeyValuesFormat entityKeyValues, BSPPlane[] brushSides)
+        {
+            Console.WriteLine($"Creating brush entity of type: {className}");
+
+            // Create brush entity (mesh only, no transform)
+            BrushEntity brushEntity = new BrushEntity
+            {
+                Name = entityKeyValues.ParentKeys[0].Name
+            };
+
+            List<Mesh> brushMeshes = new List<Mesh>();
+            foreach (BSPPlane side in brushSides)
+            {
+                // Create a MeshAsset
+                Mesh sideMesh = new Mesh();
+
+                sideMesh.Vertices = side.Vertices;
+                sideMesh.Indices = side.Indices;
+                sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
+
+                brushMeshes.Add(sideMesh);
+            }
+
+            brushEntity.Brush = brushMeshes;
+
+            // Set properties (excluding transform-related ones)
+            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+            {
+                string key = propertyKeyValue.Key.ToLower();
+
+                // Skip transform properties
+                if (key == "origin" || key == "angles" || key == "scale")
+                    continue;
+
+                // Handle connections
+                if (key.StartsWith("connection_"))
+                {
+                    EntityIOConnection io = EntityIOUtility.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
+                    brushEntity.Outputs.Add(io);
                     continue;
                 }
 
-                Console.WriteLine($"Creating entity of type: {entityNamespace}");
-
-                // Dynamically create the correct entity type
-                PointEntity entity = (PointEntity)Activator.CreateInstance(entityType);
-
-                // Process Entity properties
-                foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
-                {
-                    // Skip Entity IO events
-                    if (propertyKeyValue.Key.StartsWith("connection_"))
-                        continue;
-
-                    entity.SetProperty(propertyKeyValue.Key, propertyKeyValue.Value);
-                }
-
-                foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
-                {
-                    // Process Entity IO events
-                    if (propertyKeyValue.Key.StartsWith("connection_"))
-                    {
-                        EntityIOConnection io = EntityIOUtility.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
-                        entity.Outputs.Add(io);
-                    }
-                }
-
-                // Assign Entity Name
-                entity.Name = entityKeyValues.ParentKeys[0].Name;
-
-                // Get Entity data as KeyValues
-                KeyValue positionKeyValue = entityKeyValues.GetKeyValue("position");
-                KeyValue rotationKeyValue = entityKeyValues.GetKeyValue("rotation");
-                KeyValue scaleKeyValue = entityKeyValues.GetKeyValue("scale");
-
-                // Set Position
-                entity.Transform.Position = (Vector3)positionKeyValue.Value;
-
-                // Get Entity position
-                Vector3 position = entity.Transform.Position;
-
-                // Convert the rotation to a quaternion (adjust rotation if necessary)
-                Quaternion adjustedRotation = Math.EulerToQuaternion((Vector3)rotationKeyValue.Value);
-
-                // Rotate the entity around its own position, not the world origin
-                entity.Transform.Rotation = adjustedRotation;
-
-                Entities.Add(entity);
-                entity.Parent = MapRootEntity; // Ensure parent is set correctly
-
+                brushEntity.SetProperty(propertyKeyValue.Key, propertyKeyValue.Value);
             }
+
+            // Add to entity list
+            Entities.Add(brushEntity);
+            brushEntity.Parent = MapRootEntity;
         }
+
+        private void CreatePointEntity(string className, KeyValuesFormat entityKeyValues)
+        {
+            // Find the Type that matches the ClassName
+            Type entityType = AttributeManager.GetTypeByAttributeValue<EntityAttribute, string>("ClassName", className);
+
+            if (entityType == null)
+            {
+                Console.WriteLine($"Could not find type: '{className}'");
+                return;
+            }
+
+            Console.WriteLine($"Creating point entity of type: {className}");
+
+            // Create point entity
+            PointEntity pointEntity = (PointEntity)Activator.CreateInstance(entityType);
+            pointEntity.Name = entityKeyValues.ParentKeys[0].Name;
+
+            // Process properties
+            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+            {
+                string key = propertyKeyValue.Key.ToLower();
+
+                // Handle transform properties
+                if (key == "position")
+                {
+                    pointEntity.Transform.Position = (Vector3)propertyKeyValue.Value;
+                    continue;
+                }
+                else if (key == "rotation")
+                {
+                    pointEntity.Transform.Rotation = Math.EulerToQuaternion((Vector3)propertyKeyValue.Value);
+                    continue;
+                }
+                else if (key == "scale")
+                {
+                    pointEntity.Transform.Scale = (Vector3)propertyKeyValue.Value;
+                    continue;
+                }
+                else if (key.StartsWith("connection_"))
+                {
+                    EntityIOConnection io = EntityIOUtility.ParseIOString($"{propertyKeyValue.Key} \"{propertyKeyValue.Value}\"");
+                    pointEntity.Outputs.Add(io);
+                    continue;
+                }
+
+                // Set regular properties
+                pointEntity.SetProperty(propertyKeyValue.Key, propertyKeyValue.Value);
+            }
+
+            // Add to entity list
+            Entities.Add(pointEntity);
+            pointEntity.Parent = MapRootEntity;
+        }
+
 
         // Add a Entity to the map
         public void AddEntity(BaseEntity entity)

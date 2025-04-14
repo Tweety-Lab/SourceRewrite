@@ -54,9 +54,77 @@ namespace VBSP.Conversion
             {
                 VMFEntity vmfEntity = vmf.Entities[i];
                 BSPEntities[i].KeyValuesString = ConvertEntityToBspString(vmfEntity);
+                BSPEntities[i].BrushSides = ConvertEntityToBSPPlanes(vmfEntity);
             }
 
             bsp.SetLumpData<BSPEntity>(BSPLumpType.LUMP_ENTITIES, BSPEntities);
+        }
+
+        /// <summary>
+        /// Converts a VMF brush entity to its BSP plane representation.
+        /// </summary>
+        private static BSPPlane[] ConvertEntityToBSPPlanes(VMFEntity vmfEntity)
+        {
+            List<BSPPlane> planes = new List<BSPPlane>();
+
+            // Only process entities that have brushes (solids)
+            if (vmfEntity.Solids == null || vmfEntity.Solids.Count == 0)
+            {
+                return planes.ToArray();
+            }
+
+            // Process each solid in the entity
+            foreach (VMFSolid solid in vmfEntity.Solids)
+            {
+                // First collect all planes from the solid
+                List<Plane> solidPlanes = new List<Plane>();
+                foreach (VMFSide side in solid.Sides)
+                {
+                    solidPlanes.Add(new Plane(side.Plane.Point1, side.Plane.Point2, side.Plane.Point3));
+                }
+
+                // Process each side in the solid
+                foreach (VMFSide side in solid.Sides)
+                {
+                    // Skip NODRAW sides
+                    if (side.Material == "TOOLS/TOOLSNODRAW")
+                        continue;
+
+                    // Calculate side geometry using CSG approach
+                    float[] sideVertices = CalculateSideVertices(side, solidPlanes);
+
+                    if (sideVertices.Length < 12) // Need at least 4 vertices (3 coordinates each)
+                        continue;
+
+                    // Get UV Axis
+                    BSPUVAxis UAxis = new BSPUVAxis()
+                    {
+                        Axis = side.UAxis.Vector,
+                        Scale = side.UAxis.Scale
+                    };
+
+                    BSPUVAxis VAxis = new BSPUVAxis()
+                    {
+                        Axis = side.VAxis.Vector,
+                        Scale = side.VAxis.Scale
+                    };
+
+                    // Create the Plane struct for BSP
+                    BSPPlane bspPlane = new BSPPlane
+                    {
+                        MaterialName = side.Material,
+                        ID = side.ID,
+                        Vertices = sideVertices,
+                        Indices = GenerateIndicesForVertices(sideVertices),
+                        UAxis = UAxis,
+                        VAxis = VAxis
+                    };
+
+                    planes.Add(bspPlane);
+                }
+            }
+
+            return planes.ToArray();
         }
 
         /// <summary>
