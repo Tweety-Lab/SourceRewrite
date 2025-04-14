@@ -3,6 +3,7 @@ using SourceRewrite.Files;
 using FileFormats.VTF;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing.Modules;
+using System.Numerics;
 
 namespace SourceRewrite.AssetTypes
 {
@@ -13,6 +14,10 @@ namespace SourceRewrite.AssetTypes
     {
         private IRendererAPI _rendererAPI = GameModules.GetModule<RenderModule>().Context.GetRendererAPI();
         private readonly ITexture _textureInterface; // Use an interface for better abstraction
+
+        // Store width and height
+        public uint Width { get; private set; }
+        public uint Height { get; private set; }
 
         // Create a texture from a .VTF path
         public Texture(string path)
@@ -27,6 +32,10 @@ namespace SourceRewrite.AssetTypes
             // Load VTF
             VTFFormat texture = new VTFFormat(path);
             byte[] data = texture.GetBgra32Data();
+
+            // Set width and height
+            Width = (uint)texture.Width;
+            Height = (uint)texture.Height;
 
             // Create a texture based on current renderer
             switch (GameModules.GetModule<RenderModule>().Context.API)
@@ -44,6 +53,10 @@ namespace SourceRewrite.AssetTypes
         // Create a texture from bgra data
         public Texture(byte[] bgra32Data, uint height, uint width)
         {
+            // Set width and height
+            Width = width;
+            Height = height;
+
             // Create a texture based on current renderer
             switch (GameModules.GetModule<RenderModule>().Context.API)
             {
