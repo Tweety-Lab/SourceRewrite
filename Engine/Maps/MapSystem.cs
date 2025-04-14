@@ -143,8 +143,11 @@ namespace SourceRewrite.Maps
         }
         Vector2 ComputeUV(Vector3 worldPos, BSPUVAxis uaxis, BSPUVAxis vaxis, float textureWidth, float textureHeight)
         {
-            float u = (Vector3.Dot(worldPos, new Vector3(uaxis.Axis.X, uaxis.Axis.Y, uaxis.Axis.Z)) + uaxis.Axis.W) / uaxis.Scale;
-            float v = (Vector3.Dot(worldPos, new Vector3(vaxis.Axis.X, vaxis.Axis.Y, vaxis.Axis.Z)) + vaxis.Axis.W) / vaxis.Scale;
+            float uOffset = uaxis.Axis.W / 4;
+            float vOffset = vaxis.Axis.W / 4;
+
+            float u = (Vector3.Dot(worldPos, new Vector3(uaxis.Axis.X, uaxis.Axis.Y, uaxis.Axis.Z)) + uOffset) / uaxis.Scale;
+            float v = (Vector3.Dot(worldPos, new Vector3(vaxis.Axis.X, vaxis.Axis.Y, vaxis.Axis.Z)) + vOffset) / vaxis.Scale;
 
             // Now normalize texture size
             u *= 1.0f / textureWidth;

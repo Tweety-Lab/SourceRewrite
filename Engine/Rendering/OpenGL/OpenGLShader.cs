@@ -152,12 +152,6 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
-        public void Dispose()
-        {
-            // Remember to delete the program when we are done.
-            _gl.DeleteProgram(_handle);
-        }
-
         private uint LoadShader(ShaderType type, string source)
         {
             // To load a single shader we need to:
@@ -206,12 +200,19 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
+        // TODO: Deal with texture units on disposal
         static int currentUnit = 0;
         private TextureUnit GetNextAvailableTextureUnit()
         {
             // Simple implementation - just cycle through units (replace this)
             currentUnit = (currentUnit + 1) % 2048; // Assuming 2048 texture units available
             return TextureUnit.Texture0 + currentUnit;
+        }
+
+        public void Dispose()
+        {
+            // Remember to delete the program when we are done
+            _gl.DeleteProgram(_handle);
         }
     }
 }
