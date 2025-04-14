@@ -10,6 +10,9 @@ namespace SourceRewrite.Rendering.OpenGL
         private readonly uint _handle;
         private readonly GL _gl;
 
+        // Track texture bindings
+        private readonly Dictionary<int, AssetTypes.Texture> _boundTextures = new Dictionary<int, AssetTypes.Texture>();
+
         public OpenGLShader(GL gl, string vertexSource, string fragmentSource)
         {
             _gl = gl;
@@ -82,24 +85,71 @@ namespace SourceRewrite.Rendering.OpenGL
                     glTexture.Bind(unit);
                     _gl.Uniform1(location, unitIndex);
 
+                    // Track the binding
+                    _boundTextures[location] = texture;
+
                     break;
             }
         }
 
         /// <summary>
-        /// Get Shader Int Parameter (Uniform).
+        /// Get Shader Parameter (Uniform).
         /// </summary>
-        public unsafe int GetIntParameter(string name)
+        public unsafe T GetParameter<T>(string name)
         {
             int location = _gl.GetUniformLocation(_handle, name);
             if (location == -1)
             {
-                throw new ArgumentException($"Uniform {name} not found in shader");
+                throw new Exception($"Uniform '{name}' not found in shader");
             }
 
-            int[] output = new int[1];
-            _gl.GetUniform(_handle, location, output);
-            return output[0];
+            _gl.UseProgram(_handle);
+
+            // Handle different return types
+            if (typeof(T) == typeof(float))
+            {
+                float value = 0;
+                _gl.GetUniform(_handle, location, &value);
+                return (T)(object)value;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                int value = 0;
+                _gl.GetUniform(_handle, location, &value);
+                return (T)(object)value;
+            }
+            else if (typeof(T) == typeof(Vector3))
+            {
+                Vector3 value = default;
+                _gl.GetUniform(_handle, location, (float*)&value);
+                return (T)(object)value;
+            }
+            else if (typeof(T) == typeof(Vector4))
+            {
+                Vector4 value = default;
+                _gl.GetUniform(_handle, location, (float*)&value);
+                return (T)(object)value;
+            }
+            else if (typeof(T) == typeof(Matrix4x4))
+            {
+                Matrix4x4 value = default;
+                _gl.GetUniform(_handle, location, (float*)&value);
+                return (T)(object)value;
+            }
+            else if (typeof(T) == typeof(AssetTypes.Texture))
+            {
+                if (_boundTextures.TryGetValue(location, out var texture))
+                {
+                    return (T)(object)texture;
+                }
+
+                // No texture found
+                return default;
+            }
+            else
+            {
+                throw new NotSupportedException($"Type {typeof(T)} is not supported for uniform retrieval");
+            }
         }
 
         public void Dispose()

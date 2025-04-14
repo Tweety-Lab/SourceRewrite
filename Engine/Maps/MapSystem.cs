@@ -103,6 +103,9 @@ namespace SourceRewrite.Maps
                 // --- UV Generation ---
                 sideMesh.UVs = new float[side.Vertices.Length * 2]; // 2 floats per vertex: U, V
 
+                // Get the base texture of side
+                Texture basetexture = sideMesh.Material.Shader.GetParameter<Texture>("basetexture");
+
                 for (int i = 0; i < side.Vertices.Length / 3; i++)
                 {
                     // Get the 3D position from the float[] vertices
@@ -114,8 +117,8 @@ namespace SourceRewrite.Maps
                         new Vector3(x, y, z),
                         side.UAxis,
                         side.VAxis,
-                        512,
-                        512
+                        basetexture.Width,
+                        basetexture.Height
                     );
 
                     // Store into the flat UV array

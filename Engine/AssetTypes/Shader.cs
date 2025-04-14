@@ -74,11 +74,11 @@ namespace SourceRewrite.AssetTypes
         }
 
         /// <summary>
-        /// Get's an int parameter from the shader.
+        /// Gets a shader parameter of type T.
         /// </summary>
-        public int GetIntParameter(string uniformName)
+        public T GetParameter<T>(string uniformName)
         {
-            return _shaderInterface.GetIntParameter(uniformName);
+            return _shaderInterface.GetParameter<T>(uniformName);
         }
     }
 
@@ -89,6 +89,6 @@ namespace SourceRewrite.AssetTypes
     {
         void SetFragmentCode(string input);
         void SetParameter(string uniformName, object value);
-        int GetIntParameter(string uniformName);
+        T GetParameter<T>(string uniformName);
     }
 }
