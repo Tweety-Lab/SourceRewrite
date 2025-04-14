@@ -210,7 +210,7 @@ namespace SourceRewrite.Rendering.OpenGL
         private TextureUnit GetNextAvailableTextureUnit()
         {
             // Simple implementation - just cycle through units (replace this)
-            currentUnit = (currentUnit + 1) % 128; // Assuming 128 texture units available
+            currentUnit = (currentUnit + 1) % 2048; // Assuming 2048 texture units available
             return TextureUnit.Texture0 + currentUnit;
         }
     }
