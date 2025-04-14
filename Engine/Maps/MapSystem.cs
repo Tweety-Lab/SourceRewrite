@@ -201,12 +201,44 @@ namespace SourceRewrite.Maps
             List<Mesh> brushMeshes = new List<Mesh>();
             foreach (BSPPlane side in brushSides)
             {
-                // Create a MeshAsset
-                Mesh sideMesh = new Mesh();
+                // Skip NODRAW surfaces
+                if (side.MaterialName.Equals("tools/toolsnodraw", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
-                sideMesh.Vertices = side.Vertices;
-                sideMesh.Indices = side.Indices;
-                sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
+                // Create a MeshAsset
+                Mesh sideMesh = new Mesh
+                {
+                    Vertices = side.Vertices,
+                    Indices = side.Indices,
+                    Material = FileSystem.GetMaterial(side.MaterialName)
+                };
+
+                // Generate UVs using the same logic as world geometry
+                sideMesh.UVs = new float[side.Vertices.Length * 2]; // 2 floats per vertex: U, V
+                Texture baseTexture = sideMesh.Material?.Shader?.GetParameter<Texture>("basetexture");
+
+                if (baseTexture != null)
+                {
+                    for (int i = 0; i < side.Vertices.Length / 3; i++)
+                    {
+                        // Get the 3D position from the float[] vertices
+                        float x = side.Vertices[i * 3 + 0];
+                        float y = side.Vertices[i * 3 + 1];
+                        float z = side.Vertices[i * 3 + 2];
+
+                        Vector2 uv = ComputeUV(
+                            new Vector3(x, y, z),
+                            side.UAxis,
+                            side.VAxis,
+                            baseTexture.Width,
+                            baseTexture.Height
+                        );
+
+                        // Store into the flat UV array
+                        sideMesh.UVs[i * 2 + 0] = uv.X;  // U
+                        sideMesh.UVs[i * 2 + 1] = uv.Y;  // V
+                    }
+                }
 
                 brushMeshes.Add(sideMesh);
             }

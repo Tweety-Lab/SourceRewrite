@@ -155,6 +155,7 @@ namespace SourceRewrite.Rendering
         {
             if (entity is BrushEntity brushEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render billboard entities REPLACE THIS
             {
+                // Brushes dont have transforms
                 var modelMatrix = Matrix4x4.Identity;
 
                 foreach (Mesh mesh in brushEntity.Brush)
