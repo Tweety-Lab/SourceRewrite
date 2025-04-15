@@ -18,6 +18,9 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         Dictionary<BaseEntity, RigidBody> entityToBody = new Dictionary<BaseEntity, RigidBody>();
         Dictionary<RigidBody, BaseEntity> bodyToEntity = new Dictionary<RigidBody, BaseEntity>();
 
+        private HashSet<(BaseEntity, BaseEntity)> currentFrameCollisions = new HashSet<(BaseEntity, BaseEntity)>();
+        private HashSet<(BaseEntity, BaseEntity)> previousFrameCollisions = new HashSet<(BaseEntity, BaseEntity)>();
+
 
 
         public void OnLoad()
@@ -31,7 +34,14 @@ namespace SourceRewrite.PhysicsSystem.Bullet
 
         public void Update()
         {
+            // Process collision stuff
+            ProcessCollisions();
+
             dynamicsWorld.StepSimulation(1.0f / 22.2f, 10);
+
+            // Clear previous frame, swap sets
+            (previousFrameCollisions, currentFrameCollisions) = (currentFrameCollisions, previousFrameCollisions);
+            currentFrameCollisions.Clear();
 
             // Update all entities with their physics bodies
             foreach (var pair in entityToBody)
@@ -59,6 +69,66 @@ namespace SourceRewrite.PhysicsSystem.Bullet
                 }
                 // Brush entities don't get transformed as their geometry is world-aligned
             }
+        }
+
+        private void ProcessCollisions()
+        {
+            // Get the number of manifolds (collision pairs)
+            int numManifolds = dispatcher.NumManifolds;
+
+            for (int i = 0; i < numManifolds; i++)
+            {
+                PersistentManifold contactManifold = dispatcher.GetManifoldByIndexInternal(i);
+                RigidBody body0 = contactManifold.Body0 as RigidBody;
+                RigidBody body1 = contactManifold.Body1 as RigidBody;
+
+                if (body0 != null && body1 != null)
+                {
+                    HandleCollision(body0, body1);
+                }
+            }
+
+            HandleEndedCollision();
+        }
+
+        private void HandleCollision(RigidBody body0, RigidBody body1)
+        {
+            if (bodyToEntity.TryGetValue(body0, out var entity0) &&
+                bodyToEntity.TryGetValue(body1, out var entity1))
+            {
+                var pair = GetOrderedPair(entity0, entity1);
+
+                // Add to current frame collisions
+                currentFrameCollisions.Add(pair);
+
+                // If this collision didn't exist in the previous frame, it's new
+                if (!previousFrameCollisions.Contains(pair))
+                {
+                    entity0.PhysicsBody?.OnCollisionStart(entity1);
+                    entity1.PhysicsBody?.OnCollisionStart(entity0);
+                }
+            }
+
+        }
+
+        private void HandleEndedCollision()
+        {
+            // Detect ended collisions
+            foreach (var pair in previousFrameCollisions)
+            {
+                if (!currentFrameCollisions.Contains(pair))
+                {
+                    var (entity0, entity1) = pair;
+
+                    entity0.PhysicsBody?.OnCollisionEnd(entity1);
+                    entity1.PhysicsBody?.OnCollisionEnd(entity0);
+                }
+            }
+        }
+
+        private (BaseEntity, BaseEntity) GetOrderedPair(BaseEntity a, BaseEntity b)
+        {
+            return a.GetHashCode() < b.GetHashCode() ? (a, b) : (b, a);
         }
 
         public void InitPhysicsEntity(BaseEntity entity, PhysicsBody physBody)

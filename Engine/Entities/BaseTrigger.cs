@@ -19,11 +19,13 @@ namespace SourceRewrite.Entities
             {
                 PhysicsBody.IsStatic = true;
                 PhysicsBody.CollisionMesh = mesh;
-                PhysicsBody.CanCollide = true;
+                PhysicsBody.CanCollide = false;
                 PhysicsInitNormal();
 
-                PhysicsBody.OnCollisionStart += (entity) => { Console.WriteLine("Collision Detected"); };
             }
+
+            PhysicsBody.OnCollisionStart += (entity) => { Console.WriteLine("Collision Detected"); };
+            PhysicsBody.OnCollisionEnd += (entity) => { Console.WriteLine("Collision Ended"); };
 
             base.Start();
         }
