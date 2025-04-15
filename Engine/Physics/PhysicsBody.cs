@@ -10,14 +10,17 @@ namespace SourceRewrite.PhysicsSystem
 {
     public class PhysicsBody
     {
+        // Physics
         public float Mass { get; set; } = 1.0f;
         public float Friction { get; set; } = 0.5f;
         public float Restitution { get; set; } = 0.5f;
+
+        // Behaviour
         public bool IsStatic { get; set; } = false;
         public bool CanCollide { get; set; } = true;
 
+        // Collision
         public Mesh CollisionMesh { get; set; } = null;
-
         public Vector3 BoundingBox { get; set; } = new Vector3(0f, 0f, 0f);
 
     }
