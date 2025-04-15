@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using BulletSharp;
 using SourceRewrite.Entities;
@@ -15,8 +14,8 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         BroadphaseInterface broadphase;
         DiscreteDynamicsWorld dynamicsWorld;
 
-        // Track multiple bodies per entity
-        Dictionary<BaseEntity, List<RigidBody>> entityBodies = new Dictionary<BaseEntity, List<RigidBody>>();
+        // Track bodies to entities
+        Dictionary<BaseEntity, RigidBody> entityToBody = new Dictionary<BaseEntity, RigidBody>();
         Dictionary<RigidBody, BaseEntity> bodyToEntity = new Dictionary<RigidBody, BaseEntity>();
 
         public void OnLoad()
@@ -33,18 +32,14 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             dynamicsWorld.StepSimulation(1.0f / 22.2f, 10);
 
             // Update all entities with their physics bodies
-            foreach (var entityPair in entityBodies)
+            foreach (var pair in entityToBody)
             {
-                var entity = entityPair.Key;
-                var bodies = entityPair.Value;
+                var entity = pair.Key;
+                var body = pair.Value;
 
-                if (bodies.Count == 0) continue;
-
-                // For point entities, use the first body's transform
                 if (entity is PointEntity pointEntity)
                 {
-                    var primaryBody = bodies[0];
-                    var bulletMatrix = primaryBody.WorldTransform;
+                    var bulletMatrix = body.WorldTransform;
 
                     var numericsMatrix = new Matrix4x4(
                         bulletMatrix[0, 0], bulletMatrix[0, 1], bulletMatrix[0, 2], bulletMatrix[0, 3],
@@ -59,13 +54,6 @@ namespace SourceRewrite.PhysicsSystem.Bullet
                         numericsMatrix.M42,
                         numericsMatrix.M43
                     );
-
-                    // Update any additional bodies to match the entity's transform
-                    for (int i = 1; i < bodies.Count; i++)
-                    {
-                        var body = bodies[i];
-                        body.WorldTransform = bulletMatrix;
-                    }
                 }
                 // Brush entities don't get transformed as their geometry is world-aligned
             }
@@ -73,29 +61,15 @@ namespace SourceRewrite.PhysicsSystem.Bullet
 
         public void InitPhysicsEntity(BaseEntity entity, PhysicsBody physBody)
         {
-            if (!entityBodies.ContainsKey(entity))
+            if (entityToBody.ContainsKey(entity))
             {
-                entityBodies[entity] = new List<RigidBody>();
+                Console.WriteLine("Entity already has a physics body");
+                return;
             }
 
             RigidBody body = CreateRigidBody(entity, physBody);
-            entityBodies[entity].Add(body);
+            entityToBody[entity] = body;
             bodyToEntity[body] = entity;
-        }
-
-        public void InitPhysicsEntity(BaseEntity entity, IEnumerable<PhysicsBody> physBodies)
-        {
-            if (!entityBodies.ContainsKey(entity))
-            {
-                entityBodies[entity] = new List<RigidBody>();
-            }
-
-            foreach (var physBody in physBodies)
-            {
-                RigidBody body = CreateRigidBody(entity, physBody);
-                entityBodies[entity].Add(body);
-                bodyToEntity[body] = entity;
-            }
         }
 
         private RigidBody CreateRigidBody(BaseEntity entity, PhysicsBody physBody)
@@ -142,7 +116,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             body.Friction = physBody.Friction;
             body.Restitution = physBody.Restitution;
             body.UpdateInertiaTensor();
-            
+
             if (physBody.CanCollide == false)
             {
                 body.CollisionFlags |= CollisionFlags.NoContactResponse;
@@ -162,27 +136,21 @@ namespace SourceRewrite.PhysicsSystem.Bullet
 
         public void DestroyPhysicsEntity(BaseEntity entity)
         {
-            if (entityBodies.TryGetValue(entity, out var bodies))
+            if (entityToBody.TryGetValue(entity, out var body))
             {
-                foreach (var body in bodies)
-                {
-                    dynamicsWorld.RemoveRigidBody(body);
-                    bodyToEntity.Remove(body);
-                    body.Dispose();
-                }
-                entityBodies.Remove(entity);
+                dynamicsWorld.RemoveRigidBody(body);
+                bodyToEntity.Remove(body);
+                body.Dispose();
+                entityToBody.Remove(entity);
             }
         }
 
         public void SetEntityAbsVelocity(BaseEntity entity, Vector3 velocity)
         {
-            if (entityBodies.TryGetValue(entity, out var bodies))
+            if (entityToBody.TryGetValue(entity, out var body))
             {
-                foreach (var body in bodies)
-                {
-                    body.Activate();
-                    body.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
-                }
+                body.Activate();
+                body.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
             }
         }
 
@@ -207,16 +175,13 @@ namespace SourceRewrite.PhysicsSystem.Bullet
 
         public void Dispose()
         {
-            foreach (var bodyList in entityBodies.Values)
+            foreach (var body in entityToBody.Values)
             {
-                foreach (var body in bodyList)
-                {
-                    dynamicsWorld.RemoveRigidBody(body);
-                    body.Dispose();
-                }
+                dynamicsWorld.RemoveRigidBody(body);
+                body.Dispose();
             }
 
-            entityBodies.Clear();
+            entityToBody.Clear();
             bodyToEntity.Clear();
 
             dynamicsWorld.Dispose();
