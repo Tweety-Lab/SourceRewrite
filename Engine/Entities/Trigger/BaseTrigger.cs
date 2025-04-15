@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities
 {
-    [Entity("trigger_once")]
     public class BaseTrigger : BrushEntity
     {
         public Mesh CollisionMesh = new Mesh();
 
         public override void Start()
         {
-            Console.WriteLine("Starting Trigger");
             foreach (Mesh mesh in Brush)
             {
                 // Add this mesh to collisionMesh
@@ -31,10 +29,6 @@ namespace SourceRewrite.Entities
             
             // Init Physics
             PhysicsInitNormal();
-
-            // Register Physics Events
-            PhysicsBody.OnCollisionStart += (entity) => { Console.WriteLine("Collision Detected"); };
-            PhysicsBody.OnCollisionEnd += (entity) => { Console.WriteLine("Collision Ended"); };
 
             base.Start();
         }
