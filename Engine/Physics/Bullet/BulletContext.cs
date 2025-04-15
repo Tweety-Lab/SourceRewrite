@@ -18,6 +18,8 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         Dictionary<BaseEntity, RigidBody> entityToBody = new Dictionary<BaseEntity, RigidBody>();
         Dictionary<RigidBody, BaseEntity> bodyToEntity = new Dictionary<RigidBody, BaseEntity>();
 
+
+
         public void OnLoad()
         {
             collisionConfiguration = new DefaultCollisionConfiguration();

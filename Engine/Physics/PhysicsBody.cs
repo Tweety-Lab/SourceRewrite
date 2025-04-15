@@ -25,8 +25,8 @@ namespace SourceRewrite.PhysicsSystem
         public Vector3 BoundingBox { get; set; } = new Vector3(0f, 0f, 0f);
 
         // Events
-        public Action<BaseEntity>? OnCollisionEnter { get; set; }
-        public Action<BaseEntity>? OnCollisionExit { get; set; }
+        public Action<BaseEntity>? OnCollisionStart { get; set; }
+        public Action<BaseEntity>? OnCollisionEnd { get; set; }
 
     }
 }
