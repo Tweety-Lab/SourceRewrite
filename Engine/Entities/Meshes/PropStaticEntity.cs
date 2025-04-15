@@ -16,11 +16,10 @@ namespace SourceRewrite.Entities.Meshes
             base.Start();
 
             // Create Static Physics
-            PhysicsBody body = new PhysicsBody();
-            body.IsStatic = true;
-            body.CollisionMesh = Mesh;
+            PhysicsBody.IsStatic = true;
+            PhysicsBody.CollisionMesh = Mesh;
 
-            PhysicsInitNormal(body);
+            PhysicsInitNormal();
         }
     }
 }

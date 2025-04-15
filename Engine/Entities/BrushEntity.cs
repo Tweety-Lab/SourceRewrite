@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SourceRewrite.Entities
 {
-    // Brush Entities are more like Source 2 "Mesh Entities" simply because we use a similar mesh vs brush approach
+    // Brush Entities are more like Source 2 "Mesh Entities" simply because we use a similar mesh approach
 
     /// <summary>
     /// An Entity that is tied to a brush.

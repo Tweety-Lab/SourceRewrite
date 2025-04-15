@@ -17,11 +17,12 @@ namespace SourceRewrite.Entities
             Console.WriteLine("Starting Trigger");
             foreach (Mesh mesh in Brush)
             {
-                PhysicsBody body = new PhysicsBody();
-                body.IsStatic = true;
-                body.CollisionMesh = mesh;
-                body.CanCollide = false;
-                PhysicsInitNormal(body);
+                PhysicsBody.IsStatic = true;
+                PhysicsBody.CollisionMesh = mesh;
+                PhysicsBody.CanCollide = false;
+                PhysicsInitNormal();
+
+                PhysicsBody.OnCollisionEnter += (entity) => { Console.WriteLine("Collision Detected"); };
             }
 
             base.Start();

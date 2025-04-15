@@ -46,6 +46,9 @@ namespace SourceRewrite.Entities
 
         // Controls whether Entity logic is enabled
         public bool IsEnabled { get; set; } = true;
+
+        // Controls the Physics of the Entity (if enabled)
+        public PhysicsBody PhysicsBody { get; set; } = new PhysicsBody();
         
         // IO Outputs
         public List<EntityIOConnection> Outputs { get; set; } = new List<EntityIOConnection>();
@@ -189,12 +192,20 @@ namespace SourceRewrite.Entities
             }
         }
 
-        public void PhysicsInitNormal(PhysicsBody body)
+        /// <summary>
+        /// Initialize a Entity with a physics body.
+        /// </summary>
+        /// <param name="body"></param>
+        public void PhysicsInitNormal()
         {
             // Register this entity with the physics context
-            Physics.InitPhysicsEntity(this, body);
+            Physics.InitPhysicsEntity(this, PhysicsBody);
         }
 
+        /// <summary>
+        /// Set an Entities absolute velocity.
+        /// </summary>
+        /// <param name="velocity"></param>
         public void SetAbsVelocity(Vector3 velocity)
         {
             Physics.SetEntityAbsVelocity(this, velocity);

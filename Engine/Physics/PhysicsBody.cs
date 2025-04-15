@@ -1,4 +1,5 @@
 ﻿using SourceRewrite.AssetTypes;
+using SourceRewrite.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,10 @@ namespace SourceRewrite.PhysicsSystem
         // Collision
         public Mesh CollisionMesh { get; set; } = null;
         public Vector3 BoundingBox { get; set; } = new Vector3(0f, 0f, 0f);
+
+        // Events
+        public Action<BaseEntity>? OnCollisionEnter { get; set; }
+        public Action<BaseEntity>? OnCollisionExit { get; set; }
 
     }
 }

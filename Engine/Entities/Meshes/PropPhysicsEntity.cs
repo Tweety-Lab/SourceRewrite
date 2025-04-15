@@ -17,10 +17,9 @@ namespace SourceRewrite.Entities.Meshes
         {
             base.Start();
 
-            PhysicsBody body = new PhysicsSystem.PhysicsBody();
-            body.CollisionMesh = Mesh;
-            body.Mass = 1f;
-            PhysicsInitNormal(body);
+            PhysicsBody.CollisionMesh = Mesh;
+            PhysicsBody.Mass = 1f;
+            PhysicsInitNormal();
         }
 
         public override void Update()
