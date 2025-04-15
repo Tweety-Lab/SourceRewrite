@@ -27,6 +27,7 @@ namespace SourceRewrite.PhysicsSystem
         // Events
         public Action<BaseEntity>? OnCollisionStart { get; set; } = new Action<BaseEntity>(entity => { });
         public Action<BaseEntity>? OnCollisionEnd { get; set; } = new Action<BaseEntity>(entity => { });
+        public Action<BaseEntity>? OnColliding { get; set; } = new Action<BaseEntity>(entity => { });
 
     }
 }

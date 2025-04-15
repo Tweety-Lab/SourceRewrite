@@ -16,6 +16,7 @@ namespace SourceRewrite.Entities
 
             PhysicsBody.OnCollisionStart += (entity) => { FireOutput("OnStartTouch"); };
             PhysicsBody.OnCollisionEnd += (entity) => { FireOutput("OnEndTouch"); };
+            PhysicsBody.OnColliding += (entity) => { FireOutput("OnTrigger"); };
         }
     }
 }

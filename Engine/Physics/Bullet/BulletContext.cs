@@ -101,9 +101,14 @@ namespace SourceRewrite.PhysicsSystem.Bullet
                 // Add to current frame collisions
                 currentFrameCollisions.Add(pair);
 
+                // Trigger OnCollide
+                entity0.PhysicsBody?.OnColliding(entity1);
+                entity1.PhysicsBody?.OnColliding(entity0);
+
                 // If this collision didn't exist in the previous frame, it's new
                 if (!previousFrameCollisions.Contains(pair))
                 {
+                    // Trigger OnCollisionStart
                     entity0.PhysicsBody?.OnCollisionStart(entity1);
                     entity1.PhysicsBody?.OnCollisionStart(entity0);
                 }
@@ -120,6 +125,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
                 {
                     var (entity0, entity1) = pair;
 
+                    // Trigger OnCollisionEnd
                     entity0.PhysicsBody?.OnCollisionEnd(entity1);
                     entity1.PhysicsBody?.OnCollisionEnd(entity0);
                 }
