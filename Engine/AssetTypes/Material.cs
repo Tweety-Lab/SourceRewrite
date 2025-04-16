@@ -53,8 +53,6 @@ namespace SourceRewrite.AssetTypes
                     // Add to Properties
                     Properties.Add(propertyName, propertyValue);
 
-                    Console.WriteLine(propertyName + ": " + propertyValue);
-
                     // Special logic for base texture paths (REPLACE THIS)
                     if (keyValue.Key.ToLower() == "$basetexture")
                     {

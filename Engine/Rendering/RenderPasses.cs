@@ -55,15 +55,14 @@ namespace SourceRewrite.Rendering
             if (material.GetFlag("compilenodraw") == 1)
                 return false;
 
-            if (material.GetFlag("compiletrigger") == 1)
-                return false;
-
-
             if (material.GetFlag("alphatest") == 1)
                 return false;
 
             if (material.GetFlag("translucent") == 1)
                 return false;
+
+            if (material.GetFlag("compiletrigger") == 1)
+                return ConCommands.RenderTriggers; // Allow to toggle trigger visibilty with showtriggers_toggle
 
             return true;
         }
@@ -112,7 +111,7 @@ namespace SourceRewrite.Rendering
                 return false;
 
             if (material.GetFlag("compiletrigger") == 1)
-                return false;
+                return ConCommands.RenderTriggers; // Allow to toggle trigger visibilty with showtriggers_toggle
 
             if (material.GetFlag("alphatest") == 1)
                 return true;

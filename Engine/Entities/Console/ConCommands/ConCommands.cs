@@ -23,5 +23,13 @@ namespace SourceRewrite.Entities
         {
             DeveloperConsole.Msg(input);
         }
+
+        public static bool RenderTriggers = false;
+
+        [ConCommand("showtriggers_toggle")]
+        static void ToggleTriggerVisiblity()
+        {
+            RenderTriggers = !RenderTriggers;
+        }
     }
 }
