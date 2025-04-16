@@ -1,5 +1,4 @@
-﻿using Steam;
-
+﻿
 namespace FileFormats.KeyValues.GameInfo
 {
     // GameInfo is just abstracted KeyValues
@@ -23,20 +22,6 @@ namespace FileFormats.KeyValues.GameInfo
             // Populate Data
             GameName = (string) KeyValues.GetKeyValue("game").Value;
             SteamAppID = (int) KeyValues.GetKeyValue("SteamAppId").Value;
-        }
-
-        /// <summary>
-        /// Returns the paths to all mounted games defined in gameinfo.txt.
-        /// </summary>
-        public string[] GetMountedPaths()
-        {
-            List<string> paths = new List<string>();
-            foreach (var searchPath in KeyValues.GetParentKey("GameInfo").GetChildParentKey("FileSystem").GetChildParentKey("SearchPaths").ChildKeyValues)
-            {
-                paths.Add($"{SteamPaths.GetGamePathFromAppId(SteamAppID)}\\{(string)searchPath.Value}");
-            }
-
-            return paths.ToArray();
         }
     }
 }
