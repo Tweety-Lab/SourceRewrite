@@ -10,8 +10,28 @@ namespace SourceRewrite.Rendering.OpenGL
         private readonly uint _handle;
         private readonly GL _gl;
 
-        // Track texture bindings
-        private readonly Dictionary<int, AssetTypes.Texture> _boundTextures = new Dictionary<int, AssetTypes.Texture>();
+        // Track texture bindings with their texture units
+        private readonly Dictionary<int, TextureBinding> _boundTextures = new Dictionary<int, TextureBinding>();
+
+        // Store texture binding information
+        private class TextureBinding
+        {
+            public AssetTypes.Texture Texture { get; set; }
+            public int TextureUnit { get; set; }
+            public bool IsActive { get; set; } = true;
+        }
+
+        // LRU cache for texture unit management
+        private static readonly LRUTextureUnitCache _textureUnitCache;
+        private static readonly object _textureUnitLock = new object();
+        private static readonly int _maxTextureUnits;
+
+        static OpenGLShader()
+        {
+            // In a real implementation, query this from OpenGL
+            _maxTextureUnits = 16; // Conservative default, should be queried at runtime
+            _textureUnitCache = new LRUTextureUnitCache(_maxTextureUnits);
+        }
 
         public OpenGLShader(GL gl, string vertexSource, string fragmentSource)
         {
@@ -41,6 +61,17 @@ namespace SourceRewrite.Rendering.OpenGL
         {
             // Using the program
             _gl.UseProgram(_handle);
+
+            // Refresh all active texture bindings
+            foreach (var binding in _boundTextures.Values)
+            {
+                if (binding.IsActive)
+                {
+                    OpenGLTexture glTexture = (OpenGLTexture)binding.Texture.GetTextureInterface();
+                    TextureUnit unit = TextureUnit.Texture0 + binding.TextureUnit;
+                    glTexture.Bind(unit);
+                }
+            }
         }
 
         /// <summary>
@@ -77,17 +108,70 @@ namespace SourceRewrite.Rendering.OpenGL
                 case AssetTypes.Texture texture:
                     OpenGLTexture glTexture = (OpenGLTexture)texture.GetTextureInterface();
 
-                    // Get the next available texture unit
-                    TextureUnit unit = GetNextAvailableTextureUnit();
-                    int unitIndex = (int)unit - (int)TextureUnit.Texture0;
+                    // Check if we already have this uniform bound
+                    if (_boundTextures.TryGetValue(location, out var existingBinding))
+                    {
+                        // If binding a new texture to the same uniform
+                        if (existingBinding.Texture != texture)
+                        {
+                            // Mark the old binding as inactive
+                            existingBinding.IsActive = false;
 
-                    // Activate, bind, and set uniform
-                    glTexture.Bind(unit);
-                    _gl.Uniform1(location, unitIndex);
+                            // Get a texture unit (may reuse one from the LRU cache)
+                            int unitIndex = GetTextureUnit(texture);
+                            TextureUnit unit = TextureUnit.Texture0 + unitIndex;
 
-                    // Track the binding
-                    _boundTextures[location] = texture;
+                            // Activate, bind, and set uniform
+                            glTexture.Bind(unit);
+                            _gl.Uniform1(location, unitIndex);
 
+                            // Update tracking info
+                            _boundTextures[location] = new TextureBinding
+                            {
+                                Texture = texture,
+                                TextureUnit = unitIndex,
+                                IsActive = true
+                            };
+                        }
+                        else if (!existingBinding.IsActive)
+                        {
+                            // Same texture but was inactive, reactivate it
+                            int unitIndex = GetTextureUnit(texture);
+                            TextureUnit unit = TextureUnit.Texture0 + unitIndex;
+
+                            glTexture.Bind(unit);
+                            _gl.Uniform1(location, unitIndex);
+
+                            existingBinding.TextureUnit = unitIndex;
+                            existingBinding.IsActive = true;
+                        }
+                        else
+                        {
+                            // Same texture and still active, just touch it in the LRU cache
+                            lock (_textureUnitLock)
+                            {
+                                _textureUnitCache.Touch(existingBinding.TextureUnit);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // New texture binding
+                        int unitIndex = GetTextureUnit(texture);
+                        TextureUnit unit = TextureUnit.Texture0 + unitIndex;
+
+                        // Activate, bind, and set uniform
+                        glTexture.Bind(unit);
+                        _gl.Uniform1(location, unitIndex);
+
+                        // Track the binding
+                        _boundTextures[location] = new TextureBinding
+                        {
+                            Texture = texture,
+                            TextureUnit = unitIndex,
+                            IsActive = true
+                        };
+                    }
                     break;
             }
         }
@@ -138,9 +222,9 @@ namespace SourceRewrite.Rendering.OpenGL
             }
             else if (typeof(T) == typeof(AssetTypes.Texture))
             {
-                if (_boundTextures.TryGetValue(location, out var texture))
+                if (_boundTextures.TryGetValue(location, out var binding) && binding.IsActive)
                 {
-                    return (T)(object)texture;
+                    return (T)(object)binding.Texture;
                 }
 
                 // No texture found
@@ -200,19 +284,68 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
-        // TODO: Deal with texture units on disposal
-        static int currentUnit = 0;
-        private TextureUnit GetNextAvailableTextureUnit()
+        // Improved texture unit management with LRU cache
+        private static int GetTextureUnit(AssetTypes.Texture texture)
         {
-            // Simple implementation - just cycle through units (replace this)
-            currentUnit = (currentUnit + 1) % 2048; // Assuming 2048 texture units available
-            return TextureUnit.Texture0 + currentUnit;
+            lock (_textureUnitLock)
+            {
+                return _textureUnitCache.GetTextureUnit();
+            }
         }
 
         public void Dispose()
         {
-            // Remember to delete the program when we are done
+            // Cleanup texture bindings
+            _boundTextures.Clear();
+
+            // Delete the program when we are done
             _gl.DeleteProgram(_handle);
+        }
+    }
+
+    /// <summary>
+    /// Least Recently Used (LRU) cache for texture unit management
+    /// </summary>
+    public class LRUTextureUnitCache
+    {
+        private readonly LinkedList<int> _lruList = new LinkedList<int>();
+        private readonly Dictionary<int, LinkedListNode<int>> _unitMap = new Dictionary<int, LinkedListNode<int>>();
+        private readonly int _capacity;
+
+        public LRUTextureUnitCache(int capacity)
+        {
+            _capacity = capacity;
+
+            // Initialize with all available texture units
+            for (int i = 0; i < capacity; i++)
+            {
+                var node = _lruList.AddLast(i);
+                _unitMap[i] = node;
+            }
+        }
+
+        public int GetTextureUnit()
+        {
+            // Get the least recently used unit
+            int unit = _lruList.First.Value;
+            Touch(unit);
+            return unit;
+        }
+
+        public void Touch(int unit)
+        {
+            // Move this unit to the end of the list (most recently used)
+            if (_unitMap.TryGetValue(unit, out var node))
+            {
+                _lruList.Remove(node);
+                _lruList.AddLast(node);
+            }
+            else
+            {
+                // This shouldn't happen if the cache is properly maintained
+                var newNode = _lruList.AddLast(unit);
+                _unitMap[unit] = newNode;
+            }
         }
     }
 }
