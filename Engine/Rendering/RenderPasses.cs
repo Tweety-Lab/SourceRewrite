@@ -25,23 +25,85 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render billboard entities REPLACE THIS
+            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam)
             {
+                if (!ShouldRenderMaterial(meshEntity.Mesh.Material))
+                    return;
+
                 var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
                 Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
             }
-            else if (entity is BrushEntity brushEntity && entity is not EnvSprite && entity is not EnvBeam) // Make sure not to also render billboard entities REPLACE THIS
+            else if (entity is BrushEntity brushEntity)
             {
-                // Brushes dont have transforms
                 var modelMatrix = Matrix4x4.Identity;
 
                 foreach (Mesh mesh in brushEntity.Brush)
                 {
-                    if (mesh.Material.Properties.TryGetValue("alphatest", out object alphatest) && alphatest is int value && value == 1)
+                    if (!ShouldRenderMaterial(mesh.Material))
                         continue;
+
                     Renderer.RenderMesh(mesh, modelMatrix);
                 }
             }
+        }
+
+        // Determinse if a material should be rendered in opaque pass
+        private bool ShouldRenderMaterial(Material material)
+        {
+            if (material.Properties.TryGetValue("alphatest", out object alphaTestObj) && alphaTestObj is int alphaTest && alphaTest == 1)
+                return false;
+
+            if (material.Properties.TryGetValue("translucent", out object translucentObj) && translucentObj is int translucent && translucent == 1)
+                return false;
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Render Brush and Point Entities that are Translucent.
+    /// </summary>
+    public class TranslucentPass : BaseRenderPass
+    {
+        // Enable Depth-Testing and Culling
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullBackFaces, RenderFlag.Blend };
+
+        public override void OnRender() => RenderEntities<BaseEntity>(EntityManager.Root);
+
+        protected override void RenderEntity<TEntity>(TEntity entity)
+        {
+            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam)
+            {
+                if (!ShouldRenderMaterial(meshEntity.Mesh.Material))
+                    return;
+
+                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
+                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
+            }
+            else if (entity is BrushEntity brushEntity)
+            {
+                var modelMatrix = Matrix4x4.Identity;
+
+                foreach (Mesh mesh in brushEntity.Brush)
+                {
+                    if (!ShouldRenderMaterial(mesh.Material))
+                        continue;
+
+                    Renderer.RenderMesh(mesh, modelMatrix);
+                }
+            }
+        }
+
+        // Determinse if a material should be rendered in translucent pass
+        private bool ShouldRenderMaterial(Material material)
+        {
+            if (material.Properties.TryGetValue("alphatest", out object alphaTestObj) && alphaTestObj is int alphaTest && alphaTest == 1)
+                return true;
+
+            if (material.Properties.TryGetValue("translucent", out object translucentObj) && translucentObj is int translucent && translucent == 1)
+                return true;
+
+            return false;
         }
     }
 
