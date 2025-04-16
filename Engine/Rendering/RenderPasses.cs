@@ -37,6 +37,8 @@ namespace SourceRewrite.Rendering
 
                 foreach (Mesh mesh in brushEntity.Brush)
                 {
+                    if (mesh.Material.Properties.TryGetValue("alphatest", out object alphatest) && alphatest is int value && value == 1)
+                        continue;
                     Renderer.RenderMesh(mesh, modelMatrix);
                 }
             }
