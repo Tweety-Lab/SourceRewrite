@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SourceRewrite.Steam
+namespace Steam
 {
     public static class SteamPaths
     {

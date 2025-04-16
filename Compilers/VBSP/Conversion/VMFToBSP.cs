@@ -86,10 +86,6 @@ namespace VBSP.Conversion
                 // Process each side in the solid
                 foreach (VMFSide side in solid.Sides)
                 {
-                    // Skip NODRAW sides
-                    if (side.Material == "TOOLS/TOOLSNODRAW")
-                        continue;
-
                     // Calculate side geometry using CSG approach
                     float[] sideVertices = CalculateSideVertices(side, solidPlanes);
 
@@ -204,10 +200,6 @@ namespace VBSP.Conversion
             // Process each side
             foreach (VMFSide side in solid.Sides)
             {
-                // Skip NODRAW Sides
-                if (side.Material == "TOOLS/TOOLSNODRAW")
-                    continue;
-
                 // Calculate side geometry using CSG approach
                 float[] sideVertices = CalculateSideVertices(side, solidPlanes);
 

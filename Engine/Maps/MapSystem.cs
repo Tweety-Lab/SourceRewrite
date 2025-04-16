@@ -95,10 +95,13 @@ namespace SourceRewrite.Maps
                 // Create a MeshAsset
                 Mesh sideMesh = new Mesh();
 
+                // Get the material
+                Material sideMaterial = FileSystem.GetMaterial(side.MaterialName);
+
                 // Populate the MeshAsset with lump data
                 sideMesh.Vertices = side.Vertices;
                 sideMesh.Indices = side.Indices;
-                sideMesh.Material = FileSystem.GetMaterial(side.MaterialName);
+                sideMesh.Material = sideMaterial;
 
                 // --- UV Generation ---
                 sideMesh.UVs = new float[side.Vertices.Length * 2]; // 2 floats per vertex: U, V
