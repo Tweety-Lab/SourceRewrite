@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "458"
+	"mapversion" "459"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "458"
+	"mapversion" "459"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -1406,7 +1406,6 @@ entity
 	{
 		"OnStartTouch" "counterAdd200-1"
 		"OnEndTouch" "counterSubtract200-1"
-		"OnTrigger" "serverCommandecho gsdfsdfsd0-1"
 	}
 	solid
 	{

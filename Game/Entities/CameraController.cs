@@ -114,16 +114,6 @@ namespace Game.Entities
             {
                 Input.UnlockCursor();
             }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                PhysicsRay physicsRay = new PhysicsRay(PointCamera.ActiveCamera.Transform.Position, PointCamera.ActiveCamera.Transform.Forward);
-                BaseEntity hitEnt = Physics.RayCast(physicsRay);
-                if (hitEnt != null)
-                {
-                    hitEnt.DestroyDeferred();
-                }
-            }
         }
     }
 }
