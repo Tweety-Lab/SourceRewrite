@@ -49,7 +49,7 @@ namespace SourceRewrite.Files
             List<string> paths = new List<string>();
             foreach(var searchPath in GetParentKey("GameInfo").GetChildParentKey("FileSystem").GetChildParentKey("SearchPaths").ChildKeyValues)
             {
-                paths.Add($"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)searchPath.Value}");
+                paths.Add($"{Paths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)searchPath.Value}");
             }
 
             return paths.ToArray();
