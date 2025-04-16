@@ -50,8 +50,6 @@ namespace SourceRewrite.AssetTypes
                         // Add to Properties
                         Properties.Add(propertyName, propertyValue);
 
-                        Console.WriteLine($"{propertyName}: {propertyValue}");
-
                         // Set Shader uniform (property) to input property
                         Shader.SetParameter(propertyName, propertyValue);
                     }
