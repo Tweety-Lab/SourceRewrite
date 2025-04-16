@@ -58,7 +58,7 @@ namespace FileFormats.KeyValues
                 }
 
                 // Parse key-value pair
-                var match = Regex.Match(line, @"^""?([\w$]+)""?\s+""(.+?)""$");
+                var match = Regex.Match(line, @"^""?([\w$]+)""?\s+(?:""(.+?)""|(\S+))$");
                 if (match.Success)
                 {
                     var key = match.Groups[1].Value;
