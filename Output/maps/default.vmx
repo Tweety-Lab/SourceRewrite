@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "454"
+	"mapversion" "458"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "454"
+	"mapversion" "458"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -29,12 +29,12 @@ world
 	"skyname" "sky_black_nofog"
 	solid
 	{
-		"id" "2099"
+		"id" "2062"
 		side
 		{
-			"id" "268"
-			"plane" "(48 112 384) (48 176 384) (112 176 384)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"id" "223"
+			"plane" "(-272 128 64) (-64 128 64) (-64 -16 64)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
@@ -43,51 +43,62 @@ world
 		}
 		side
 		{
-			"id" "267"
-			"plane" "(48 176 336) (48 176 384) (48 112 384)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "266"
-			"plane" "(112 176 336) (112 112 384) (112 176 384)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "265"
-			"plane" "(48 176 336) (112 176 336) (112 176 384)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "264"
-			"plane" "(112 176 336) (48 176 336) (48 112 384)"
-			"material" "ANIM_WP/FRAMEWORK/BACKPANELS_COLOR03"
+			"id" "224"
+			"plane" "(-272 -16 0) (-64 -16 0) (-64 128 0)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "225"
+			"plane" "(-272 128 64) (-272 -16 64) (-272 -16 0)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "226"
+			"plane" "(-64 128 0) (-64 -16 0) (-64 -16 64)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "227"
+			"plane" "(-64 128 64) (-272 128 64) (-272 128 0)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
+			"uaxis" "[1 0 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "228"
+			"plane" "(-64 -16 0) (-272 -16 0) (-272 -16 64)"
+			"material" "METAL/BACKSTAGE_GRATE_001A"
+			"uaxis" "[1 0 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
 		}
 		editor
 		{
-			"color" "0 120 173"
+			"color" "0 223 148"
 			"visgroupshown" "1"
 			"visgroupautoshown" "1"
 		}
@@ -1395,8 +1406,7 @@ entity
 	{
 		"OnStartTouch" "counterAdd200-1"
 		"OnEndTouch" "counterSubtract200-1"
-		"OnTrigger" "serverCommandecho 0-1"
-		"touching" "0-10-1"
+		"OnTrigger" "serverCommandecho gsdfsdfsd0-1"
 	}
 	solid
 	{

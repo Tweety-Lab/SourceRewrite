@@ -9,6 +9,7 @@ namespace SourceRewrite.AssetTypes
     public class Material
     {
         public Shader Shader;
+        public Dictionary<string, object> Properties = new();
 
         // File-Path Constructor
         public Material(string filePath = "")
@@ -45,6 +46,11 @@ namespace SourceRewrite.AssetTypes
                     {
                         string propertyName = keyValue.Key.Split('$')[1];
                         object propertyValue = keyValue.Value;
+
+                        // Add to Properties
+                        Properties.Add(propertyName, propertyValue);
+
+                        Console.WriteLine($"{propertyName}: {propertyValue}");
 
                         // Set Shader uniform (property) to input property
                         Shader.SetParameter(propertyName, propertyValue);
