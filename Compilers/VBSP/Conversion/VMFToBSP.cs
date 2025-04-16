@@ -93,9 +93,6 @@ namespace VBSP.Conversion
                     // Calculate side geometry using CSG approach
                     float[] sideVertices = CalculateSideVertices(side, solidPlanes);
 
-                    if (sideVertices.Length < 12) // Need at least 4 vertices (3 coordinates each)
-                        continue;
-
                     // Get UV Axis
                     BSPUVAxis UAxis = new BSPUVAxis()
                     {
@@ -213,9 +210,6 @@ namespace VBSP.Conversion
 
                 // Calculate side geometry using CSG approach
                 float[] sideVertices = CalculateSideVertices(side, solidPlanes);
-
-                if (sideVertices.Length < 12) // Need at least 4 vertices (3 coordinates each)
-                    continue;
 
                 // Get UV Axis
                 BSPUVAxis UAxis = new BSPUVAxis()
