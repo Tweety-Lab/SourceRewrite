@@ -2,7 +2,7 @@
 
 namespace Steam
 {
-    public static class Paths
+    public static class SteamPaths
     {
         /// <summary>
         /// Gets the File Path to Steam install.
