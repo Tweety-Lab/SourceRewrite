@@ -50,10 +50,19 @@ namespace SourceRewrite.Rendering
         // Determinse if a material should be rendered in opaque pass
         private bool ShouldRenderMaterial(Material material)
         {
-            if (material.Properties.TryGetValue("alphatest", out object alphaTestObj) && alphaTestObj is int alphaTest && alphaTest == 1)
+            // COMPILE TIME OPTIMIZATION
+            // TODO: Move this to VBSP
+            if (material.GetFlag("compilenodraw") == 1)
                 return false;
 
-            if (material.Properties.TryGetValue("translucent", out object translucentObj) && translucentObj is int translucent && translucent == 1)
+            if (material.GetFlag("compiletrigger") == 1)
+                return false;
+
+
+            if (material.GetFlag("alphatest") == 1)
+                return false;
+
+            if (material.GetFlag("translucent") == 1)
                 return false;
 
             return true;
@@ -97,10 +106,18 @@ namespace SourceRewrite.Rendering
         // Determinse if a material should be rendered in translucent pass
         private bool ShouldRenderMaterial(Material material)
         {
-            if (material.Properties.TryGetValue("alphatest", out object alphaTestObj) && alphaTestObj is int alphaTest && alphaTest == 1)
+            // COMPILE TIME OPTIMIZATION
+            // TODO: Move this to VBSP
+            if (material.GetFlag("compilenodraw") == 1)
+                return false;
+
+            if (material.GetFlag("compiletrigger") == 1)
+                return false;
+
+            if (material.GetFlag("alphatest") == 1)
                 return true;
 
-            if (material.Properties.TryGetValue("translucent", out object translucentObj) && translucentObj is int translucent && translucent == 1)
+            if (material.GetFlag("translucent") == 1)
                 return true;
 
             return false;

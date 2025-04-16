@@ -36,6 +36,25 @@ namespace SourceRewrite.AssetTypes
                 // Loop through every KeyValue in Material
                 foreach (KeyValue keyValue in keyValues.ParentKeys[0].ChildKeyValues)
                 {
+                    // Get property name and value
+                    string key = keyValue.Key;
+                    string propertyName;
+
+                    // Split at '$' or '%'
+                    if (key.StartsWith('$'))
+                        propertyName = key.Split('$')[1];
+                    else if (key.StartsWith('%'))
+                        propertyName = key.Split('%')[1];
+                    else
+                        propertyName = key; // fallback if neither is present
+
+                    object propertyValue = keyValue.Value;
+
+                    // Add to Properties
+                    Properties.Add(propertyName, propertyValue);
+
+                    Console.WriteLine(propertyName + ": " + propertyValue);
+
                     // Special logic for base texture paths (REPLACE THIS)
                     if (keyValue.Key.ToLower() == "$basetexture")
                     {
@@ -44,12 +63,6 @@ namespace SourceRewrite.AssetTypes
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))
                     {
-                        string propertyName = keyValue.Key.Split('$')[1];
-                        object propertyValue = keyValue.Value;
-
-                        // Add to Properties
-                        Properties.Add(propertyName, propertyValue);
-
                         // Set Shader uniform (property) to input property
                         Shader.SetParameter(propertyName, propertyValue);
                     }
@@ -60,6 +73,18 @@ namespace SourceRewrite.AssetTypes
             {
                 DeveloperConsole.Error($"A Material error occurred: {ex.Message}");
             }
+        }
+
+        // Get Property
+        public object GetProperty(string propertyName) => Properties[propertyName];
+
+        // Get a Flag (boolean property)
+        public int GetFlag(string propertyName)
+        {
+            if (Properties.ContainsKey(propertyName))
+                return (int)Properties[propertyName];
+            else
+                return 0;
         }
     }
 }

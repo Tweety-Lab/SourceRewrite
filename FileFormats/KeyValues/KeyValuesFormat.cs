@@ -58,11 +58,12 @@ namespace FileFormats.KeyValues
                 }
 
                 // Parse key-value pair
-                var match = Regex.Match(line, @"^""?([\w$]+)""?\s+(?:""(.+?)""|(\S+))$");
+                var match = Regex.Match(line, @"^\s*[""]?([^\s""]+)[""]?\s+(?:([""])(.*?)\2|(\S+))\s*$");
+
                 if (match.Success)
                 {
                     var key = match.Groups[1].Value;
-                    var value = match.Groups[2].Success ? match.Groups[2].Value : match.Groups[3].Value;
+                    var value = match.Groups[3].Success ? match.Groups[3].Value : match.Groups[4].Value;
 
                     KeyValue keyValue = new KeyValue(key, value);
                     keyValue.Value = KeyValuesUtility.ConvertValueToType(value);

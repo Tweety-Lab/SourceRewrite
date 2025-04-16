@@ -207,10 +207,6 @@ namespace SourceRewrite.Maps
             List<Mesh> brushMeshes = new List<Mesh>();
             foreach (BSPPlane side in brushSides)
             {
-                // Skip NODRAW surfaces
-                if (side.MaterialName.Equals("tools/toolsnodraw", StringComparison.OrdinalIgnoreCase))
-                    continue;
-
                 // Create a MeshAsset
                 Mesh sideMesh = new Mesh
                 {
