@@ -70,7 +70,7 @@ namespace SourceRewrite.Rendering
         protected override bool ShouldRenderMaterial(Material material)
         {
             if (material.GetFlag("compilenodraw") == 1) return false;
-            if (material.GetFlag("compiletrigger") == 1) return ConCommands.RenderTriggers;
+            if (material.GetFlag("compiletrigger") == 1) return false;
 
             return material.GetFlag("alphatest") != 1 &&
                    material.GetFlag("translucent") != 1;

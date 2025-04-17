@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "180"
+	"mapversion" "181"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "180"
+	"mapversion" "181"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -3439,10 +3439,11 @@ entity
 entity
 {
 	"id" "713"
-	"classname" "trigger_once"
+	"classname" "trigger_multiple"
 	"origin" "-448 -96 196"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
+	"wait" "1"
 	solid
 	{
 		"id" "711"

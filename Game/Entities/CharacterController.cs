@@ -23,7 +23,7 @@ namespace Game.Entities
         public static float JumpPower { get; set; } = 256f;
 
         [ConVar("sensitivity")]
-        public static float Sensitivity { get; set; } = 0.6f;
+        public static float Sensitivity { get; set; } = 0.4f;
 
         private float pitch = 0f;  // rotation around Right (X)
         private float yaw = 0f;    // rotation around Up (Z)
