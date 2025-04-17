@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "461"
+	"mapversion" "471"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "16"
+	"nGridSpacing" "4"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "461"
+	"mapversion" "471"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -1361,7 +1361,7 @@ entity
 	"id" "713"
 	"classname" "info_player_start"
 	"angles" "0 0 0"
-	"origin" "-352 80 32"
+	"origin" "-356 80 48"
 	editor
 	{
 		"color" "0 255 0"

@@ -39,6 +39,10 @@ namespace Game.Entities
 
                 camEntity.Parent = this;
 
+                // Set the Camera offset
+                // Eye level = 64 units offset from center of origin
+                camEntity.LocalTransform.Position = new Vector3(0f, 0f, 28f);
+
                 PointCamera.SetActiveCamera(camEntity);
             }
 
@@ -49,7 +53,7 @@ namespace Game.Entities
 
             // Physics
             PhysicsBody.BodyType = BodyType.Dynamic;
-            PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
+            PhysicsBody.BoundingBox = new Vector3(16f, 16f, 36f); // Bounding box is half of desired dimensions
             PhysicsBody.FreezeAllRotations = true;
             PhysicsInitNormal();
         }
