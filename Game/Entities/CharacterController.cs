@@ -16,11 +16,15 @@ namespace Game.Entities
     [Entity("info_player_start")]
     public class CharacterController : PointEntity
     {
-        [ConVar("movement_speed")]
-        public static float MovementSpeed { get; set; } = 256f;
+        // Speed of Movement
+        public float MovementSpeed { get; set; } = 256f;
 
-        [ConVar("jump_power")]
-        public static float JumpPower { get; set; } = 256f;
+        // Power of Jump
+        public float JumpPower { get; set; } = 256f;
+
+        // Max height of obstacle before it cant be walked up
+        public float StepUpHeight { get; set; } = 18f;
+
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.4f;
@@ -66,11 +70,22 @@ namespace Game.Entities
             // Jumping
             if (Input.GetPressed("jump"))
                 Jump();
+
         }
 
         private void Jump()
         {
-            Velocity = new Vector3(Velocity.X, Velocity.Y, JumpPower);
+            if (IsGrounded())
+                Velocity = new Vector3(Velocity.X, Velocity.Y, JumpPower);
+        }
+
+        private bool IsGrounded()
+        {
+            float groundCheckDistance = 32f; // Small distance below feet
+            Vector3 footPosition = Transform.Position + new Vector3(0f, 0f, -PhysicsBody.BoundingBox.Z);
+            Vector3 groundCheckPosition = footPosition + new Vector3(0f, 0f, -groundCheckDistance);
+
+            return Physics.RayCast(new PhysicsRay(footPosition, groundCheckPosition)) != null;
         }
 
         private void HandleMovementInput(float deltaTime)
@@ -96,16 +111,12 @@ namespace Game.Entities
             if (Input.GetDown("left")) movementDirection -= camRight;
             if (Input.GetDown("right")) movementDirection += camRight;
 
-            // Normalize if moving diagonally
             if (movementDirection != Vector3.Zero)
             {
                 movementDirection = Vector3.Normalize(movementDirection);
             }
 
-            // Calculate target velocity
             Vector3 targetVelocity = movementDirection * MovementSpeed;
-
-            // Apply velocity directly
             Velocity = new Vector3(targetVelocity.X, targetVelocity.Y, Velocity.Z);
         }
 

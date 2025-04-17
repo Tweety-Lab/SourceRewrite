@@ -1,7 +1,7 @@
 ﻿using SourceRewrite;
 using SourceRewrite.Attributes;
 
-namespace Game.Console
+namespace Game.ConsoleCommands
 {
     public static class ConCommands
     {
@@ -16,7 +16,7 @@ namespace Game.Console
         [ConCommand("print_convar")]
         static void PrintConvar()
         {
-            DeveloperConsole.Msg($"Value of my_convar: {ConVars.MyConvar}");
+            DeveloperConsole.Msg($"Value of my_convar: {ConsoleVariables.ConVars.MyConvar}");
         }
     }
 }

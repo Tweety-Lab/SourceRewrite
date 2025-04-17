@@ -1,6 +1,6 @@
 ﻿using SourceRewrite.Attributes;
 
-namespace Game.Console
+namespace Game.ConsoleVariables
 {
     public static class ConVars
     {
