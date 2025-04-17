@@ -20,7 +20,7 @@ namespace Game.Entities
         public static float MovementSpeed { get; set; } = 216f;
 
         [ConVar("sensitivity")]
-        public static float Sensitivity { get; set; } = 20f;
+        public static float Sensitivity { get; set; } = 1f;
 
         private float pitch = 0f;  // rotation around Right (X)
         private float yaw = 0f;    // rotation around Up (Z)
@@ -47,7 +47,8 @@ namespace Game.Entities
             // Physics
             PhysicsBody.BodyType = BodyType.Dynamic;
             PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
-            PhysicsBody.FreezeAllRotations = true;
+            PhysicsBody.FreezeRotationX = true;
+            PhysicsBody.FreezeRotationY = true;
             PhysicsInitNormal();
         }
 
@@ -92,8 +93,8 @@ namespace Game.Entities
             {
                 Input.LockCursor();
 
-                float mouseX = -Input.GetMouseXMovement() * Sensitivity * deltaTime;
-                float mouseY = -Input.GetMouseYMovement() * Sensitivity * deltaTime;
+                float mouseX = -Input.GetMouseXMovement() * Sensitivity;
+                float mouseY = -Input.GetMouseYMovement() * Sensitivity;
 
                 yaw += mouseX;    // Horizontal rotation around Z (yaw)
                 pitch += mouseY;  // Vertical rotation around Right (pitch)
@@ -104,8 +105,8 @@ namespace Game.Entities
                 // Convert euler angles to quaternion
                 Quaternion newRotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
 
-                // Set Rotation
-                Transform.Rotation = newRotation;
+                // Set Rotation of camera
+                PointCamera.ActiveCamera.LocalTransform.Rotation = newRotation;
             }
             else
             {

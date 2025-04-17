@@ -17,22 +17,22 @@ namespace SourceRewrite.Entities
     {
         // Entity Transform
         private Transform _transform = new Transform();
-        public Transform Transform 
-        {  
+        public Transform Transform
+        {
             get
             {
-                // Relative transforms
                 if (Parent is PointEntity parent)
                 {
-                    return parent.Transform * _transform;
+                    return parent.Transform * LocalTransform;
                 }
-
-                return _transform;
+                return LocalTransform;
             }
-            set 
-            {
-                _transform = value;
-            } 
+        }
+
+        public Transform LocalTransform
+        {
+            get => _transform;
+            set => _transform = value;
         }
 
         // Name Constructor
