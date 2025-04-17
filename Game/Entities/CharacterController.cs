@@ -19,8 +19,8 @@ namespace Game.Entities
         [ConVar("movement_speed")]
         public static float MovementSpeed { get; set; } = 256f;
 
-        [ConVar("jump_height")]
-        public static float JumpHeight { get; set; } = 32f;
+        [ConVar("jump_power")]
+        public static float JumpPower { get; set; } = 256f;
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.6f;
@@ -51,7 +51,6 @@ namespace Game.Entities
             PhysicsBody.BodyType = BodyType.Dynamic;
             PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
             PhysicsBody.FreezeAllRotations = true;
-            PhysicsBody.Mass = 128f;
             PhysicsInitNormal();
         }
 
@@ -67,7 +66,7 @@ namespace Game.Entities
 
         private void Jump()
         {
-            Velocity = new Vector3(Velocity.X, Velocity.Y, 512f);
+            Velocity = new Vector3(Velocity.X, Velocity.Y, JumpPower);
         }
 
         private void HandleMovementInput(float deltaTime)
