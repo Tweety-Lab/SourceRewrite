@@ -14,10 +14,10 @@ using System.Numerics;
 namespace Game.Entities
 {
     [Entity("info_player_start")]
-    public class CameraController : PointEntity
+    public class CharacterController : PointEntity
     {
         [ConVar("movement_speed")]
-        public static float MovementSpeed { get; set; } = 128f;
+        public static float MovementSpeed { get; set; } = 256f;
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.6f;
