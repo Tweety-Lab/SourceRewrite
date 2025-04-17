@@ -113,6 +113,20 @@ namespace SourceRewrite.InputSystem
         public static bool GetUp(string action) => !GetDown(action);
 
         /// <summary>
+        /// Checks if an action was just pressed.
+        /// </summary>
+        /// <param name="action"></param>
+        public static bool GetPressed(string action)
+        {
+            if (Context.ActionStates.TryGetValue(action, out var current) &&
+                Context.PreviousActionStates.TryGetValue(action, out var previous))
+            {
+                return current && !previous;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Returns a list of all bound actions.
         /// </summary>
         public static List<string> GetBoundActions()

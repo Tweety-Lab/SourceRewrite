@@ -12,6 +12,10 @@ namespace SourceRewrite.InputSystem
         // Keybind Map
         public Dictionary<string, Key> KeybindMap = CreateKeybindMap();
 
+        // Action States
+        public Dictionary<string, bool> ActionStates = new();      // Current frame
+        public Dictionary<string, bool> PreviousActionStates = new(); // Previous frame
+
         public IKeyboard PrimaryKeyboard;
         public IMouse PrimaryMouse;
 
@@ -31,9 +35,21 @@ namespace SourceRewrite.InputSystem
 
         public void InputUpdate()
         {
-            // Calculate and update MouseDelta
+            // Update mouse delta
             MouseDelta = PrimaryMouse.Position - lastMousePos;
             lastMousePos = PrimaryMouse.Position;
+
+            // Copy current action states to previous
+            foreach (var kvp in ActionStates)
+            {
+                PreviousActionStates[kvp.Key] = kvp.Value;
+            }
+
+            // Update current action states
+            foreach (var action in Keybinds.Keys)
+            {
+                ActionStates[action] = Input.GetDown(action);
+            }
         }
 
         private static Dictionary<string, Key> CreateKeybindMap()

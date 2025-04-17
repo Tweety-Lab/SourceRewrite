@@ -61,7 +61,7 @@ namespace Game.Entities
             HandleMouseInput(Time.DeltaTime);
 
             // Jumping
-            if (Input.GetDown("jump"))
+            if (Input.GetPressed("jump"))
                 Jump();
         }
 
