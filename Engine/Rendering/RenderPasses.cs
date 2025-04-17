@@ -14,112 +14,87 @@ using SourceRewrite.AssetTypes;
 namespace SourceRewrite.Rendering
 {
     /// <summary>
-    /// Render Brush and Point Entities that are Opaque.
+    /// Base class for geometry rendering passes.
     /// </summary>
-    public class OpaquePass : BaseRenderPass
+    public abstract class GeometryPass : BaseRenderPass
     {
-        // Enable Depth-Testing and Culling
-        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullBackFaces };
-
         public override void OnRender() => RenderEntities<BaseEntity>(EntityManager.Root);
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam)
+            switch (entity)
             {
-                if (!ShouldRenderMaterial(meshEntity.Mesh.Material))
-                    return;
+                case MeshEntity meshEntity when !(entity is EnvSprite) && !(entity is EnvBeam):
+                    RenderMeshEntity(meshEntity);
+                    break;
 
-                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
-                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
-            }
-            else if (entity is BrushEntity brushEntity)
-            {
-                var modelMatrix = Matrix4x4.Identity;
-
-                foreach (Mesh mesh in brushEntity.Brush)
-                {
-                    if (!ShouldRenderMaterial(mesh.Material))
-                        continue;
-
-                    Renderer.RenderMesh(mesh, modelMatrix);
-                }
+                case BrushEntity brushEntity:
+                    RenderBrushEntity(brushEntity);
+                    break;
             }
         }
 
-        // Determinse if a material should be rendered in opaque pass
-        private bool ShouldRenderMaterial(Material material)
+        private void RenderMeshEntity(MeshEntity meshEntity)
         {
-            // COMPILE TIME OPTIMIZATION
-            // TODO: Move this to VBSP
-            if (material.GetFlag("compilenodraw") == 1)
-                return false;
+            if (!ShouldRenderMaterial(meshEntity.Mesh.Material))
+                return;
 
-            if (material.GetFlag("alphatest") == 1)
-                return false;
+            var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
+            Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
+        }
 
-            if (material.GetFlag("translucent") == 1)
-                return false;
+        private void RenderBrushEntity(BrushEntity brushEntity)
+        {
+            foreach (Mesh mesh in brushEntity.Brush)
+            {
+                if (!ShouldRenderMaterial(mesh.Material))
+                    continue;
 
-            if (material.GetFlag("compiletrigger") == 1)
-                return ConCommands.RenderTriggers; // Allow to toggle trigger visibilty with showtriggers_toggle
+                Renderer.RenderMesh(mesh, Matrix4x4.Identity);
+            }
+        }
 
-            return true;
+        protected abstract bool ShouldRenderMaterial(Material material);
+    }
+
+    /// <summary>
+    /// Render Brush and Point Entities that are Opaque.
+    /// </summary>
+    public class OpaquePass : GeometryPass
+    {
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> {
+            RenderFlag.DepthTest,
+            RenderFlag.CullBackFaces
+        };
+
+        protected override bool ShouldRenderMaterial(Material material)
+        {
+            if (material.GetFlag("compilenodraw") == 1) return false;
+            if (material.GetFlag("compiletrigger") == 1) return ConCommands.RenderTriggers;
+
+            return material.GetFlag("alphatest") != 1 &&
+                   material.GetFlag("translucent") != 1;
         }
     }
 
     /// <summary>
     /// Render Brush and Point Entities that are Translucent.
     /// </summary>
-    public class TranslucentPass : BaseRenderPass
+    public class TranslucentPass : GeometryPass
     {
-        // Enable Depth-Testing and Culling
-        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> { RenderFlag.DepthTest, RenderFlag.CullBackFaces, RenderFlag.Blend };
+        public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> {
+            RenderFlag.DepthTest,
+            RenderFlag.CullBackFaces,
+            RenderFlag.Blend
+        };
 
-        public override void OnRender() => RenderEntities<BaseEntity>(EntityManager.Root);
-
-        protected override void RenderEntity<TEntity>(TEntity entity)
+        protected override bool ShouldRenderMaterial(Material material)
         {
-            if (entity is MeshEntity meshEntity && entity is not EnvSprite && entity is not EnvBeam)
-            {
-                if (!ShouldRenderMaterial(meshEntity.Mesh.Material))
-                    return;
+            if (material.GetFlag("compilenodraw") == 1) return false;
+            if (material.GetFlag("compiletrigger") == 1) return ConCommands.RenderTriggers;
 
-                var modelMatrix = RendererContext.GetEntityModelMatrix(meshEntity) ?? Matrix4x4.Identity;
-                Renderer.RenderMesh(meshEntity.Mesh, modelMatrix);
-            }
-            else if (entity is BrushEntity brushEntity)
-            {
-                var modelMatrix = Matrix4x4.Identity;
-
-                foreach (Mesh mesh in brushEntity.Brush)
-                {
-                    if (!ShouldRenderMaterial(mesh.Material))
-                        continue;
-
-                    Renderer.RenderMesh(mesh, modelMatrix);
-                }
-            }
-        }
-
-        // Determinse if a material should be rendered in translucent pass
-        private bool ShouldRenderMaterial(Material material)
-        {
-            // COMPILE TIME OPTIMIZATION
-            // TODO: Move this to VBSP
-            if (material.GetFlag("compilenodraw") == 1)
-                return false;
-
-            if (material.GetFlag("compiletrigger") == 1)
-                return ConCommands.RenderTriggers; // Allow to toggle trigger visibilty with showtriggers_toggle
-
-            if (material.GetFlag("alphatest") == 1)
-                return true;
-
-            if (material.GetFlag("translucent") == 1)
-                return true;
-
-            return false;
+            return material.GetFlag("alphatest") == 1 ||
+                   material.GetFlag("translucent") == 1;
         }
     }
 
@@ -128,7 +103,7 @@ namespace SourceRewrite.Rendering
     /// </summary>
     public class LightingPass : BaseRenderPass
     {
-        private readonly List<object> _activeLights = new List<object>(); // Stores lights
+        private readonly List<ILight> _activeLights = new List<ILight>(); // Stores lights
         private const int MaxLights = 10; // Match the shader's array size
 
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag>();
@@ -138,10 +113,8 @@ namespace SourceRewrite.Rendering
             // Clear previous frame's lights
             _activeLights.Clear();
 
-            // Collect all active lights of all types
-            RenderEntities<Light>(EntityManager.Root);
-            RenderEntities<LightSpot>(EntityManager.Root);
-            RenderEntities<LightDirectional>(EntityManager.Root);
+            // Render
+            RenderEntities<PointEntity>(EntityManager.Root);
 
             // Update shaders with all active lights
             UpdateShaderLighting();
@@ -149,9 +122,9 @@ namespace SourceRewrite.Rendering
 
         protected override void RenderEntity<TEntity>(TEntity entity)
         {
-            if ((entity is Light || entity is LightSpot || entity is LightDirectional) && _activeLights.Count < MaxLights)
+            if (entity is ILight light && _activeLights.Count < MaxLights)
             {
-                _activeLights.Add(entity);
+                _activeLights.Add(light);
             }
         }
 
@@ -159,66 +132,14 @@ namespace SourceRewrite.Rendering
         {
             foreach (Shader shader in Shader.Shaders)
             {
-                // Set the number of active lights
                 shader.SetParameter("activeLights", _activeLights.Count);
 
-                // Update each light in the array
                 for (int i = 0; i < _activeLights.Count && i < MaxLights; i++)
                 {
-                    string lightPrefix = $"lights[{i}]";
-
-                    if (_activeLights[i] is Light light)
-                    {
-                        // Handle regular point light
-                        Vector4 modifiedColor = light.Color;
-                        modifiedColor.W *= 90000.0f;
-                        Vector4 normalizedColor = modifiedColor / 255.0f;
-
-                        shader.SetParameter($"{lightPrefix}.position", light.Transform.Position);
-                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
-                        shader.SetParameter($"{lightPrefix}.attenuation",
-                            new Vector3(light.ConstantAttenuation,
-                                      light.LinearAttenuation,
-                                      light.QuadraticAttenuation));
-
-                        // Set point light defaults
-                        shader.SetParameter($"{lightPrefix}.lightType", 0);
-                        shader.SetParameter($"{lightPrefix}.direction", Vector3.Zero);
-                        shader.SetParameter($"{lightPrefix}.cutOff", 0.0f);
-                        shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
-                    }
-                    else if (_activeLights[i] is LightSpot lightSpot)
-                    {
-                        // Handle spotlight
-                        Vector4 modifiedColor = lightSpot.Color;
-                        modifiedColor.W *= 90000.0f;
-                        Vector4 normalizedColor = modifiedColor / 255.0f;
-
-                        shader.SetParameter($"{lightPrefix}.position", lightSpot.Transform.Position);
-                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
-                        shader.SetParameter($"{lightPrefix}.attenuation",
-                            new Vector3(lightSpot.ConstantAttenuation,
-                                      lightSpot.LinearAttenuation,
-                                      lightSpot.QuadraticAttenuation));
-
-                        // Set spotlight specific properties
-                        shader.SetParameter($"{lightPrefix}.lightType", 1);
-                        shader.SetParameter($"{lightPrefix}.direction", lightSpot.Transform.Forward);
-                        shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(Math.DegreesToRadians(lightSpot.InnerConeAngle)));
-                        shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(Math.DegreesToRadians(lightSpot.OuterConeAngle)));
-                    }
-                    else if (_activeLights[i] is LightDirectional lightDirectional)
-                    {
-                        // Handle directional light
-                        Vector4 modifiedColor = lightDirectional.Color;
-                        Vector4 normalizedColor = modifiedColor / 255.0f;
-                        shader.SetParameter($"{lightPrefix}.color", normalizedColor);
-                        shader.SetParameter($"{lightPrefix}.lightType", 2);
-                        shader.SetParameter($"{lightPrefix}.direction", lightDirectional.Transform.Forward);
-                    }
+                    _activeLights[i].ApplyToShader(shader, i);
                 }
 
-                // Clear any remaining light slots in the array
+                // Clear remaining light slots
                 for (int i = _activeLights.Count; i < MaxLights; i++)
                 {
                     string lightPrefix = $"lights[{i}]";

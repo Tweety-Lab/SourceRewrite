@@ -10,7 +10,7 @@ namespace SourceRewrite.Entities
 {
     [AlwaysExecute]
     [Entity("light")]
-    public class Light : PointEntity
+    public class Light : PointEntity, ILight
     {
         // Light Properties
         [EntityProperty("_light")]
@@ -26,8 +26,24 @@ namespace SourceRewrite.Entities
         [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation { get; set; } = 0.032f;
 
+        public void ApplyToShader(Shader shader, int lightIndex)
+        {
+            string lightPrefix = $"lights[{lightIndex}]";
 
-        // LIGHT RENDERING IS APPLIED IN LIGHTING RENDER PASS!
+            Vector4 modifiedColor = Color;
+            modifiedColor.W *= 90000.0f;
+            Vector4 normalizedColor = modifiedColor / 255.0f;
+
+            shader.SetParameter($"{lightPrefix}.position", Transform.Position);
+            shader.SetParameter($"{lightPrefix}.color", normalizedColor);
+            shader.SetParameter($"{lightPrefix}.attenuation",
+                new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
+            shader.SetParameter($"{lightPrefix}.lightType", 0); // 0 = point light
+            shader.SetParameter($"{lightPrefix}.direction", Vector3.Zero);
+            shader.SetParameter($"{lightPrefix}.cutOff", 0.0f);
+            shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
+        }
+
 
         public override void OnDestroy()
         {
@@ -45,5 +61,11 @@ namespace SourceRewrite.Entities
             Gizmos.DrawSprite(Transform.Position, "sprites/point_light", 2f, this);
         }
 #endif
+    }
+
+    public interface ILight
+    {
+        // Handle applying the light to the shader
+        void ApplyToShader(Shader shader, int lightIndex);
     }
 }
