@@ -20,6 +20,21 @@ namespace SourceRewrite.PhysicsSystem
         public BodyType BodyType { get; set; } = BodyType.Dynamic;
         public bool CanCollide { get; set; } = true;
 
+        // Rotation Constraints
+        public bool FreezeRotationX { get; set; } = false;
+        public bool FreezeRotationY { get; set; } = false;
+        public bool FreezeRotationZ { get; set; } = false;
+
+        public bool FreezeAllRotations
+        {
+            set
+            {
+                FreezeRotationX = value;
+                FreezeRotationY = value;
+                FreezeRotationZ = value;
+            }
+        }
+
         // Collision
         public Mesh CollisionMesh { get; set; } = null;
         public Vector3 BoundingBox { get; set; } = new Vector3(0f, 0f, 0f);

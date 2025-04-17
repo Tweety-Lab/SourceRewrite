@@ -184,10 +184,23 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             // Configure physics properties
             BulletSharp.Math.Vector3 localInertia;
             bodyInfo.CollisionShape.CalculateLocalInertia(physBody.Mass, out localInertia);
+
+            // Apply rotation constraints by zeroing out the inertia for frozen axes
+            if (physBody.FreezeRotationX) localInertia.X = 0;
+            if (physBody.FreezeRotationY) localInertia.Y = 0;
+            if (physBody.FreezeRotationZ) localInertia.Z = 0;
+
             body.SetMassProps(physBody.Mass, localInertia);
             body.Friction = physBody.Friction;
             body.Restitution = physBody.Restitution;
             body.UpdateInertiaTensor();
+
+            // Set angular factor to enforce rotation constraints
+            body.AngularFactor = new BulletSharp.Math.Vector3(
+                physBody.FreezeRotationX ? 0 : 1,
+                physBody.FreezeRotationY ? 0 : 1,
+                physBody.FreezeRotationZ ? 0 : 1
+            );
 
             // Set collision flags based on body type
             if (physBody.BodyType == BodyType.Static)

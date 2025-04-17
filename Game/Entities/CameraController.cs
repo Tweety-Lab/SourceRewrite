@@ -46,7 +46,8 @@ namespace Game.Entities
 
             // Physics
             PhysicsBody.BodyType = BodyType.Dynamic;
-            PhysicsBody.BoundingBox = new Vector3(32f, 32f, 32f);
+            PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
+            PhysicsBody.FreezeAllRotations = true;
             PhysicsInitNormal();
         }
 
