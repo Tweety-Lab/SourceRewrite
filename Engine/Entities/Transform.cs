@@ -11,6 +11,49 @@ namespace SourceRewrite.Entities
         public Vector3 Forward => Vector3.Normalize(Vector3.Transform(Vector3.UnitY, Rotation));
         public Vector3 Right => Vector3.Normalize(Vector3.Transform(Vector3.UnitX, Rotation));
         public Vector3 Up => Vector3.Normalize(Vector3.Transform(Vector3.UnitZ, Rotation));
+
+        // OOPERATORS
+        public static Transform operator +(Transform a, Transform b)
+        {
+            return new Transform
+            {
+                Position = a.Position + b.Position,
+                Scale = a.Scale + b.Scale,
+                Rotation = Quaternion.Normalize(a.Rotation + b.Rotation)
+            };
+        }
+
+        public static Transform operator -(Transform a, Transform b)
+        {
+            return new Transform
+            {
+                Position = a.Position - b.Position,
+                Scale = a.Scale - b.Scale,
+                Rotation = Quaternion.Normalize(a.Rotation - b.Rotation)
+            };
+        }
+
+        public static Transform operator *(Transform a, Transform b)
+        {
+            return new Transform
+            {
+                Position = a.Position + Vector3.Transform(b.Position, a.Rotation),
+                Scale = a.Scale * b.Scale,
+                Rotation = Quaternion.Normalize(a.Rotation * b.Rotation)
+            };
+        }
+
+        public static Transform operator *(Transform t, float scalar)
+        {
+            return new Transform
+            {
+                Position = t.Position * scalar,
+                Scale = t.Scale * scalar,
+                Rotation = Quaternion.Slerp(Quaternion.Identity, t.Rotation, scalar)
+            };
+        }
+
+        public static Transform operator *(float scalar, Transform t) => t * scalar;
     }
 }
 
