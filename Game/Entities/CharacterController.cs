@@ -19,6 +19,9 @@ namespace Game.Entities
         [ConVar("movement_speed")]
         public static float MovementSpeed { get; set; } = 256f;
 
+        [ConVar("jump_height")]
+        public static float JumpHeight { get; set; } = 32f;
+
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.6f;
 
@@ -64,7 +67,7 @@ namespace Game.Entities
 
         private void Jump()
         {
-            Velocity = Vector3.UnitZ * 512f;
+            Velocity = new Vector3(Velocity.X, Velocity.Y, 512f);
         }
 
         private void HandleMovementInput(float deltaTime)
@@ -100,7 +103,7 @@ namespace Game.Entities
             Vector3 targetVelocity = movementDirection * MovementSpeed;
 
             // Apply velocity directly
-            Velocity = targetVelocity;
+            Velocity = new Vector3(targetVelocity.X, targetVelocity.Y, Velocity.Z);
         }
 
         private void HandleMouseInput(float deltaTime)
