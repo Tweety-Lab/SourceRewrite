@@ -20,7 +20,7 @@ namespace Game.Entities
         public static float MovementSpeed { get; set; } = 128f;
 
         [ConVar("sensitivity")]
-        public static float Sensitivity { get; set; } = 1f;
+        public static float Sensitivity { get; set; } = 0.6f;
 
         private float pitch = 0f;  // rotation around Right (X)
         private float yaw = 0f;    // rotation around Up (Z)
@@ -48,7 +48,7 @@ namespace Game.Entities
             PhysicsBody.BodyType = BodyType.Dynamic;
             PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
             PhysicsBody.FreezeAllRotations = true;
-            PhysicsBody.Mass = 64f;
+            PhysicsBody.Mass = 128f;
             PhysicsInitNormal();
         }
 

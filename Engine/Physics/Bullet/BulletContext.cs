@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using BulletSharp;
 using SourceRewrite.Entities;
+using SourceRewrite.TimeSystem;
 using SourceRewrite.Windowing.Modules;
 
 namespace SourceRewrite.PhysicsSystem.Bullet
@@ -29,7 +30,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             dispatcher = new CollisionDispatcher(collisionConfiguration);
             broadphase = new DbvtBroadphase();
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, null, collisionConfiguration);
-            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, 0, -9.81f);
+            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, 0, -600f);
         }
 
         public void Update()
@@ -37,7 +38,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             // Process collision stuff
             ProcessCollisions();
 
-            dynamicsWorld.StepSimulation(1.0f / 22.2f, 10);
+            dynamicsWorld.StepSimulation(Time.DeltaTime, 10);
 
             // Clear previous frame, swap sets
             (previousFrameCollisions, currentFrameCollisions) = (currentFrameCollisions, previousFrameCollisions);
