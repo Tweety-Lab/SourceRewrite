@@ -195,15 +195,22 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             body.Restitution = physBody.Restitution;
             body.UpdateInertiaTensor();
 
+            // Set collision flags based on body type
+            if (physBody.BodyType == BodyType.Static)
+            {
+                body.CollisionFlags |= CollisionFlags.StaticObject;
+                body.SetMassProps(0, BulletSharp.Math.Vector3.Zero);
+            }
+            else if (physBody.BodyType == BodyType.Kinematic)
+            {
+                body.CollisionFlags |= CollisionFlags.KinematicObject;
+                body.SetMassProps(0, BulletSharp.Math.Vector3.Zero);
+                body.ActivationState = ActivationState.DisableDeactivation;
+            }
+
             if (physBody.CanCollide == false)
             {
                 body.CollisionFlags |= CollisionFlags.NoContactResponse;
-            }
-
-            if (physBody.IsStatic)
-            {
-                body.CollisionFlags |= CollisionFlags.StaticObject;
-                body.SetMassProps(0, new BulletSharp.Math.Vector3(0, 0, 0));
             }
 
             dynamicsWorld.AddRigidBody(body);

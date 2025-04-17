@@ -17,7 +17,7 @@ namespace SourceRewrite.PhysicsSystem
         public float Restitution { get; set; } = 0.5f;
 
         // Behaviour
-        public bool IsStatic { get; set; } = false;
+        public BodyType BodyType { get; set; } = BodyType.Dynamic;
         public bool CanCollide { get; set; } = true;
 
         // Collision
@@ -29,5 +29,12 @@ namespace SourceRewrite.PhysicsSystem
         public Action<BaseEntity>? OnCollisionEnd { get; set; } = new Action<BaseEntity>(entity => { });
         public Action<BaseEntity>? OnColliding { get; set; } = new Action<BaseEntity>(entity => { });
 
+    }
+
+    public enum BodyType
+    {
+        Static,
+        Dynamic,
+        Kinematic
     }
 }

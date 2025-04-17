@@ -21,9 +21,9 @@ namespace SourceRewrite.Entities
                 CollisionMesh.Vertices = CollisionMesh.Vertices.Concat(mesh.Vertices).ToArray();
                 CollisionMesh.Indices = CollisionMesh.Indices.Concat(mesh.Indices).ToArray();
             }
-            
+
             // Physics Properties
-            PhysicsBody.IsStatic = true;
+            PhysicsBody.BodyType = BodyType.Static;
             PhysicsBody.CollisionMesh = CollisionMesh;
             PhysicsBody.CanCollide = false;
             

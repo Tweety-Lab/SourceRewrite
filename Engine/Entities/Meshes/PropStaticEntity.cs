@@ -16,7 +16,7 @@ namespace SourceRewrite.Entities.Meshes
             base.Start();
 
             // Create Static Physics
-            PhysicsBody.IsStatic = true;
+            PhysicsBody.BodyType = BodyType.Static;
             PhysicsBody.CollisionMesh = Mesh;
 
             PhysicsInitNormal();
