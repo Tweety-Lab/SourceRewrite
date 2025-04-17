@@ -272,6 +272,16 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             }
         }
 
+        public Vector3 GetEntityAbsVelocity(BaseEntity entity)
+        {
+            if (entityToBody.TryGetValue(entity, out var body))
+            {
+                return new Vector3(body.LinearVelocity.X, body.LinearVelocity.Y, body.LinearVelocity.Z);
+            }
+
+            return Vector3.NaN;
+        }
+
         public BaseEntity RayCast(PhysicsRay ray)
         {
             var rayFrom = new BulletSharp.Math.Vector3(ray.Origin.X, ray.Origin.Y, ray.Origin.Z);

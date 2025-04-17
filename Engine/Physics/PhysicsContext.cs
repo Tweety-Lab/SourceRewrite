@@ -89,6 +89,12 @@ namespace SourceRewrite.PhysicsSystem
         void SetEntityAbsVelocity(BaseEntity entity, Vector3 velocity);
 
         /// <summary>
+        /// Get the absolute velocity of an Entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        Vector3 GetEntityAbsVelocity(BaseEntity entity);
+
+        /// <summary>
         /// Set the transform of an Entity.
         /// </summary>
         /// <param name="entity"></param>

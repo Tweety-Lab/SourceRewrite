@@ -49,6 +49,12 @@ namespace SourceRewrite.Entities
 
         // Controls the Physics of the Entity (if enabled)
         public PhysicsBody PhysicsBody { get; set; } = new PhysicsBody();
+
+        public Vector3 Velocity
+        {
+            get => Physics.GetEntityAbsVelocity(this);
+            set => Physics.SetEntityAbsVelocity(this, value);
+        }
         
         // IO Outputs
         public List<EntityIOConnection> Outputs { get; set; } = new List<EntityIOConnection>();
@@ -202,15 +208,6 @@ namespace SourceRewrite.Entities
             Physics.InitPhysicsEntity(this, PhysicsBody);
         }
 
-        /// <summary>
-        /// Set an Entities absolute velocity.
-        /// </summary>
-        /// <param name="velocity"></param>
-        public void SetAbsVelocity(Vector3 velocity)
-        {
-            Physics.SetEntityAbsVelocity(this, velocity);
-        }
-        
         // Set an Entities physicsBody transform
         public void SetPhysicsTransform(Transform transform, bool isTeleport = false)
         {

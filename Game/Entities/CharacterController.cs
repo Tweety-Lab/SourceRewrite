@@ -56,6 +56,15 @@ namespace Game.Entities
         {
             HandleMovementInput(Time.DeltaTime);
             HandleMouseInput(Time.DeltaTime);
+
+            // Jumping
+            if (Input.GetDown("jump"))
+                Jump();
+        }
+
+        private void Jump()
+        {
+            Velocity = Vector3.UnitZ * 512f;
         }
 
         private void HandleMovementInput(float deltaTime)
@@ -91,7 +100,7 @@ namespace Game.Entities
             Vector3 targetVelocity = movementDirection * MovementSpeed;
 
             // Apply velocity directly
-            SetAbsVelocity(targetVelocity);
+            Velocity = targetVelocity;
         }
 
         private void HandleMouseInput(float deltaTime)
