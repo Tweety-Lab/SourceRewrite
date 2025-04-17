@@ -17,7 +17,7 @@ namespace Game.Entities
     public class CameraController : PointEntity
     {
         [ConVar("movement_speed")]
-        public static float MovementSpeed { get; set; } = 216f;
+        public static float MovementSpeed { get; set; } = 128f;
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 1f;
@@ -47,8 +47,8 @@ namespace Game.Entities
             // Physics
             PhysicsBody.BodyType = BodyType.Dynamic;
             PhysicsBody.BoundingBox = new Vector3(32f, 32f, 64f);
-            PhysicsBody.FreezeRotationX = true;
-            PhysicsBody.FreezeRotationY = true;
+            PhysicsBody.FreezeAllRotations = true;
+            PhysicsBody.Mass = 64f;
             PhysicsInitNormal();
         }
 
@@ -62,17 +62,24 @@ namespace Game.Entities
         {
             Vector3 movementDirection = Vector3.Zero;
 
-            // Forward/Backward
-            if (Input.GetDown("forward")) movementDirection += Transform.Forward;
-            if (Input.GetDown("back")) movementDirection -= Transform.Forward;
+            // Get the camera's forward/right vectors
+            Vector3 camForward = PointCamera.ActiveCamera.Transform.Forward;
+            Vector3 camRight = PointCamera.ActiveCamera.Transform.Right;
 
-            // Left/Right
-            if (Input.GetDown("left")) movementDirection -= Transform.Right;
-            if (Input.GetDown("right")) movementDirection += Transform.Right;
+            // Flatten them onto the horizontal plane (zero out Z)
+            camForward.Z = 0;
+            camRight.Z = 0;
 
-            // Up/Down (optional — jump or fly cam)
-            if (Input.GetDown("up")) movementDirection += Transform.Up;
-            if (Input.GetDown("down")) movementDirection -= Transform.Up;
+            // Re-normalize since we changed the length by removing Z
+            camForward = Vector3.Normalize(camForward);
+            camRight = Vector3.Normalize(camRight);
+
+            // Move relative to camera's horizontal orientation
+            if (Input.GetDown("forward")) movementDirection += camForward;
+            if (Input.GetDown("back")) movementDirection -= camForward;
+
+            if (Input.GetDown("left")) movementDirection -= camRight;
+            if (Input.GetDown("right")) movementDirection += camRight;
 
             // Normalize if moving diagonally
             if (movementDirection != Vector3.Zero)
@@ -107,6 +114,7 @@ namespace Game.Entities
 
                 // Set Rotation of camera
                 PointCamera.ActiveCamera.LocalTransform.Rotation = newRotation;
+
             }
             else
             {
