@@ -34,6 +34,13 @@ namespace SourceRewrite.Maps
             MapRootEntity.Parent = EntityManager.MapContainer;
         }
 
+        /// <summary>
+        /// Get all entities of type T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>IEnumerable of Entities</returns>
+        public IEnumerable<BaseEntity> GetEntityOfType<T>() where T : BaseEntity => Entities.Where(e => e is T);
+
         // Unload the map from the world
         public void UnloadMap()
         {
