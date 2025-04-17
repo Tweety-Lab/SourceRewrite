@@ -58,38 +58,38 @@ namespace Game.Entities
             // Forward/Backward
             if (Input.GetDown("forward"))
             {
-                movement += PointCamera.ActiveCamera.Transform.Forward;
+                movement += Transform.Forward;
             }
 
             if (Input.GetDown("back"))
             {
-                movement -= PointCamera.ActiveCamera.Transform.Forward;
+                movement -= Transform.Forward;
             }
 
             // Left/Right
             if (Input.GetDown("left"))
             {
-                movement -= PointCamera.ActiveCamera.Transform.Right;
+                movement -= Transform.Right;
             }
 
             if (Input.GetDown("right"))
             {
-                movement += PointCamera.ActiveCamera.Transform.Right;
+                movement += Transform.Right;
             }
 
             // Up/Down (optional — jump or fly cam)
             if (Input.GetDown("up"))
             {
-                movement += PointCamera.ActiveCamera.Transform.Up;
+                movement += Transform.Up;
             }
 
             if (Input.GetDown("down"))
             {
-                movement -= PointCamera.ActiveCamera.Transform.Up;
+                movement -= Transform.Up;
             }
 
             // Apply movement
-            PointCamera.ActiveCamera.Transform.Position += movement * MovementSpeed * deltaTime;
+            Transform.Position += movement * MovementSpeed * deltaTime;
         }
 
         private void HandleMouseInput(float deltaTime)
@@ -108,7 +108,7 @@ namespace Game.Entities
                 pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Convert euler angles (pitch X, yaw Z, roll Y stays zero)
-                PointCamera.ActiveCamera.Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+                Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
             }
             else
             {

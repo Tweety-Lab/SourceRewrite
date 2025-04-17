@@ -16,7 +16,24 @@ namespace SourceRewrite.Entities
     public class PointEntity : BaseEntity
     {
         // Entity Transform
-        public Transform Transform { get; set; } = new Transform();
+        private Transform _transform = new Transform();
+        public Transform Transform 
+        {  
+            get
+            {
+                // Relative transforms
+                if (Parent is PointEntity parent)
+                {
+                    return parent.Transform * _transform;
+                }
+
+                return _transform;
+            }
+            set 
+            { 
+                _transform = value;
+            } 
+        }
 
         // Name Constructor
         public PointEntity(string name) : base(name) { }
