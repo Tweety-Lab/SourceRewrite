@@ -10,14 +10,14 @@ namespace SourceRewrite.PhysicsSystem
     public class PhysicsRay
     {
         public Vector3 Origin { get; set; }
-        public Vector3 Direction { get; set; }
+        public Vector3 End { get; set; }
 
         public PhysicsRay() { }
 
-        public PhysicsRay(Vector3 origin, Vector3 direction)
+        public PhysicsRay(Vector3 origin, Vector3 end)
         {
             Origin = origin;
-            Direction = direction;
+            End = end;
         }
 
     }

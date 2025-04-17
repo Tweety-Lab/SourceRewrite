@@ -286,9 +286,9 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         {
             var rayFrom = new BulletSharp.Math.Vector3(ray.Origin.X, ray.Origin.Y, ray.Origin.Z);
             var rayTo = new BulletSharp.Math.Vector3(
-                ray.Direction.X * 999999f,
-                ray.Direction.Y * 999999f,
-                ray.Direction.Z * 999999f);
+                ray.End.X,
+                ray.End.Y,
+                ray.End.Z);
 
             var rayResult = new ClosestRayResultCallback(ref rayFrom, ref rayTo);
             dynamicsWorld.RayTest(rayFrom, rayTo, rayResult);
