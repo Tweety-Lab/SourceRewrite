@@ -23,6 +23,11 @@ namespace SourceRewrite.PhysicsSystem
             Context.APIInterface.SetEntityAbsVelocity(entity, velocity);
         }
 
+        public static void SetEntityTransform(BaseEntity entity, Transform transform, bool isTeleport = false)
+        {
+            Context.APIInterface.SetEntityTransform(entity, transform, isTeleport);
+        }
+
         public static BaseEntity RayCast(PhysicsRay ray)
         {
             return Context.APIInterface.RayCast(ray);

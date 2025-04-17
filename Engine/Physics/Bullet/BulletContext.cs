@@ -167,24 +167,18 @@ namespace SourceRewrite.PhysicsSystem.Bullet
                     physBody.BoundingBox.Z));
             }
 
-            bodyInfo = new RigidBodyConstructionInfo(physBody.Mass, null, shape, BulletSharp.Math.Vector3.Zero);
+            var motionState = new DefaultMotionState();
+            bodyInfo = new RigidBodyConstructionInfo(physBody.Mass, motionState, shape, BulletSharp.Math.Vector3.Zero);
             var body = new RigidBody(bodyInfo);
 
             // Set initial transform
             if (entity is PointEntity pointEntity)
             {
-                var rotation = BulletSharp.Math.Matrix.RotationQuaternion(new BulletSharp.Math.Quaternion(
-                    pointEntity.Transform.Rotation.X,
-                    pointEntity.Transform.Rotation.Y,
-                    pointEntity.Transform.Rotation.Z,
-                    pointEntity.Transform.Rotation.W));
+                var transform = Matrix4x4.CreateScale(pointEntity.Transform.Scale) *
+                               Matrix4x4.CreateFromQuaternion(pointEntity.Transform.Rotation) *
+                               Matrix4x4.CreateTranslation(pointEntity.Transform.Position);
 
-                var translation = BulletSharp.Math.Matrix.Translation(new BulletSharp.Math.Vector3(
-                    pointEntity.Transform.Position.X,
-                    pointEntity.Transform.Position.Y,
-                    pointEntity.Transform.Position.Z));
-
-                body.WorldTransform = rotation * translation;
+                body.WorldTransform = ConvertToBulletMatrix(transform);
             }
 
             // Configure physics properties
@@ -217,6 +211,31 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             body.Activate();
 
             return body;
+        }
+
+        // Add methods to update physics body transforms
+        public void SetEntityTransform(BaseEntity entity, Transform transform, bool isTeleport = false)
+        {
+            if (entityToBody.TryGetValue(entity, out var body))
+            {
+                var bulletMatrix = ConvertToBulletMatrix(
+                    Matrix4x4.CreateScale(transform.Scale) *
+                    Matrix4x4.CreateFromQuaternion(transform.Rotation) *
+                    Matrix4x4.CreateTranslation(transform.Position));
+
+                if (isTeleport || (body.CollisionFlags & CollisionFlags.KinematicObject) != 0)
+                {
+                    // For kinematic objects or teleports, set transform directly
+                    body.WorldTransform = bulletMatrix;
+                    body.Activate();
+                }
+                else
+                {
+                    // For dynamic objects, use forces/velocities
+                    body.MotionState.SetWorldTransform(ref bulletMatrix);
+                    body.Activate();
+                }
+            }
         }
 
         public void DestroyPhysicsEntity(BaseEntity entity)
@@ -256,6 +275,16 @@ namespace SourceRewrite.PhysicsSystem.Bullet
             }
 
             return null;
+        }
+
+        // Helper method for matrix conversion
+        private BulletSharp.Math.Matrix ConvertToBulletMatrix(Matrix4x4 matrix)
+        {
+            return new BulletSharp.Math.Matrix(
+                matrix.M11, matrix.M12, matrix.M13, matrix.M14,
+                matrix.M21, matrix.M22, matrix.M23, matrix.M24,
+                matrix.M31, matrix.M32, matrix.M33, matrix.M34,
+                matrix.M41, matrix.M42, matrix.M43, matrix.M44);
         }
 
         public void Dispose()

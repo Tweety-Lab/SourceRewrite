@@ -82,11 +82,19 @@ namespace SourceRewrite.PhysicsSystem
         void DestroyPhysicsEntity(BaseEntity physEntity);
 
         /// <summary>
-        /// Set the absolute velocity of an entity.
+        /// Set the absolute velocity of an Entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="velocity"></param>
         void SetEntityAbsVelocity(BaseEntity entity, Vector3 velocity);
+
+        /// <summary>
+        /// Set the transform of an Entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="transform"></param>
+        /// <param name="isTeleport"></param>
+        void SetEntityTransform(BaseEntity entity, Transform transform, bool isTeleport = false);
 
         /// <summary>
         /// Raycast from the origin to the direction.
