@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "183"
+	"mapversion" "187"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "183"
+	"mapversion" "187"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -3218,6 +3218,27 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "3073"
+	"classname" "prop_weighted_cube"
+	"allowfunnel" "1"
+	"angles" "0 0 0"
+	"CubeType" "0"
+	"drawinfastreflection" "0"
+	"NewSkins" "0"
+	"PaintPower" "4"
+	"skin" "0"
+	"SkinType" "0"
+	"origin" "-368 -97.1435 176"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 -5268]"
 	}
 }
 entity

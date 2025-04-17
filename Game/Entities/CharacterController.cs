@@ -22,9 +22,6 @@ namespace Game.Entities
         // Power of Jump
         public float JumpPower { get; set; } = 256f;
 
-        // Max height of obstacle before it cant be walked up
-        public float StepUpHeight { get; set; } = 18f;
-
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.4f;
@@ -64,12 +61,12 @@ namespace Game.Entities
 
         public override void Update()
         {
-            HandleMovementInput(Time.DeltaTime);
-            HandleMouseInput(Time.DeltaTime);
-
             // Jumping
             if (Input.GetPressed("jump"))
                 Jump();
+
+            HandleMovementInput();
+            HandleMouseInput();
 
         }
 
@@ -81,14 +78,21 @@ namespace Game.Entities
 
         private bool IsGrounded()
         {
-            float groundCheckDistance = 32f; // Small distance below feet
+            float groundCheckDistance = 16f; // Small distance below feet
             Vector3 footPosition = Transform.Position + new Vector3(0f, 0f, -PhysicsBody.BoundingBox.Z);
             Vector3 groundCheckPosition = footPosition + new Vector3(0f, 0f, -groundCheckDistance);
 
-            return Physics.RayCast(new PhysicsRay(footPosition, groundCheckPosition)) != null;
+            var hit = Physics.RayCast(new PhysicsRay(footPosition, groundCheckPosition));
+
+            if (hit != null)
+                return true;
+
+
+            return false;
         }
 
-        private void HandleMovementInput(float deltaTime)
+
+        private void HandleMovementInput()
         {
             Vector3 movementDirection = Vector3.Zero;
 
@@ -111,6 +115,7 @@ namespace Game.Entities
             if (Input.GetDown("left")) movementDirection -= camRight;
             if (Input.GetDown("right")) movementDirection += camRight;
 
+            // Normalize the movement direction
             if (movementDirection != Vector3.Zero)
             {
                 movementDirection = Vector3.Normalize(movementDirection);
@@ -120,7 +125,7 @@ namespace Game.Entities
             Velocity = new Vector3(targetVelocity.X, targetVelocity.Y, Velocity.Z);
         }
 
-        private void HandleMouseInput(float deltaTime)
+        private void HandleMouseInput()
         {
             if (Input.GetMouseButtonDown(1)) // RMB held
             {
