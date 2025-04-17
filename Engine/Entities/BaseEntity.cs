@@ -210,5 +210,11 @@ namespace SourceRewrite.Entities
         {
             Physics.SetEntityAbsVelocity(this, velocity);
         }
+        
+        // Set an Entities physicsBody transform
+        public void SetPhysicsTransform(Transform transform, bool isTeleport = false)
+        {
+            Physics.SetEntityTransform(this, transform, isTeleport);
+        }
     }
 }

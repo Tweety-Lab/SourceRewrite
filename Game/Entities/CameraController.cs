@@ -17,7 +17,7 @@ namespace Game.Entities
     public class CameraController : PointEntity
     {
         [ConVar("movement_speed")]
-        public static float MovementSpeed { get; set; } = 1512f;
+        public static float MovementSpeed { get; set; } = 216f;
 
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 20f;
@@ -43,6 +43,11 @@ namespace Game.Entities
             Vector3 currentEuler = SourceRewrite.Math.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Z;
+
+            // Physics
+            PhysicsBody.BodyType = BodyType.Dynamic;
+            PhysicsBody.BoundingBox = new Vector3(32f, 32f, 32f);
+            PhysicsInitNormal();
         }
 
         public override void Update()
@@ -53,43 +58,31 @@ namespace Game.Entities
 
         private void HandleMovementInput(float deltaTime)
         {
-            Vector3 movement = Vector3.Zero;
+            Vector3 movementDirection = Vector3.Zero;
 
             // Forward/Backward
-            if (Input.GetDown("forward"))
-            {
-                movement += Transform.Forward;
-            }
-
-            if (Input.GetDown("back"))
-            {
-                movement -= Transform.Forward;
-            }
+            if (Input.GetDown("forward")) movementDirection += Transform.Forward;
+            if (Input.GetDown("back")) movementDirection -= Transform.Forward;
 
             // Left/Right
-            if (Input.GetDown("left"))
-            {
-                movement -= Transform.Right;
-            }
-
-            if (Input.GetDown("right"))
-            {
-                movement += Transform.Right;
-            }
+            if (Input.GetDown("left")) movementDirection -= Transform.Right;
+            if (Input.GetDown("right")) movementDirection += Transform.Right;
 
             // Up/Down (optional — jump or fly cam)
-            if (Input.GetDown("up"))
+            if (Input.GetDown("up")) movementDirection += Transform.Up;
+            if (Input.GetDown("down")) movementDirection -= Transform.Up;
+
+            // Normalize if moving diagonally
+            if (movementDirection != Vector3.Zero)
             {
-                movement += Transform.Up;
+                movementDirection = Vector3.Normalize(movementDirection);
             }
 
-            if (Input.GetDown("down"))
-            {
-                movement -= Transform.Up;
-            }
+            // Calculate target velocity
+            Vector3 targetVelocity = movementDirection * MovementSpeed;
 
-            // Apply movement
-            Transform.Position += movement * MovementSpeed * deltaTime;
+            // Apply velocity directly
+            SetAbsVelocity(targetVelocity);
         }
 
         private void HandleMouseInput(float deltaTime)
@@ -107,8 +100,11 @@ namespace Game.Entities
                 // Clamp pitch to avoid flipping
                 pitch = System.Math.Clamp(pitch, -89f, 89f);
 
-                // Convert euler angles (pitch X, yaw Z, roll Y stays zero)
-                Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+                // Convert euler angles to quaternion
+                Quaternion newRotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+
+                // Set Rotation
+                Transform.Rotation = newRotation;
             }
             else
             {

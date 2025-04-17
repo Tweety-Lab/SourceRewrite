@@ -30,7 +30,7 @@ namespace SourceRewrite.Entities
                 return _transform;
             }
             set 
-            { 
+            {
                 _transform = value;
             } 
         }
