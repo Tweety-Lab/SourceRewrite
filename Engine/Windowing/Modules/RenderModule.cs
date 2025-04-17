@@ -16,7 +16,7 @@ namespace SourceRewrite.Windowing.Modules
 
             // Register Default Render Passes
             RenderPassManager.RegisterPass(new OpaquePass());
-            RenderPassManager.RegisterPass(new TranslucentPass());
+            RenderPassManager.RegisterPass(new TransparentPass());
             RenderPassManager.RegisterPass(new BillboardPass());
             RenderPassManager.RegisterPass(new LightingPass());
             RenderPassManager.RegisterPass(new ScreenspaceGUIRenderPass());

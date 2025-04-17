@@ -78,9 +78,9 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Render Brush and Point Entities that are Translucent.
+    /// Render Brush and Point Entities that are Transparent.
     /// </summary>
-    public class TranslucentPass : GeometryPass
+    public class TransparentPass : GeometryPass
     {
         public override List<RenderFlag> RenderPassFlags => new List<RenderFlag> {
             RenderFlag.DepthTest,
