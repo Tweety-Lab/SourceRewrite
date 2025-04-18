@@ -11,6 +11,6 @@ namespace SourceRewrite.Entities
     /// </summary>
     public interface IUsable
     {
-        void Use(BaseEntity activator);
+        void OnUse(BaseEntity activator);
     }
 }

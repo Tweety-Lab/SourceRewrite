@@ -99,7 +99,7 @@ namespace Game.Entities
             if (hit is IUsable usable)
             {
                 // Trigger its interact logic
-                usable.Use(this);
+                usable.OnUse(this);
             }
         }
 
