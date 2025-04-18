@@ -19,6 +19,9 @@ namespace Game.Entities
         // Speed of Movement
         public float MovementSpeed { get; set; } = 256f;
 
+        // Speed of Movement when crouching
+        public float CrouchSpeed { get; set; } = 75f;
+
         // Power of Jump
         public float JumpPower { get; set; } = 256f;
 
@@ -65,15 +68,50 @@ namespace Game.Entities
             if (Input.GetPressed("jump"))
                 Jump();
 
+            HandleCrouchInput();
             HandleMovementInput();
             HandleMouseInput();
-
         }
 
         private void Jump()
         {
             if (IsGrounded())
                 Velocity = new Vector3(Velocity.X, Velocity.Y, JumpPower);
+        }
+
+        bool isCrouching = false;
+        private float _preCrouchSpeed;
+        private void HandleCrouchInput()
+        {
+            if (Input.GetPressed("duck"))
+            {
+                isCrouching = true;
+
+                // Save movement speed persistently
+                _preCrouchSpeed = MovementSpeed;
+
+                // Change bounding box
+                PhysicsDestroyObject();
+                PhysicsBody.BoundingBox = new Vector3(PhysicsBody.BoundingBox.X, PhysicsBody.BoundingBox.Y, PhysicsBody.BoundingBox.Z / 3);
+                PhysicsInitNormal();
+
+                // Slow down movement speed
+                MovementSpeed = CrouchSpeed;
+            }
+            if (Input.GetUp("duck"))
+            {
+                if (isCrouching)
+                {
+                    // Revert bounding box
+                    PhysicsDestroyObject();
+                    PhysicsBody.BoundingBox = new Vector3(PhysicsBody.BoundingBox.X, PhysicsBody.BoundingBox.Y, PhysicsBody.BoundingBox.Z * 3);
+                    PhysicsInitNormal();
+
+                    // Restore saved movement speed
+                    MovementSpeed = _preCrouchSpeed;
+                }
+                isCrouching = false;
+            }
         }
 
         private bool IsGrounded()

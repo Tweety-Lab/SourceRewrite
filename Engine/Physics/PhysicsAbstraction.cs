@@ -38,7 +38,7 @@ namespace SourceRewrite.PhysicsSystem
             return Context.APIInterface.RayCast(ray);
         }
 
-        public static void DestroyPhysicsEntity(PointEntity physEntity)
+        public static void DestroyPhysicsEntity(BaseEntity physEntity)
         {
             Context.APIInterface.DestroyPhysicsEntity(physEntity);
         }

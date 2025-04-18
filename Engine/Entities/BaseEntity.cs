@@ -208,6 +208,14 @@ namespace SourceRewrite.Entities
             Physics.InitPhysicsEntity(this, PhysicsBody);
         }
 
+        /// <summary>
+        /// Destroy an Entity's physics body.
+        /// </summary>
+        public void PhysicsDestroyObject()
+        {
+            Physics.DestroyPhysicsEntity(this);
+        }
+
         // Set an Entities physicsBody transform
         public void SetPhysicsTransform(Transform transform, bool isTeleport = false)
         {
