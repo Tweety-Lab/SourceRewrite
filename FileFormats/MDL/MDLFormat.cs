@@ -252,8 +252,6 @@ namespace FileFormats.MDL
                 textureDirs.Add(textureDir);
             }
 
-            Console.WriteLine(textureDir);
-
             // Return to original position
             reader.BaseStream.Seek(currentOffset, SeekOrigin.Begin);
 
