@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 namespace SourceRewrite.Entities.Func
 {
     [Entity("func_button")]
-    public class FuncButton : BrushEntity
+    public class FuncButton : BrushEntity, IUsable
     {
+        public void OnUse(BaseEntity activator)
+        {
+            FireOutput("OnPressed");
+        }
     }
 }
