@@ -15,9 +15,6 @@ namespace SourceRewrite.Entities
 
         public override void Start()
         {
-            // Clear any previous physics bodies
-            PhysicsDestroyObject();
-
             foreach (Mesh mesh in Brush)
             {
                 // Add this mesh to collisionMesh
@@ -32,8 +29,6 @@ namespace SourceRewrite.Entities
             
             // Init Physics
             PhysicsInitNormal();
-
-            base.Start();
         }
     }
 }

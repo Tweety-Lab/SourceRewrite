@@ -142,7 +142,7 @@ namespace SourceRewrite.PhysicsSystem.Bullet
         {
             if (entityToBody.ContainsKey(entity))
             {
-                Console.WriteLine("Entity already has a physics body");
+                Console.WriteLine($"Entity {entity} already has a physics body.");
                 return;
             }
 
