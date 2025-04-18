@@ -78,17 +78,14 @@ namespace Game.Entities
 
         private bool IsGrounded()
         {
-            float groundCheckDistance = 16f; // Small distance below feet
-            Vector3 footPosition = Transform.Position + new Vector3(0f, 0f, -PhysicsBody.BoundingBox.Z);
-            Vector3 groundCheckPosition = footPosition + new Vector3(0f, 0f, -groundCheckDistance);
+            float groundCheckDistance = 8f;
+            float skinWidth = 1f; // Small offset
+
+            Vector3 footPosition = Transform.Position - new Vector3(0f, 0f, PhysicsBody.BoundingBox.Z - skinWidth);
+            Vector3 groundCheckPosition = footPosition - new Vector3(0f, 0f, groundCheckDistance);
 
             var hit = Physics.RayCast(new PhysicsRay(footPosition, groundCheckPosition));
-
-            if (hit != null)
-                return true;
-
-
-            return false;
+            return hit != null;
         }
 
 
