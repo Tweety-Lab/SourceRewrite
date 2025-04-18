@@ -8,9 +8,9 @@ namespace SourceRewrite.Entities
         public Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
         public Quaternion Rotation { get; set; } = Quaternion.Identity;
 
-        public Vector3 Forward => Vector3.Normalize(Vector3.Transform(Vector3.UnitY, Rotation));
-        public Vector3 Right => Vector3.Normalize(Vector3.Transform(Vector3.UnitX, Rotation));
-        public Vector3 Up => Vector3.Normalize(Vector3.Transform(Vector3.UnitZ, Rotation));
+        public Vector3 Forward => Vector3.Transform(Vector3.UnitY, Rotation);
+        public Vector3 Right => Vector3.Transform(Vector3.UnitX, Rotation);
+        public Vector3 Up => Vector3.Transform(Vector3.UnitZ, Rotation);
 
         // OPERATORS
         public static Transform operator *(Transform a, Transform b)

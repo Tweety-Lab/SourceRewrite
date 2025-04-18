@@ -17,13 +17,16 @@ namespace Game.Entities
     public class CharacterController : PointEntity
     {
         // Speed of Movement
-        public float MovementSpeed { get; set; } = 256f;
+        public int MovementSpeed { get; set; } = 256;
 
         // Speed of Movement when crouching
-        public float CrouchSpeed { get; set; } = 75f;
+        public int CrouchSpeed { get; set; } = 75;
 
         // Power of Jump
-        public float JumpPower { get; set; } = 256f;
+        public int JumpPower { get; set; } = 256;
+
+        // Range of Interaction
+        public int InteractionRange { get; set; } = 64;
 
 
         [ConVar("sensitivity")]
@@ -68,6 +71,9 @@ namespace Game.Entities
             if (Input.GetPressed("jump"))
                 Jump();
 
+            if (Input.GetPressed("use"))
+                Interact();
+
             HandleCrouchInput();
             HandleMovementInput();
             HandleMouseInput();
@@ -79,15 +85,33 @@ namespace Game.Entities
                 Velocity = new Vector3(Velocity.X, Velocity.Y, JumpPower);
         }
 
+        private void Interact()
+        {
+            // Raycast out of camera
+            var hit = Physics.RayCast(
+                new PhysicsRay(
+                    PointCamera.ActiveCamera.Transform.Position,
+                    PointCamera.ActiveCamera.Transform.Position + PointCamera.ActiveCamera.Transform.Forward * 64f
+                )
+            );
+
+            // Check if hit is usable
+            if (hit is IUsable usable)
+            {
+                // Trigger its interact logic
+                usable.Use(this);
+            }
+        }
+
         bool isCrouching = false;
-        private float _preCrouchSpeed;
+        private int _preCrouchSpeed;
         private void HandleCrouchInput()
         {
             if (Input.GetPressed("duck"))
             {
                 isCrouching = true;
 
-                // Save movement speed persistently
+                // Save movement speed
                 _preCrouchSpeed = MovementSpeed;
 
                 // Change bounding box
@@ -110,6 +134,7 @@ namespace Game.Entities
                     // Restore saved movement speed
                     MovementSpeed = _preCrouchSpeed;
                 }
+
                 isCrouching = false;
             }
         }
