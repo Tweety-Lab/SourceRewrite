@@ -57,7 +57,7 @@ namespace Game.Entities
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = SourceRewrite.SourceMath.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = SourceRewrite.EngineMaths.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Z;
 
@@ -267,7 +267,7 @@ namespace Game.Entities
                 pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Convert euler angles to quaternion
-                Quaternion newRotation = SourceRewrite.SourceMath.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+                Quaternion newRotation = SourceRewrite.EngineMaths.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
 
                 // Set Rotation of camera
                 PointCamera.ActiveCamera.LocalTransform.Rotation = newRotation;

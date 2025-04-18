@@ -54,7 +54,7 @@ namespace SourceRewrite.Rendering.OpenGL
             _gl.GetFloat(GLEnum.MaxTextureMaxAnisotropy, out float maxAniso);
             _gl.TexParameter(TextureTarget.Texture2D,
     TextureParameterName.TextureMaxAnisotropy,
-    SourceMath.Min(4.0f, maxAniso)); // Lower value = less anisotropic filtering
+    Math.Min(4.0f, maxAniso)); // Lower value = less anisotropic filtering
 
             // Generate mipmaps
             _gl.GenerateMipmap(TextureTarget.Texture2D);

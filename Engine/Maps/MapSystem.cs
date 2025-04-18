@@ -311,7 +311,7 @@ namespace SourceRewrite.Maps
                 }
                 else if (key == "rotation")
                 {
-                    pointEntity.Transform.Rotation = SourceMath.EulerToQuaternion((Vector3)propertyKeyValue.Value);
+                    pointEntity.Transform.Rotation = EngineMaths.EulerToQuaternion((Vector3)propertyKeyValue.Value);
                     continue;
                 }
                 else if (key == "scale")

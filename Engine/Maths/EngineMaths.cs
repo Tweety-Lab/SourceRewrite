@@ -2,7 +2,7 @@
 
 namespace SourceRewrite
 {
-    public static class SourceMath
+    public static class EngineMaths
     {
         /// <summary>
         /// Converts degrees to radians.
@@ -63,14 +63,6 @@ namespace SourceRewrite
             roll = RadiansToDegrees(roll);
 
             return new Vector3(pitch, yaw, roll);
-        }
-
-        /// <summary>
-        /// Returns the smaller of two values.
-        /// </summary>
-        public static float Min(float val1, float val2)
-        {
-            return val1 < val2 ? val1 : val2;
         }
     }
 }

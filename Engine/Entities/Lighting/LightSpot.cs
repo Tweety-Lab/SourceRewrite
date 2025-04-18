@@ -43,8 +43,8 @@ namespace SourceRewrite.Entities.Lighting
                 new Vector3(ConstantAttenuation, LinearAttenuation, QuadraticAttenuation));
             shader.SetParameter($"{lightPrefix}.lightType", 1); // 1 = spot light
             shader.SetParameter($"{lightPrefix}.direction", Transform.Forward);
-            shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(SourceMath.DegreesToRadians(InnerConeAngle)));
-            shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(SourceMath.DegreesToRadians(OuterConeAngle)));
+            shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(EngineMaths.DegreesToRadians(InnerConeAngle)));
+            shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(EngineMaths.DegreesToRadians(OuterConeAngle)));
         }
 
 #if EDITOR
