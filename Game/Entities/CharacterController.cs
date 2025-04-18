@@ -23,10 +23,13 @@ namespace Game.Entities
         public int CrouchSpeed { get; set; } = 75;
 
         // Power of Jump
-        public int JumpPower { get; set; } = 256;
+        public int JumpPower { get; set; } = 230;
 
         // Range of Interaction
         public int InteractionRange { get; set; } = 64;
+
+        public float AirDrag { get; set; } = 0.99f; // Higher = less air drag
+        public float AirControl { get; set; } = 0.025f; // Higher = more air control
 
 
         [ConVar("sensitivity")]
@@ -161,14 +164,13 @@ namespace Game.Entities
             camForward.Z = 0;
             camRight.Z = 0;
 
-            // Re-normalize since we changed the length by removing Z
+            // Re-normalize since we changed length
             camForward = Vector3.Normalize(camForward);
             camRight = Vector3.Normalize(camRight);
 
             // Move relative to camera's horizontal orientation
             if (Input.GetDown("forward")) movementDirection += camForward;
             if (Input.GetDown("back")) movementDirection -= camForward;
-
             if (Input.GetDown("left")) movementDirection -= camRight;
             if (Input.GetDown("right")) movementDirection += camRight;
 
@@ -178,8 +180,39 @@ namespace Game.Entities
                 movementDirection = Vector3.Normalize(movementDirection);
             }
 
-            Vector3 targetVelocity = movementDirection * MovementSpeed;
-            Velocity = new Vector3(targetVelocity.X, targetVelocity.Y, Velocity.Z);
+            // Get current horizontal velocity
+            Vector3 currentVelocity = Velocity;
+            Vector2 currentHorizontalVelocity = new Vector2(currentVelocity.X, currentVelocity.Y);
+
+            // Calculate target velocity
+            Vector2 targetVelocity = new Vector2(movementDirection.X, movementDirection.Y) * MovementSpeed;
+
+            if (IsGrounded())
+            {
+                // On ground, immediate response
+                currentHorizontalVelocity = targetVelocity;
+            }
+            else
+            {
+                // In air, apply air control with some acceleration/deceleration
+                // If there's input accelerate toward target velocity
+                if (movementDirection != Vector3.Zero)
+                {
+                    currentHorizontalVelocity = Vector2.Lerp(
+                        currentHorizontalVelocity,
+                        targetVelocity,
+                        AirControl * Time.DeltaTime * 60f
+                    );
+                }
+                else
+                {
+                    // No input, slowly decelerate
+                    currentHorizontalVelocity *= AirDrag;
+                }
+            }
+
+            // Apply the new horizontal velocity while preserving vertical velocity (Z)
+            Velocity = new Vector3(currentHorizontalVelocity.X, currentHorizontalVelocity.Y, currentVelocity.Z);
         }
 
         private void HandleMouseInput()
