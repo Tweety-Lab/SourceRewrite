@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "482"
+	"mapversion" "486"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "482"
+	"mapversion" "486"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -1546,6 +1546,37 @@ world
 			"visgroupshown" "1"
 			"visgroupautoshown" "1"
 		}
+	}
+}
+entity
+{
+	"id" "2194"
+	"classname" "env_beam"
+	"BoltWidth" "2"
+	"ClipStyle" "0"
+	"damage" "0"
+	"decalname" "Bigshot"
+	"framerate" "0"
+	"framestart" "0"
+	"HDRColorScale" "1.0"
+	"life" "1"
+	"NoiseAmplitude" "0"
+	"Radius" "256"
+	"renderamt" "100"
+	"rendercolor" "255 255 255"
+	"renderfx" "0"
+	"StrikeTime" "1"
+	"targetpoint" "-14 372 71"
+	"texture" "sprites/laserbeam.spr"
+	"TextureScroll" "35"
+	"TouchType" "0"
+	"origin" "-11.4448 -192 76"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
 	}
 }
 entity

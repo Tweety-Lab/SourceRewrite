@@ -13,8 +13,8 @@ namespace SourceRewrite.Entities.Env
         [EntityProperty("texture")]
         public string TexturePath { get; set; }
 
-        [EntityProperty("Radius")]
-        public float Radius { get; set; } = 256.0f;
+        [EntityProperty("radius")]
+        public float Radius { get; set; } = 16.0f;
 
         [EntityProperty("targetpoint")]
         public Vector3 TargetPoint { get; set; }
@@ -24,43 +24,49 @@ namespace SourceRewrite.Entities.Env
             Mesh newMesh = new Mesh();
             newMesh.Material = FileSystem.GetMaterial(TexturePath.Replace(".vmt", ""));
 
-            // Calculate the direction from Position to TargetPoint
-            Vector3 direction = TargetPoint - Transform.Position;
+            Vector3 start = Transform.Position;
+            Vector3 end = TargetPoint;
 
-            // Calculate the horizontal distance
-            float horizontalDistance = new Vector2(direction.X, direction.Z).Length();
+            // Direction vector from start to end
+            Vector3 direction = Vector3.Normalize(end - start);
+            float length = Vector3.Distance(start, end);
 
-            // Create the mesh with Radius as the vertical height
-            newMesh.Vertices = new float[] {
-                // Vertex 1: bottom-left
-                -0.5f * horizontalDistance, 0,  0.5f * Radius,
-                // Vertex 2: top-left
-                -0.5f * horizontalDistance, 0, -0.5f * Radius,
-                // Vertex 3: top-right
-                 0.5f * horizontalDistance, 0, -0.5f * Radius,
-                // Vertex 4: bottom-right
-                 0.5f * horizontalDistance, 0,  0.5f * Radius
-            };
+            // Find a perpendicular vector to direction
+            Vector3 up = Vector3.UnitZ; // Z-up world
+            if (Vector3.Dot(direction, up) > 0.99f) // if they're parallel
+                up = Vector3.UnitX; // pick another axis
 
-            newMesh.Indices = new uint[] { 0, 1, 2, 0, 2, 3 };
+            Vector3 right = Vector3.Normalize(Vector3.Cross(direction, up)) * Radius;
+            Vector3 actualUp = Vector3.Normalize(Vector3.Cross(right, direction)) * Radius;
 
-            // Set Uvs to tile
-            newMesh.UVs = new float[] {
-                0, 0,  // Vertex 1 (bottom-left)
-                0, Radius / horizontalDistance,  // Vertex 2 (top-left)
-                horizontalDistance / horizontalDistance, Radius / horizontalDistance,  // Vertex 3 (top-right)
-                horizontalDistance / horizontalDistance, 0  // Vertex 4 (bottom-right)
-            };
+            // Define vertices
+            Vector3 v0 = start - right;           // bottom-left
+            Vector3 v1 = start + right;           // bottom-right
+            Vector3 v2 = end + right;             // top-right
+            Vector3 v3 = end - right;             // top-left
 
-            for (int i = 0; i < newMesh.Vertices.Length; i += 3)
+            newMesh.Vertices = new float[]
             {
-                // Adjust the vertices based on the center offset
-                newMesh.Vertices[i] += Transform.Position.X;
-                newMesh.Vertices[i + 1] += Transform.Position.Y;
-                newMesh.Vertices[i + 2] += Transform.Position.Z;
-            }
+                v0.X, v0.Y, v0.Z,
+                v1.X, v1.Y, v1.Z,
+                v2.X, v2.Y, v2.Z,
+                v3.X, v3.Y, v3.Z
+            };
 
-            // Set the Mesh object
+            newMesh.Indices = new uint[]
+            {
+                0, 1, 2, 0, 2, 3
+            };
+
+            // UVs based on length
+            newMesh.UVs = new float[]
+            {
+                0, 0,
+                1, 0,
+                1, length / Radius,
+                0, length / Radius
+            };
+
             Mesh = newMesh;
         }
     }
