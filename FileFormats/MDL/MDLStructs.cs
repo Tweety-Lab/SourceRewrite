@@ -100,6 +100,50 @@ namespace FileFormats.MDL
         public int AttachmentCount;
         public int AttachmentOffset;
 
+        // Node Values
+        public int LocalNodeCount;
+        public int LocalNodeIndex;
+        public int LocalNodeNameIndex;
+
+        // mstudioflexdesc
+        public int FlexDescCount;
+        public int FlexDescIndex;
+
+        // mstudioflexcontroller
+        public int FlexControllerCount;
+        public int FlexControllerIndex;
+
+        // mstudioflexrule
+        public int FlexRulesCount;
+        public int FlexRulesIndex;
+
+        // Probably inverse kinematics
+        public int IKChainCount;
+        public int IKChainIndex;
+
+        // Information about mouth on the model for speech animations
+        public int MouthsCount;
+        public int MouthsIndex;
+
+        // mstudioposeparamdesc
+        public int LocalPoseParamCount;
+        public int LocalPoseParamIndex;
+
+        // We skip to byte 308
+
+        // Surface Property value
+        public int SurfacePropIndex;
+
+        // Key Value data
+        public int KeyValueIndex;
+        public int KeyValueCount;
+
+        // More Inverse Kinematics
+        public int IKLockCount;
+        public int IKLockIndex;
+
+        public float Mass;
+
     }
 
     // 64 Bytes Long

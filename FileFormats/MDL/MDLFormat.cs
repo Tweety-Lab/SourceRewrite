@@ -27,6 +27,11 @@ namespace FileFormats.MDL
         public List<string> TexturePaths = new List<string>();
 
         /// <summary>
+        /// Mass of the model in kilograms.
+        /// </summary>
+        public float Mass { get; set; }
+
+        /// <summary>
         /// Model Header.
         /// </summary>
         public MDLHeader Header;
@@ -107,6 +112,40 @@ namespace FileFormats.MDL
 
                 Header.AttachmentCount = reader.ReadInt32();
                 Header.AttachmentOffset = reader.ReadInt32();
+
+                Header.LocalNodeCount = reader.ReadInt32();
+                Header.LocalNodeIndex = reader.ReadInt32();
+                Header.LocalNodeNameIndex = reader.ReadInt32();
+
+                Header.FlexDescCount = reader.ReadInt32();
+                Header.FlexDescIndex = reader.ReadInt32();
+
+                Header.FlexControllerCount = reader.ReadInt32();
+                Header.FlexControllerIndex = reader.ReadInt32();
+
+                Header.FlexRulesCount = reader.ReadInt32();
+                Header.FlexRulesIndex = reader.ReadInt32();
+
+                Header.IKChainCount = reader.ReadInt32();
+                Header.IKChainIndex = reader.ReadInt32();
+
+                Header.MouthsCount = reader.ReadInt32();
+                Header.MouthsIndex = reader.ReadInt32();
+
+                Header.LocalPoseParamCount = reader.ReadInt32();
+                Header.LocalPoseParamIndex = reader.ReadInt32();
+
+                Header.SurfacePropIndex = reader.ReadInt32();
+
+                Header.KeyValueIndex = reader.ReadInt32();
+                Header.KeyValueCount = reader.ReadInt32();
+
+                Header.IKLockCount = reader.ReadInt32();
+                Header.IKLockIndex = reader.ReadInt32();
+
+                // Read Mass
+                Header.Mass = reader.ReadSingle();
+                Mass = Header.Mass;
             }
 
             // Load other Files

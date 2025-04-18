@@ -95,12 +95,9 @@ namespace Game.Entities
                 )
             );
 
-            // Check if hit is usable
+            // Check if hit is usable and trigger OnUse
             if (hit is IUsable usable)
-            {
-                // Trigger its interact logic
                 usable.OnUse(this);
-            }
         }
 
         bool isCrouching = false;

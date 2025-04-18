@@ -25,11 +25,18 @@ namespace SourceRewrite.Entities
         [EntityProperty("skin")]
         public string Skin { get; set; }
 
+        /// <summary>
+        /// Mass of the model as defined in the .MDL in kilograms.
+        /// </summary>
+        public float Mass { get; set; }
+
         public override void Start()
         {
-            Mesh = new Model(FileSystem.GetModelPath(MeshPath.Replace("models/", "")));
+            Model model = new Model(FileSystem.GetModelPath(MeshPath.Replace("models/", "")));
+            Mass = model.Mass;
+            Mesh = model;
 
-            GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Render the (empty) mesh
+            GameModules.GetModule<RenderModule>().Context.InitMesh(Mesh); // Init the mesh
         }
     }
 }

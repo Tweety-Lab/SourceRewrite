@@ -12,6 +12,9 @@ namespace SourceRewrite.AssetTypes
     /// </summary>
     public class Model : Mesh
     {
+        // Mass of model
+        public float Mass;
+
         // Create a Model from file path
         public Model(string filePath, Material material = null)
         {
@@ -61,6 +64,8 @@ namespace SourceRewrite.AssetTypes
                 Indices = MDL.GetMeshIndices();
 
                 UVs = uvData.ToArray();
+
+                Mass = MDL.Mass;
 
                 if (material != null)
                 {
