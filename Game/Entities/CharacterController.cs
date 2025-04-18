@@ -57,7 +57,7 @@ namespace Game.Entities
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = SourceRewrite.Math.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = SourceRewrite.SourceMath.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Z;
 
@@ -142,13 +142,49 @@ namespace Game.Entities
         private bool IsGrounded()
         {
             float groundCheckDistance = 8f;
-            float skinWidth = 1f; // Small offset
+            float skinWidth = 1f;
+            float halfWidthX = PhysicsBody.BoundingBox.X;
+            float halfWidthY = PhysicsBody.BoundingBox.Y;
+            float characterRadius = Math.Max(PhysicsBody.BoundingBox.X, PhysicsBody.BoundingBox.Y);
 
             Vector3 footPosition = Transform.Position - new Vector3(0f, 0f, PhysicsBody.BoundingBox.Z - skinWidth);
-            Vector3 groundCheckPosition = footPosition - new Vector3(0f, 0f, groundCheckDistance);
 
-            var hit = Physics.RayCast(new PhysicsRay(footPosition, groundCheckPosition));
-            return hit != null;
+            // Create multiple ray origins
+            Vector3[] rayOrigins = new Vector3[]
+            {
+                // Middle
+                footPosition,
+
+                // Four corners
+                footPosition + new Vector3(halfWidthX, halfWidthY, 0f),
+                footPosition + new Vector3(-halfWidthX, halfWidthY, 0f),
+                footPosition + new Vector3(halfWidthX, -halfWidthY, 0f),
+                footPosition + new Vector3(-halfWidthX, -halfWidthY, 0f),
+        
+                // Midpoints of each side
+                footPosition + new Vector3(halfWidthX, 0f, 0f),
+                footPosition + new Vector3(-halfWidthX, 0f, 0f),
+                footPosition + new Vector3(0f, halfWidthY, 0f),
+                footPosition + new Vector3(0f, -halfWidthY, 0f)
+            };
+
+            int hitCount = 0;
+            int requiredHits = 1; // Minimum number of hits to consider the character grounded
+
+            foreach (var origin in rayOrigins)
+            {
+                Vector3 groundCheckPosition = origin - new Vector3(0f, 0f, groundCheckDistance);
+                var hit = Physics.RayCast(new PhysicsRay(origin, groundCheckPosition));
+
+                if (hit != null)
+                {
+                    hitCount++;
+                    if (hitCount >= requiredHits)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -231,7 +267,7 @@ namespace Game.Entities
                 pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Convert euler angles to quaternion
-                Quaternion newRotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
+                Quaternion newRotation = SourceRewrite.SourceMath.EulerToQuaternion(new Vector3(pitch, 0f, yaw));
 
                 // Set Rotation of camera
                 PointCamera.ActiveCamera.LocalTransform.Rotation = newRotation;

@@ -32,7 +32,7 @@ namespace Editor.Components
             }
 
             // Initialize rotation angles from current transform
-            Vector3 currentEuler = SourceRewrite.Math.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = SourceRewrite.SourceMath.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Y;
         }
@@ -98,7 +98,7 @@ namespace Editor.Components
                 pitch = System.Math.Clamp(pitch, -89f, 89f);
 
                 // Update the rotation based on yaw and pitch (roll remains 0)
-                PointCamera.ActiveCamera.Transform.Rotation = SourceRewrite.Math.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
+                PointCamera.ActiveCamera.Transform.Rotation = SourceRewrite.SourceMath.EulerToQuaternion(new Vector3(pitch, yaw, 0f));
             }
             else
             {
