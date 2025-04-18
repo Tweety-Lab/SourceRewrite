@@ -62,7 +62,7 @@ namespace SourceRewrite.Rendering.OpenGL
 
         public void Bind(TextureUnit textureSlot = TextureUnit.Texture0)
         {
-            //When we bind a texture we can choose which textureslot we can bind it to.
+            // When we bind a texture we can choose which textureslot we can bind it to.
             _gl.ActiveTexture(textureSlot);
             _gl.BindTexture(TextureTarget.Texture2D, _handle);
         }
