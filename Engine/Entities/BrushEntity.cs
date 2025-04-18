@@ -19,6 +19,9 @@ namespace SourceRewrite.Entities
     {
         private List<Mesh> _brush;
 
+        // Mesh that represents the physical bounds of the entity
+        public Mesh CollisionMesh = new Mesh();
+
         // Meshes that represents the bounds of the entity
         public List<Mesh> Brush
         {
@@ -43,6 +46,23 @@ namespace SourceRewrite.Entities
         public BrushEntity() : base()
         {
             _brush = new List<Mesh>();
+        }
+
+        public override void Start()
+        {
+            foreach (Mesh mesh in Brush)
+            {
+                // Add this mesh to collisionMesh
+                CollisionMesh.Vertices = CollisionMesh.Vertices.Concat(mesh.Vertices).ToArray();
+                CollisionMesh.Indices = CollisionMesh.Indices.Concat(mesh.Indices).ToArray();
+            }
+
+            // Physics Properties
+            PhysicsBody.BodyType = BodyType.Static;
+            PhysicsBody.CollisionMesh = CollisionMesh;
+
+            // Init Physics
+            PhysicsInitNormal();
         }
 
         // Render Meshes when they gets changed
