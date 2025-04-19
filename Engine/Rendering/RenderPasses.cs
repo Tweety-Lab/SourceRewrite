@@ -58,7 +58,7 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Render Brush and Point Entities that are Opaque.
+    /// Render Brushes and Entities that are Opaque.
     /// </summary>
     public class OpaquePass : GeometryPass
     {
@@ -78,7 +78,7 @@ namespace SourceRewrite.Rendering
     }
 
     /// <summary>
-    /// Render Brush and Point Entities that are Transparent.
+    /// Render Brushes and Entities that are Transparent.
     /// </summary>
     public class TransparentPass : GeometryPass
     {
