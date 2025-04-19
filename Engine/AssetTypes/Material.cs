@@ -60,17 +60,37 @@ namespace SourceRewrite.AssetTypes
                         string resolvedPath = FileSystem.GetTexturePath(texturePath);
                         if (resolvedPath != null)
                         {
-                            Shader.SetParameter(propertyName, new Texture(resolvedPath));
+                            // Get all parameter names from the shader
+                            string[] parameterNames = Shader.GetParameterNames();
+
+                            // Find the case-insensitive match for the propertyName in the parameter names
+                            string matchingParam = parameterNames
+                                .FirstOrDefault(param => string.Equals(param, propertyName, StringComparison.OrdinalIgnoreCase));
+
+                            if (matchingParam != null)
+                            {
+                                // Set the texture parameter using the matching parameter name
+                                Shader.SetParameter(matchingParam, new Texture(resolvedPath));
+                            }
                         }
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))
                     {
-                        // Set Shader uniform (property) to input property
-                        Shader.SetParameter(propertyName, propertyValue);
+                        // Get all parameter names from the shader
+                        string[] parameterNames = Shader.GetParameterNames();
+
+                        // Find the case-insensitive match for the propertyName in the parameter names
+                        string matchingParam = parameterNames
+                            .FirstOrDefault(param => string.Equals(param, propertyName, StringComparison.OrdinalIgnoreCase));
+
+                        if (matchingParam != null)
+                        {
+                            // Set Shader uniform (property) to input property using the matching parameter name
+                            Shader.SetParameter(matchingParam, propertyValue);
+                        }
                     }
                 }
-
             }
             catch (Exception ex)
             {
