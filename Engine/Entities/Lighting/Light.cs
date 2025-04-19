@@ -44,16 +44,6 @@ namespace SourceRewrite.Entities
             shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
         }
 
-
-        public override void OnDestroy()
-        {
-            // Update Uniforms
-            foreach (Shader shader in Shader.Shaders)
-            {
-                shader.SetParameter("light_color", new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-            }
-        }
-
 #if EDITOR
         public override void DrawGizmos()
         {
