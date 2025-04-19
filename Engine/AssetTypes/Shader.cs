@@ -80,6 +80,14 @@ namespace SourceRewrite.AssetTypes
         {
             return _shaderInterface.GetParameter<T>(uniformName);
         }
+
+        /// <summary>
+        /// Checks if the shader has the specified parameter (uniform).
+        /// </summary>
+        public bool HasParameter(string uniformName)
+        {
+            return _shaderInterface.HasParameter(uniformName);
+        }
     }
 
     /// <summary>
@@ -88,20 +96,8 @@ namespace SourceRewrite.AssetTypes
     public interface IShader
     {
         void SetFragmentCode(string input);
-
-        /// <summary>
-        /// Sets the shader's specified parameter (uniform) to the specified value.
-        /// </summary>
         void SetParameter(string uniformName, object value);
-
-        /// <summary>
-        /// Gets a shader parameter (uniform) of type T.
-        /// </summary>
         T GetParameter<T>(string uniformName);
-
-        /// <summary>
-        /// Checks if the shader has the specified parameter (uniform).
-        /// </summary>
         bool HasParameter(string uniformName);
     }
 }

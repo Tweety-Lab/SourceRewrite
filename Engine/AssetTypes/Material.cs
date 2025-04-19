@@ -55,10 +55,13 @@ namespace SourceRewrite.AssetTypes
 
                     // Special logic for Textures
                     // Textures are stored as paths to the texture file in the Material
-                    if (Shader.GetParameter<Texture>(propertyName) != default)
+                    if (keyValue.Value is string texturePath)
                     {
-                        Console.WriteLine("Texture");
-                        Shader.SetParameter(propertyName, new Texture(FileSystem.GetTexturePath((string)propertyValue)));
+                        string resolvedPath = FileSystem.GetTexturePath(texturePath);
+                        if (resolvedPath != null)
+                        {
+                            Shader.SetParameter(propertyName, new Texture(resolvedPath));
+                        }
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))

@@ -61,7 +61,7 @@ namespace SourceRewrite.Files
                 if (File.Exists(mountedTexturePath)) return mountedTexturePath;
             }
 
-            return path;
+            return null;
         }
 
         /// <summary>
