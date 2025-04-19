@@ -128,8 +128,12 @@ namespace SourceRewrite.Rendering
             }
         }
 
+        private bool _lightsDirty = true;
         private void UpdateShaderLighting()
         {
+            // Only Update if lights have changed
+            if (!_lightsDirty) return;
+
             foreach (Shader shader in Shader.Shaders)
             {
                 shader.SetParameter("activeLights", _activeLights.Count);
@@ -152,6 +156,9 @@ namespace SourceRewrite.Rendering
                     shader.SetParameter($"{lightPrefix}.outerCutOff", 0.0f);
                 }
             }
+
+            // Mark lights as clean
+            _lightsDirty = false;
         }
     }
 

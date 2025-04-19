@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "188"
+	"mapversion" "192"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "188"
+	"mapversion" "192"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -2812,6 +2812,30 @@ world
 }
 entity
 {
+	"id" "3185"
+	"classname" "light"
+	"_constant_attn" "2000"
+	"_distance" "0"
+	"_fifty_percent_distance" "0"
+	"_hardfalloff" "0"
+	"_light" "79 79 79 1"
+	"_lightHDR" "-1 -1 -1 1"
+	"_lightscaleHDR" "1"
+	"_linear_attn" "0"
+	"_quadratic_attn" "0"
+	"_zero_percent_distance" "0"
+	"style" "0"
+	"origin" "-160 -768 -384"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 7500]"
+	}
+}
+entity
+{
 	"id" "1893"
 	"classname" "prop_static"
 	"angles" "0 135 0"
@@ -2900,14 +2924,14 @@ entity
 {
 	"id" "2296"
 	"classname" "light"
-	"_constant_attn" "0"
+	"_constant_attn" "2000"
 	"_distance" "0"
 	"_fifty_percent_distance" "0"
 	"_hardfalloff" "0"
-	"_light" "26 26 26 1"
+	"_light" "79 79 79 1"
 	"_lightHDR" "-1 -1 -1 1"
 	"_lightscaleHDR" "1"
-	"_linear_attn" "1"
+	"_linear_attn" "0"
 	"_quadratic_attn" "0"
 	"_zero_percent_distance" "0"
 	"style" "0"
@@ -3134,30 +3158,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 10000]"
-	}
-}
-entity
-{
-	"id" "2764"
-	"classname" "light"
-	"_constant_attn" "0"
-	"_distance" "0"
-	"_fifty_percent_distance" "0"
-	"_hardfalloff" "0"
-	"_light" "26 26 26 1"
-	"_lightHDR" "-1 -1 -1 1"
-	"_lightscaleHDR" "1"
-	"_linear_attn" "1"
-	"_quadratic_attn" "0"
-	"_zero_percent_distance" "0"
-	"style" "0"
-	"origin" "-192 -704 -544"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 7500]"
 	}
 }
 entity
