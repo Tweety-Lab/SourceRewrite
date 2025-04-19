@@ -31,7 +31,7 @@ namespace SourceRewrite.Entities
             string lightPrefix = $"lights[{lightIndex}]";
 
             Vector4 modifiedColor = Color;
-            modifiedColor.W *= 50000.0f;
+            modifiedColor.W *= 4000.0f;
             Vector4 normalizedColor = modifiedColor / 255.0f;
 
             shader.SetParameter($"{lightPrefix}.position", Transform.Position);
