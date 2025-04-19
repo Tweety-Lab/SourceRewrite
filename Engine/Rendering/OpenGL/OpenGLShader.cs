@@ -74,9 +74,8 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
-        /// <summary>
-        /// Set Shader Parameter (Uniform).
-        /// </summary>
+
+        // Set Shader Uniform
         public unsafe void SetParameter(string name, object value)
         {
             int location = _gl.GetUniformLocation(_handle, name);
@@ -176,9 +175,8 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
-        /// <summary>
-        /// Get Shader Parameter (Uniform).
-        /// </summary>
+
+        // Get Shader Uniform
         public unsafe T GetParameter<T>(string name)
         {
             int location = _gl.GetUniformLocation(_handle, name);
@@ -236,6 +234,7 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
+        // Check if a parameter exists
         public bool HasParameter(string name) => _gl.GetUniformLocation(_handle, name) != -1;
 
         private uint LoadShader(ShaderType type, string source)
@@ -302,52 +301,6 @@ namespace SourceRewrite.Rendering.OpenGL
 
             // Delete the program when we are done
             _gl.DeleteProgram(_handle);
-        }
-    }
-
-    /// <summary>
-    /// Least Recently Used (LRU) cache for texture unit management
-    /// </summary>
-    public class LRUTextureUnitCache
-    {
-        private readonly LinkedList<int> _lruList = new LinkedList<int>();
-        private readonly Dictionary<int, LinkedListNode<int>> _unitMap = new Dictionary<int, LinkedListNode<int>>();
-        private readonly int _capacity;
-
-        public LRUTextureUnitCache(int capacity)
-        {
-            _capacity = capacity;
-
-            // Initialize with all available texture units
-            for (int i = 0; i < capacity; i++)
-            {
-                var node = _lruList.AddLast(i);
-                _unitMap[i] = node;
-            }
-        }
-
-        public int GetTextureUnit()
-        {
-            // Get the least recently used unit
-            int unit = _lruList.First.Value;
-            Touch(unit);
-            return unit;
-        }
-
-        public void Touch(int unit)
-        {
-            // Move this unit to the end of the list (most recently used)
-            if (_unitMap.TryGetValue(unit, out var node))
-            {
-                _lruList.Remove(node);
-                _lruList.AddLast(node);
-            }
-            else
-            {
-                // This shouldn't happen if the cache is properly maintained
-                var newNode = _lruList.AddLast(unit);
-                _unitMap[unit] = newNode;
-            }
         }
     }
 }
