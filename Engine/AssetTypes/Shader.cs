@@ -88,6 +88,14 @@ namespace SourceRewrite.AssetTypes
         {
             return _shaderInterface.HasParameter(uniformName);
         }
+
+        /// <summary>
+        /// Gets the names of all parameters (uniforms) in the shader.
+        /// </summary>
+        public string[] GetParameterNames()
+        {
+            return _shaderInterface.GetParameterNames();
+        }
     }
 
     /// <summary>
@@ -99,5 +107,6 @@ namespace SourceRewrite.AssetTypes
         void SetParameter(string uniformName, object value);
         T GetParameter<T>(string uniformName);
         bool HasParameter(string uniformName);
+        string[] GetParameterNames();
     }
 }

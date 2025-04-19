@@ -237,6 +237,26 @@ namespace SourceRewrite.Rendering.OpenGL
         // Check if a parameter exists
         public bool HasParameter(string name) => _gl.GetUniformLocation(_handle, name) != -1;
 
+        // Get all parameter names
+        public string[] GetParameterNames()
+        {
+            // First, get the number of active uniforms in the shader program
+            _gl.GetProgram(_handle, GLEnum.ActiveUniforms, out int uniformCount);
+
+            // Create an array to store the names
+            List<string> parameterNames = new List<string>();
+
+            // Loop through all the active uniforms and get their names
+            for (int i = 0; i < uniformCount; i++)
+            {
+                // Get the name of the uniform
+                _gl.GetActiveUniform(_handle, (uint)i, 256, out _, out _, out UniformType uniformType, out string uniformName);
+                parameterNames.Add(uniformName);
+            }
+
+            return parameterNames.ToArray();
+        }
+
         private uint LoadShader(ShaderType type, string source)
         {
             // To load a single shader we need to:
