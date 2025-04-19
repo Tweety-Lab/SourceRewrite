@@ -236,6 +236,8 @@ namespace SourceRewrite.Rendering.OpenGL
             }
         }
 
+        public bool HasParameter(string name) => _gl.GetUniformLocation(_handle, name) != -1;
+
         private uint LoadShader(ShaderType type, string source)
         {
             // To load a single shader we need to:

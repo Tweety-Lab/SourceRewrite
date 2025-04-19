@@ -90,5 +90,6 @@ namespace SourceRewrite.AssetTypes
         void SetFragmentCode(string input);
         void SetParameter(string uniformName, object value);
         T GetParameter<T>(string uniformName);
+        bool HasParameter(string uniformName);
     }
 }

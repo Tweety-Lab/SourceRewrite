@@ -78,9 +78,6 @@ namespace SourceRewrite.AssetTypes
         // Get Property
         public object GetProperty(string propertyName) => Properties[propertyName];
 
-        // Check if Property exists
-        public bool HasProperty(string propertyName) => Properties.ContainsKey(propertyName);
-
         // Get a Flag (boolean property)
         public int GetFlag(string propertyName)
         {
