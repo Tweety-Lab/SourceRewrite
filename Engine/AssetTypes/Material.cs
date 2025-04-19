@@ -53,10 +53,12 @@ namespace SourceRewrite.AssetTypes
                     // Add to Properties
                     Properties.Add(propertyName, propertyValue);
 
-                    // Special logic for base texture paths (REPLACE THIS)
-                    if (keyValue.Key.ToLower() == "$basetexture")
+                    // Special logic for Textures
+                    // Textures are stored as paths to the texture file in the Material
+                    if (Shader.GetParameter<Texture>(propertyName) != default)
                     {
-                        Shader.SetParameter("basetexture", new Texture(FileSystem.GetTexturePath((string)keyValue.Value))); // Set the Texture
+                        Console.WriteLine("Texture");
+                        Shader.SetParameter(propertyName, new Texture(FileSystem.GetTexturePath((string)propertyValue)));
                     }
                     // Keys starting with '$' are Shader properties
                     else if (keyValue.Key.StartsWith('$'))
@@ -75,6 +77,9 @@ namespace SourceRewrite.AssetTypes
 
         // Get Property
         public object GetProperty(string propertyName) => Properties[propertyName];
+
+        // Check if Property exists
+        public bool HasProperty(string propertyName) => Properties.ContainsKey(propertyName);
 
         // Get a Flag (boolean property)
         public int GetFlag(string propertyName)
