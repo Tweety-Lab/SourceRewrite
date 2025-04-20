@@ -6,21 +6,61 @@ namespace SourceRewrite.Entities
     [Entity("math_counter")]
     public class MathCounter : PointEntity
     {
+
+        private int _value;
+
         [EntityProperty("startvalue")]
-        public int Value { get; set; } = 0;
+        public int Value
+        {
+            get => _value;
+            set
+            {
+                int clampedValue = value;
+
+                // Clamp to MinValue only if its is non-zero
+                if (MinValue != 0 && clampedValue < MinValue)
+                    clampedValue = MinValue;
+
+                // Clamp to MaxValue only if its is non-zero
+                if (MaxValue != 0 && clampedValue > MaxValue)
+                    clampedValue = MaxValue;
+
+                // Only continue if the value is actually changing
+                if (_value == clampedValue)
+                    return;
+
+                _value = clampedValue;
+
+                // Check for hitting the minimum
+                if (MinValue != 0 && _value == MinValue)
+                {
+                    FireOutput("OnHitMin");
+                }
+
+                // Check for hitting the maximum
+                if (MaxValue != 0 && _value == MaxValue)
+                {
+                    FireOutput("OnHitMax");
+                }
+            }
+        }
+
+        [EntityProperty("min")]
+        public int MinValue { get; set; }
+
+        [EntityProperty("max")]
+        public int MaxValue { get; set; }
 
         [Input]
         public void Add(int amount)
         {
             Value += amount;
-            DeveloperConsole.Msg($"MathCounter {Name} incremented to {Value}");
         }
 
         [Input]
         public void Subtract(int amount)
         {
             Value -= amount;
-            DeveloperConsole.Msg($"MathCounter {Name} decremented to {Value}");
         }
 
         [Input]
@@ -31,7 +71,6 @@ namespace SourceRewrite.Entities
                 return;
 
             Value /= amount;
-            DeveloperConsole.Msg($"MathCounter {Name} divided to {Value}");
         }
 
 #if EDITOR
