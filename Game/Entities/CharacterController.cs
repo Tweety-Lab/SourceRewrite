@@ -30,6 +30,9 @@ namespace Game.Entities
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.4f;
 
+        [ConVar("fov")]
+        public static float FieldOfView { get; set; } = 70f;
+
         private float pitch = 0f;
         private float yaw = 0f;
 
@@ -42,6 +45,7 @@ namespace Game.Entities
             if (PointCamera.ActiveCamera == null)
             {
                 PointCamera camEntity = new PointCamera();
+                camEntity.FieldOfView = FieldOfView;
                 camEntity.Start();
                 camEntity.Parent = this;
                 camEntity.LocalTransform.Position = new Vector3(0f, 0f, 28f);
