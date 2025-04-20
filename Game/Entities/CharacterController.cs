@@ -27,11 +27,16 @@ namespace Game.Entities
         public float AirDrag { get; set; } = 0.99f;
         public float AirControl { get; set; } = 0.025f;
 
+        // Camera
+
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.4f;
 
         [ConVar("fov", ConVarFlag.Archive)]
         public static float FieldOfView { get; set; } = 70f;
+
+        // The camera offset from the middle of the player
+        public Vector3 CameraOffset { get; set; } = new Vector3(0f, 0f, 32f);
 
         private float pitch = 0f;
         private float yaw = 0f;
@@ -48,7 +53,7 @@ namespace Game.Entities
                 camEntity.FieldOfView = FieldOfView;
                 camEntity.Start();
                 camEntity.Parent = this;
-                camEntity.LocalTransform.Position = new Vector3(0f, 0f, 28f);
+                camEntity.LocalTransform.Position = CameraOffset;
                 PointCamera.SetActiveCamera(camEntity);
             }
 
