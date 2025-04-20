@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
+using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Entities.Lighting
@@ -11,6 +12,12 @@ namespace SourceRewrite.Entities.Lighting
         // Light Properties
         [EntityProperty("_light")]
         public Vector4 Color { get; set; } = new Vector4(255.0f, 255.0f, 255.0f, 200.0f);
+
+        public override void Start()
+        {
+            // Mark lights as dirty (needing a refresh)
+            RenderPassManager.GetRenderPass<LightingPass>().LightsDirty = true;
+        }
 
         public void ApplyToShader(Shader shader, int lightIndex)
         {

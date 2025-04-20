@@ -1,5 +1,6 @@
 ﻿using SourceRewrite.AssetTypes;
 using SourceRewrite.Attributes;
+using SourceRewrite.Rendering;
 using System.Numerics;
 
 namespace SourceRewrite.Entities.Lighting
@@ -45,6 +46,12 @@ namespace SourceRewrite.Entities.Lighting
             shader.SetParameter($"{lightPrefix}.direction", Transform.Forward);
             shader.SetParameter($"{lightPrefix}.cutOff", MathF.Cos(EngineMaths.DegreesToRadians(InnerConeAngle)));
             shader.SetParameter($"{lightPrefix}.outerCutOff", MathF.Cos(EngineMaths.DegreesToRadians(OuterConeAngle)));
+        }
+
+        public override void Start()
+        {
+            // Mark lights as dirty (needing a refresh)
+            RenderPassManager.GetRenderPass<LightingPass>().LightsDirty = true;
         }
 
 #if EDITOR

@@ -1,6 +1,7 @@
 ﻿using SourceRewrite.Attributes;
 using System.Numerics;
 using SourceRewrite.AssetTypes;
+using SourceRewrite.Rendering;
 
 
 #if EDITOR
@@ -25,6 +26,12 @@ namespace SourceRewrite.Entities
 
         [EntityProperty("_quadratic_attn")]
         public float QuadraticAttenuation { get; set; } = 0.032f;
+
+        public override void Start()
+        {
+            // Mark lights as dirty (needing a refresh)
+            RenderPassManager.GetRenderPass<LightingPass>().LightsDirty = true;
+        }
 
         public void ApplyToShader(Shader shader, int lightIndex)
         {

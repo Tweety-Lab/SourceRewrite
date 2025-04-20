@@ -8,6 +8,7 @@ using SourceRewrite.Attributes;
 using FileFormats.BSP.IO;
 using SourceRewrite.PhysicsSystem;
 using Silk.NET.Input;
+using SourceRewrite.Rendering;
 
 namespace SourceRewrite.Maps
 {
