@@ -57,7 +57,7 @@ namespace Game.Entities
                 PointCamera.SetActiveCamera(camEntity);
             }
 
-            Vector3 currentEuler = SourceRewrite.EngineMaths.QuaternionToEuler(Transform.Rotation);
+            Vector3 currentEuler = EngineMaths.QuaternionToEuler(Transform.Rotation);
             pitch = currentEuler.X;
             yaw = currentEuler.Z;
 

@@ -1,4 +1,5 @@
-﻿using SourceRewrite.Entities.GUI;
+﻿using SourceRewrite.Entities;
+using SourceRewrite.Entities.GUI;
 using SourceRewrite.InputSystem;
 using VistaGUI.Scripting.References;
 
@@ -29,7 +30,6 @@ namespace SourceRewrite
             {
                 Msg("] " + args[0]); // Display the typed command
                 DeveloperConsole.EvaluateCommand(args[0]); // Run the typed command
-
             });
         }
 
