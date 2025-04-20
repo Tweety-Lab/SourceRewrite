@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "516"
+	"mapversion" "517"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "516"
+	"mapversion" "517"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -568,8 +568,8 @@ entity
 	"targetname" "logic_01"
 	connections
 	{
-		"OnTrigger" "serverCommandecho server0-1"
-		"OnTrigger" "clientCommandecho client0-1"
+		"OnTrigger" "serverCommandecho "printed from server"0-1"
+		"OnTrigger" "clientCommandecho "printed from client"0-1"
 	}
 	"origin" "-288 -80 64"
 	editor
