@@ -73,6 +73,12 @@ namespace SourceRewrite.Entities
             Value /= amount;
         }
 
+        [Input]
+        public void Multiply(int amount)
+        {
+            Value *= amount;
+        }
+
 #if EDITOR
         public override void DrawGizmos()
         {
