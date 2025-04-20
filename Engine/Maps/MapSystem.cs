@@ -278,8 +278,6 @@ namespace SourceRewrite.Maps
             // Add to entity list
             Entities.Add(brushEntity);
             brushEntity.Parent = MapRootEntity;
-
-            Console.WriteLine($"Creating brush entity of type: {className}");
         }
 
         private void CreatePointEntity(string className, KeyValuesFormat entityKeyValues)
@@ -292,8 +290,6 @@ namespace SourceRewrite.Maps
                 Console.WriteLine($"Could not find type: '{className}'");
                 return;
             }
-
-            Console.WriteLine($"Creating point entity of type: {className}");
 
             // Create point entity
             PointEntity pointEntity = (PointEntity)Activator.CreateInstance(entityType);
