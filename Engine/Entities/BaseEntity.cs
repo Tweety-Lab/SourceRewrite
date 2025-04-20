@@ -112,11 +112,8 @@ namespace SourceRewrite.Entities
             // Run Entity destroy logic
             OnDestroy();
 
-            // Remove any physics
-            if (this is PointEntity)
-            {
-                Physics.DestroyPhysicsEntity(this as PointEntity);
-            }
+            // Remove physics bodies
+            Physics.DestroyPhysicsEntity(this);
 
             // Prevent enumeration issues
             List<BaseEntity> childrenToDestroy = new List<BaseEntity>(Children);

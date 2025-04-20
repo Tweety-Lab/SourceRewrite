@@ -18,7 +18,7 @@ namespace Game.Entities
     {
         // Player
         public int MovementSpeed { get; set; } = 256;
-        public int CrouchSpeed { get; set; } = 75;
+        public int CrouchSpeed { get; set; } = 128;
         public int JumpPower { get; set; } = 230;
         public int InteractionRange { get; set; } = 64;
 
