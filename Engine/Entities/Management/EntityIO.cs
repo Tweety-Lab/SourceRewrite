@@ -23,9 +23,20 @@ namespace SourceRewrite.Entities
                 var method = entity.GetType().GetMethod(InputName);
                 if (method != null)
                 {
-                    // Invoke the method with or without parameters
-                    if (Parameter == null) method.Invoke(entity, null);
-                    else method.Invoke(entity, new object[] { Parameter });
+                    // Check the number of parameters the method expects
+                    var methodParameters = method.GetParameters();
+
+                    // If the method expects no parameters, invoke it without passing any parameter
+                    if (methodParameters.Length == 0)
+                    {
+                        method.Invoke(entity, null);
+                    }
+                    else if (methodParameters.Length == 1 && Parameter != null)
+                    {
+                        // Invoke with the parameter if it expects 1 parameter
+                        var convertedParam = Convert.ChangeType(Parameter, methodParameters[0].ParameterType);
+                        method.Invoke(entity, new object[] { convertedParam });
+                    }
                 }
             }
         }

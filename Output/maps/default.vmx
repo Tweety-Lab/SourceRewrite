@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "510"
+	"mapversion" "516"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "32"
+	"nGridSpacing" "16"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "510"
+	"mapversion" "516"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -562,6 +562,26 @@ world
 }
 entity
 {
+	"id" "2353"
+	"classname" "logic_relay"
+	"StartDisabled" "0"
+	"targetname" "logic_01"
+	connections
+	{
+		"OnTrigger" "serverCommandecho server0-1"
+		"OnTrigger" "clientCommandecho client0-1"
+	}
+	"origin" "-288 -80 64"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
 	"id" "2283"
 	"classname" "light"
 	"_constant_attn" "2000"
@@ -575,7 +595,7 @@ entity
 	"_quadratic_attn" "0"
 	"_zero_percent_distance" "0"
 	"style" "0"
-	"origin" "-128.421 224 192"
+	"origin" "-128.421 256 128"
 	editor
 	{
 		"color" "220 30 220"
@@ -607,9 +627,7 @@ entity
 	"wait" "3"
 	connections
 	{
-		"OnPressed" "serverCommandecho 0-1"
-		"button" "was0-1"
-		"pressed" "0-10-1"
+		"OnPressed" "logic_01Trigger0-1"
 	}
 	solid
 	{
