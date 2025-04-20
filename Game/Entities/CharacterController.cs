@@ -29,7 +29,7 @@ namespace Game.Entities
 
         // Camera
 
-        [ConVar("sensitivity")]
+        [ConVar("sensitivity", ConVarFlag.Archive)]
         public static float Sensitivity { get; set; } = 0.4f;
 
         [ConVar("fov", ConVarFlag.Archive)]
