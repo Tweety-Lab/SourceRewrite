@@ -79,6 +79,12 @@ namespace SourceRewrite.Entities
             Value *= amount;
         }
 
+        [Input]
+        public void SetValue(int amount)
+        {
+            Value = amount;
+        }
+
 #if EDITOR
         public override void DrawGizmos()
         {
