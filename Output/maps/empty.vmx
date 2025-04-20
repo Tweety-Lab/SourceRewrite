@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "227"
+	"mapversion" "228"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "227"
+	"mapversion" "228"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -2951,7 +2951,7 @@ entity
 	"StartDisabled" "0"
 	connections
 	{
-		"OnStartTouch" "clientCommandecho "Player walked infront of door."0-1"
+		"OnStartTouch" "clientCommandecho "Player walked infront of door!"0-1"
 	}
 	solid
 	{
