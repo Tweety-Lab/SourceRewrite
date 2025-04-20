@@ -128,11 +128,11 @@ namespace SourceRewrite.Rendering
             }
         }
 
-        private bool _lightsDirty = true;
+        public bool LightsDirty = true;
         private void UpdateShaderLighting()
         {
             // Only Update if lights have changed
-            if (!_lightsDirty) return;
+            if (!LightsDirty) return;
 
             foreach (Shader shader in Shader.Shaders)
             {
@@ -158,7 +158,7 @@ namespace SourceRewrite.Rendering
             }
 
             // Mark lights as clean
-            _lightsDirty = false;
+            LightsDirty = false;
         }
     }
 

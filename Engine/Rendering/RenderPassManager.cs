@@ -38,6 +38,13 @@ namespace SourceRewrite.Rendering
         /// <param name="pass">The render pass to register.</param>
         public static void RegisterPass(IRenderPass pass) => RenderPasses.Add(pass);
 
+        /// <summary>
+        /// Get a render pass from it's type.
+        /// </summary>
+        /// <param name="type"></param>
+        public static T GetRenderPass<T>() where T : IRenderPass =>
+            (T)RenderPasses.FirstOrDefault(x => x is T);
+
         private static void ApplyFlags(IEnumerable<RenderFlag> flags)
         {
             var rendererAPI = GameModules.GetModule<RenderModule>().Context.GetRendererAPI();
