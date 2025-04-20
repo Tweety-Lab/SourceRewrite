@@ -30,7 +30,7 @@ namespace Game.Entities
         [ConVar("sensitivity")]
         public static float Sensitivity { get; set; } = 0.4f;
 
-        [ConVar("fov")]
+        [ConVar("fov", ConVarFlag.Archive)]
         public static float FieldOfView { get; set; } = 70f;
 
         private float pitch = 0f;
