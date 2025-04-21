@@ -23,7 +23,7 @@ public class ParentKey
     public List<ParentKey> ParentKeys { get; } = new();
 
     /// <summary>
-    /// Returns the first found Parent Key with the specified name.
+    /// Returns the first found Child Parent Key with the specified name.
     /// </summary>
     public ParentKey GetChildParentKey(string name)
     {

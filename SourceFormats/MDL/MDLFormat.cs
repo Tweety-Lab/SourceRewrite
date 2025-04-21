@@ -24,7 +24,7 @@ namespace SourceFormats.MDL
         /// <summary>
         /// Mass of the model in kilograms.
         /// </summary>
-        public float Mass { get; set; }
+        public float Mass => Header.Mass;
 
         /// <summary>
         /// Model Header.
@@ -38,109 +38,15 @@ namespace SourceFormats.MDL
 
         public MDLFormat(string path)
         {
-            // Load the Model
-            Header = new MDLHeader();
 
             // Start reading the file
             using (var reader = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                // Read the header
-                Header.ID = reader.ReadInt32();
-                Header.Version = reader.ReadInt32();
-                Header.Checksum = reader.ReadInt32();
+                // Load the Model
+                Header = new MDLHeader(reader);
 
-                // Read the name
-                Header.Name = new string(reader.ReadChars(64)).Trim('\0');
-                Header.DataLength = reader.ReadInt32();
-
-                // Read Vectors, three 4-byte floats in a row
-                Header.EyePosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Header.IllumPosition = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Header.HullMin = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Header.HullMax = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Header.ViewBBMin = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Header.ViewBBMax = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-
-                // Read Model Flags
-                Header.Flags = (MDLFlags)reader.ReadUInt32();
-
-                // Read Offsets
-                Header.BoneCount = reader.ReadInt32();
-                Header.BoneOffset = reader.ReadInt32();
-
-                Header.BoneControllerCount = reader.ReadInt32();
-                Header.BoneControllerOffset = reader.ReadInt32();
-
-                Header.HitboxCount = reader.ReadInt32();
-                Header.HitboxOffset = reader.ReadInt32();
-
-                Header.LocalAnimCount = reader.ReadInt32();
-                Header.LocalAnimOffset = reader.ReadInt32();
-
-                Header.LocalSequenceCount = reader.ReadInt32();
-                Header.LocalSequenceOffset = reader.ReadInt32();
-
-                Header.ActivityListVersion = reader.ReadInt32();
-                Header.EventsIndexed = reader.ReadInt32();
-
-                Header.TextureCount = reader.ReadInt32();
-                Header.TextureOffset = reader.ReadInt32();
-
-                // Set Texture Names
                 TextureNames = GetTextureNames(reader);
-
-                // This Offset Points to a series of ints
-                // Each int value, in turn, is an offset relative to the start of the file
-                // at which there is a null-terminated string
-                Header.TextureDirCount = reader.ReadInt32();
-                Header.TextureDirOffset = reader.ReadInt32();
-
-                // Set Texture Dirs
                 TexturePaths = GetTextureDirs(reader);
-
-                Header.SkinReferenceCount = reader.ReadInt32();
-                Header.SkinFamilyCount = reader.ReadInt32();
-                Header.SkinReferenceIndex = reader.ReadInt32();
-
-                Header.BodyPartCount = reader.ReadInt32();
-                Header.BodyPartOffset = reader.ReadInt32();
-
-                Header.AttachmentCount = reader.ReadInt32();
-                Header.AttachmentOffset = reader.ReadInt32();
-
-                Header.LocalNodeCount = reader.ReadInt32();
-                Header.LocalNodeIndex = reader.ReadInt32();
-                Header.LocalNodeNameIndex = reader.ReadInt32();
-
-                Header.FlexDescCount = reader.ReadInt32();
-                Header.FlexDescIndex = reader.ReadInt32();
-
-                Header.FlexControllerCount = reader.ReadInt32();
-                Header.FlexControllerIndex = reader.ReadInt32();
-
-                Header.FlexRulesCount = reader.ReadInt32();
-                Header.FlexRulesIndex = reader.ReadInt32();
-
-                Header.IKChainCount = reader.ReadInt32();
-                Header.IKChainIndex = reader.ReadInt32();
-
-                Header.MouthsCount = reader.ReadInt32();
-                Header.MouthsIndex = reader.ReadInt32();
-
-                Header.LocalPoseParamCount = reader.ReadInt32();
-                Header.LocalPoseParamIndex = reader.ReadInt32();
-
-                Header.SurfacePropIndex = reader.ReadInt32();
-
-                Header.KeyValueIndex = reader.ReadInt32();
-                Header.KeyValueCount = reader.ReadInt32();
-
-                Header.IKLockCount = reader.ReadInt32();
-                Header.IKLockIndex = reader.ReadInt32();
-
-                // Read Mass
-                Header.Mass = reader.ReadSingle();
-                Mass = Header.Mass;
             }
 
             // Load other Files
@@ -213,7 +119,7 @@ namespace SourceFormats.MDL
             reader.BaseStream.Seek(textureOffset - 4, SeekOrigin.Current);
 
             // Read texture Name
-            string textureName = MDLHelper.ReadNullTerminatedString(reader, ASCIIEncoding.ASCII);
+            string textureName = MDLHeader.ReadNullTerminatedString(reader, 100);
             textureNames.Add(textureName);
 
             // Return to original position
@@ -237,7 +143,7 @@ namespace SourceFormats.MDL
             reader.BaseStream.Seek(textureDirOffset, SeekOrigin.Begin);
 
             // Read texture dirs
-            string textureDir = MDLHelper.ReadNullTerminatedString(reader, ASCIIEncoding.ASCII);
+            string textureDir = MDLHeader.ReadNullTerminatedString(reader, 100);
 
             if (textureDir.EndsWith(".mdl"))
             {
@@ -253,39 +159,5 @@ namespace SourceFormats.MDL
             return textureDirs;
         }
 
-    }
-
-    public static class MDLHelper
-    {
-        public static string ReadNullTerminatedString(BinaryReader reader, Encoding encoding)
-        {
-            List<byte> bytes = new List<byte>();
-            bool started = false;
-            byte b;
-
-            while (true)
-            {
-                b = reader.ReadByte();
-
-                if (b == 0)
-                {
-                    if (!started)
-                    {
-                        // First byte is null, ignore and continue
-                        continue;
-                    }
-                    else
-                    {
-                        // Reached end of string
-                        break;
-                    }
-                }
-
-                started = true;
-                bytes.Add(b);
-            }
-
-            return encoding.GetString(bytes.ToArray());
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 namespace SourceFormats.MDL
 {
@@ -27,118 +28,6 @@ namespace SourceFormats.MDL
         STUDIOHDR_FLAGS_DO_NOT_CAST_SHADOWS = 0x00020000,
         STUDIOHDR_FLAGS_CAST_TEXTURE_SHADOWS = 0x00040000,
         STUDIOHDR_FLAGS_VERT_ANIM_FIXED_POINT_SCALE = 0x00200000
-    }
-
-    // MDL Header (studiohdr_t)
-    public struct MDLHeader
-    {
-        public int ID; // FourCC (IDST)
-        public int Version;
-        public int Checksum;
-        public string Name; // Name of model as defined in the file
-
-        public int DataLength; // Data size of MDL file in bytes
-
-        public Vector3 EyePosition; // Position of player viewpoint relative to model origin (????)
-        public Vector3 IllumPosition; // Position of light source relative to model origin
-        public Vector3 HullMin; // Corner of model hull box with the least X/Y/Z values
-        public Vector3 HullMax; // Opposite corner of model hull box
-        public Vector3 ViewBBMin; // Minimum bounding box of model
-        public Vector3 ViewBBMax; // Maximum bounding box of model
-
-        public MDLFlags Flags; // Flags for the model
-
-        // OFFSETS
-        // Offsets are from the start of the file
-
-        // Bone Data
-        public int BoneCount;
-        public int BoneOffset;
-
-        // Bone Controller Data
-        public int BoneControllerCount;
-        public int BoneControllerOffset;
-
-        // Hitbox Data
-        public int HitboxCount;
-        public int HitboxOffset;
-
-        // Animation Data
-        public int LocalAnimCount;
-        public int LocalAnimOffset;
-
-        // Sequence Data
-        public int LocalSequenceCount;
-        public int LocalSequenceOffset;
-
-        public int ActivityListVersion; // ??
-        public int EventsIndexed; // ??
-
-        // VMT Materials
-        // Texture Data
-        public int TextureCount;
-        public int TextureOffset;
-
-        public int TextureDirCount;
-        public int TextureDirOffset;
-
-        // Skins
-        public int SkinReferenceCount;
-        public int SkinFamilyCount;
-        public int SkinReferenceIndex;
-
-        // Body Parts
-        public int BodyPartCount;
-        public int BodyPartOffset;
-
-        // Attatchment Points
-        public int AttachmentCount;
-        public int AttachmentOffset;
-
-        // Node Values
-        public int LocalNodeCount;
-        public int LocalNodeIndex;
-        public int LocalNodeNameIndex;
-
-        // mstudioflexdesc
-        public int FlexDescCount;
-        public int FlexDescIndex;
-
-        // mstudioflexcontroller
-        public int FlexControllerCount;
-        public int FlexControllerIndex;
-
-        // mstudioflexrule
-        public int FlexRulesCount;
-        public int FlexRulesIndex;
-
-        // Probably inverse kinematics
-        public int IKChainCount;
-        public int IKChainIndex;
-
-        // Information about mouth on the model for speech animations
-        public int MouthsCount;
-        public int MouthsIndex;
-
-        // mstudioposeparamdesc
-        public int LocalPoseParamCount;
-        public int LocalPoseParamIndex;
-
-        // We skip to byte 308
-
-        // Surface Property value
-        public int SurfacePropIndex;
-
-        // Key Value data
-        public int KeyValueIndex;
-        public int KeyValueCount;
-
-        // More Inverse Kinematics
-        public int IKLockCount;
-        public int IKLockIndex;
-
-        public float Mass;
-
     }
 
     // 64 Bytes Long
