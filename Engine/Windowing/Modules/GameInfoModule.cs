@@ -1,5 +1,5 @@
-﻿using SourceFormats.KeyValues.GameInfo;
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
+using SourceFormats.GameInfo;
 
 namespace SourceRewrite.Windowing.Modules
 {

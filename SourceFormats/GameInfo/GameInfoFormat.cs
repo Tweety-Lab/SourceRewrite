@@ -19,7 +19,7 @@ namespace SourceFormats.KeyValues.GameInfo
             // Load KeyValues
             KeyValues = new KeyValuesFormat(content);
 
-            // Populate Data
+            // Populate GameInfo-Specific Data
             GameName = (string) KeyValues.GetKeyValue("game").Value;
             SteamAppID = (int) KeyValues.GetKeyValue("SteamAppId").Value;
         }

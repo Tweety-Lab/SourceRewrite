@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace SourceFormats.KeyValues
 {
-    // This code is bad. Rewrite.
-
     /// <summary>
     /// Valve KeyValues file class. In Source 1, this file type is used for materials, VGUI elements, gameinfo.txt and more.
     /// </summary>
