@@ -61,7 +61,7 @@ namespace SourceRewrite.AssetTypes
 
                 Normals = normalData.ToArray();
 
-                Indices = MDL.GetMeshIndices();
+                Indices = MDL.GetMeshIndices(MDLWindingOrder.CounterClockwise);
 
                 UVs = uvData.ToArray();
 

@@ -30,6 +30,13 @@ namespace SourceFormats.MDL
         STUDIOHDR_FLAGS_VERT_ANIM_FIXED_POINT_SCALE = 0x00200000
     }
 
+    // Desired Winding Order for getting mesh indices
+    public enum MDLWindingOrder
+    {
+        Clockwise,
+        CounterClockwise
+    }
+
     // 64 Bytes Long
     public struct MDLTexture
     {

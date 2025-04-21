@@ -27,12 +27,12 @@ namespace SourceFormats.MDL
         public float Mass => Header.Mass;
 
         /// <summary>
-        /// Names of requested .VMT Textures
+        /// Names of requested .VMT Textures.
         /// </summary>
         public List<string> TextureNames { get; private set; }
 
         /// <summary>
-        /// Paths of requested .VMT Textures
+        /// Paths of requested .VMT Textures, does not include Texture Name.
         /// </summary>
         public List<string> TexturePaths { get; private set; }
 
@@ -75,7 +75,7 @@ namespace SourceFormats.MDL
 
         // Convert The indices to be usable geometry
         // Help from: https://github.com/gkjohnson/source-engine-model-loader/
-        public uint[] GetMeshIndices()
+        public uint[] GetMeshIndices(MDLWindingOrder windingOrder)
         {
             if (VTX == null)
                 return new uint[0];
@@ -109,7 +109,8 @@ namespace SourceFormats.MDL
             }
 
             // Reverse the array for winding order
-            Array.Reverse(meshIndices);
+            if (windingOrder == MDLWindingOrder.CounterClockwise)
+                Array.Reverse(meshIndices);
 
             return meshIndices;
         }
