@@ -22,6 +22,7 @@ public class KeyValuesFormat
         ParseLines(lines);
     }
 
+    // Parses a KeyValues file
     private void ParseLines(string[] lines)
     {
         for (var currentLine = 0; currentLine < lines.Length; currentLine++)
@@ -42,6 +43,7 @@ public class KeyValuesFormat
         }
     }
 
+    // Parses a ParentKey block
     private int ParseBlock(string[] lines, int currentLine, ParentKey parentKey)
     {
         while (currentLine < lines.Length)
@@ -79,9 +81,7 @@ public class KeyValuesFormat
         return currentLine;
     }
 
-    /// <summary>
-    /// Adds a KeyValue to the specified ParentKey from a Regex match.
-    /// </summary>
+    // Adds a KeyValue to the specified ParentKey from a Regex match
     private static void AddKeyValuePair(ParentKey parentKey, Match match)
     {
         var key = match.Groups[1].Value;
@@ -91,9 +91,7 @@ public class KeyValuesFormat
         parentKey.KeyValues.Add(new KeyValue(key, convertedValue));
     }
 
-    /// <summary>
-    /// Adds a nested ParentKey to the specified ParentKey from a Regex match.
-    /// </summary>
+    // Adds a nested ParentKey to the specified ParentKey from a Regex match.
     private int ParseNestedBlock(string[] lines, int currentLine, ParentKey parentKey, Match match)
     {
         var nestedParentKey = new ParentKey(match.Groups[1].Value);
