@@ -1,5 +1,6 @@
-﻿
-namespace SourceFormats.KeyValues.GameInfo
+﻿using SourceFormats.KeyValues;
+
+namespace SourceFormats.GameInfo
 {
     // GameInfo is just abstracted KeyValues
 
@@ -9,7 +10,7 @@ namespace SourceFormats.KeyValues.GameInfo
     public class GameInfoFormat
     {
         public KeyValuesFormat KeyValues;
-        
+
         // Data
         public string GameName;
         public int SteamAppID;
@@ -20,8 +21,8 @@ namespace SourceFormats.KeyValues.GameInfo
             KeyValues = new KeyValuesFormat(content);
 
             // Populate GameInfo-Specific Data
-            GameName = (string) KeyValues.GetKeyValue("game").Value;
-            SteamAppID = (int) KeyValues.GetKeyValue("SteamAppId").Value;
+            GameName = (string)KeyValues.GetKeyValue("game").Value;
+            SteamAppID = (int)KeyValues.GetKeyValue("SteamAppId").Value;
         }
     }
 }

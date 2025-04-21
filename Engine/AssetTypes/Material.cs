@@ -34,7 +34,7 @@ namespace SourceRewrite.AssetTypes
                 Shader = FileSystem.GetShader(keyValues.ParentKeys[0].Name); // Set the Shader
 
                 // Loop through every KeyValue in Material
-                foreach (KeyValue keyValue in keyValues.ParentKeys[0].ChildKeyValues)
+                foreach (KeyValue keyValue in keyValues.ParentKeys[0].KeyValues)
                 {
                     // Get property name and value
                     string key = keyValue.Key;

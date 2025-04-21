@@ -55,12 +55,12 @@ namespace SourceFormats.VMF
                     ProcessSolids(parentKey, ref entity.Solids);
 
                     // Loop through every key value attribute in the entity
-                    foreach (KeyValue keyValue in parentKey.ChildKeyValues)
+                    foreach (KeyValue keyValue in parentKey.KeyValues)
                     {
                         entity.Properties.Add(keyValue); // Add the attribute
                     }
 
-                    foreach(KeyValue keyValue in parentKey.GetChildParentKey("connections") ?.ChildKeyValues ?? Enumerable.Empty<KeyValue>())
+                    foreach(KeyValue keyValue in parentKey.GetChildParentKey("connections") ?.KeyValues ?? Enumerable.Empty<KeyValue>())
                     {
                         entity.Connections.Add(keyValue);
                     }
@@ -72,7 +72,7 @@ namespace SourceFormats.VMF
 
         private void ProcessSolids(ParentKey parentKey, ref List<VMFSolid> solidsList)
         {
-            foreach (ParentKey childParentKey in parentKey.ChildParentKeys)
+            foreach (ParentKey childParentKey in parentKey.ParentKeys)
             {
                 if (childParentKey.Name == "solid")
                 {
@@ -80,7 +80,7 @@ namespace SourceFormats.VMF
                     newSolid.ID = (int)childParentKey.GetKeyValue("id").Value;
                     newSolid.Sides = new List<VMFSide>();
 
-                    foreach (ParentKey solidParentKey in childParentKey.ChildParentKeys)
+                    foreach (ParentKey solidParentKey in childParentKey.ParentKeys)
                     {
                         if (solidParentKey.Name == "side")
                         {

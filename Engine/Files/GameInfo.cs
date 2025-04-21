@@ -47,7 +47,7 @@ namespace SourceRewrite.Files
         public static string[] GetMountedPaths()
         {
             List<string> paths = new List<string>();
-            foreach (var searchPath in GetParentKey("GameInfo").GetChildParentKey("FileSystem").GetChildParentKey("SearchPaths").ChildKeyValues)
+            foreach (var searchPath in GetParentKey("GameInfo").GetChildParentKey("FileSystem").GetChildParentKey("SearchPaths").KeyValues)
             {
                 paths.Add($"{SteamPaths.GetGamePathFromAppId(GetSteamAppID())}\\{(string)searchPath.Value}");
             }

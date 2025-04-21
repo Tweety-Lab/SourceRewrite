@@ -256,7 +256,7 @@ namespace SourceRewrite.Maps
             brushEntity.Brush = brushMeshes;
 
             // Set properties (excluding transform-related ones)
-            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].KeyValues)
             {
                 string key = propertyKeyValue.Key.ToLower();
 
@@ -296,7 +296,7 @@ namespace SourceRewrite.Maps
             pointEntity.Name = entityKeyValues.ParentKeys[0].Name;
 
             // Process properties
-            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].ChildKeyValues)
+            foreach (KeyValue propertyKeyValue in entityKeyValues.ParentKeys[0].KeyValues)
             {
                 string key = propertyKeyValue.Key.ToLower();
 
