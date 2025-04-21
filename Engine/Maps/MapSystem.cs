@@ -179,7 +179,7 @@ namespace SourceRewrite.Maps
             {
                 // Parse entity properties
                 KeyValuesFormat entityKeyValues = new KeyValuesFormat(bspEntity.KeyValuesString);
-                string className = (string)entityKeyValues.GetKeyValue("classname").Value;
+                string className = (string)entityKeyValues.ParentKeys[0].GetKeyValue("classname").Value;
 
                 // Skip worldspawn as it's handled separately
                 if (className == "worldspawn")

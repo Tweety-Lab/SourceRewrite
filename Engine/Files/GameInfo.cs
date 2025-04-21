@@ -14,7 +14,7 @@ namespace SourceRewrite.Files
         /// </summary>
         public static KeyValue GetKeyValue(string name)
         {
-            return GameModules.GetModule<GameInfoModule>().GameInfo.KeyValues.GetKeyValue(name);
+            return GameModules.GetModule<GameInfoModule>().GameInfo.KeyValues.ParentKeys[0].GetKeyValue(name);
         }
 
         /// <summary>

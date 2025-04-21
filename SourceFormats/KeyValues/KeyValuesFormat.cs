@@ -108,18 +108,4 @@ public class KeyValuesFormat
     {
         return ParentKeys.Find(pk => pk.Name == name);
     }
-
-    /// <summary>
-    /// Returns a KeyValue from its Key.
-    /// </summary>
-    public KeyValue GetKeyValue(string key)
-    {
-        foreach (var parentKey in ParentKeys)
-        {
-            var keyValue = parentKey.GetKeyValue(key);
-            if (keyValue != null) return keyValue;
-        }
-
-        return null;
-    }
 }
