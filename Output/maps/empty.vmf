@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "9672"
-	"mapversion" "229"
+	"mapversion" "230"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "64"
+	"nGridSpacing" "8"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "229"
+	"mapversion" "230"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -2949,10 +2949,6 @@ entity
 	"origin" "-328 -1124 -436"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
-	connections
-	{
-		"OnStartTouch" "clientCommandecho "Player walked infront of door!"0-1"
-	}
 	solid
 	{
 		"id" "3566"
@@ -3473,7 +3469,7 @@ entity
 	"PaintPower" "4"
 	"skin" "0"
 	"SkinType" "0"
-	"origin" "-368 -97.1435 176"
+	"origin" "-360 -96 140"
 	editor
 	{
 		"color" "220 30 220"
@@ -3696,98 +3692,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 8000]"
-	}
-}
-entity
-{
-	"id" "713"
-	"classname" "trigger_multiple"
-	"origin" "-448 -96 196"
-	"spawnflags" "4097"
-	"StartDisabled" "0"
-	"wait" "1"
-	solid
-	{
-		"id" "711"
-		side
-		{
-			"id" "814"
-			"plane" "(-640 -256 272) (-640 64 272) (-256 64 272)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 -1 0 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "813"
-			"plane" "(-640 64 120) (-640 -256 120) (-256 -256 120)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 -1 0 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "812"
-			"plane" "(-640 -256 120) (-640 64 120) (-640 64 272)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "811"
-			"plane" "(-256 64 120) (-256 -256 120) (-256 -256 272)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "810"
-			"plane" "(-640 64 120) (-256 64 120) (-256 64 272)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "809"
-			"plane" "(-256 -256 120) (-640 -256 120) (-640 -256 272)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		editor
-		{
-			"color" "220 30 220"
-			"visgroupshown" "1"
-			"visgroupautoshown" "1"
-		}
-	}
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 500]"
 	}
 }
 entity

@@ -2949,10 +2949,6 @@ entity
 	"origin" "-328 -1124 -436"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
-	connections
-	{
-		"OnStartTouch" "clientCommandecho "Player walked infront of door!"0-1"
-	}
 	solid
 	{
 		"id" "3566"
