@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileFormats\FileFormats.csproj" />
+    <ProjectReference Include="..\FileFormats\SourceFormats.csproj" />
+    <ProjectReference Include="..\SourceFormats\EngineFormats.csproj" />
     <ProjectReference Include="..\Steam\Steam.csproj" />
     <ProjectReference Include="..\VistaGUI\VistaGUI.csproj" />
   </ItemGroup>

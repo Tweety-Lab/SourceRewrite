@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VBSP", "Compilers\VBSP\VBSP.csproj", "{88B326EE-7F8E-423C-8563-ABB74163A7AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileFormats", "FileFormats\FileFormats.csproj", "{8756DF38-4C08-4DB9-9488-D4A367733C70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceFormats", "FileFormats\SourceFormats.csproj", "{8756DF38-4C08-4DB9-9488-D4A367733C70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltralightNet", "ThirdParty\UltralightNet\src\UltralightNet\UltralightNet.csproj", "{AF83A3C4-1F16-4017-835F-C6A0F12AB3AD}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{CFB820F6-C9F5-4DAB-AA2D-7FF544E0A22D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steam", "Steam\Steam.csproj", "{2F64F501-98A4-442D-9CCB-40B4B124ACDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineFormats", "SourceFormats\EngineFormats.csproj", "{80B42D05-53D6-4E12-8BB3-1AE66B3AED5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{2F64F501-98A4-442D-9CCB-40B4B124ACDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F64F501-98A4-442D-9CCB-40B4B124ACDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F64F501-98A4-442D-9CCB-40B4B124ACDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B42D05-53D6-4E12-8BB3-1AE66B3AED5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B42D05-53D6-4E12-8BB3-1AE66B3AED5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B42D05-53D6-4E12-8BB3-1AE66B3AED5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B42D05-53D6-4E12-8BB3-1AE66B3AED5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

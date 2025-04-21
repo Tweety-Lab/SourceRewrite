@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace FileFormats.Shaders
+namespace EngineFormats.Shaders
 {
     public class ShaderFormat
     { 

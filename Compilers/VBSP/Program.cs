@@ -1,6 +1,6 @@
-﻿using FileFormats.BSP;
-using FileFormats.BSP.IO;
-using System.Numerics;
+﻿using System.Numerics;
+using EngineFormats.BSP;
+using EngineFormats.BSP.IO;
 using VBSP.Conversion;
 class Program
 {

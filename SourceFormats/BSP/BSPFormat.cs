@@ -1,11 +1,6 @@
 ﻿using MessagePack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FileFormats.BSP
+namespace EngineFormats.BSP
 {
     // Represents the structure of a BSP file
     public class BSPFormat

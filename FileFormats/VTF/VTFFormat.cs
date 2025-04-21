@@ -1,6 +1,6 @@
 ﻿using Sledge.Formats.Texture.Vtf;
 
-namespace FileFormats.VTF
+namespace SourceFormats.VTF
 {
     /// <summary>
     /// Valve's Source 1 .vtf texture format.

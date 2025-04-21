@@ -1,13 +1,6 @@
 ﻿using MessagePack;
-using Sledge.Formats.Texture.Wad;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FileFormats.BSP.IO
+namespace EngineFormats.BSP.IO
 {
     public class BSPWriter
     {

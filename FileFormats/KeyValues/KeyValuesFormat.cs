@@ -2,8 +2,7 @@
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-
-namespace FileFormats.KeyValues
+namespace SourceFormats.KeyValues
 {
     // This code is bad. Rewrite.
 

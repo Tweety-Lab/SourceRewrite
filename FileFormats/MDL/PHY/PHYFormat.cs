@@ -1,11 +1,4 @@
-﻿using FileFormats.MDL.VTX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileFormats.MDL.PHY
+﻿namespace SourceFormats.MDL.PHY
 {
     /// <summary>
     /// Valve's Source 1 .phy physics format.

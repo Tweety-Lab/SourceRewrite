@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
-namespace FileFormats.MDL
+namespace SourceFormats.MDL
 {
     // MDL Flags
     // We map these to the bits that define them in the .MDL file (https://developer.valvesoftware.com/wiki/MDL).\

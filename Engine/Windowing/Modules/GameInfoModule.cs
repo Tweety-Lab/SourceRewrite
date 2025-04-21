@@ -1,4 +1,4 @@
-﻿using FileFormats.KeyValues.GameInfo;
+﻿using SourceFormats.KeyValues.GameInfo;
 using Silk.NET.Maths;
 
 namespace SourceRewrite.Windowing.Modules

@@ -1,9 +1,9 @@
 ﻿using SourceRewrite.Rendering.OpenGL;
 using SourceRewrite.Files;
-using FileFormats.VTF;
 using SourceRewrite.Rendering;
 using SourceRewrite.Windowing.Modules;
 using System.Numerics;
+using SourceFormats.VTF;
 
 namespace SourceRewrite.AssetTypes
 {

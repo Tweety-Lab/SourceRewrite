@@ -1,13 +1,7 @@
-﻿using MessagePack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
+using MessagePack;
 
-namespace FileFormats.BSP
+namespace EngineFormats.BSP
 {
     public enum BSPLumpType
     {

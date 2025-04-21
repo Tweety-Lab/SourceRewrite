@@ -1,9 +1,8 @@
-﻿using FileFormats.KeyValues;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Numerics;
+using SourceFormats.KeyValues;
 
-namespace FileFormats.VMF
+namespace SourceFormats.VMF
 {
     /// <summary>
     /// Valve's Source 1 .vmf (uncompiled) map file.

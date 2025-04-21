@@ -1,10 +1,4 @@
-﻿using FileFormats.MDL.VVD;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace FileFormats.MDL.VTX
+﻿namespace SourceFormats.MDL.VTX
 {
     public class VTXFormat
     {

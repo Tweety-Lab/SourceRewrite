@@ -1,5 +1,5 @@
 ﻿using Editor.Logic;
-using FileFormats.KeyValues;
+using SourceFormats.KeyValues;
 using SourceRewrite.Attributes;
 using SourceRewrite.Entities;
 using SourceRewrite.Entities.GUI;

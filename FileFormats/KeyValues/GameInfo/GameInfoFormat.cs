@@ -1,5 +1,5 @@
 ﻿
-namespace FileFormats.KeyValues.GameInfo
+namespace SourceFormats.KeyValues.GameInfo
 {
     // GameInfo is just abstracted KeyValues
 

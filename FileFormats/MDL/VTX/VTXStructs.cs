@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-
-namespace FileFormats.MDL.VTX
+﻿namespace SourceFormats.MDL.VTX
 {
     public struct VTXHeader
     {

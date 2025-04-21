@@ -1,15 +1,10 @@
-﻿using FileFormats.MDL.PHY;
-using FileFormats.MDL.VTX;
-using FileFormats.MDL.VVD;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using SourceFormats.MDL.PHY;
+using SourceFormats.MDL.VTX;
+using SourceFormats.MDL.VVD;
 
-namespace FileFormats.MDL
+namespace SourceFormats.MDL
 {
     /// <summary>
     /// Valve's Source 1 .mdl model format.

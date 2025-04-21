@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileFormats.MDL.VVD
+﻿namespace SourceFormats.MDL.VVD
 {
     /// <summary>
     /// Valve's Source 1 .vvd vertex data format.

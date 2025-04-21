@@ -1,6 +1,6 @@
-﻿using FileFormats.BSP;
-using FileFormats.KeyValues;
-using FileFormats.VMF;
+﻿using EngineFormats.BSP;
+using SourceFormats.KeyValues;
+using SourceFormats.VMF;
 using System;
 using System.Collections.Generic;
 using System.Numerics;

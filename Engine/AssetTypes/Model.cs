@@ -1,5 +1,5 @@
-﻿using FileFormats.MDL;
-using FileFormats.MDL.VVD;
+﻿using SourceFormats.MDL;
+using SourceFormats.MDL.VVD;
 using Silk.NET.Assimp;
 using SourceRewrite.Files;
 using System.Numerics;

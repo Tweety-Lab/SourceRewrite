@@ -1,7 +1,7 @@
-﻿using FileFormats.KeyValues;
-using System.Numerics;
+﻿using System.Numerics;
+using SourceFormats.KeyValues;
 
-namespace FileFormats.VMF
+namespace SourceFormats.VMF
 {
     // Version information
     public struct VersionInfo
