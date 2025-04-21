@@ -10,9 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FileFormats\FileFormats.csproj" />
-    <ProjectReference Include="..\..\FileFormats\SourceFormats.csproj" />
-    <ProjectReference Include="..\..\SourceFormats\EngineFormats.csproj" />
+    <ProjectReference Include="..\..\EngineFormats\EngineFormats.csproj" />
+    <ProjectReference Include="..\..\SourceFormats\SourceFormats.csproj" />
   </ItemGroup>
 
 </Project>
