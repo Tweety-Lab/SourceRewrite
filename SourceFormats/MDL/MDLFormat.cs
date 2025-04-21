@@ -29,12 +29,12 @@ namespace SourceFormats.MDL
         /// <summary>
         /// Names of requested .VMT Textures
         /// </summary>
-        public List<string> TextureNames = new List<string>();
+        public List<string> TextureNames { get; private set; }
 
         /// <summary>
         /// Paths of requested .VMT Textures
         /// </summary>
-        public List<string> TexturePaths = new List<string>();
+        public List<string> TexturePaths { get; private set; }
 
         /// <summary>
         /// Model Header.
@@ -42,9 +42,9 @@ namespace SourceFormats.MDL
         public MDLHeader Header;
 
         // Other Files
-        public VTXFormat VTX;
-        public VVDFormat VVD;
-        public PHYFormat PHY;
+        public readonly VTXFormat VTX;
+        public readonly VVDFormat VVD;
+        public readonly PHYFormat PHY;
 
         public MDLFormat(string path)
         {

@@ -4,7 +4,7 @@ using System.Text;
 namespace SourceFormats.MDL
 {
     // MDL Flags
-    // We map these to the bits that define them in the .MDL file (https://developer.valvesoftware.com/wiki/MDL).\
+    // We map these to the bits that define them in the .MDL file (https://developer.valvesoftware.com/wiki/MDL).
     [Flags]
     public enum MDLFlags
     {
