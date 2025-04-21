@@ -25,7 +25,10 @@ namespace SourceFormats.MDL
         public Vector3 ViewBBMin; // Minimum bounding box of model
         public Vector3 ViewBBMax; // Maximum bounding box of model
 
-        public MDLFlags Flags; // Flags for the model
+        /// <summary>
+        /// Flags defined in the MDL.
+        /// </summary>
+        public MDLFlags Flags { get; set; }
 
         // OFFSETS
 
@@ -115,7 +118,8 @@ namespace SourceFormats.MDL
         public int IKLockCount;
         public int IKLockIndex;
 
-        public float Mass;
+        // Mass in kilograms defined in mdl
+        public float Mass { get; set; }
 
         public MDLHeader(BinaryReader reader)
         {

@@ -12,6 +12,21 @@ namespace SourceFormats.MDL
     public class MDLFormat
     {
         /// <summary>
+        /// Name of the Model.
+        /// </summary>
+        public string Name => Header.Name;
+
+        /// <summary>
+        /// Version of the MDL.
+        /// </summary>
+        public int Version => Header.Version;
+
+        /// <summary>
+        /// Mass of the model in kilograms.
+        /// </summary>
+        public float Mass => Header.Mass;
+
+        /// <summary>
         /// Names of requested .VMT Textures
         /// </summary>
         public List<string> TextureNames = new List<string>();
@@ -20,11 +35,6 @@ namespace SourceFormats.MDL
         /// Paths of requested .VMT Textures
         /// </summary>
         public List<string> TexturePaths = new List<string>();
-
-        /// <summary>
-        /// Mass of the model in kilograms.
-        /// </summary>
-        public float Mass => Header.Mass;
 
         /// <summary>
         /// Model Header.
