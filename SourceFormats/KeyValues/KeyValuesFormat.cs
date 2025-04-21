@@ -3,37 +3,41 @@
 namespace SourceFormats.KeyValues;
 
 /// <summary>
-/// Valve KeyValues file class. In Source 1, this file type is used for materials, VGUI elements, gameinfo.txt and
-/// more.
+/// Valve KeyValues file.
 /// </summary>
 public class KeyValuesFormat
 {
+    private static readonly string[] NewLineSeparators = { "\r\n", "\r", "\n" };
+    private static readonly Regex ParentKeyPattern = new(@"^""?([\w$]+)""?\s*{?", RegexOptions.Compiled);
+    private static readonly Regex KeyValuePattern = new(@"^\s*[""]?([^\s""]+)[""]?\s+(?:([""])(.*?)\2|(\S+))\s*$", RegexOptions.Compiled);
+
+    /// <summary>
+    /// All Parent Keys that exist in the KeyValues file at the top level.
+    /// </summary>
     public List<ParentKey> ParentKeys = new();
 
     public KeyValuesFormat(string contents)
     {
         var lines = contents.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-        var currentLine = 0;
+        ParseLines(lines);
+    }
 
-        while (currentLine < lines.Length)
+    private void ParseLines(string[] lines)
+    {
+        for (var currentLine = 0; currentLine < lines.Length; currentLine++)
         {
             var line = lines[currentLine].Trim();
-            if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//")) // Ignore comments and empty lines
-            {
-                currentLine++;
-                continue;
-            }
 
-            var match = Regex.Match(line, @"^""?([\w$]+)""?\s*{?");
-            if (match.Success)
+            // Ignore comments and empty lines
+            if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
+                continue;
+
+            var parentKeyMatch = ParentKeyPattern.Match(line);
+            if (parentKeyMatch.Success)
             {
-                var parentKey = new ParentKey(match.Groups[1].Value);
+                var parentKey = new ParentKey(parentKeyMatch.Groups[1].Value);
                 ParentKeys.Add(parentKey);
                 currentLine = ParseBlock(lines, currentLine + 1, parentKey);
-            }
-            else
-            {
-                currentLine++;
             }
         }
     }

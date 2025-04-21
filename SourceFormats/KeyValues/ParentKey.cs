@@ -11,11 +11,19 @@ public class ParentKey
     }
 
     public string Name { get; }
+
+    /// <summary>
+    /// Child KeyValues.
+    /// </summary>
     public List<KeyValue> KeyValues { get; } = new();
+
+    /// <summary>
+    /// Child Parent Keys.
+    /// </summary>
     public List<ParentKey> ParentKeys { get; } = new();
 
     /// <summary>
-    ///     Returns the first found Parent Key with the specified name.
+    /// Returns the first found Parent Key with the specified name.
     /// </summary>
     public ParentKey GetChildParentKey(string name)
     {
@@ -23,7 +31,7 @@ public class ParentKey
     }
 
     /// <summary>
-    ///     Returns a KeyValue inside this ParentKey from its Key.
+    /// Returns a KeyValue inside this ParentKey from its Key.
     /// </summary>
     public KeyValue GetKeyValue(string key)
     {
