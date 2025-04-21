@@ -41,7 +41,7 @@ namespace SourceRewrite.AssetTypes
                 MDLFormat MDL = new MDLFormat(filePath);
 
                 // For an MDL quad, ensure consistent coordinate system and proper winding
-                foreach (VVDVertex vertex in MDL.VVD.Vertices)
+                foreach (VVDVertex vertex in MDL.Vertices)
                 { 
                     vertexData.Add(vertex.Position.X);
                     vertexData.Add(vertex.Position.Y);

@@ -27,6 +27,16 @@ namespace SourceFormats.MDL
         public float Mass => Header.Mass;
 
         /// <summary>
+        /// Indices of the model. Clockwise winding order.
+        /// </summary>
+        public uint[] MeshIndices => GetMeshIndices(MDLWindingOrder.Clockwise);
+
+        /// <summary>
+        /// Vertices of the model.
+        /// </summary>
+        public VVDVertex[] Vertices => VVD.Vertices;
+
+        /// <summary>
         /// Names of requested .VMT Textures.
         /// </summary>
         public List<string> TextureNames { get; private set; }
@@ -73,7 +83,7 @@ namespace SourceFormats.MDL
                 PHY = new PHYFormat(phyPath);
         }
 
-        // Convert The indices to be usable geometry
+        // Convert The indices to be usable
         // Help from: https://github.com/gkjohnson/source-engine-model-loader/
         public uint[] GetMeshIndices(MDLWindingOrder windingOrder)
         {
