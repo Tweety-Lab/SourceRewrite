@@ -16,32 +16,36 @@ namespace Game.Entities
     [Entity("info_player_start")]
     public class CharacterController : PointEntity
     {
+        [ConVar("noclip")]
+        public static bool Noclip { get; set; } = false;
+
         // Player
         public int MovementSpeed { get; set; } = 256;
         public int CrouchSpeed { get; set; } = 128;
         public int JumpPower { get; set; } = 230;
         public int InteractionRange { get; set; } = 64;
+        public int NoclipSpeed { get; set; } = 512;
 
         // Physics
-        public float GroundAcceleration { get; set; } = 0.2f; 
+        public float GroundAcceleration { get; set; } = 0.2f;
         public float AirDrag { get; set; } = 0.99f;
         public float AirControl { get; set; } = 0.025f;
+        public float NoclipAcceleration { get; set; } = 0.5f;
 
         // Camera
-
         [ConVar("sensitivity", ConVarFlag.Archive)]
         public static float Sensitivity { get; set; } = 0.4f;
 
         [ConVar("fov", ConVarFlag.Archive)]
         public static float FieldOfView { get; set; } = 70f;
 
-        // The camera offset from the middle of the player
         public Vector3 CameraOffset { get; set; } = new Vector3(0f, 0f, 32f);
 
         private float pitch = 0f;
         private float yaw = 0f;
-
         private bool wasGroundedLastFrame = false;
+        private bool isCrouching = false;
+        private int _preCrouchSpeed;
 
         public override void Start()
         {
@@ -72,7 +76,7 @@ namespace Game.Entities
         public override void Update()
         {
             // Jumping
-            if (Input.GetPressed("jump"))
+            if (Input.GetPressed("jump") && !Noclip)
                 Jump();
 
             // Interacting
@@ -80,8 +84,12 @@ namespace Game.Entities
                 Interact();
 
             HandleCrouchInput();
-            HandleMovementInput();
             HandleMouseInput();
+
+            if (Noclip)
+                HandleNoclipMovement();
+            else
+                HandleMovementInput();
         }
 
         private void Jump()
@@ -95,7 +103,7 @@ namespace Game.Entities
             var hit = Physics.RayCast(
                 new PhysicsRay(
                     PointCamera.ActiveCamera.Transform.Position,
-                    PointCamera.ActiveCamera.Transform.Position + PointCamera.ActiveCamera.Transform.Forward * 64f
+                    PointCamera.ActiveCamera.Transform.Position + PointCamera.ActiveCamera.Transform.Forward * InteractionRange
                 )
             );
 
@@ -103,10 +111,10 @@ namespace Game.Entities
                 usable.OnUse(this);
         }
 
-        bool isCrouching = false;
-        private int _preCrouchSpeed;
         private void HandleCrouchInput()
         {
+            if (Noclip) return; // Disable crouching in noclip
+
             if (Input.GetPressed("duck"))
             {
                 isCrouching = true;
@@ -135,6 +143,8 @@ namespace Game.Entities
 
         private bool IsGrounded()
         {
+            if (Noclip) return false; // Always not grounded in noclip
+
             float groundCheckDistance = 4f;
             float skinWidth = 1f;
             float halfWidthX = PhysicsBody.BoundingBox.X;
@@ -172,6 +182,28 @@ namespace Game.Entities
             }
 
             return false;
+        }
+
+        private void HandleNoclipMovement()
+        {
+            Vector3 movementDirection = Vector3.Zero;
+
+            Vector3 camForward = PointCamera.ActiveCamera.Transform.Forward;
+            Vector3 camRight = PointCamera.ActiveCamera.Transform.Right;
+            Vector3 camUp = Vector3.UnitZ;
+
+            if (Input.GetDown("forward")) movementDirection += camForward;
+            if (Input.GetDown("back")) movementDirection -= camForward;
+            if (Input.GetDown("left")) movementDirection -= camRight;
+            if (Input.GetDown("right")) movementDirection += camRight;
+            if (Input.GetDown("jump")) movementDirection += camUp;
+            if (Input.GetDown("duck")) movementDirection -= camUp;
+
+            if (movementDirection != Vector3.Zero)
+                movementDirection = Vector3.Normalize(movementDirection);
+
+            Vector3 targetVelocity = movementDirection * NoclipSpeed;
+            Velocity = Vector3.Lerp(Velocity, targetVelocity, NoclipAcceleration * Time.DeltaTime * 60f);
         }
 
         private void HandleMovementInput()
