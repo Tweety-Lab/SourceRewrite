@@ -8,6 +8,7 @@ SourceRewrite is a semi-rewrite of Valve's 'Source Engine' in C#. It was designe
 - C# Entity API
 - Extensive code/content modding system
 - VPhysics Replacement via Bullet Physics
+- Real-time Lighting
 - Custom GLSL Preprocessor for simple Shader manipulation
 - Source Engine's Input, Entity, Map IO, and File Systems all faithfully recreated in C#
 
