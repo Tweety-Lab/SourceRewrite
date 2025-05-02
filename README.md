@@ -22,4 +22,4 @@ Open Everything.sln
 Build
 
 # Usage Guidelines
-All original code is licensed under MIT. Projects made using SourceRewrite must follow the individual licenses of used libraries such as the Ultralight SDK.
+It's recommended to not use the engine for commercial purposes without permission from Valve. all original code is licensed under MIT. Projects made using SourceRewrite must follow the individual licenses of used libraries such as the Ultralight SDK.
