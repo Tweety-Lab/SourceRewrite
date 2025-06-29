@@ -15,6 +15,8 @@ SourceRewrite is a semi-rewrite of Valve's 'Source Engine' in C#. It was designe
 # Getting Started
 You can find Documentation for using the engine [here](https://placeholderp2modwikiholder.github.io/Wiki/). SourceRewrite was developed alongside an unreleased Portal 2 Mod and was primarily designed to be compatible with the Portal 2/ASW Engine Branches, other compatiblity is not guaranteed.
 
+For mounting assets, extract the games .vpk.
+
 ## Windows
 Run prebuild.bat
 
